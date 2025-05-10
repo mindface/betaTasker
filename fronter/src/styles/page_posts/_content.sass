@@ -1,0 +1,38 @@
+
+@use "../settings" as *
+
+.content
+  min-height: calc(100vh - 120px)
+  max-width: 1000px
+  margin: 0 auto
+  padding: 40px 0 0
+
+  &__body
+    .sententce
+      font-size: 1.6rem
+      line-height: 1.7
+
+  &-header
+    padding: 0 0 16px
+    font-size: 2rem
+    font-weight: bold
+    line-height: 1
+    .btn
+      padding: 4px
+    &__title
+      padding: 0 16px 0 0
+    .search-box
+      .input
+        padding: 6px
+        border: 1px solid $gray_color
+      .btn
+        box-shadow: 0 0 0 1px $gray_color inset
+    .search-box
+      .select
+        padding: 8px
+        box-shadow: 0 0 0 1px $gray_color inset
+        border: none
+    .add-box
+      .btn
+        box-shadow: 0 0 0 1px $gray_color inset
+      

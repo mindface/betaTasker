@@ -1,0 +1,68 @@
+@use '../settings' as *
+
+.card
+  position: relative
+  max-width: 320px
+  width: 100%
+  margin: 0 8px 8px
+  border: $gary_thin_color 1px solid
+  &:hover
+    .card__btns
+      display: block
+  &__title
+    padding: 8px
+    font-size: 1.2rem
+    background-color: $base_dark_color
+    color: $white-color
+  &__btns
+    display: none
+    position: absolute
+    right: 0
+    bottom: 0
+    .btn
+      padding: 0
+      border: $gary_thin_color 1px solid
+      background-color: $white-color
+      &:hover
+        box-shadow: 0 0 0 3px $gray_color inset
+  .sentence
+    padding: 8px
+    line-height: 1.5
+    &-text
+      display: -webkit-box
+      -webkit-box-orient: vertical
+      -webkit-line-clamp: 2
+      text-overflow: ellipsis
+      overflow: hidden
+    .aid
+      margin: 0 0 2px
+      padding: 0 0 2px
+      border-bottom: 1px solid $base_dark_color
+  .category
+    padding: 8px
+    display: none
+    .aid
+      display: inline-block
+      padding: 2px
+      background-color: $base_dark_color
+      color: $white-color
+
+.list
+  .card
+    max-width: 100%
+    border: none
+    &:hover
+      box-shadow: 0 0 0 2px $base_dark_color inset
+    .sentence
+      padding-left: 16px
+    .category
+      padding: 8px
+      display: none
+
+.category
+  .card
+    .sentence
+      display: none
+    .category
+      padding: 8px
+      display: block

@@ -1,0 +1,25 @@
+
+@mixin moveTransformScaleX()
+  transition: transform 0.3s
+  transform: scaleX(0)
+  animation: TransformScaleX 0.3s ease 0s forwards
+
+@keyframes TransformScaleX
+  0%
+    transform: scaleX(0)
+  100%
+    transform: scaleX(1)
+
+@mixin moveUpFade()
+  transition: transform 0.3s
+  opacity: 0
+  transform: translate(-20px,0)
+  animation: UpFade 0.3s ease 0s forwards
+
+@keyframes UpFade
+  0%
+    opacity: 0
+    transform: translate(-20px,0)
+  100%
+    opacity: 1
+    transform: translate(0,0)

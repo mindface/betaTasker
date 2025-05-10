@@ -1,0 +1,181 @@
+@use '../settings' as *
+@use '../animation' as animation
+
+.modal-transfer
+  position: fixed
+  z-index: 10
+  top: 0
+  left: 0
+  display: flex
+  justify-content: center
+  align-items: flex-start
+  height: 100vh
+  width: 100vw
+  background-color: $color_b_rgba_02
+
+.modal
+  &-box
+    position: relative
+    min-height: 320px
+    max-width: 640px
+    width: 100%
+    margin: 0 auto
+    padding: 24px
+    color: $white_color
+    .label
+      display: block
+      padding: 0 0 8px
+      color: $base_dark_color
+    .field
+      padding: 8px 0
+      &-box
+        max-height: 80vh
+        padding: 16px
+        background-color: $white_color
+        overflow-y: scroll
+        .checker
+          display: none
+          font-size: 1.4rem
+          color: $red_color
+          &.view
+            display: block
+      .textarea
+        min-height: 180px
+      .textarea,
+      .input
+        width: 100%
+        padding: 8px
+      .btn
+        border: solid 2px $base_dark_color
+        &:hover
+          background-color: $base_dark_color
+          color: $white_color
+    .close
+      position: absolute
+      top: 8px
+      left: 100%
+    .view
+      &-box
+        max-height: 80vh
+        background-color: $white_color
+        overflow: scroll
+        .item
+          padding: 8px
+          font-size: 1.2rem
+          .id
+            display: inline-block
+            padding: 0 8px
+            color: $base_dark_color
+          &.title
+            font-weight: bold
+            border-bottom: solid 1px $white_color
+          .aid
+            display: inline-block
+            padding: 4px
+            background-color: $base_dark_color
+            color: $white_color
+          .input
+            width: 100%
+            padding: 8px
+            border: none
+            transition: box-shadow 0.3s
+            &:focus
+              outline: none
+              box-shadow: 0 0 0 1px $base_dark_color
+          .textarea
+            min-height: 160px
+          .btn
+            border: solid 2px $base_dark_color
+    .search
+      &-link-box
+        padding: 16px
+        background-color: $white_color
+        .btn
+          border: solid 2px $base_dark_color
+        .input
+          width: 100%
+          padding: 2px 4px
+        .list
+          padding: 16px 0
+          .item
+            padding: 8px 0
+        .search
+          &-list
+            padding: 0 0 16px
+          &-item
+            display: inline-block
+            margin: 0 0 8px
+            padding: 4px 8px
+            position: relative
+            font-weight: bold
+            color: $base_dark_color
+            cursor: pointer
+            .item
+              padding: 0 0 8px
+            .url
+              padding: 2px
+              pointer-events: none
+              background-color: $base_dark_color
+              color: $white_color
+            .aid
+              position: absolute
+              left: 0
+              bottom: 100%
+              padding: 2px
+              width: 84px
+              background-color: $base_dark_color
+              color: $white_color
+              display: none
+              &.view
+                display: inline-block
+
+  &-bg
+    position: absolute
+    right: 0
+    bottom: 0
+    font-size: 9vw
+    color: $color_w_f_rgba
+  &__title
+    position: relative
+    display: inline-block
+    padding: 0 0 8px
+    border-bottom: 1px solid $white_color
+    font-size: 2rem
+    &::before
+      content: ""
+      position: absolute
+      right: 0
+      bottom: -4px
+      height: 10px
+      width: 10px
+      background-color: $white_color
+    &::before,
+    &::after
+      content: ""
+      position: absolute
+      right: 0
+      bottom: -13px
+      height: 1px
+      width: 40px
+      background-color: $white_color
+      transform: rotate(-45deg)
+    &::before
+      width: 50px
+      right: -15px
+      bottom: -28px
+      transform: rotate(0)
+    .aid
+      display: inline-block
+      overflow: hidden
+      &::before
+        content: ""
+        position: absolute
+        right: 0
+        bottom: -4px
+        height: 10px
+        width: 10px
+        background-color: $white_color
+  &__content
+    padding: 40px 0 0
+    font-size: 1.6rem
+    line-height: 1.7

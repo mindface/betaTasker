@@ -1,6 +1,8 @@
 # Node.js dependencies
 node_modules/
-front/node_modules/
+front/node_modules
+front/.next
+
 backer/godotask/visiterui
 
 # Logs
@@ -41,3 +43,6 @@ coverage/
 /config/master.key
 
 /gate
+
+!front/
+!backer/
