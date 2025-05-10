@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>book top</title>
+</head>
+<body>
+  <h1>記録一覧</h1>
+  <a href="/book/edit/1">記録1を編集</a>
+  {{range $i, $v := .list}}
+  <div class="user">
+      <p><a href="/user/edit/{{$i}}">編集</a></p>
+      <p>{{$i}}</p>
+      <p>{{$v}}</p>
+  </div>
+  {{end}}
+
+  <form action="/api/book" method="post">
+    <input type="text" name="name" >
+    <input type="text" name="imgPath" >
+    <input type="submit" value="送信">
+  </form>
+</body>
+</html>

@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  godotask:
+    container_name: godotask
+    build:
+      context: .
+      dockerfile: godotask/DockerFile
+    stdin_open: true
+    tty: true
+    command: bash -c "/bin/bash"
+    # command: /bin/sh -c "go run main.go"
+    volumes:
+      # - ./godotask:/app
+      - ./godotask:/usr/local/go/godotask
+    ports:
+      - 8080:8080
+    # environment:
+      # - "GOPATH=/go/src"
+      # - "GO111MODULE=off"
+    depends_on:
+      - "dbgodotask"
+
+  dbgodotask:
+    container_name: dbgodotask
+    image: mysql:8.0
+    restart: always
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    ports:
+      - "3306:3306"
+    # command: mysqld --skip-grant-tables --skip-networking
+    environment:
+      MYSQL_ROOT_PASSWORD: dbgodotask
+      MYSQL_DATABASE: dbgodotask
+      MYSQL_USER: dbgodotask
+      MYSQL_PASSWORD: dbgodotask
+    volumes:
+      - ./mydata/my.cnf:/etc/mysql/conf.d/my.cnf
+      # - dbdata:/var/lib/mysql
+
+volumes:
+  db-data:
+    driver: local
