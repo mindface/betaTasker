@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/godotask/controller/book"
 	"github.com/godotask/controller/top"
+	"github.com/godotask/controller/user"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
@@ -38,5 +39,13 @@ func GetRouter() *gin.Engine {
 	r.DELETE("/api/deletebook/:id", book.DeleteBookAction)
 	r.PUT("/api/updatebook/:id", book.UpdateBookAction)
 	r.GET("/book/edit/:id", book.UpdateBookAction)
-	return r
+
+	// User authentication routes
+	r.POST("/api/register", user.Register)
+	r.POST("/api/login", user.Login)
+
+	// Protected routes
+	r.GET("/api/user/profile",  user.AuthMiddleware(), user.Profile)
+
+return r
 }
