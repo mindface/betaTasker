@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/godotask/model"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,5 +20,5 @@ func UpdateBookAction(c *gin.Context) {
 	imgPath := form["imgPath"].(string)
 	model.EditBookData(id, title, name, text, disc, imgPath)
 
-	c.JSON(http.StatusOK, gin.H{"str": "OK"})
+	c.JSON(http.StatusOK, gin.H{"message": "Book updated successfully"})
 }

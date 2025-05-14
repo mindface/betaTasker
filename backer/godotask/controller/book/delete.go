@@ -15,5 +15,5 @@ func DeleteBookAction(c *gin.Context) {
 	id := c.Param("id")
 	model.DeleteBookData(id)
 
-	c.JSON(http.StatusOK, gin.H{"str": "OK"})
+	c.JSON(http.StatusOK, gin.H{"message": "Book deleted successfully"})
 }

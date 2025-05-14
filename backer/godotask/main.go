@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/godotask/server"
+	"github.com/godotask/model"
 	// "giner/calculation"
 	// "giner/controller"
 )
@@ -45,6 +46,7 @@ var dataInfo = []UserInfo{{
 }}
 
 func main() {
+	model.InitDB()
 	// bytes, err := ioutil.ReadFile("data.json")
 	// if err != nil {
 	// 	 log.Fatal(err)
