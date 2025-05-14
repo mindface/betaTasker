@@ -68,8 +68,6 @@ func Register(c *gin.Context) {
 		Username:     input.Username,
 		Email:        input.Email,
 		PasswordHash: string(hashedPassword),
-		CreatedAt:    time.Now(),
-		UpdatedAt:    time.Now(),
 	}
 
 	if err := model.DB.Create(&user).Error; err != nil {
@@ -133,8 +131,8 @@ func Profile(c *gin.Context) {
 
 	var user model.User
 	if err := model.DB.Where("username = ?", userName).First(&user).Error; err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user from database"})
-			return
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user from database"})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -147,5 +145,5 @@ func Profile(c *gin.Context) {
 				"isActive":  user.IsActive,
 				"role":      user.Role,
 		},
-})
+	})
 }

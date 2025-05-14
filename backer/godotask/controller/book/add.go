@@ -32,5 +32,5 @@ func AddBookAction(c *gin.Context) {
 
 	model.AddBookData(0, title, name, text, disc, imgPath)
 
-	c.JSON(http.StatusOK, gin.H{"str": "OK"})
+	c.JSON(http.StatusOK, gin.H{"message": "Book added successfully"})
 }
