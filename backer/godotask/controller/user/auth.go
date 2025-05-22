@@ -15,6 +15,7 @@ var jwtKey = []byte("your_secret_key")
 
 type Claims struct {
 	Username string `json:"username"`
+	Role     string `json:"role"`
 	jwt.StandardClaims
 }
 
@@ -44,7 +45,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			claims := &Claims{}
 
 			token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-					return jwtKey, nil
+				return jwtKey, nil
 			})
 
 			if err != nil {
@@ -64,8 +65,9 @@ func AuthMiddleware() gin.HandlerFunc {
 					return
 			}
 
-			// トークンが有効であれば、ユーザー情報をコンテキストに設定
+			// トークンが有効であれば、ユーザー情報とロールをコンテキストに設定
 			c.Set("user", claims.Username)
+			c.Set("role", claims.Role)
 			c.Next()
 	}
 }
@@ -74,6 +76,7 @@ func Register(c *gin.Context) {
 	var input struct {
 		Username string `json:"username" binding:"required"`
 		Email    string `json:"email" binding:"required,email"`
+		Role string `json:"role" binding:"required"`
 		Password string `json:"password" binding:"required"`
 	}
 
@@ -140,6 +143,7 @@ func Login(c *gin.Context) {
 	expirationTime := time.Now().Add(10 * time.Minute)
 	claims := &Claims{
 		Username: user.Username,
+		Role:     user.Role, // ロールをセット
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},

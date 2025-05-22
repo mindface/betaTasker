@@ -12,7 +12,7 @@ import (
 
 func setupRouter() *gin.Engine {
     r := gin.Default()
-    r.POST("/api/book", AddBookAction) // AddBookActionを直接使用
+    r.POST("/api/book", AddBookAction)
     return r
 }
 
