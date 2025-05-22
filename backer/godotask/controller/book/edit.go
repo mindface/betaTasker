@@ -1,7 +1,6 @@
 package book
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/godotask/model"
@@ -10,15 +9,39 @@ import (
 
 func UpdateBookAction(c *gin.Context) {
 	id := c.Param("id")
-	var form map[string]interface{}
-	c.BindJSON(&form)
-	log.Print(form)
-	name := form["name"].(string)
-	title := form["title"].(string)
-	text := form["text"].(string)
-	disc := form["disc"].(string)
-	imgPath := form["imgPath"].(string)
-	model.EditBookData(id, title, name, text, disc, imgPath)
+	if id == "" {
+			c.JSON(http.StatusBadRequest, gin.H{
+					"status":  "error",
+					"message": "Book ID is required",
+			})
+			return
+	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Book updated successfully"})
+	var input struct {
+			Title   string `json:"title" binding:"required"`
+			Name    string `json:"name" binding:"required"`
+			Text    string `json:"text" binding:"required"`
+			Disc    string `json:"disc"`
+			ImgPath string `json:"imgPath"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+					"status":  "error",
+					"message": "入力値が正しくありません",
+					"detail":  err.Error(),
+			})
+			return
+	}
+
+	model.EditBookData(id, input.Title, input.Name, input.Text, input.Disc, input.ImgPath)
+	c.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "Book updated successfully",
+	})
+
+	c.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "Book update successfully",
+	})
 }

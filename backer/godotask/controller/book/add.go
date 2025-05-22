@@ -1,7 +1,6 @@
 package book
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/godotask/model"
@@ -21,16 +20,33 @@ func BookAddDisplayAction(c *gin.Context) {
 }
 
 func AddBookAction(c *gin.Context) {
-	var form map[string]interface{}
-	c.BindJSON(&form)
-	log.Print(form)
-	name := form["name"].(string)
-	title := form["title"].(string)
-	text := form["text"].(string)
-	disc := form["disc"].(string)
-	imgPath := form["imgPath"].(string)
+	var input struct {
+			Title   string `json:"title" binding:"required"`
+			Name    string `json:"name" binding:"required"`
+			Text    string `json:"text" binding:"required"`
+			Disc    string `json:"disc"`
+			ImgPath string `json:"imgPath"`
+	}
 
-	model.AddBookData(0, title, name, text, disc, imgPath)
+	if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+					"status":  "error",
+					"message": "Invalid input data",
+					"detail":  err.Error(),
+			})
+			return
+	}
+
+	model.AddBookData(0, input.Title, input.Name, input.Text, input.Disc, input.ImgPath)
+	c.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "Book added successfully",
+	})
+
+	c.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "Book added successfully",
+	})
 
 	c.JSON(http.StatusOK, gin.H{"message": "Book added successfully"})
 }

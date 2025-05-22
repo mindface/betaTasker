@@ -31,6 +31,8 @@ func GetRouter() *gin.Engine {
 	r.Use(CORSMiddleware())
 
 	r.POST("/api/login", user.Login) 
+	r.POST("/api/logout", user.Logout) 
+	r.POST("/api/register", user.Register)
 
 	r.Use(user.AuthMiddleware())
 
@@ -45,7 +47,6 @@ func GetRouter() *gin.Engine {
 	r.GET("/book/edit/:id", book.UpdateBookAction)
 
 	// User authentication routes
-	r.POST("/api/register", user.Register)
 
 	// Protected routes
 	r.GET("/api/user/profile",  user.AuthMiddleware(), user.Profile)

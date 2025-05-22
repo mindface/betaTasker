@@ -13,7 +13,22 @@ func BookEleteDisplayAction(c *gin.Context) {
 
 func DeleteBookAction(c *gin.Context) {
 	id := c.Param("id")
-	model.DeleteBookData(id)
+    if id == "" {
+        c.JSON(http.StatusBadRequest, gin.H{
+            "status":  "error",
+            "message": "Book ID is required",
+        })
+        return
+    }
 
-	c.JSON(http.StatusOK, gin.H{"message": "Book deleted successfully"})
+		model.DeleteBookData(id)
+		c.JSON(http.StatusOK, gin.H{
+				"status":  "success",
+				"message": "Book deleted successfully",
+		})
+
+    c.JSON(http.StatusOK, gin.H{
+        "status":  "success",
+        "message": "Book deleted successfully",
+    })
 }

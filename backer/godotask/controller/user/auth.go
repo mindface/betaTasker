@@ -15,8 +15,11 @@ var jwtKey = []byte("your_secret_key")
 
 type Claims struct {
 	Username string `json:"username"`
+	Role     string `json:"role"`
 	jwt.StandardClaims
 }
+
+var tokenBlacklist = make(map[string]struct{})
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -28,20 +31,43 @@ func AuthMiddleware() gin.HandlerFunc {
 			}
 
 			tokenString := authHeader[len("Bearer "):]
+			// if tokenString == "" {
+			// 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is required"})
+			// 		c.Abort()
+			// 		return
+			// }
+			if _, blacklisted := tokenBlacklist[authHeader]; blacklisted {
+					c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is blacklisted"})
+					c.Abort()
+					return
+			}
+
 			claims := &Claims{}
 
 			token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-					return jwtKey, nil
+				return jwtKey, nil
 			})
 
-			if err != nil || !token.Valid {
+			if err != nil {
+				if err == jwt.ErrSignatureInvalid {
+						c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token signature"})
+						c.Abort()
+						return
+				}
+				c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+				c.Abort()
+				return
+			}
+			
+			if !token.Valid {
 					c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 					c.Abort()
 					return
 			}
 
-			// トークンが有効であれば、ユーザー情報をコンテキストに設定
+			// トークンが有効であれば、ユーザー情報とロールをコンテキストに設定
 			c.Set("user", claims.Username)
+			c.Set("role", claims.Role)
 			c.Next()
 	}
 }
@@ -50,6 +76,7 @@ func Register(c *gin.Context) {
 	var input struct {
 		Username string `json:"username" binding:"required"`
 		Email    string `json:"email" binding:"required,email"`
+		Role string `json:"role" binding:"required"`
 		Password string `json:"password" binding:"required"`
 	}
 
@@ -78,6 +105,14 @@ func Register(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User registered successfully"})
 }
 
+func Logout(c *gin.Context) {
+		tokenString := c.GetHeader("Authorization")
+    if tokenString != "" {
+        tokenBlacklist[tokenString] = struct{}{}
+    }
+    c.JSON(200, gin.H{"message": "Logged out successfully"})
+}
+
 func Login(c *gin.Context) {
 	var input struct {
 		Email    string `json:"email" binding:"required,email"`
@@ -104,9 +139,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	expirationTime := time.Now().Add(24 * time.Hour)
+	// expirationTime := time.Now().Add(24 * time.Hour)
+	expirationTime := time.Now().Add(10 * time.Minute)
 	claims := &Claims{
 		Username: user.Username,
+		Role:     user.Role, // ロールをセット
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
