@@ -114,7 +114,7 @@ func main() {
 		rows, err := db.Query("SELECT id, title, full_text, summary, created_at FROM documents ORDER BY id DESC")
 		if err != nil {
 			http.Error(w, "データベースエラー: "+err.Error(), http.StatusInternalServerError)
-			return
+			returns
 		}
 		defer rows.Close()
 

@@ -1,18 +1,17 @@
 package model
 
 import (
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
 )
 
-
 var DB *gorm.DB
 
 func InitDB() {
-	dsn := "root:dbgodotask@tcp(dbgodotask:3306)/dbgodotask?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "host=dbgodotask user=dbgodotask password=dbgodotask dbname=dbgodotask port=5432 sslmode=disable"
 	var err error
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+  DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("failed to connect database: %v", err)
 	}

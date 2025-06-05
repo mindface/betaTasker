@@ -23,52 +23,55 @@ var tokenBlacklist = make(map[string]struct{})
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-			authHeader := c.GetHeader("Authorization")
-			if authHeader == "" {
-					c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is required"})
-					c.Abort()
-					return
-			}
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is required"})
+			c.Abort()
+			return
+		}
 
-			tokenString := authHeader[len("Bearer "):]
-			// if tokenString == "" {
-			// 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is required"})
-			// 		c.Abort()
-			// 		return
-			// }
-			if _, blacklisted := tokenBlacklist[authHeader]; blacklisted {
-					c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is blacklisted"})
-					c.Abort()
-					return
-			}
+		// Bearerトークン形式のチェック
+		const bearerPrefix = "Bearer "
+		if len(authHeader) <= len(bearerPrefix) || authHeader[:len(bearerPrefix)] != bearerPrefix {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header must start with 'Bearer '"})
+			c.Abort()
+			return
+		}
+		tokenString := authHeader[len(bearerPrefix):]
 
-			claims := &Claims{}
+		if _, blacklisted := tokenBlacklist[authHeader]; blacklisted {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is blacklisted"})
+			c.Abort()
+			return
+		}
 
-			token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-				return jwtKey, nil
-			})
+		claims := &Claims{}
 
-			if err != nil {
-				if err == jwt.ErrSignatureInvalid {
-						c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token signature"})
-						c.Abort()
-						return
-				}
-				c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+			return jwtKey, nil
+		})
+
+		if err != nil {
+			if err == jwt.ErrSignatureInvalid {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token signature"})
 				c.Abort()
 				return
 			}
-			
-			if !token.Valid {
-					c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
-					c.Abort()
-					return
-			}
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+			c.Abort()
+			return
+		}
 
-			// トークンが有効であれば、ユーザー情報とロールをコンテキストに設定
-			c.Set("user", claims.Username)
-			c.Set("role", claims.Role)
-			c.Next()
+		if !token.Valid {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.Abort()
+			return
+		}
+
+		// トークンが有効であれば、ユーザー情報とロールをコンテキストに設定
+		c.Set("user", claims.Username)
+		c.Set("role", claims.Role)
+		c.Next()
 	}
 }
 
