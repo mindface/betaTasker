@@ -3,12 +3,7 @@ package memory
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"github.com/godotask/service"
 )
-
-type MemoryController struct {
-	Service *service.MemoryService
-}
 
 // ListMemories: GET /api/memory
 func (ctl *MemoryController) ListMemories(c *gin.Context) {

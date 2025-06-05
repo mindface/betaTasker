@@ -4,12 +4,7 @@ import (
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/model"
-	"github.com/godotask/service"
 )
-
-type MemoryController struct {
-	Service *service.MemoryService
-}
 
 // AddMemory: POST /api/memory
 func (ctl *MemoryController) AddMemory(c *gin.Context) {

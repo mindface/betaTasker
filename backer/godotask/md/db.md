@@ -5,6 +5,7 @@ docker exec -it dbgodotask bash
 ``` psqlでDBに接続 ```
 psql -U dbgodotask -d dbgodotask
 
+
 ```
 CREATE TYPE source_type_enum AS ENUM ('book', 'article', 'video', 'lecture', 'other');
 CREATE TYPE read_status_enum AS ENUM ('unread', 'reading', 'finished');

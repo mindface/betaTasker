@@ -58,12 +58,19 @@ func GetRouter() *gin.Engine {
 	// Protected routes
 	r.GET("/api/user/profile",  user.AuthMiddleware(), user.Profile)
 
-	// Memory API (CRUD)
-	r.POST("/api/memory", memoryController.Create)      // 追加
-	r.GET("/api/memory", memoryController.List)       // 一覧取得
-	r.GET("/api/memory/:id", memoryController.Get)      // 取得（単体）
-	r.PUT("/api/memory/:id", memoryController.Update)   // 更新
-	r.DELETE("/api/memory/:id", memoryController.Delete) // 削除
+    // Memory API (CRUD)
+    r.POST("/api/memory", memoryController.AddMemory)
+    r.GET("/api/memory", memoryController.ListMemories)
+    r.GET("/api/memory/:id", memoryController.GetMemory)
+    r.PUT("/api/memory/:id", memoryController.EditMemory)
+    r.DELETE("/api/memory/:id", memoryController.DeleteMemory)
+
+    // Task API (CRUD)
+    r.POST("/api/task", taskController.AddTask)
+    r.GET("/api/task", taskController.ListTasks)
+    r.GET("/api/task/:id", taskController.GetTask)
+    r.PUT("/api/task/:id", taskController.EditTask)
+    r.DELETE("/api/task/:id", taskController.DeleteTask)
 
 	return r
 }
