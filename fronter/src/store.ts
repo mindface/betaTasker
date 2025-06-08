@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { postReducer } from './modules/postReducer'
+import { userReducer } from './modules/userReducer'
 import { State } from './model/posts'
 
 export type AppState = {
@@ -9,6 +10,7 @@ export type AppState = {
 export const setupStore = configureStore({
   reducer: {
     state: postReducer,
+    user: userReducer,
   },
 })
 

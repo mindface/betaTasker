@@ -3,6 +3,7 @@ package user
 import (
 	"net/http"
 	"time"
+	"fmt"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -126,6 +127,7 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+  fmt.Printf("Login input: %+v\n", input)
 
 	var user model.User
 	if err := model.DB.Where("email = ?", input.Email).First(&user).Error; err != nil {
@@ -136,6 +138,7 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
 		return
 	}
+	fmt.Printf("Fetched user: %+v\n", user)
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(input.Password)); err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
@@ -159,6 +162,8 @@ func Login(c *gin.Context) {
 		return
 	}
 
+    
+	fmt.Printf("Generated token: %s\n", tokenString)
 	c.JSON(http.StatusOK, gin.H{"token": tokenString})
 }
 

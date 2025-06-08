@@ -22,7 +22,7 @@ curl -X POST http://localhost:8080/api/memory \
 
 curl -X POST http://localhost:8080/api/memory \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InR0Iiwicm9sZSI6InVzZXIiLCJleHAiOjE3NDg3NjQ3MTd9.17ODbiF2VzBg1M8urFoXAg2e0TVsxbHHp-jwWuuWkPs" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InR0ciIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzQ5MzA0MzYzfQ.C6tLkPY_lKxCucsiFJkX93YkLNnpSMgt_kTxe4jzT-Y" \
   -d '{
     "user_id": 1,
     "source_type": "book",

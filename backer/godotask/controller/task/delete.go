@@ -3,7 +3,6 @@ package task
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"github.com/godotask/service"
 )
 
 // DeleteTask: DELETE /api/task/:id
