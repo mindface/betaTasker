@@ -1,34 +1,93 @@
 "use client"
-import React, { useState, useEffect, useRef } from 'react'
-import ReactDOM from'react-dom'
-import { useDispatch, useStore, useSelector } from 'react-redux';
-import SvgRect from './partsSvg/SvgRect';
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../store'
+import { loadMemories, createMemory, updateMemory, removeMemory } from '../features/memory/memorySlice'
+import ItemMemory from "./parts/ItemMemory"
+import MemoryModal from "./parts/MemoryModal"
+import { AddMemory, Memory } from "../model/memory";
 
-export default function SectionBetaTools() {
-  const svgElement = useRef(null)
-  const [items,setItems] = useState<{id:number,text:string}[]>([])
+export default function SectionMemory() {
+  const dispatch = useDispatch()
+  const { memories, loading, error } = useSelector((state: RootState) => state.memory)
+  const { isAuthenticated } = useSelector((state: RootState) => state.user)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingMemory, setEditingMemory] = useState<AddMemory|Memory|undefined>()
 
   useEffect(() => {
-  },[])
+    // if (isAuthenticated) {
+    // }
+    dispatch(loadMemories())
+  }, [dispatch, isAuthenticated])
 
-  const addRect = () => {
-    setItems([...items,{id:items.length,text:'text'}])
-    console.log(items)
+  const handleAddMemory = () => {
+    // if (!isAuthenticated) {
+    //   // TODO: ログインモーダルを表示
+    //   return
+    // }
+    setEditingMemory(undefined)
+    setIsModalOpen(true)
   }
 
-  return(
-    <div className="section__inner section--tools">
-      <div className="section-continer">
-        <div className="tools-header">
-          <button onClick={e => {addRect()}}>Rect追加</button>
+  const handleEditMemory = (memory: Memory) => {
+    console.log(memory)
+    setEditingMemory(memory)
+    setIsModalOpen(true)
+  }
+
+  const handleSaveMemory = async (memoryData: AddMemory | Memory) => {
+    if (editingMemory) {
+      // TODO: 編集処理を実装
+      console.log(memoryData)
+      await dispatch(updateMemory(memoryData as Memory))
+    } else {
+      await dispatch(createMemory(memoryData as AddMemory))
+    }
+    setIsModalOpen(false)
+  }
+
+  const handleDeleteMemory = async (id: number) => {
+    await dispatch(removeMemory(id))
+  }
+
+  return (
+    <div className="section__inner section--memory">
+      <div className="section-container">
+        <div className="memory-header">
+          <h2>メモ</h2>
+          <button 
+            onClick={() => handleAddMemory()}
+            className="btn btn-primary"
+          >
+            新規メモ
+          </button>
         </div>
-        <div className="tools__body" ref={svgElement}>
-          <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
-            {items.map((item) => {
-              return (<SvgRect key={item.id} />)
-            })}
-          </svg>
-        </div>
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
+
+        {loading ? (
+          <div className="loading">読み込み中...</div>
+        ) : (
+          <div className="memory-list">
+            {memories.map((memory,index) => (
+              <ItemMemory
+                key={`memory-item${index}`}
+                memory={memory}
+                onEdit={(editMemory) => handleEditMemory(editMemory)}
+                onDelete={() => handleDeleteMemory(memory.id)}
+              />
+            ))}
+          </div>
+        )}
+        <MemoryModal
+          initialData={editingMemory}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSaveMemory}
+        />
       </div>
     </div>
   )

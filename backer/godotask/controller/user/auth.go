@@ -149,7 +149,7 @@ func Login(c *gin.Context) {
 	expirationTime := time.Now().Add(10 * time.Minute)
 	claims := &Claims{
 		Username: user.Username,
-		Role:     user.Role, // ロールをセット
+		Role:     user.Role,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -162,7 +162,6 @@ func Login(c *gin.Context) {
 		return
 	}
 
-    
 	fmt.Printf("Generated token: %s\n", tokenString)
 	c.JSON(http.StatusOK, gin.H{"token": tokenString})
 }

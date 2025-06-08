@@ -9,7 +9,6 @@ import { fetchMemoriesService } from '../services/memoryApi';
 export default function SectionLogin() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const [loginSwitch, setLoginSwitch] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -22,7 +21,7 @@ export default function SectionLogin() {
     //   dispatch(loginSuccess(result.token));
     // } else {
     //   dispatch(loginFailure(result.error || 'ログイン失敗'));
-    // } 
+    // }
   };
 
   const handleLogout = async () => {
@@ -35,15 +34,11 @@ export default function SectionLogin() {
     console.log(result);
   }
 
-  const switchAction = () => {
-    setLoginSwitch(!loginSwitch)
-  }
-
   return (
     <div className="section__inner section--tools">
       <div className="section-continer">
         <div className="tools-header">
-          <h2>{ loginSwitch ? "ログイン画面" : "新規登録" }</h2>
+          <h2>ログイン</h2>
         </div>
         <form onSubmit={handleLogin} className="tools__body">
           <div>
@@ -60,7 +55,6 @@ export default function SectionLogin() {
         </form>
       </div>
       <button onClick={handleLogout}>ログアウト</button>
-      <div className="swith-text" onClick={switchAction}>{ loginSwitch ? "新規登録へ移行" : "ログインへ移行" }</div>
       <button onClick={getMemory}>getMemory</button>
     </div>
   );
