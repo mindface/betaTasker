@@ -1,61 +1,85 @@
 "use client"
-import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { loginRequest, loginSuccess, loginFailure } from '../modules/userReducer';
-import { loginApi, logoutApi } from '../services/authApi';
-import { fetchMemoriesService } from '../services/memoryApi';
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../store'
+import { loadTasks, createTask, updateTask, removeTask } from '../features/task/taskSlice'
+import ItemTask from "./parts/ItemTask"
+import TaskModal from "./parts/TaskModal"
+import { AddTask, Task } from "../model/task";
 
-export default function SectionLogin() {
-  const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.user);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export default function SectionTask() {
+  const dispatch = useDispatch()
+  const { tasks, loading, error } = useSelector((state: RootState) => state.task)
+  const { isAuthenticated } = useSelector((state: RootState) => state.user)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingTask, setEditingTask] = useState<AddTask|Task|undefined>()
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(loginRequest());
-    const result = await loginApi(email, password);
-    console.log(result);
-    // if (result.token) {
-    //   dispatch(loginSuccess(result.token));
-    // } else {
-    //   dispatch(loginFailure(result.error || 'ログイン失敗'));
-    // }
-  };
+  useEffect(() => {
+    dispatch(loadTasks())
+  }, [dispatch, isAuthenticated])
 
-  const handleLogout = async () => {
-    const result = await logoutApi();
-    console.log(result);
+  const handleAddTask = () => {
+    setEditingTask(undefined)
+    setIsModalOpen(true)
   }
 
-  const getMemory = async () => {
-    const result = await fetchMemoriesService();
-    console.log(result);
+  const handleEditTask = (task: Task) => {
+    setEditingTask(task)
+    setIsModalOpen(true)
+  }
+
+  const handleSaveTask = async (taskData: AddTask | Task) => {
+    if (editingTask) {
+      await dispatch(updateTask(taskData as Task))
+    } else {
+      await dispatch(createTask(taskData as AddTask))
+    }
+    setIsModalOpen(false)
+  }
+
+  const handleDeleteTask = async (id: number) => {
+    await dispatch(removeTask(id))
   }
 
   return (
-    <div className="section__inner section--tools">
-      <div className="section-continer">
-        <div className="tools-header">
-          <h2>ログイン</h2>
+    <div className="section__inner section--task">
+      <div className="section-container">
+        <div className="task-header">
+          <h2>タスク</h2>
+          <button 
+            onClick={() => handleAddTask()}
+            className="btn btn-primary"
+          >
+            新規タスク
+          </button>
         </div>
-        <form onSubmit={handleLogin} className="tools__body">
-          <div>
-            <label>メールアドレス</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+        {error && (
+          <div className="error-message">
+            {error}
           </div>
-          <div>
-            <label>パスワード</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+        )}
+
+        {loading ? (
+          <div className="loading">読み込み中...</div>
+        ) : (
+          <div className="task-list">
+            {tasks.map((task: Task, index: number) => (
+              <ItemTask
+                key={`task-item${index}`}
+                task={task}
+                onEdit={(editTask: Task) => handleEditTask(editTask)}
+                onDelete={() => handleDeleteTask(task.id)}
+              />
+            ))}
           </div>
-          <button type="submit" disabled={user.loading}>ログイン</button>
-          {user.error && <div style={{color:'red'}}>{user.error}</div>}
-          {user.isAuthenticated && <div style={{color:'green'}}>ログイン成功</div>}
-        </form>
+        )}
+        <TaskModal
+          initialData={editingTask}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSaveTask}
+        />
       </div>
-      <button onClick={handleLogout}>ログアウト</button>
-      <button onClick={getMemory}>getMemory</button>
     </div>
-  );
+  )
 }
