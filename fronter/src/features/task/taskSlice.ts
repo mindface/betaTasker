@@ -22,6 +22,7 @@ export const loadTasks = createAsyncThunk(
       if (response.error) {
         return rejectWithValue(response.error);
       }
+      console.log(response)
       return response.tasks || response;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -86,6 +87,7 @@ const taskSlice = createSlice({
       })
       .addCase(loadTasks.fulfilled, (state, action: PayloadAction<Task[]>) => {
         state.loading = false;
+        console.log('Tasks loaded:', action.payload);
         state.tasks = action.payload;
       })
       .addCase(loadTasks.rejected, (state, action) => {

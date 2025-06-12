@@ -11,7 +11,7 @@ export async function GET() {
     }
     console.log('Task API トークン:', token);
 
-    const backendRes = await fetch('http://localhost:8080/api/task', {
+    const backendRes = await fetch('http://localhost:8080/api/assessment', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -25,7 +25,7 @@ export async function GET() {
 
     const data = await backendRes.json();
 
-    return NextResponse.json({ tasks: data.tasks || [] }, { status: 200 });
+    return NextResponse.json({ assessments: data.assessments || [] }, { status: 200 });
   } catch (error) {
     console.error('Task API エラー:', error);
     return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const backendRes = await fetch('http://localhost:8080/api/task', {
+    const backendRes = await fetch('http://localhost:8080/api/assessment', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -78,7 +78,7 @@ export async function PUT(request: Request) {
 
     const body = await request.json()
 
-    const backendRes = await fetch(`http://localhost:8080/api/task/${body.id}`, {
+    const backendRes = await fetch(`http://localhost:8080/api/assessment/${body.id}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -120,7 +120,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'IDが指定されていません' }, { status: 400 });
     }
 
-    const backendRes = await fetch(`http://localhost:8080/api/task/${id}`, {
+    const backendRes = await fetch(`http://localhost:8080/api/assessment/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,

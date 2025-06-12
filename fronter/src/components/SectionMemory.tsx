@@ -30,7 +30,6 @@ export default function SectionMemory() {
   }
 
   const handleEditMemory = (memory: Memory) => {
-    console.log(memory)
     setEditingMemory(memory)
     setIsModalOpen(true)
   }
@@ -48,6 +47,13 @@ export default function SectionMemory() {
 
   const handleDeleteMemory = async (id: number) => {
     await dispatch(removeMemory(id))
+  }
+
+  const tes = (info:string) => {
+    const _info = info
+    return (test:string) => {
+      return test +_info;
+    }
   }
 
   return (

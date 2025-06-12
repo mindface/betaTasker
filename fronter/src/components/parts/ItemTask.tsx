@@ -23,6 +23,7 @@ const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete }) => {
         </div>
       </div>
       <div className="task-item__content">
+        <p>{task.title}</p>
         <p>{task.description}</p>
         {task.status && (
           <span className="task-status">{task.status}</span>

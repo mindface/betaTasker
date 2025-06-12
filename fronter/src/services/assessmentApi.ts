@@ -1,62 +1,61 @@
-import { AddTask, Task } from "../model/task";
+import { AddAssessment, Assessment } from "../model/assessment";
 
-export const fetchTasksService = async () => {
+export const fetchAssessmentsService = async () => {
   try {
-    const res = await fetch('/api/task', {
+    const res = await fetch('/api/assessment', {
       method: 'GET',
       credentials: 'include',
     });
     const data = await res.json();
-    console.log(data)
-    if (!res.ok) throw new Error('タスク一覧取得失敗');
+    if (!res.ok) throw new Error('アセスメント一覧取得失敗');
     return data;
   } catch (err: any) {
     return { error: err.message };
   }
 };
 
-export const addTaskService = async (task: AddTask) => {
+export const addAssessmentService = async (assessment: AddAssessment) => {
   try {
-    const res = await fetch('/api/task', {
+    const res = await fetch('/api/assessment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(task),
+      body: JSON.stringify(assessment),
       credentials: 'include',
     });
     const data = await res.json();
-    if (!res.ok) throw new Error('タスク追加失敗');
+    if (!res.ok) throw new Error('アセスメント追加失敗');
     return data;
   } catch (err: any) {
     return { error: err.message };
   }
 };
 
-export const updateTaskService = async (task: Task) => {
+export const updateAssessmentService = async (assessment: Assessment) => {
   try {
-    const res = await fetch('/api/task', {
+    const res = await fetch('/api/assessment', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(task),
+      body: JSON.stringify(assessment),
       credentials: 'include',
     });
     const data = await res.json();
-    if (!res.ok) throw new Error('タスク更新失敗');
+    if (!res.ok) throw new Error('アセスメント更新失敗');
     return data;
   } catch (err: any) {
     return { error: err.message };
   }
 };
 
-export const deleteTaskService = async (id: string) => {
+export const deleteAssessmentService = async (id: string) => {
   try {
-    const res = await fetch(`/api/task`, {
+    const res = await fetch(`/api/assessment`, {
       method: 'DELETE',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id }),
     });
     const data = await res.json();
-    if (!res.ok) throw new Error('タスク削除失敗');
+    if (!res.ok) throw new Error('アセスメント削除失敗');
     return data;
   } catch (err: any) {
     return { error: err.message };

@@ -28,11 +28,14 @@ const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete }) => 
         <p>{memory.notes}</p>
         {memory.tags && (
           <div className="memory-item__tags">
+            <p className="item">{memory.title}</p>
+            <p>
             {memory.tags.split(',').map((tag, index) => (
               <span key={index} className="tag">
                 {tag.trim()}
               </span>
             ))}
+            </p>
           </div>
         )}
       </div>

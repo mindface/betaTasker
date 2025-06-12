@@ -4,6 +4,7 @@ import { State } from './model/posts'
 import userReducer from './features/user/userSlice'
 import memoryReducer from './features/memory/memorySlice'
 import taskReducer from './features/task/taskSlice'
+import assessmentReducer from './features/assessment/assessmentSlice'
 
 export type AppState = {
   state: State
@@ -15,6 +16,7 @@ export const setupStore = configureStore({
     user: userReducer,
     memory: memoryReducer,
     task: taskReducer,
+    assessment: assessmentReducer,
   },
 })
 
