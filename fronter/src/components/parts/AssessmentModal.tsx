@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AddAssessment, Assessment } from "../../model/assessment";
+import Cookies from 'js-cookie';
 
 interface AssessmentModalProps {
   isOpen: boolean;
@@ -7,6 +8,8 @@ interface AssessmentModalProps {
   onSave: (assessmentData: AddAssessment | Assessment) => void;
   initialData?: AddAssessment | Assessment;
 }
+
+const setCheker = ['user_id', 'task_id', 'effectiveness_score', 'effort_score', 'impact_score'];
 
 const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSave, initialData }) => {
   const [formData, setFormData] = useState<AddAssessment | Assessment | undefined>();
@@ -30,18 +33,19 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-      setFormData(prev => prev ? {
-        ...prev,
-        [name]: ['user_id', 'task_id', 'effectiveness_score', 'effort_score', 'impact_score'].includes(name)
-          ? Number(value)
-          : value
-      } : prev);
+    setFormData(prev => prev ? {
+      ...prev,
+      [name]: setCheker.includes(name) ? Number(value) : value
+    } : prev);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData) return;
-    await onSave(formData);
+    // cookieからuser_id取得
+    const userIdStr = Cookies.get('user_id');
+    const user_id = userIdStr ? Number(userIdStr) : 0;
+    await onSave({ ...formData, user_id });
   };
 
   if (!isOpen) return null;
@@ -62,17 +66,7 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
               required
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="user_id">ユーザーID</label>
-            <input
-              type="number"
-              id="user_id"
-              name="user_id"
-              value={formData?.user_id || 0}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          {/* ユーザーID入力欄は削除 */}
           <div className="form-group">
             <label htmlFor="effectiveness_score">効果スコア</label>
             <input

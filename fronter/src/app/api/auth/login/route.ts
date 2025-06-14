@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   const data = await res.json();
 
   if (res.ok && data.token) {
-    const response = NextResponse.json({ message: 'Login successful', token: data.token });
+    const response = NextResponse.json({ message: 'Login successful', token: data.token, user: data.user }, { status: 200 });
 
     response.cookies.set({
       name: 'token',

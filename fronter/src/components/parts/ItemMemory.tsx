@@ -1,6 +1,5 @@
 "use client"
 import React, { useState } from 'react'
-import { fetchMemoriesService, addMemoryService, deleteMemoryService } from '../../services/memoryApi'
 import { Memory } from "../../model/memory";
 
 interface ItemMemoryProps {
@@ -30,11 +29,11 @@ const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete }) => 
           <div className="memory-item__tags">
             <p className="item">{memory.title}</p>
             <p>
-            {memory.tags.split(',').map((tag, index) => (
-              <span key={index} className="tag">
-                {tag.trim()}
-              </span>
-            ))}
+              {memory.tags.split(',').map((tag, index) => (
+                <span key={index} className="tag">
+                  {tag.trim()}
+                </span>
+              ))}
             </p>
           </div>
         )}

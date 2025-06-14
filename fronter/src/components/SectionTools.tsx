@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect } from 'react'
-import { useStore } from 'react-redux';
 
 export default function SectionHome() {
   
@@ -25,12 +24,12 @@ export default function SectionHome() {
     }
   ]
 
-  useEffect(() => {
+  // useEffect(() => {
     // const scroll = new LocomotiveScroll({
     //   el: document.querySelector('[data-scroll-container]'),
     //   smooth: true
     // });
-  },[])
+  // },[])
 
   return(
     <div className="section__inner section--tools">

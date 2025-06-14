@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { AddTask, Task } from "../../model/task";
+import { Memory } from "../../model/memory";
 
 interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (taskData: AddTask | Task) => void;
   initialData?: AddTask | Task;
+  memories: Memory[];
 }
 
-const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialData }) => {
+const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialData, memories }) => {
   const [formData, setFormData] = useState<AddTask | Task | undefined>();
 
   useEffect(() => {
@@ -91,6 +93,22 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
               min={1}
               max={5}
             />
+          </div>
+          <div className="form-group">
+            <label htmlFor="memory_id">関連メモ</label>
+            <select
+              id="memory_id"
+              name="memory_id"
+              value={formData?.memory_id ?? ''}
+              onChange={handleChange}
+            >
+              <option value="">選択してください</option>
+              {memories.map(memory => (
+                <option key={memory.id} value={memory.id}>
+                  {memory.title}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="form-actions">
             <button type="button" onClick={onClose} className="btn btn-secondary">キャンセル</button>

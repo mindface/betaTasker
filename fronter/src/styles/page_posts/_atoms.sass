@@ -80,13 +80,13 @@
   padding: 2rem
   color: #666
 
-
+.assessment-list,
 .memory-list
   display: grid
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
   gap: 1.5rem
 
-
+.assessment-item,
 .memory-item
   background-color: white
   border-radius: 8px
@@ -94,12 +94,12 @@
   padding: 1.5rem
   transition: transform 0.2s
 
-
+.assessment-item:hover,
 .memory-item:hover
   transform: translateY(-2px)
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15)
 
-
+.assessment-item-header,
 .memory-item-header
   display: flex
   justify-content: space-between
@@ -107,28 +107,31 @@
   margin-bottom: 1rem
 
 
-.memory-item-header h3
+.assessment-item__header h3,
+.memory-item__header h3
   margin: 0
   font-size: 1.2rem
   color: #333
   flex: 1
 
 
+.assessment-item-actions,
 .memory-item-actions
   display: flex
   gap: 0.5rem
 
 
-.memory-item-content
+.assessment-item__content,
+.memory-item__content
   color: #666
 
-
-.memory-item-content p
+.assessment-item__content p,
+.memory-item__content p
   margin: 0 0 1rem 0
   line-height: 1.5
 
-
-.memory-item-meta
+.assessment-item__meta,
+.memory-item__meta
   display: flex
   justify-content: space-between
   align-items: center
@@ -136,12 +139,10 @@
   color: #888
   margin-top: 1rem
 
-
 .tags
   display: flex
   flex-wrap: wrap
   gap: 0.5rem
-
 
 .tag
   background-color: #e9ecef
@@ -149,6 +150,11 @@
   border-radius: 4px
   font-size: 0.8rem
 
+.date
+  display: inline-block
+  padding: 4px
+  font-size: 0.9rem
+  color: #888
 
 .status
   padding: 0.25rem 0.5rem
@@ -170,7 +176,7 @@
   background-color: #28a745
   color: #fff
 
-
+.assessment-edit-input,
 .memory-edit-input
   width: 100%
   padding: 0.5rem
@@ -180,6 +186,7 @@
   margin-bottom: 1rem
 
 
+.assessment-edit-textarea,
 .memory-edit-textarea
   width: 100%
   min-height: 100px

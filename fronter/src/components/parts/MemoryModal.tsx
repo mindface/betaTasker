@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import CommonModal from './CommonModal';
 import { AddMemory, Memory } from "../../model/memory";
@@ -57,14 +57,14 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="memory-form">
         {error && <div className="error-message">{error}</div>}
-        { formData && <div>
+        <div>
           <div className="form-group">
             <label htmlFor="title">タイトル</label>
             <input
               type="text"
               id="title"
               name="title"
-              value={formData.title}
+              value={formData?.title || ''}
               onChange={handleChange}
               required
             />
@@ -75,7 +75,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
             <textarea
               id="notes"
               name="notes"
-              value={formData.notes}
+              value={formData?.notes || ''}
               onChange={handleChange}
               rows={5}
               required
@@ -88,7 +88,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               type="text"
               id="tags"
               name="tags"
-              value={formData.tags}
+              value={formData?.tags || ''}
               onChange={handleChange}
               placeholder="例: 仕事, 重要, 後で"
             />
@@ -99,7 +99,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
             <select
               id="read_status"
               name="read_status"
-              value={formData.read_status}
+              value={formData?.read_status || ''}
               onChange={handleChange}
             >
               <option value="unread">未読</option>
@@ -124,7 +124,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               {loading ? '保存中...' : '保存'}
             </button>
           </div>
-        </div>}
+        </div>
       </form>
     </CommonModal>
   );

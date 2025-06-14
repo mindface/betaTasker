@@ -1,11 +1,20 @@
 
-export interface User {
+export interface UserSys {
+ createdAt: Date;
+ updatedAt: Date;
+}
+
+export interface User extends UserSys {
  id: Number;
  username: string;
  email: string;
- name: string;
  role: string;
  isacutive: boolean;
- createdAt: Date;
- updatedAt: Date;
+}
+
+export interface UserInfo {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
 }

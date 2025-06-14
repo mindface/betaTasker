@@ -3,22 +3,21 @@ import { Assessment } from "../../model/assessment";
 
 interface ItemAssessmentProps {
   assessment: Assessment;
-  onEdit: (assessment: Assessment) => void;
-  onDelete: (id: number) => void;
+  onEdit?: (assessment: Assessment) => void;
+  onDelete?: (id: number) => void;
 }
 
 const ItemAssessment: React.FC<ItemAssessmentProps> = ({ assessment, onEdit, onDelete }) => {
-  console.log(assessment)
   return (
     <div className="assessment-item">
       <div className="assessment-item__header">
         <div className="assessment-item__actions">
-          <button onClick={() => onEdit(assessment)} className="btn btn-edit">
+          {onEdit && <button onClick={() => onEdit(assessment)} className="btn btn-edit">
             編集
-          </button>
-          <button onClick={() => onDelete(assessment.id)} className="btn btn-delete">
+          </button>}
+          {onDelete && <button onClick={() => onDelete(assessment.id)} className="btn btn-delete">
             削除
-          </button>
+          </button>}
         </div>
       </div>
       <div className="assessment-item__content">

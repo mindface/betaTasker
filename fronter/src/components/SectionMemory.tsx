@@ -15,8 +15,6 @@ export default function SectionMemory() {
   const [editingMemory, setEditingMemory] = useState<AddMemory|Memory|undefined>()
 
   useEffect(() => {
-    // if (isAuthenticated) {
-    // }
     dispatch(loadMemories())
   }, [dispatch, isAuthenticated])
 

@@ -1,14 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  role: string;
-}
+import { UserInfo } from "../../model/user";
 
 interface UserState {
-  user: User | null;
+  user: UserInfo | null;
   token: string | null;
   isAuthenticated: boolean;
   loading: boolean;
@@ -22,7 +16,6 @@ const initialState: UserState = {
   loading: false,
   error: null,
 };
-
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -31,7 +24,7 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    loginSuccess: (state, action: PayloadAction<UserState>) => {
+    loginSuccess: (state, action: PayloadAction<{ token: string; user: UserInfo }>) => {
       state.loading = false;
       state.isAuthenticated = true;
       state.user = action.payload.user;

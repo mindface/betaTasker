@@ -1,8 +1,8 @@
 "use client"
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { loginRequest, loginSuccess, loginFailure } from '../modules/userReducer';
+import { loginRequest, loginSuccess, loginFailure } from '../features/user/userSlice';
 import { loginApi, logoutApi } from '../services/authApi';
 import { fetchMemoriesService } from '../services/memoryApi';
 
@@ -17,12 +17,11 @@ export default function SectionLogin() {
     e.preventDefault();
     dispatch(loginRequest());
     const result = await loginApi(email, password);
-    console.log(result);
-    // if (result.token) {
-    //   dispatch(loginSuccess(result.token));
-    // } else {
-    //   dispatch(loginFailure(result.error || 'ログイン失敗'));
-    // } 
+    if (result.token && result.user) {
+      dispatch(loginSuccess({ token: result.token, user: result.user }));
+    } else {
+      dispatch(loginFailure(result.error || 'ログイン失敗'));
+    }
   };
 
   const handleLogout = async () => {

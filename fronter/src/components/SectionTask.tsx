@@ -6,16 +6,20 @@ import { loadTasks, createTask, updateTask, removeTask } from '../features/task/
 import ItemTask from "./parts/ItemTask"
 import TaskModal from "./parts/TaskModal"
 import { AddTask, Task } from "../model/task";
+import { Memory } from "../model/memory";
+import { loadMemories } from '../features/memory/memorySlice';
 
 export default function SectionTask() {
   const dispatch = useDispatch()
   const { tasks, loading, error } = useSelector((state: RootState) => state.task)
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
+  const { memories } = useSelector((state: RootState) => state.memory)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<AddTask|Task|undefined>()
 
   useEffect(() => {
     dispatch(loadTasks())
+    dispatch(loadMemories())
   }, [dispatch, isAuthenticated])
 
   const handleAddTask = () => {
@@ -78,6 +82,7 @@ export default function SectionTask() {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSave={handleSaveTask}
+          memories={memories}
         />
       </div>
     </div>

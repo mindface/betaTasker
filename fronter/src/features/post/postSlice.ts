@@ -1,33 +1,34 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { State, Posts } from '../../model/posts'
 
 interface UserState {
   loading: boolean;
   isAuthenticated: boolean;
   error: string | null;
-  token: string | null;
+  post: Posts | null;
 }
 
 const initialState: UserState = {
   loading: false,
   isAuthenticated: false,
   error: null,
-  token: null,
+  post: null,
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: 'posts',
   initialState,
   reducers: {
-    loginRequest: (state) => {
+    postRequest: (state) => {
       state.loading = true;
       state.error = null;
     },
-    loginSuccess: (state, action: PayloadAction<string>) => {
+    postSuccess: (state, action: PayloadAction<Posts>) => {
       state.loading = false;
       state.isAuthenticated = true;
-      state.token = action.payload;
+      state.post = action.payload;
     },
-    loginFailure: (state, action: PayloadAction<string>) => {
+    postFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.isAuthenticated = false;
       state.error = action.payload;
@@ -35,5 +36,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { loginRequest, loginSuccess, loginFailure } = userSlice.actions;
+export const { postRequest, postSuccess, postFailure } = userSlice.actions;
 export default userSlice.reducer;

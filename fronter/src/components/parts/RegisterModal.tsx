@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { register, clearError } from '../../features/memory/memorySlice';
+import { regApi } from '../../services/authApi';
 import { RootState } from '../../store';
 
 interface RegisterModalProps {
@@ -30,17 +30,17 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-      dispatch(clearError());
+      console.error('パスワードが一致しません');
       return;
     }
 
-    const result = await dispatch(register({
+    const result = await dispatch(regApi({
       username: formData.username,
       email: formData.email,
       password: formData.password,
     }));
 
-    if (register.fulfilled.match(result)) {
+    if (!result.error) {
       onClose();
     }
   };
