@@ -5,6 +5,7 @@ import (
 	"github.com/godotask/controller/memory"
 	"github.com/godotask/controller/top"
 	"github.com/godotask/controller/user"
+	"github.com/godotask/controller/task"
 	"github.com/godotask/repository"
 	"github.com/godotask/service"
 	"github.com/godotask/model"
@@ -37,6 +38,9 @@ func GetRouter() *gin.Engine {
 	memoryService := &service.MemoryService{Repo: memoryRepo}
 	memoryController := memory.MemoryController{Service: memoryService}
 
+  taskRepo := &repository.TaskRepository{DB: model.DB}
+	taskService := &service.TaskService{Repo: taskRepo}
+	taskController := task.TaskController{Service: taskService}
 
 	r.POST("/api/login", user.Login)
 	r.POST("/api/logout", user.Logout)
@@ -58,19 +62,19 @@ func GetRouter() *gin.Engine {
 	// Protected routes
 	r.GET("/api/user/profile",  user.AuthMiddleware(), user.Profile)
 
-    // Memory API (CRUD)
-    r.POST("/api/memory", memoryController.AddMemory)
-    r.GET("/api/memory", memoryController.ListMemories)
-    r.GET("/api/memory/:id", memoryController.GetMemory)
-    r.PUT("/api/memory/:id", memoryController.EditMemory)
-    r.DELETE("/api/memory/:id", memoryController.DeleteMemory)
+	// Memory API (CRUD)
+	r.POST("/api/memory", memoryController.AddMemory)
+	r.GET("/api/memory", memoryController.ListMemories)
+	r.GET("/api/memory/:id", memoryController.GetMemory)
+	r.PUT("/api/memory/:id", memoryController.EditMemory)
+	r.DELETE("/api/memory/:id", memoryController.DeleteMemory)
 
-    // Task API (CRUD)
-    r.POST("/api/task", taskController.AddTask)
-    r.GET("/api/task", taskController.ListTasks)
-    r.GET("/api/task/:id", taskController.GetTask)
-    r.PUT("/api/task/:id", taskController.EditTask)
-    r.DELETE("/api/task/:id", taskController.DeleteTask)
+	// // Task API (CRUD)
+	r.POST("/api/task", taskController.AddTask)
+	r.GET("/api/task", taskController.ListTasks)
+	r.GET("/api/task/:id", taskController.GetTask)
+	r.PUT("/api/task/:id", taskController.EditTask)
+	r.DELETE("/api/task/:id", taskController.DeleteTask)
 
 	return r
 }

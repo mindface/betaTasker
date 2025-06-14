@@ -12,11 +12,9 @@ export default function SectionViewer() {
   const canvas = useRef<HTMLCanvasElement >(null)
   const top = useRef(30)
   const left = useRef(0)
-  const right = useRef(0)
   const botton = useRef(0)
   const sendModel = useRef<any>(null)
   let mixer = useRef<any>()
-  let numAnimations:number = 0
   const v3A = new THREE.Vector3()
 
   function createColliderMesh(radius:number, offset: THREE.Vector3): VRMSpringBoneColliderMesh {
@@ -146,7 +144,7 @@ export default function SectionViewer() {
         });
 
         const animations = gltf.animations;
-        numAnimations = animations.length;
+        // numAnimations = animations.length;
         
         if(animations && animations.length){
           mixer.current = new THREE.AnimationMixer( sendModel.current );

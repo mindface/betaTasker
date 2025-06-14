@@ -1,6 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { postReducer } from './modules/postReducer'
 import { State } from './model/posts'
+import userReducer from './features/user/userSlice'
+import memoryReducer from './features/memory/memorySlice'
+import taskReducer from './features/task/taskSlice'
+import assessmentReducer from './features/assessment/assessmentSlice'
 
 export type AppState = {
   state: State
@@ -8,7 +11,10 @@ export type AppState = {
 
 export const setupStore = configureStore({
   reducer: {
-    state: postReducer,
+    user: userReducer,
+    memory: memoryReducer,
+    task: taskReducer,
+    assessment: assessmentReducer,
   },
 })
 

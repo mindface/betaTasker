@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import menu from '../json/menu.json'
 
 interface titleType{
   title: string
@@ -22,21 +23,14 @@ class BaseHeader extends React.Component<titleType> {
           </h3>
           <nav className="nav">
             <ul className="nav--list _flex_">
-            <li className="nav__item">
-                <Link href="/">
-                  home
-                </Link>
-              </li>
-              <li className="nav__item">
-                <Link href="/photo">
-                  photo
-                </Link>
-              </li>
-              <li className="nav__item">
-                <Link href="/about">
-                  about
-                </Link>
-              </li>
+              {/* menu.jsonのリンクを動的に追加 */}
+              {menu.map((item: { title: string; path: string }, idx: number) => (
+                <li className="nav__item" key={`menu${idx}`}>
+                  <Link href={item.path}>
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>

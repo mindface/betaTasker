@@ -1,7 +1,6 @@
 "use client"
 import * as React from 'react'
 import { Provider } from 'react-redux'
-import App, { AppProps } from 'next/app'
 import { setupStore } from '../store'
 
 // const store = setupStore()
@@ -16,12 +15,16 @@ export default function BaseApp ({
   children: React.ReactNode;
 }>) {
   return (
-    <Provider store={setupStore}>
-      <IndexLayout>
-      <div>
-        {children}
-      </div>
-      </IndexLayout>
-    </Provider>
+    <html lang="ja">
+      <body>
+        <Provider store={setupStore}>
+          <IndexLayout>
+          <div>
+            {children}
+          </div>
+          </IndexLayout>
+        </Provider>
+      </body>
+    </html>
   )
 }
