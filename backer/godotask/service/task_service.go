@@ -21,6 +21,6 @@ func (s *TaskService) ListTasks() ([]model.Task, error) {
 func (s *TaskService) UpdateTask(id string, task *model.Task) error {
 	return s.Repo.Update(id, task)
 }
-func (s *TaskService) DeleteTask(id string) error {	
+func (s *TaskService) DeleteTask(id string) error {
 	return s.Repo.Delete(id)
 }

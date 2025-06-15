@@ -6,6 +6,7 @@ import (
 	"github.com/godotask/controller/top"
 	"github.com/godotask/controller/user"
 	"github.com/godotask/controller/task"
+	"github.com/godotask/controller/assessment"
 	"github.com/godotask/repository"
 	"github.com/godotask/service"
 	"github.com/godotask/model"
@@ -34,13 +35,18 @@ func GetRouter() *gin.Engine {
 	r.Use(static.Serve("/usr/local/go/godotask/static", static.LocalFile("./images", true)))
 	r.LoadHTMLGlob("view/*.html")
 	r.Use(CORSMiddleware())
+
 	memoryRepo := &repository.MemoryRepository{DB: model.DB}
 	memoryService := &service.MemoryService{Repo: memoryRepo}
 	memoryController := memory.MemoryController{Service: memoryService}
 
-  taskRepo := &repository.TaskRepository{DB: model.DB}
+	taskRepo := &repository.TaskRepository{DB: model.DB}
 	taskService := &service.TaskService{Repo: taskRepo}
 	taskController := task.TaskController{Service: taskService}
+
+  assessmentRepo := &repository.AssessmentRepository{DB: model.DB}
+	assessmentService := &service.AssessmentService{Repo: assessmentRepo}
+	assessmentController := assessment.AssessmentController{Service: assessmentService}
 
 	r.POST("/api/login", user.Login)
 	r.POST("/api/logout", user.Logout)
@@ -60,7 +66,7 @@ func GetRouter() *gin.Engine {
 
 	// User authentication routes
 	// Protected routes
-	r.GET("/api/user/profile",  user.AuthMiddleware(), user.Profile)
+	r.GET("/api/user/profile", user.AuthMiddleware(), user.Profile)
 
 	// Memory API (CRUD)
 	r.POST("/api/memory", memoryController.AddMemory)
@@ -75,6 +81,12 @@ func GetRouter() *gin.Engine {
 	r.GET("/api/task/:id", taskController.GetTask)
 	r.PUT("/api/task/:id", taskController.EditTask)
 	r.DELETE("/api/task/:id", taskController.DeleteTask)
+
+	r.POST("/api/assessment", assessmentController.AddAssessment)
+	r.GET("/api/assessment", assessmentController.ListAssessments)
+	r.GET("/api/assessment/:id", assessmentController.GetAssessment)
+	r.PUT("/api/assessment/:id", assessmentController.EditAssessment)
+	r.DELETE("/api/assessment/:id", assessmentController.DeleteAssessment)	
 
 	return r
 }
