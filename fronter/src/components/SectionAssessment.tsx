@@ -6,15 +6,20 @@ import { loadAssessments, createAssessment, updateAssessment, removeAssessment }
 import ItemAssessment from "./parts/ItemAssessment"
 import AssessmentModal from "./parts/AssessmentModal"
 import { AddAssessment, Assessment } from "../model/assessment";
+import { Task } from "../model/task";
+import { loadTasks } from '../features/task/taskSlice';
 
 export default function SectionAssessment() {
   const dispatch = useDispatch()
-  const { assessments, loading, error } = useSelector((state: RootState) => state.assessment)
+  const { tasks, taskLoading, taskError } = useSelector((state: RootState) => state.task)
+  const { assessments, assessmentLoading, assessmentError } = useSelector((state: RootState) => state.assessment)
+  const { memories, memoryLoading, memoryError } = useSelector((state: RootState) => state.memory)
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingAssessment, setEditingAssessment] = useState<AddAssessment|Assessment|undefined>()
 
   useEffect(() => {
+    dispatch(loadAssessments())
     dispatch(loadAssessments())
   }, [dispatch, isAuthenticated])
 
@@ -41,6 +46,11 @@ export default function SectionAssessment() {
     await dispatch(removeAssessment(id))
   }
 
+  useEffect(() => {
+    dispatch(loadTasks())
+    // dispatch(loadMemories())
+  }, [dispatch, isAuthenticated]);
+
   return (
     <div className="section__inner section--assessment">
       <div className="section-container">
@@ -53,13 +63,13 @@ export default function SectionAssessment() {
             新規アセスメント
           </button>
         </div>
-        {error && (
+        {assessmentError && (
           <div className="error-message">
-            {error}
+            {assessmentError}
           </div>
         )}
 
-        {loading ? (
+        {assessmentLoading ? (
           <div className="loading">読み込み中...</div>
         ) : (
           <div className="assessment-list">
@@ -78,6 +88,8 @@ export default function SectionAssessment() {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSave={handleSaveAssessment}
+          tasks={tasks}
+          memories={memories}
         />
       </div>
     </div>

@@ -40,6 +40,9 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
     await onSave(formData);
   };
 
+  // 選択中のmemory_idに該当するMemoryを取得
+  const selectedMemory = memories.find(m => m.id === Number(formData?.memory_id));
+
   if (!isOpen) return null;
 
   return (
@@ -57,6 +60,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
               onChange={handleChange}
               required
             />
+            
           </div>
           <div className="form-group">
             <label htmlFor="description">説明</label>
@@ -110,6 +114,15 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
               ))}
             </select>
           </div>
+          {/* 選択中のメモ内容を表示 */}
+          {selectedMemory && (
+            <div className="selected-memory-info" style={{margin: '1em 0', padding: '0.5em', background: '#f6f8fa', borderRadius: 6}}>
+              <div><b>タイトル:</b> {selectedMemory.title}</div>
+              <div><b>内容:</b> {selectedMemory.notes}</div>
+              <div><b>タグ:</b> {selectedMemory.tags}</div>
+              <div><b>ステータス:</b> {selectedMemory.read_status}</div>
+            </div>
+          )}
           <div className="form-actions">
             <button type="button" onClick={onClose} className="btn btn-secondary">キャンセル</button>
             <button type="submit" className="btn btn-primary">保存</button>

@@ -4,14 +4,14 @@ import { AddTask, Task } from '../../model/task';
 
 interface TaskState {
   tasks: Task[];
-  loading: boolean;
-  error: string | null;
+  taskLoading: boolean;
+  taskError: string | null;
 }
 
 const initialState: TaskState = {
   tasks: [],
-  loading: false,
-  error: null,
+  taskLoading: false,
+  taskError: null,
 }
 
 export const loadTasks = createAsyncThunk(
@@ -82,17 +82,17 @@ const taskSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loadTasks.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.taskLoading = true;
+        state.taskError = null;
       })
       .addCase(loadTasks.fulfilled, (state, action: PayloadAction<Task[]>) => {
-        state.loading = false;
+        state.taskLoading = false;
         console.log('Tasks loaded:', action.payload);
         state.tasks = action.payload;
       })
       .addCase(loadTasks.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+        state.taskLoading = false;
+        state.taskError = action.payload as string;
       })
       .addCase(createTask.fulfilled, (state, action: PayloadAction<Task>) => {
         state.tasks.push(action.payload);

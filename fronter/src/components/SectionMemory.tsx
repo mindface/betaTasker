@@ -9,7 +9,7 @@ import { AddMemory, Memory } from "../model/memory";
 
 export default function SectionMemory() {
   const dispatch = useDispatch()
-  const { memories, loading, error } = useSelector((state: RootState) => state.memory)
+  const { memories, memoryLoading, memoryError } = useSelector((state: RootState) => state.memory)
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingMemory, setEditingMemory] = useState<AddMemory|Memory|undefined>()
@@ -66,13 +66,13 @@ export default function SectionMemory() {
             新規メモ
           </button>
         </div>
-        {error && (
+        {memoryLoading && (
           <div className="error-message">
-            {error}
+            {memoryLoading}
           </div>
         )}
 
-        {loading ? (
+        {memoryError ? (
           <div className="loading">読み込み中...</div>
         ) : (
           <div className="memory-list">

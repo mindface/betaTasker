@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { AddAssessment, Assessment } from "../../model/assessment";
 import Cookies from 'js-cookie';
+import { Memory } from "../../model/memory";
+import { Task } from "../../model/task";
 
 interface AssessmentModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (assessmentData: AddAssessment | Assessment) => void;
   initialData?: AddAssessment | Assessment;
+  tasks?: Task[];
+  memories?: Memory[];
 }
 
 const setCheker = ['user_id', 'task_id', 'effectiveness_score', 'effort_score', 'impact_score'];
 
-const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSave, initialData }) => {
+const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSave, initialData, tasks, memories }) => {
   const [formData, setFormData] = useState<AddAssessment | Assessment | undefined>();
+  // メモリー詳細表示用のstate
+  const [openMemoryId, setOpenMemoryId] = useState<number | null>(null);
 
   useEffect(() => {
     if (initialData) {
@@ -30,7 +36,7 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
   }, [initialData]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData(prev => prev ? {
@@ -48,12 +54,52 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
     await onSave({ ...formData, user_id });
   };
 
+  // 選択中のタスクに紐づくメモリーを取得
+  const selectedTask = tasks?.find(t => t.id === Number(formData?.task_id));
+  const relatedMemory = memories?.find(m => m.id === selectedTask?.memory_id);
+
   if (!isOpen) return null;
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>{initialData ? 'アセスメントを編集' : '新規アセスメント'}</h2>
+        {/* 全メモリー一覧を表示（タイトルクリックで詳細トグル） */}
+        {memories && memories.length > 0 && (
+          <div className="all-memories-list" style={{margin: '1em 0', padding: '0.5em', background: '#f0f4fa', borderRadius: 6}}>
+            <div style={{fontWeight: 'bold', marginBottom: 4}}>全メモリー一覧</div>
+            <ul style={{margin: 0, padding: 0, listStyle: 'none'}}>
+              {memories.map(memory => (
+                <li key={memory.id} style={{marginBottom: 6, borderBottom: '1px solid #e0e0e0', paddingBottom: 4}}>
+                  <div>
+                    <span
+                      style={{ cursor: 'pointer', color: '#2563eb', textDecoration: 'underline' }}
+                      onClick={() => setOpenMemoryId(openMemoryId === memory.id ? null : memory.id)}
+                    >
+                      {memory.title}
+                    </span>
+                  </div>
+                  {openMemoryId === memory.id && (
+                    <div style={{marginTop: 4, paddingLeft: 8}}>
+                      <div><b>内容:</b> {memory.notes}</div>
+                      <div><b>タグ:</b> {memory.tags}</div>
+                      <div><b>ステータス:</b> {memory.read_status}</div>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {/* 紐づくメモリー情報を表示 */}
+        {relatedMemory && (
+          <div className="related-memory-info" style={{margin: '1em 0', padding: '0.5em', background: '#f6f8fa', borderRadius: 6}}>
+            <div><b>関連メモ:</b> {relatedMemory.title}</div>
+            <div><b>内容:</b> {relatedMemory.notes}</div>
+            <div><b>タグ:</b> {relatedMemory.tags}</div>
+            <div><b>ステータス:</b> {relatedMemory.read_status}</div>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="assessment-form">
           <div className="form-group">
             <label htmlFor="task_id">タスクID</label>
@@ -113,6 +159,22 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
               rows={3}
             />
           </div>
+          {tasks && (
+            <div className="form-group">
+              <label htmlFor="related_task_id">関連タスク</label>
+              <select
+                id="related_task_id"
+                name="related_task_id"
+                value={formData?.task_id || ''}
+                onChange={handleChange}
+              >
+                <option value="">選択してください</option>
+                {tasks.map(task => (
+                  <option key={task.id} value={task.id}>{task.title}</option>
+                ))}
+              </select>
+            </div>
+          )}
           <div className="form-actions">
             <button type="button" onClick={onClose} className="btn btn-secondary">キャンセル</button>
             <button type="submit" className="btn btn-primary">保存</button>

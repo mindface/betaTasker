@@ -4,6 +4,7 @@ import { RootState } from '../../store';
 import CommonModal from './CommonModal';
 import { AddMemory, Memory } from "../../model/memory";
 
+
 interface MemoryModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -18,7 +19,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
   initialData,
 }) => {
   const [formData, setFormData] = useState<(AddMemory|Memory|undefined)>();
-  const { loading, error } = useSelector((state: RootState) => state.memory);
+  const { memoryLoading, memoryError } = useSelector((state: RootState) => state.memory);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -56,7 +57,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
       title={initialData?.title ? 'メモを編集' : '新規メモ'}
     >
       <form onSubmit={handleSubmit} className="memory-form">
-        {error && <div className="error-message">{error}</div>}
+        {memoryError && <div className="error-message">{memoryError}</div>}
         <div>
           <div className="form-group">
             <label htmlFor="title">タイトル</label>
@@ -119,9 +120,9 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={loading}
+              disabled={memoryLoading}
             >
-              {loading ? '保存中...' : '保存'}
+              {memoryLoading ? '保存中...' : '保存'}
             </button>
           </div>
         </div>

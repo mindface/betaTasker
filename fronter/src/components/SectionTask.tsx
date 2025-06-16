@@ -6,12 +6,11 @@ import { loadTasks, createTask, updateTask, removeTask } from '../features/task/
 import ItemTask from "./parts/ItemTask"
 import TaskModal from "./parts/TaskModal"
 import { AddTask, Task } from "../model/task";
-import { Memory } from "../model/memory";
 import { loadMemories } from '../features/memory/memorySlice';
 
 export default function SectionTask() {
   const dispatch = useDispatch()
-  const { tasks, loading, error } = useSelector((state: RootState) => state.task)
+  const { tasks, taskLoading, taskError } = useSelector((state: RootState) => state.task)
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const { memories } = useSelector((state: RootState) => state.memory)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -57,13 +56,13 @@ export default function SectionTask() {
             新規タスク
           </button>
         </div>
-        {error && (
+        {taskError && (
           <div className="error-message">
-            {error}
+            {taskError}
           </div>
         )}
 
-        {loading ? (
+        {taskLoading ? (
           <div className="loading">読み込み中...</div>
         ) : (
           <div className="task-list">
