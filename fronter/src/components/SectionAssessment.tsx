@@ -56,7 +56,7 @@ export default function SectionAssessment() {
       <div className="section-container">
         <div className="assessment-header">
           <h2>アセスメント</h2>
-          <button 
+          <button
             onClick={() => handleAddAssessment()}
             className="btn btn-primary"
           >
@@ -68,7 +68,6 @@ export default function SectionAssessment() {
             {assessmentError}
           </div>
         )}
-
         {assessmentLoading ? (
           <div className="loading">読み込み中...</div>
         ) : (

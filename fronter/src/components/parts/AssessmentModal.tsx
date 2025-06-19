@@ -14,7 +14,6 @@ interface AssessmentModalProps {
 }
 
 const setCheker = ['user_id', 'task_id', 'effectiveness_score', 'effort_score', 'impact_score'];
-
 const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSave, initialData, tasks, memories }) => {
   const [formData, setFormData] = useState<AddAssessment | Assessment | undefined>();
   // メモリー詳細表示用のstate
@@ -159,22 +158,6 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
               rows={3}
             />
           </div>
-          {tasks && (
-            <div className="form-group">
-              <label htmlFor="related_task_id">関連タスク</label>
-              <select
-                id="related_task_id"
-                name="related_task_id"
-                value={formData?.task_id || ''}
-                onChange={handleChange}
-              >
-                <option value="">選択してください</option>
-                {tasks.map(task => (
-                  <option key={task.id} value={task.id}>{task.title}</option>
-                ))}
-              </select>
-            </div>
-          )}
           <div className="form-actions">
             <button type="button" onClick={onClose} className="btn btn-secondary">キャンセル</button>
             <button type="submit" className="btn btn-primary">保存</button>

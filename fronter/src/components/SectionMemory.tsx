@@ -34,11 +34,20 @@ export default function SectionMemory() {
 
   const handleSaveMemory = async (memoryData: AddMemory | Memory) => {
     if (editingMemory) {
-      // TODO: 編集処理を実装
       console.log(memoryData)
-      await dispatch(updateMemory(memoryData as Memory))
+      try {
+        await dispatch(updateMemory(memoryData as Memory))
+        await dispatch(loadMemories())
+      } catch (error) {
+        console.error('メモの更新に失敗しました:', error)
+      }
     } else {
-      await dispatch(createMemory(memoryData as AddMemory))
+      try {
+        await dispatch(createMemory(memoryData as AddMemory))
+        await dispatch(loadMemories())
+      } catch (error) {
+        console.error('メモの更新に失敗しました:', error)
+      }
     }
     setIsModalOpen(false)
   }

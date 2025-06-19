@@ -1,4 +1,3 @@
-
 ``` dockerを含む ```
 docker exec -it dbgodotask bash
 
@@ -19,6 +18,10 @@ CREATE TABLE memory (
   tags VARCHAR(255),
   read_status read_status_enum DEFAULT 'unread',
   read_date TIMESTAMP,
+  factor VARCHAR(255),
+  process VARCHAR(255),
+  evaluation_axis VARCHAR(255),
+  information_amount VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -3,12 +3,7 @@ package assessment
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"github.com/godotask/service"
 )
-
-type AssessmentController struct {
-	Service *service.AssessmentService
-}
 
 // DeleteAssessment: DELETE /api/assessment/:id
 func (ctl *AssessmentController) DeleteAssessment(c *gin.Context) {

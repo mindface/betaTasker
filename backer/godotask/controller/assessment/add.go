@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/model"
-	"github.com/godotask/service"
 )
 
 // AddAssessment: POST /api/assessment
