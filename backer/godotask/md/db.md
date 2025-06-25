@@ -1,4 +1,3 @@
-
 ``` dockerを含む ```
 docker exec -it dbgodotask bash
 
@@ -9,6 +8,8 @@ psql -U dbgodotask -d dbgodotask
 ```
 CREATE TYPE source_type_enum AS ENUM ('book', 'article', 'video', 'lecture', 'other');
 CREATE TYPE read_status_enum AS ENUM ('unread', 'reading', 'finished');
+
+
 CREATE TABLE memory (
   id SERIAL PRIMARY KEY,
   user_id INT NOT NULL,
@@ -59,5 +60,17 @@ CREATE TABLE users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   is_active BOOLEAN DEFAULT TRUE
+);
+
+DROP TABLE IF EXISTS book CASCADE;
+
+CREATE TABLE book (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255),
+  name VARCHAR(255),
+  text TEXT,
+  disc TEXT,
+  img_path VARCHAR(1024),
+  status VARCHAR(255)
 );
 ```

@@ -52,3 +52,18 @@ curl -X GET http://localhost:8080/api/memory \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InR0ciIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzQ5MzEwNDM5fQ.EyfPtEBqLCUgyYTXZO5mKSKV6mv1zG3TsMX1wjt8nGI"
 
+
+
+
+curl -X GET http://localhost:8080/api/book
+
+curl -X POST http://localhost:8080/api/book \
+  -H "Content-Type: application/json" \
+  -d '{"title":"サンプルタイトル","name":"著者名","text":"本文","disc":"説明","imgPath":"path/to/image.png","status":"active"}'
+
+
+  curl -X DELETE http://localhost:8080/api/deletebook/1
+
+  curl -X PUT http://localhost:8080/api/updatebook/1 \
+  -H "Content-Type: application/json" \
+  -d '{"title":"新タイトル","name":"新著者名","text":"新本文","disc":"新説明","imgPath":"new/path.png","status":"inactive"}'

@@ -19,34 +19,16 @@ func BookAddDisplayAction(c *gin.Context) {
 	c.HTML(200, "book-add.html", gin.H{})
 }
 
-func AddBookAction(c *gin.Context) {
-	var input struct {
-			Title   string `json:"title" binding:"required"`
-			Name    string `json:"name" binding:"required"`
-			Text    string `json:"text" binding:"required"`
-			Disc    string `json:"disc"`
-			ImgPath string `json:"imgPath"`
+// AddBook: POST /api/book
+func (ctl *BookController) AddBook(c *gin.Context) {
+	var book model.Book
+	if err := c.ShouldBindJSON(&book); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
-
-	if err := c.ShouldBindJSON(&input); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-					"status":  "error",
-					"message": "Invalid input data",
-					"detail":  err.Error(),
-			})
-			return
+	if err := ctl.Service.CreateBook(&book); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add book"})
+		return
 	}
-
-	model.AddBookData(0, input.Title, input.Name, input.Text, input.Disc, input.ImgPath)
-	c.JSON(http.StatusOK, gin.H{
-			"status":  "success",
-			"message": "Book added successfully",
-	})
-
-	c.JSON(http.StatusOK, gin.H{
-			"status":  "success",
-			"message": "Book added successfully",
-	})
-
-	c.JSON(http.StatusOK, gin.H{"message": "Book added successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Book added", "book": book})
 }
