@@ -57,7 +57,7 @@ func GetRouter() *gin.Engine {
 	r.POST("/api/logout", user.Logout)
 	r.POST("/api/register", user.Register)
 
-	r.Use(user.AuthMiddleware())
+	// r.Use(user.AuthMiddleware())
 
 	r.GET("/", top.IndexDisplayAction)
 	// r.GET("/book", book.BookListDisplayAction)

@@ -25,7 +25,7 @@ export const addTaskService = async (task: AddTask) => {
     });
     const data = await res.json();
     if (!res.ok) throw new Error('タスク追加失敗');
-    return data;
+    return data
   } catch (err: any) {
     return { error: err.message };
   }

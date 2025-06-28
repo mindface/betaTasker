@@ -18,6 +18,7 @@ export default function SectionLogin() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(loginRequest());
+    console.log(email, password)
     const result = await loginApi(email, password);
     if (result.token && result.user) {
       dispatch(loginSuccess({ token: result.token, user: result.user }));
