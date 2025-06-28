@@ -146,7 +146,8 @@ func Login(c *gin.Context) {
 	}
 
 	// expirationTime := time.Now().Add(24 * time.Hour)
-	expirationTime := time.Now().Add(10 * time.Minute)
+	// expirationTime := time.Now().Add(10 * time.Minute)
+	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
 		Username: user.Username,
 		Role:     user.Role,
@@ -162,8 +163,12 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("Generated token: %s\n", tokenString)
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	fmt.Printf("Generated token2: %s\n", tokenString)
+	fmt.Printf("Generated user: %s\n", user)
+	c.JSON(http.StatusOK, gin.H{
+		"token": tokenString,
+		"user": user,
+	})
 }
 
 func Profile(c *gin.Context) {

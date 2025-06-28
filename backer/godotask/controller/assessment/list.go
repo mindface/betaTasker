@@ -3,7 +3,6 @@ package assessment
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"github.com/godotask/service"
 )
 
 // ListAssessments: GET /api/assessment

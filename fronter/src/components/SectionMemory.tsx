@@ -9,7 +9,7 @@ import { AddMemory, Memory } from "../model/memory";
 
 export default function SectionMemory() {
   const dispatch = useDispatch()
-  const { memories, loading, error } = useSelector((state: RootState) => state.memory)
+  const { memories, memoryLoading, memoryError } = useSelector((state: RootState) => state.memory)
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingMemory, setEditingMemory] = useState<AddMemory|Memory|undefined>()
@@ -34,11 +34,20 @@ export default function SectionMemory() {
 
   const handleSaveMemory = async (memoryData: AddMemory | Memory) => {
     if (editingMemory) {
-      // TODO: 編集処理を実装
       console.log(memoryData)
-      await dispatch(updateMemory(memoryData as Memory))
+      try {
+        await dispatch(updateMemory(memoryData as Memory))
+        await dispatch(loadMemories())
+      } catch (error) {
+        console.error('メモの更新に失敗しました:', error)
+      }
     } else {
-      await dispatch(createMemory(memoryData as AddMemory))
+      try {
+        await dispatch(createMemory(memoryData as AddMemory))
+        await dispatch(loadMemories())
+      } catch (error) {
+        console.error('メモの更新に失敗しました:', error)
+      }
     }
     setIsModalOpen(false)
   }
@@ -66,13 +75,13 @@ export default function SectionMemory() {
             新規メモ
           </button>
         </div>
-        {error && (
+        {memoryLoading && (
           <div className="error-message">
-            {error}
+            {memoryLoading}
           </div>
         )}
 
-        {loading ? (
+        {memoryError ? (
           <div className="loading">読み込み中...</div>
         ) : (
           <div className="memory-list">

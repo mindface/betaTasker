@@ -6,6 +6,10 @@ export interface Memory {
   title: string;
   author: string;
   notes: string;
+  factor: string;
+  process: string;
+  evaluation_axis: string;
+  information_amount: string;
   tags: string;
   read_status: string;
   read_date: string | null;
@@ -19,6 +23,10 @@ export interface AddMemory {
   author: string;
   source_type: string;
   notes: string;
+  factor: string;
+  process: string;
+  evaluation_axis: string;
+  information_amount: string;
   tags: string;
   read_status: string;
   read_date: string;

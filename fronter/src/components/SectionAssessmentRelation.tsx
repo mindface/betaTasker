@@ -58,27 +58,14 @@ export default function SectionAssessmentRelation() {
 
   return (
     <div className="section__inner section--assessment-relation">
-      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>タスク・メモリ・アセスメント連携</h2>
-      <div className="relation-container" style={{ display: 'flex', gap: 32, alignItems: 'flex-start', justifyContent: 'center' }}>
-        <div className="task-list" style={{ minWidth: 220, background: '#f8fafc', borderRadius: 8, padding: 16, boxShadow: '0 2px 8px #0001' }}>
-          <h3 style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: 8, marginBottom: 12 }}>タスク一覧</h3>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+      <h2>タスク・メモリ・アセスメント連携</h2>
+      <div className="relation-container">
+        <div className="task-list">
+          <h3>タスク一覧</h3>
+          <ul>
             {tasks.map(task => (
-              <li key={task.id} style={{ marginBottom: 8 }}>
-                <button
-                  onClick={() => setSelectedTask(task)}
-                  style={{
-                    width: '100%',
-                    background: selectedTask?.id === task.id ? '#2563eb' : '#fff',
-                    color: selectedTask?.id === task.id ? '#fff' : '#222',
-                    border: '1px solid #2563eb',
-                    borderRadius: 4,
-                    padding: '8px 12px',
-                    cursor: 'pointer',
-                    fontWeight: selectedTask?.id === task.id ? 'bold' : 'normal',
-                    transition: 'all 0.2s',
-                  }}
-                >
+              <li key={task.id}>
+                <button onClick={() => setSelectedTask(task)}>
                   {task.title}
                 </button>
               </li>
@@ -86,25 +73,13 @@ export default function SectionAssessmentRelation() {
           </ul>
         </div>
         {selectedTask && (
-          <div className="memory-list" style={{ minWidth: 220, background: '#f1f5f9', borderRadius: 8, padding: 16, boxShadow: '0 2px 8px #0001' }}>
-            <h3 style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: 8, marginBottom: 12 }}>選択タスクのメモリ一覧</h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          <div className="memory-list">
+            <h3>選択タスクのメモリ一覧</h3>
+            <ul>
               {relatedMemories.map(memory => (
-                <li key={memory.id} style={{ marginBottom: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ flex: 1 }}>{memory.title}</span>
-                  <button
-                    onClick={() => handleAddAssessment(memory)}
-                    style={{
-                      marginLeft: 8,
-                      background: '#22c55e',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: 4,
-                      padding: '6px 12px',
-                      cursor: 'pointer',
-                      fontWeight: 'bold',
-                    }}
-                  >
+                <li key={memory.id}>
+                  <span>{memory.title}</span>
+                  <button onClick={() => handleAddAssessment(memory)}>
                     アセスメント追加
                   </button>
                 </li>
@@ -112,13 +87,11 @@ export default function SectionAssessmentRelation() {
             </ul>
           </div>
         )}
-        <div className="assessment-list" style={{ flex: 1, background: '#f9fafb', borderRadius: 8, padding: 16, boxShadow: '0 2px 8px #0001', minWidth: 320 }}>
-          <h3 style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: 8, marginBottom: 12 }}>アセスメント一覧</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {filteredAssessments.map(assessment => (
-              <ItemAssessment key={assessment.id} assessment={assessment} />
-            ))}
-          </div>
+        <div className="assessment-list">
+          <h3>アセスメント一覧</h3>
+          {filteredAssessments.map(assessment => (
+            <ItemAssessment key={assessment.id} assessment={assessment} />
+          ))}
         </div>
       </div>
       <AssessmentModal

@@ -5,8 +5,10 @@ import { RootState } from '../store';
 import { loginRequest, loginSuccess, loginFailure } from '../features/user/userSlice';
 import { loginApi, logoutApi } from '../services/authApi';
 import { fetchMemoriesService } from '../services/memoryApi';
+import { useRouter } from 'next/navigation';
 
 export default function SectionLogin() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
   const [loginSwitch, setLoginSwitch] = useState(false);
@@ -19,6 +21,7 @@ export default function SectionLogin() {
     const result = await loginApi(email, password);
     if (result.token && result.user) {
       dispatch(loginSuccess({ token: result.token, user: result.user }));
+      router.push('/');
     } else {
       dispatch(loginFailure(result.error || 'ログイン失敗'));
     }

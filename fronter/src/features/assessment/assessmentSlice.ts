@@ -4,14 +4,14 @@ import { AddAssessment, Assessment } from '../../model/assessment';
 
 interface AssessmentState {
   assessments: Assessment[];
-  loading: boolean;
-  error: string | null;
+  assessmentLoading: boolean;
+  assessmentError: string | null;
 }
 
 const initialState: AssessmentState = {
   assessments: [],
-  loading: false,
-  error: null,
+  assessmentLoading: false,
+  assessmentError: null,
 }
 
 export const loadAssessments = createAsyncThunk(
@@ -81,16 +81,16 @@ const assessmentSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loadAssessments.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.assessmentLoading = true;
+        state.assessmentError = null;
       })
       .addCase(loadAssessments.fulfilled, (state, action: PayloadAction<Assessment[]>) => {
-        state.loading = false;
+        state.assessmentLoading = false;
         state.assessments = action.payload;
       })
       .addCase(loadAssessments.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+        state.assessmentLoading = false;
+        state.assessmentError = action.payload as string;
       })
       .addCase(createAssessment.fulfilled, (state, action: PayloadAction<Assessment>) => {
         state.assessments.push(action.payload);
