@@ -14,6 +14,6 @@ type Assessment struct {
 	UpdatedAt           time.Time `json:"updated_at"`
 }
 
-func (Assessment) TableName() string {	
-		return "assessment"
+func (Assessment) TableName() string {
+    return "assessment"
 }

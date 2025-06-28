@@ -14,11 +14,11 @@ func (r *TaskRepository) Create(task *model.Task) error {
 }
 
 func (r *TaskRepository) FindByID(id string) (*model.Task, error) {
-	var t model.Task
-	if err := r.DB.Where("id = ?", id).First(&t).Error; err != nil {
+	var task model.Task
+	if err := r.DB.Where("id = ?", id).First(&task).Error; err != nil {
 		return nil, err
 	}
-	return &t, nil
+	return &task, nil
 }
 
 func (r *TaskRepository) FindAll() ([]model.Task, error) {

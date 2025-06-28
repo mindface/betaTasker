@@ -4,14 +4,14 @@ import { AddMemory, Memory } from '../../model/memory';
 
 interface MemoryState {
   memories: Memory[];
-  loading: boolean;
-  error: string | null;
+  memoryLoading: boolean;
+  memoryError: string | null;
 }
 
 const initialState: MemoryState = {
   memories: [],
-  loading: false,
-  error: null,
+  memoryLoading: false,
+  memoryError: null,
 }
 
 export const loadMemories = createAsyncThunk(
@@ -79,34 +79,34 @@ const memorySlice = createSlice({
   initialState,
   reducers: {
     clearError: (state) => {
-      state.error = null;
+      state.memoryError = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(loadMemories.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.memoryLoading = true;
+        state.memoryError = null;
       })
       .addCase(loadMemories.fulfilled, (state, action: PayloadAction<Memory[]>) => {
-        state.loading = false;
+        state.memoryLoading = false;
         state.memories = action.payload;
       })
       .addCase(loadMemories.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+        state.memoryLoading = false;
+        state.memoryError = action.payload as string;
       })
       .addCase(createMemory.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.memoryLoading = true;
+        state.memoryError = null;
       })
       .addCase(createMemory.fulfilled, (state, action: PayloadAction<Memory>) => {
-        state.loading = false;
+        state.memoryLoading = false;
         state.memories.push(action.payload);
       })
       .addCase(createMemory.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+        state.memoryLoading = false;
+        state.memoryError = action.payload as string;
       })
       .addCase(removeMemory.fulfilled, (state, action: PayloadAction<number>) => {
         state.memories = state.memories.filter(memory => memory.id !== action.payload);

@@ -4,6 +4,7 @@ import { RootState } from '../../store';
 import CommonModal from './CommonModal';
 import { AddMemory, Memory } from "../../model/memory";
 
+
 interface MemoryModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -11,14 +12,25 @@ interface MemoryModalProps {
   initialData?: (AddMemory|Memory);
 }
 
+const initiaSetlData = {
+    title: '',
+    notes: '',
+    tags: '',
+    read_status: 'unread',
+    factor: '',
+    process: '',
+    evaluation_axis: '',
+    information_amount: '',
+  }
+
 const MemoryModal: React.FC<MemoryModalProps> = ({
   isOpen,
   onClose,
   onSave,
   initialData,
 }) => {
-  const [formData, setFormData] = useState<(AddMemory|Memory|undefined)>();
-  const { loading, error } = useSelector((state: RootState) => state.memory);
+  const [formData, setFormData] = useState<(AddMemory|Memory|undefined)>(initiaSetlData as AddMemory);
+  const { memoryLoading, memoryError } = useSelector((state: RootState) => state.memory);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -46,6 +58,8 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
+    }else {
+      setFormData(initiaSetlData as AddMemory);
     }
   }, [initialData]);
 
@@ -56,7 +70,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
       title={initialData?.title ? 'メモを編集' : '新規メモ'}
     >
       <form onSubmit={handleSubmit} className="memory-form">
-        {error && <div className="error-message">{error}</div>}
+        {memoryError && <div className="error-message">{memoryError}</div>}
         <div>
           <div className="form-group">
             <label htmlFor="title">タイトル</label>
@@ -108,6 +122,51 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
             </select>
           </div>
 
+          <div className="form-group">
+            <label htmlFor="factor">因子</label>
+            <input
+              type="text"
+              id="factor"
+              name="factor"
+              value={formData?.factor || ''}
+              onChange={handleChange}
+              placeholder="例: 環境, 動機, 習慣 など"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="process">プロセス仮説</label>
+            <input
+              type="text"
+              id="process"
+              name="process"
+              value={formData?.process || ''}
+              onChange={handleChange}
+              placeholder="例: どのように学んだか・使ったか"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="evaluation_axis">評価軸</label>
+            <input
+              type="text"
+              id="evaluation_axis"
+              name="evaluation_axis"
+              value={formData?.evaluation_axis || ''}
+              onChange={handleChange}
+              placeholder="例: 理解度, 応用度, 継続性 など"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="information_amount">情報量</label>
+            <input
+              type="text"
+              id="information_amount"
+              name="information_amount"
+              value={formData?.information_amount || ''}
+              onChange={handleChange}
+              placeholder="例: 参考文献数やメモの分量など"
+            />
+          </div>
+
           <div className="form-actions">
             <button
               type="button"
@@ -119,9 +178,9 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={loading}
+              disabled={memoryLoading}
             >
-              {loading ? '保存中...' : '保存'}
+              {memoryLoading ? '保存中...' : '保存'}
             </button>
           </div>
         </div>
@@ -130,4 +189,4 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
   );
 };
 
-export default MemoryModal; 
+export default MemoryModal;
