@@ -51,6 +51,7 @@ func GetRouter() *gin.Engine {
 	r.POST("/api/logout", user.Logout)
 	r.POST("/api/register", user.Register)
 
+	r.Use(user.AuthMiddleware())
 
 	r.GET("/", top.IndexDisplayAction)
 	// r.GET("/book", book.BookListDisplayAction)
@@ -61,7 +62,12 @@ func GetRouter() *gin.Engine {
 	r.DELETE("/api/deletebook/:id", bookController.DeleteBook)
 	r.PUT("/api/updatebook/:id", bookController.EditBook)
 
-	r.Use(user.AuthMiddleware())
+	// // Task API (CRUD)
+	r.POST("/api/task", taskController.AddTask)
+	r.GET("/api/task", taskController.ListTasks)
+	r.GET("/api/task/:id", taskController.GetTask)
+	r.PUT("/api/task/:id", taskController.EditTask)
+	r.DELETE("/api/task/:id", taskController.DeleteTask)
 
 	// User authentication routes
 	// Protected routes
@@ -73,13 +79,6 @@ func GetRouter() *gin.Engine {
 	r.GET("/api/memory/:id", memoryController.GetMemory)
 	r.PUT("/api/memory/:id", memoryController.EditMemory)
 	r.DELETE("/api/memory/:id", memoryController.DeleteMemory)
-
-	// // Task API (CRUD)
-	r.POST("/api/task", taskController.AddTask)
-	r.GET("/api/task", taskController.ListTasks)
-	r.GET("/api/task/:id", taskController.GetTask)
-	r.PUT("/api/task/:id", taskController.EditTask)
-	r.DELETE("/api/task/:id", taskController.DeleteTask)
 
 	return r
 }
