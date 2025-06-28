@@ -11,11 +11,11 @@ const getPostRequest = (): Action => {
   }
 }
 
-const getPostSuccess = (json:Posts[]): Action => {
+const getPostSuccess = (posts:Posts[]): Action => {
   return {
     type: GET_POST_SUCCESS,
-    payload: json,
-    rePayload: json,
+    payload: posts,
+    rePayload: posts,
     loading:false
   }
 }

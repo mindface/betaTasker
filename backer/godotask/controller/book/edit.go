@@ -7,41 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UpdateBookAction(c *gin.Context) {
+
+// EditBook: PUT /api/book/:id
+func (ctl *BookController) EditBook(c *gin.Context) {
 	id := c.Param("id")
-	if id == "" {
-			c.JSON(http.StatusBadRequest, gin.H{
-					"status":  "error",
-					"message": "Book ID is required",
-			})
-			return
+	var book model.Book
+	if err := c.ShouldBindJSON(&book); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
-
-	var input struct {
-			Title   string `json:"title" binding:"required"`
-			Name    string `json:"name" binding:"required"`
-			Text    string `json:"text" binding:"required"`
-			Disc    string `json:"disc"`
-			ImgPath string `json:"imgPath"`
+	if err := ctl.Service.UpdateBook(id, &book); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to edit book"})
+		return
 	}
-
-	if err := c.ShouldBindJSON(&input); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-					"status":  "error",
-					"message": "入力値が正しくありません",
-					"detail":  err.Error(),
-			})
-			return
-	}
-
-	model.EditBookData(id, input.Title, input.Name, input.Text, input.Disc, input.ImgPath)
-	c.JSON(http.StatusOK, gin.H{
-			"status":  "success",
-			"message": "Book updated successfully",
-	})
-
-	c.JSON(http.StatusOK, gin.H{
-			"status":  "success",
-			"message": "Book update successfully",
-	})
+	c.JSON(http.StatusOK, gin.H{"message": "Book edited", "book": book})
 }

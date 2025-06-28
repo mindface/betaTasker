@@ -36,6 +36,11 @@ func GetRouter() *gin.Engine {
 	r.LoadHTMLGlob("view/*.html")
 	r.Use(CORSMiddleware())
 
+  
+  bookRepo := &repository.BookRepository{DB: model.DB}
+	bookService := &service.BookService{Repo: bookRepo}
+	bookController := book.BookController{Service: bookService}
+
 	memoryRepo := &repository.MemoryRepository{DB: model.DB}
 	memoryService := &service.MemoryService{Repo: memoryRepo}
 	memoryController := memory.MemoryController{Service: memoryService}
@@ -52,17 +57,23 @@ func GetRouter() *gin.Engine {
 	r.POST("/api/logout", user.Logout)
 	r.POST("/api/register", user.Register)
 
-	r.Use(user.AuthMiddleware())
+	// r.Use(user.AuthMiddleware())
 
 	r.GET("/", top.IndexDisplayAction)
-	r.GET("/book", book.BookListDisplayAction)
-	r.GET("/api/book", book.ApiBookListDisplayAction)
-	r.GET("/book/add", book.BookAddDisplayAction)
-	r.POST("/api/book", book.AddBookAction)
+	// r.GET("/book", book.BookListDisplayAction)
+	// r.GET("/book/add", book.BookAddDisplayAction)
+	r.GET("/api/book", bookController.ListBooks)
 	r.POST("/api/file", book.HundleUplond)
-	r.DELETE("/api/deletebook/:id", book.DeleteBookAction)
-	r.PUT("/api/updatebook/:id", book.UpdateBookAction)
-	r.GET("/book/edit/:id", book.UpdateBookAction)
+	r.POST("/api/book", bookController.AddBook)
+	r.DELETE("/api/deletebook/:id", bookController.DeleteBook)
+	r.PUT("/api/updatebook/:id", bookController.EditBook)
+
+	// // Task API (CRUD)
+	r.POST("/api/task", taskController.AddTask)
+	r.GET("/api/task", taskController.ListTasks)
+	r.GET("/api/task/:id", taskController.GetTask)
+	r.PUT("/api/task/:id", taskController.EditTask)
+	r.DELETE("/api/task/:id", taskController.DeleteTask)
 
 	// User authentication routes
 	// Protected routes
@@ -74,13 +85,6 @@ func GetRouter() *gin.Engine {
 	r.GET("/api/memory/:id", memoryController.GetMemory)
 	r.PUT("/api/memory/:id", memoryController.EditMemory)
 	r.DELETE("/api/memory/:id", memoryController.DeleteMemory)
-
-	// // Task API (CRUD)
-	r.POST("/api/task", taskController.AddTask)
-	r.GET("/api/task", taskController.ListTasks)
-	r.GET("/api/task/:id", taskController.GetTask)
-	r.PUT("/api/task/:id", taskController.EditTask)
-	r.DELETE("/api/task/:id", taskController.DeleteTask)
 
 	r.POST("/api/assessment", assessmentController.AddAssessment)
 	r.GET("/api/assessment", assessmentController.ListAssessments)

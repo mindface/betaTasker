@@ -1,10 +1,10 @@
 package model
 
 import (
-	"database/sql"
-	"encoding/json"
-	"fmt"
-	"strconv"
+	// "database/sql"
+	// "encoding/json"
+	// "fmt"
+	// "strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -17,17 +17,7 @@ const password = "dbgodotask"
 const schema = "dbgodotask"
 
 type Book struct {
-	id      int    `json:"id"`
-	title   string `json:"title"`
-	name    string `json:"name"`
-	text    string `json:"text"`
-	disc    string `json:"disc"`
-	imgPath string `json:"imgPath"`
-	Status  string `json:"status"`
-}
-
-type BookApi struct {
-	Id      int    `json:"id"`
+	ID      int    `gorm:"primaryKey" json:"id"`
 	Title   string `json:"title"`
 	Name    string `json:"name"`
 	Text    string `json:"text"`
@@ -36,142 +26,146 @@ type BookApi struct {
 	Status  string `json:"status"`
 }
 
-func GetBookList() string {
-
-	db, err := sql.Open("mysql", bookname+":"+password+"@tcp(dbgodotask:3306)/"+schema)
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
-
-	rows, err := db.Query("select id, title, name, text, disc, imgPath from book order by id")
-	if err != nil {
-		panic(err.Error())
-	}
-	defer rows.Close()
-
-	// list := make(map[int]string)
-	var uptData []BookApi
-
-	for rows.Next() {
-		var book BookApi
-
-		err := rows.Scan(&book.Id, &book.Title, &book.Name, &book.Text, &book.Disc, &book.ImgPath)
-		if err != nil {
-			panic(err)
-		}
-		// list[book.id] = book.name
-		fmt.Println(book.Id)
-		inuptData := BookApi{Id: book.Id, Title: book.Title, Name: book.Name, Text: book.Text, Disc: book.Disc, ImgPath: book.ImgPath}
-		uptData = append(uptData, inuptData)
-	}
-
-	err = rows.Err()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(uptData)
-	bytes, _ := json.Marshal(uptData)
-	// if bytes != nil {
-	// 	return "[]"
-	// }
-
-	return string(bytes)
+func (Book) TableName() string {
+	return "book"
 }
 
-func GetBookData(id string) map[string]string {
-	db, err := sql.Open("mysql", bookname+":"+password+"@tcp(dbgodotask:3306)/"+schema)
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
-	rows, err := db.Query("select id, name from user where id = ?", id)
-	if err != nil {
-		panic(err.Error())
-	}
+// func GetBookList() string {
 
-	data := make(map[string]string)
+// 	db, err := sql.Open("mysql", bookname+":"+password+"@tcp(dbgodotask:3306)/"+schema)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	defer db.Close()
 
-	for rows.Next() {
-		var book Book
+// 	rows, err := db.Query("select id, title, name, text, disc, imgPath from book order by id")
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	defer rows.Close()
 
-		err := rows.Scan(&book.id, &book.name)
-		if err != nil {
-			panic(err)
-		}
+// 	// list := make(map[int]string)
+// 	var uptData []BookApi
 
-		data["id"] = strconv.Itoa(book.id)
-		data["name"] = book.name
-	}
+// 	for rows.Next() {
+// 		var book BookApi
 
-	err = rows.Err()
-	if err != nil {
-		panic(err)
-	}
+// 		err := rows.Scan(&book.Id, &book.Title, &book.Name, &book.Text, &book.Disc, &book.ImgPath)
+// 		if err != nil {
+// 			panic(err)
+// 		}
+// 		// list[book.id] = book.name
+// 		fmt.Println(book.Id)
+// 		inuptData := BookApi{Id: book.Id, Title: book.Title, Name: book.Name, Text: book.Text, Disc: book.Disc, ImgPath: book.ImgPath}
+// 		uptData = append(uptData, inuptData)
+// 	}
 
-	return data
-}
+// 	err = rows.Err()
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Println(uptData)
+// 	bytes, _ := json.Marshal(uptData)
+// 	// if bytes != nil {
+// 	// 	return "[]"
+// 	// }
 
-func EditBookData(id string, title string, name string, text string, disc string, imgPath string) {
-	db, err := sql.Open("mysql", bookname+":"+password+"@tcp(dbgodotask:3306)/"+schema)
-	fmt.Printf(id)
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
+// 	return string(bytes)
+// }
 
-	update, err := db.Prepare("update book set title = ?, text = ?, name = ?, disc = ?, imgPath = ? where id = ?")
-	if err != nil {
-		panic(err.Error())
-	}
-	defer update.Close()
+// func GetBookData(id string) map[string]string {
+// 	db, err := sql.Open("mysql", bookname+":"+password+"@tcp(dbgodotask:3306)/"+schema)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	defer db.Close()
+// 	rows, err := db.Query("select id, name from user where id = ?", id)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
 
-	_, err = update.Exec(title, text, name, disc, imgPath, id)
-	if err != nil {
-		panic(err.Error())
-	}
-}
+// 	data := make(map[string]string)
 
-func DeleteBookData(id string) {
-	db, err := sql.Open("mysql", bookname+":"+password+"@tcp(dbgodotask:3306)/"+schema)
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
+// 	for rows.Next() {
+// 		var book Book
 
-	delete, err := db.Prepare("delete from book where id = ?")
-	if err != nil {
-		panic(err.Error())
-	}
-	defer delete.Close()
+// 		err := rows.Scan(&book.id, &book.name)
+// 		if err != nil {
+// 			panic(err)
+// 		}
 
-	_, err = delete.Exec(id)
-	if err != nil {
-		panic(err.Error())
-	}
-}
+// 		data["id"] = strconv.Itoa(book.id)
+// 		data["name"] = book.name
+// 	}
 
-func AddBookData(id int, title string, name string, text string, disc string, imgPath string) {
-	// snedData := Book{}
-	// snedData.name = name
-	// snedData.title = title
-	// snedData.text = text
-	// snedData.disc = disc
-	// snedData.imgPath = imgPath
-	db, err := sql.Open("mysql", bookname+":"+password+"@tcp(dbgodotask:3306)/"+schema)
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
+// 	err = rows.Err()
+// 	if err != nil {
+// 		panic(err)
+// 	}
 
-	insert, err := db.Prepare(`insert book(title,name,text,disc,imgPath) values(?,?,?,?,?)`)
-	if err != nil {
-		panic(err.Error())
-	}
-	defer insert.Close()
+// 	return data
+// }
 
-	_, err = insert.Exec(title, name, text, disc, imgPath)
-	if err != nil {
-		panic(err.Error())
-	}
-}
+// func EditBookData(id string, title string, name string, text string, disc string, imgPath string) {
+// 	db, err := sql.Open("mysql", bookname+":"+password+"@tcp(dbgodotask:3306)/"+schema)
+// 	fmt.Printf(id)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	defer db.Close()
+
+// 	update, err := db.Prepare("update book set title = ?, text = ?, name = ?, disc = ?, imgPath = ? where id = ?")
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	defer update.Close()
+
+// 	_, err = update.Exec(title, text, name, disc, imgPath, id)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// }
+
+// func DeleteBookData(id string) {
+// 	db, err := sql.Open("mysql", bookname+":"+password+"@tcp(dbgodotask:3306)/"+schema)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	defer db.Close()
+
+// 	delete, err := db.Prepare("delete from book where id = ?")
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	defer delete.Close()
+
+// 	_, err = delete.Exec(id)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// }
+
+// func AddBookData(id int, title string, name string, text string, disc string, imgPath string) {
+// 	// snedData := Book{}
+// 	// snedData.name = name
+// 	// snedData.title = title
+// 	// snedData.text = text
+// 	// snedData.disc = disc
+// 	// snedData.imgPath = imgPath
+// 	db, err := sql.Open("mysql", bookname+":"+password+"@tcp(dbgodotask:3306)/"+schema)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	defer db.Close()
+
+// 	insert, err := db.Prepare(`insert book(title,name,text,disc,imgPath) values(?,?,?,?,?)`)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// 	defer insert.Close()
+
+// 	_, err = insert.Exec(title, name, text, disc, imgPath)
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+// }
