@@ -6,6 +6,7 @@ import { loadAssessments, createAssessment, updateAssessment, removeAssessment }
 import { loadLearningData } from '../features/learningData/learningDataSlice'
 import ItemAssessment from "./parts/ItemAssessment"
 import AssessmentModal from "./parts/AssessmentModal"
+import MemoryAidList from "./MemoryAidList"
 import { AddAssessment, Assessment } from "../model/assessment"
 import { loadTasks } from '../features/task/taskSlice'
 

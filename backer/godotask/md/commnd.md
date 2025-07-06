@@ -50,7 +50,11 @@ curl -X PUT http://localhost:8080/api/memory/1 \
 
 curl -X GET http://localhost:8080/api/memory \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InR0ciIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzQ5MzEwNDM5fQ.EyfPtEBqLCUgyYTXZO5mKSKV6mv1zG3TsMX1wjt8nGI"
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InR0ciIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzUxODQ5NzMzfQ.OqDvU98DDYNZdOl53D7Mzsgv9OrIDFSr1nDl2X5m3DY"
+
+curl -X GET http://localhost:8080/api/memory/aid/MA-Q-02 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InR0ciIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzUxODQ5NzMzfQ.OqDvU98DDYNZdOl53D7Mzsgv9OrIDFSr1nDl2X5m3DY"
 
 
 curl -X GET http://localhost:8080/api/book

@@ -6,6 +6,7 @@ import { loadMemories, createMemory, updateMemory, removeMemory } from '../featu
 import ItemMemory from "./parts/ItemMemory"
 import MemoryModal from "./parts/MemoryModal"
 import { AddMemory, Memory } from "../model/memory";
+import MemoryAidList from './MemoryAidList';
 
 export default function SectionMemory() {
   const dispatch = useDispatch()
@@ -13,6 +14,7 @@ export default function SectionMemory() {
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingMemory, setEditingMemory] = useState<AddMemory|Memory|undefined>()
+  const [aidCode, setAidCode] = useState('MA-Q-02'); // デフォルト値は任意
 
   useEffect(() => {
     dispatch(loadMemories())
@@ -75,12 +77,18 @@ export default function SectionMemory() {
             新規メモ
           </button>
         </div>
+        {/* aidCode入力欄とMemoryAidList表示を追加 */}
+        <div style={{margin:'16px 0'}}>
+          <label>MemoryAidコード: </label>
+          <input value={aidCode} onChange={e => setAidCode(e.target.value)} style={{marginRight:8}} />
+        </div>
+        <MemoryAidList code={aidCode} />
+        {/* 既存のメモリ表示 */}
         {memoryLoading && (
           <div className="error-message">
             {memoryLoading}
           </div>
         )}
-
         {memoryError ? (
           <div className="loading">読み込み中...</div>
         ) : (

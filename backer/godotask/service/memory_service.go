@@ -30,3 +30,15 @@ func (s *MemoryService) UpdateMemory(id string, memory *model.Memory) error {
 func (s *MemoryService) DeleteMemory(id string) error {
 	return s.Repo.Delete(id)
 }
+
+// FindMemoryContextsByCode: work_targetにcodeが含まれるものを配列で返す
+func (s *MemoryService) FindMemoryContextsByCode(code string, contexts *[]model.MemoryContext) error {
+	repo := repository.MemoryContextRepository{DB: s.Repo.DB}
+	return repo.FindByCode(code, contexts)
+}
+
+// FindMemoryAidsByCode: work_targetにcodeが含まれるものを補助情報ごと返す
+func (s *MemoryService) FindMemoryAidsByCode(code string, contexts *[]model.MemoryContext) error {
+	repo := repository.MemoryContextRepository{DB: s.Repo.DB}
+	return repo.FindWithAidsByCode(code, contexts)
+}
