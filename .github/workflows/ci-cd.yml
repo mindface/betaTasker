@@ -58,7 +58,7 @@ jobs:
       - name: Build backend Docker image
         working-directory: ./backer/godotask
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }} -f /Dockerfile .
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }} -f Dockerfile .
 
   # フロントエンドテスト・ビルド
   frontend:
