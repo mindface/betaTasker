@@ -1,6 +1,7 @@
 package model
 
 import (
+	"os"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
