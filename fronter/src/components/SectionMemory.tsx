@@ -14,7 +14,7 @@ export default function SectionMemory() {
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingMemory, setEditingMemory] = useState<AddMemory|Memory|undefined>()
-  const [aidCode, setAidCode] = useState('MA-Q-02'); // デフォルト値は任意
+  const [aidCode, setAidCode] = useState('MA-Q-02');
 
   useEffect(() => {
     dispatch(loadMemories())

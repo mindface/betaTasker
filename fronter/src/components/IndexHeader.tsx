@@ -26,8 +26,8 @@ class IndexHeader extends React.Component<titleType> {
           <nav className="g-nav">
             <ul className="list _flex_">
               {menu.map((item: { title: string; path: string }, idx: number) => (
-                <li className="item" key={`menu${idx}`}>
-                  <Link href={item.path} className="link">
+                <li className="item" key={`indexmenu${idx}`}>
+                  <Link href={item.path} className="link" passHref>
                     {item.title}
                   </Link>
                 </li>

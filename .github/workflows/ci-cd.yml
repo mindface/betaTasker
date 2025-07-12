@@ -1,0 +1,190 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: mindface/betatasker
+
+jobs:
+  # バックエンドテスト・ビルド
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      # - name: Run backend tests
+      #   working-directory: backer/godotask
+      #   run: |
+      #     go test -v ./...
+      #     go vet ./...
+
+      - name: Build backend binary
+        working-directory: backer/godotask
+        run: |
+          CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+
+      - name: Build backend Docker image
+        working-directory: backer/godotask
+        run: |
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }} -f Dockerfile .
+
+  # フロントエンドテスト・ビルド
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check package manager
+        working-directory: fronter
+        run: |
+          echo "Checking package manager files..."
+          ls -la
+          if [ -f "yarn.lock" ]; then
+            echo "Using Yarn"
+            echo "PACKAGE_MANAGER=yarn" >> $GITHUB_ENV
+          elif [ -f "package-lock.json" ]; then
+            echo "Using npm"
+            echo "PACKAGE_MANAGER=npm" >> $GITHUB_ENV
+          else
+            echo "No lock file found, defaulting to npm"
+            echo "PACKAGE_MANAGER=npm" >> $GITHUB_ENV
+          fi
+
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: fronter/yarn.lock
+
+      - name: Install dependencies
+        working-directory: fronter
+        run: yarn install --frozen-lockfile
+
+      # - name: Run linting
+      #   working-directory: fronter
+      #   run: yarn lint
+
+      - name: Run type checking
+        working-directory: fronter
+        run: npx tsc --noEmit
+
+      - name: Clean up Docker before build
+        run: |
+          docker system prune -f
+          docker builder prune -f
+
+      - name: Build frontend Docker image
+        run: |
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }} -f fronter/Dockerfile fronter
+   
+
+  # 統合テスト
+  integration:
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Run integration tests
+        working-directory: backer/godotask
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db?sslmode=disable
+        run: |
+          go test -v -tags=integration ./...
+
+  # セキュリティスキャン
+  # security:
+  #   needs: [backend, frontend]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Run Trivy vulnerability scanner
+  #       uses: aquasecurity/trivy-action@master
+  #       with:
+  #         scan-type: 'fs'
+  #         scan-ref: '.'
+  #         format: 'sarif'
+  #         output: 'trivy-results.sarif'
+
+  #     - name: Upload Trivy scan results to GitHub Security tab
+  #       uses: github/codeql-action/upload-sarif@v2
+  #       if: always()
+  #       with:
+  #         sarif_file: 'trivy-results.sarif'
+
+  # デプロイ（mainブランチのみ）
+  # deploy:
+  #   needs: [backend, frontend, integration, security]
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Log in to Container Registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ${{ env.REGISTRY }}
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+
+  #     - name: Push Docker images
+  #       run: |
+  #         docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+  #         docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
+
+  #     - name: Deploy to production
+  #       run: |
+  #         # 本番環境へのデプロイスクリプトを実行
+  #         echo "Deploying to production..."
+  #         # ここに実際のデプロイコマンドを追加 

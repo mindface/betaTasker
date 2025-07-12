@@ -50,7 +50,7 @@ type KnowledgeTransformation struct {
 	CreatedAt        time.Time
 }
 
-func main() {
+func RunSeed() {
 	// ここでDB接続
 	dsn := "host=dbgodotask user=dbgodotask password=dbgodotask dbname=dbgodotask port=5432 sslmode=disable"
 	var err error
@@ -66,7 +66,7 @@ func main() {
 
 	// シードデータ投入前にテーブルを空にする
 	fmt.Println("テーブルをクリアしています...")
-	
+
 	// 外部キー制約を考慮して、子テーブルから削除
 	_, err = sqlDB.Exec("DELETE FROM knowledge_transformations")
 	if err != nil {

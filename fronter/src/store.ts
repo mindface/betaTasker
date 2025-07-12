@@ -6,6 +6,7 @@ import taskReducer from './features/task/taskSlice'
 import assessmentReducer from './features/assessment/assessmentSlice'
 import learningReducer from './features/learningData/learningDataSlice'
 import memoryAidReducer from './features/memoryAid/memoryAidSlice';
+import { postReducer } from './modules/postReducer';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export type AppState = {
@@ -15,6 +16,7 @@ export type AppState = {
 export const setupStore = configureStore({
   reducer: {
     user: userReducer,
+    post: postReducer,
     memory: memoryReducer,
     task: taskReducer,
     assessment: assessmentReducer,
