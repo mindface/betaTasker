@@ -53,7 +53,7 @@ jobs:
       #     pwd
       #     ls -R
       - name: Check Dockerfile exists
-        run: ls -la ./backer/godotask/Dockerfile
+        run: ls -la backer/godotask/Dockerfile
 
       - name: Build backend Docker image
         working-directory: ./backer/godotask
