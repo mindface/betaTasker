@@ -1,6 +1,7 @@
 package user
 
 import (
+	"os"
 	"bytes"
 	"net/http"
 	"net/http/httptest"
@@ -12,6 +13,8 @@ import (
 )
 
 func setupTestDB() {
+	// テスト用のデータベースURLを設定
+	os.Setenv("DATABASE_URL", "postgres://dbgodotask:dbgodotask@localhost:5432/test_db?sslmode=disable")
 	model.InitDB()
 	model.DB.AutoMigrate(&model.User{})
 }

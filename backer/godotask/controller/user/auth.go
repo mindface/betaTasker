@@ -164,7 +164,7 @@ func Login(c *gin.Context) {
 	}
 
 	fmt.Printf("Generated token2: %s\n", tokenString)
-	fmt.Printf("Generated user: %s\n", user)
+	fmt.Printf("FetchGenerateded user: %+v\n", user)
 	c.JSON(http.StatusOK, gin.H{
 		"token": tokenString,
 		"user": user,

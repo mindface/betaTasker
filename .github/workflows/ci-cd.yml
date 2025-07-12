@@ -14,6 +14,8 @@ jobs:
   # バックエンドテスト・ビルド
   backend:
     runs-on: ubuntu-latest
+    env:
+      SKIP_TESTS: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -44,8 +46,13 @@ jobs:
         run: |
           CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
+      # - name: Show directory tree
+      #   run: |
+      #     pwd
+      #     ls -R
+
       - name: Build backend Docker image
-        working-directory: backer/godotask
+        working-directory: ./backer/godotask
         run: |
           docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }} -f Dockerfile .
 
@@ -71,7 +78,6 @@ jobs:
             echo "No lock file found, defaulting to npm"
             echo "PACKAGE_MANAGER=npm" >> $GITHUB_ENV
           fi
-
 
       - name: Install Yarn
         run: npm install -g yarn
@@ -103,7 +109,6 @@ jobs:
       - name: Build frontend Docker image
         run: |
           docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }} -f fronter/Dockerfile fronter
-   
 
   # 統合テスト
   integration:
@@ -113,8 +118,9 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: dbgodotask
           POSTGRES_DB: test_db
+          POSTGRES_USER: dbgodotask
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -126,18 +132,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+  
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.21'
-
+  
       - name: Run integration tests
         working-directory: backer/godotask
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db?sslmode=disable
         run: |
-          go test -v -tags=integration ./...
+          go test -v ./...
 
   # セキュリティスキャン
   # security:

@@ -3,20 +3,20 @@ import React, { useState,useRef, useEffect } from 'react'
 import { useDispatch, useStore, useSelector } from 'react-redux'
 import Image from 'next/image'
 import { getPostAction } from '../modules/getPostAction'
-import { Posts, SetState } from '../model/posts'
+import { Posts } from '../model/posts'
 
 import ContentTask01 from "./ContentTask01"
 import ContentHeader from "./ContentTasksHeader"
 import ItemCard from "./ItemCard"
 import Loading from "./Loading"
-import { RootState } from '../store'
+import { RootState } from "../store"
 
 export interface State {
   status:String,
   posts: Posts[],
   rePosts: Posts[],
   lastUpdated: number,
- }
+}
 
 export default function SectionTaskView() {
   const dispatch = useDispatch()
