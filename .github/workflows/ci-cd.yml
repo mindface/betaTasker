@@ -16,7 +16,7 @@ jobs:
   backend:
     runs-on: ubuntu-latest
     env:
-      DATABASE_DSN: "host=localhost user=dbgodotask password=dbgodotask dbname=test_db port=5432 sslmode=disable
+      DATABASE_DSN: host=localhost user=dbgodotask password=dbgodotask dbname=test_db port=5432 sslmode=disable
       SKIP_TESTS: true
     steps:
       - name: Checkout code
