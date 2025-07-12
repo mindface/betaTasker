@@ -3,34 +3,34 @@ import React, { useState,useRef, useEffect } from 'react'
 import { useDispatch, useStore, useSelector } from 'react-redux'
 import Image from 'next/image'
 import { getPostAction } from '../modules/getPostAction'
-import { Posts, SetState } from '../model/posts'
+import { Posts } from '../model/posts'
 
 import ContentTask01 from "./ContentTask01"
 import ContentHeader from "./ContentTasksHeader"
 import ItemCard from "./ItemCard"
 import Loading from "./Loading"
+import { RootState } from "../store"
 
 export interface State {
   status:String,
   posts: Posts[],
   rePosts: Posts[],
   lastUpdated: number,
- }
+}
 
 export default function SectionTaskView() {
   const dispatch = useDispatch()
-  const store = useStore()
   const [switchClass,setSwitchClass] = useState('')
   const [posts,setPosts] = useState<Posts[]>([])
   const postsSwtch = useRef<boolean>(false)
   const postsState = useRef<Posts[]>([])
   const [isClient, setIsClient] = useState(false)
-  const postsStateSelector = useSelector((payload:{state:SetState}) => {
-    postsState.current = payload.state.rePosts 
-    return payload.state.rePosts ? payload.state.rePosts : []
+  const postsStateSelector = useSelector((state:RootState) => {
+    postsState.current = state.post.rePosts
+    return state.post.rePosts ? state.post.rePosts : []
   })
-  const currentLoding = useSelector((payload:{state:SetState}) => {
-    return payload.state.loading
+  const currentLoding = useSelector((state:RootState) => {
+    return state.post.loading
   })
 
   function viewSwitch(type:string){

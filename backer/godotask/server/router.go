@@ -83,6 +83,8 @@ func GetRouter() *gin.Engine {
 	r.POST("/api/memory", memoryController.AddMemory)
 	r.GET("/api/memory", memoryController.ListMemories)
 	r.GET("/api/memory/:id", memoryController.GetMemory)
+	r.GET("/api/memory/context/:code", memoryController.GetMemoryContextByCode)
+	r.GET("/api/memory/aid/:code", memoryController.GetMemoryAidByCode)
 	r.PUT("/api/memory/:id", memoryController.EditMemory)
 	r.DELETE("/api/memory/:id", memoryController.DeleteMemory)
 

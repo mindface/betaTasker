@@ -6,6 +6,7 @@ import { loadAssessments, createAssessment, updateAssessment, removeAssessment }
 import { loadLearningData } from '../features/learningData/learningDataSlice'
 import ItemAssessment from "./parts/ItemAssessment"
 import AssessmentModal from "./parts/AssessmentModal"
+import MemoryAidList from "./MemoryAidList"
 import { AddAssessment, Assessment } from "../model/assessment"
 import { loadTasks } from '../features/task/taskSlice'
 
@@ -79,7 +80,7 @@ export default function SectionAssessment() {
             ) : learningData ? (
               <div className="learning-structure-info">
                 <span className="d-block">学習カテゴリ: {learningData.learningStructure.category}</span>
-                <span className="d-block">学習サイクル: {learningData.learningStructure.studyCycle.map((item) => <span className="d-iline-block p-1">{item}</span>)}</span>
+                <span className="d-block">学習サイクル: {learningData.learningStructure.studyCycle.map((item,index) => <span key={`studyCycle${index}`} className="d-iline-block p-1">{item}</span>)}</span>
               </div>
             ) : null}
 

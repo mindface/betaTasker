@@ -5,7 +5,7 @@ services:
     container_name: godotask
     build:
       context: .
-      dockerfile: godotask/DockerFile
+      dockerfile: godotask/DockerFile.compose
     stdin_open: true
     tty: true
     command: bash -c "/bin/bash"
