@@ -16,6 +16,7 @@ jobs:
   backend:
     runs-on: ubuntu-latest
     env:
+      DATABASE_DSN: postgres://dbgodotask:dbgodotask@localhost:5432/test_db?sslmode=disable
       SKIP_TESTS: true
     steps:
       - name: Checkout code
