@@ -40,7 +40,7 @@ jobs:
       #     go vet ./...
 
       - name: Build backend binary
-        working-directory: backer/godotask
+        working-directory: ./backer/godotask
         run: |
           CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
