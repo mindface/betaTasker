@@ -6,7 +6,7 @@ import (
 )
 
 type BookService struct {
-	Repo *repository.BookRepository
+  Repo repository.BookRepositoryInterface
 }
 
 func (s *BookService) CreateBook(book *model.Book) error {

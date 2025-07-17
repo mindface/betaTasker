@@ -9,6 +9,7 @@ import (
 
 	"github.com/godotask/server"
 	"github.com/godotask/model"
+	"github.com/joho/godotenv"
 	// "giner/calculation"
 	// "giner/controller"
 )
@@ -46,6 +47,10 @@ var dataInfo = []UserInfo{{
 }}
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
 	model.InitDB()
 	// bytes, err := ioutil.ReadFile("data.json")
 	// if err != nil {

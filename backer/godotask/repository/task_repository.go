@@ -5,15 +5,15 @@ import (
 	"github.com/godotask/model"
 )
 
-type TaskRepository struct {
+type TaskRepositoryImpl struct {
 	DB *gorm.DB
 }
 
-func (r *TaskRepository) Create(task *model.Task) error {
+func (r *TaskRepositoryImpl) Create(task *model.Task) error {
 	return r.DB.Create(task).Error
 }
 
-func (r *TaskRepository) FindByID(id string) (*model.Task, error) {
+func (r *TaskRepositoryImpl) FindByID(id string) (*model.Task, error) {
 	var task model.Task
 	if err := r.DB.Where("id = ?", id).First(&task).Error; err != nil {
 		return nil, err
@@ -21,7 +21,7 @@ func (r *TaskRepository) FindByID(id string) (*model.Task, error) {
 	return &task, nil
 }
 
-func (r *TaskRepository) FindAll() ([]model.Task, error) {
+func (r *TaskRepositoryImpl) FindAll() ([]model.Task, error) {
 	var tasks []model.Task
 	if err := r.DB.Find(&tasks).Error; err != nil {
 		return nil, err
@@ -29,10 +29,10 @@ func (r *TaskRepository) FindAll() ([]model.Task, error) {
 	return tasks, nil
 }
 
-func (r *TaskRepository) Update(id string, task *model.Task) error {
+func (r *TaskRepositoryImpl) Update(id string, task *model.Task) error {
 	return r.DB.Model(&model.Task{}).Where("id = ?", id).Updates(task).Error
 }
 
-func (r *TaskRepository) Delete(id string) error {
+func (r *TaskRepositoryImpl) Delete(id string) error {
 	return r.DB.Delete(&model.Task{}, id).Error
 }

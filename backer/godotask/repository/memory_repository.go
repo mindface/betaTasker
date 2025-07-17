@@ -5,15 +5,15 @@ import (
 	"github.com/godotask/model"
 )
 
-// MemoryRepository
-type MemoryRepository struct {
+// MemoryRepositoryImpl
+type MemoryRepositoryImpl struct {
 	DB *gorm.DB
 }
 
-func (r *MemoryRepository) Create(memory *model.Memory) error {
+func (r *MemoryRepositoryImpl) Create(memory *model.Memory) error {
 	return r.DB.Create(memory).Error
 }
-func (r *MemoryRepository) FindByID(id string) (*model.Memory, error) {
+func (r *MemoryRepositoryImpl) FindByID(id string) (*model.Memory, error) {
 	var m model.Memory
 	if err := r.DB.Where("id = ?", id).First(&m).Error; err != nil {
 		return nil, err
@@ -21,7 +21,7 @@ func (r *MemoryRepository) FindByID(id string) (*model.Memory, error) {
 	return &m, nil
 }
 
-func (r *MemoryRepository) FindAll() ([]model.Memory, error) {
+func (r *MemoryRepositoryImpl) FindAll() ([]model.Memory, error) {
 	var memories []model.Memory
 	if err := r.DB.Find(&memories).Error; err != nil {
 		return nil, err
@@ -29,10 +29,14 @@ func (r *MemoryRepository) FindAll() ([]model.Memory, error) {
 	return memories, nil
 }
 
-func (r *MemoryRepository) Update(id string, memory *model.Memory) error {
+func (r *MemoryRepositoryImpl) Update(id string, memory *model.Memory) error {
 	return r.DB.Model(&model.Memory{}).Where("id = ?", id).Updates(memory).Error
 }
 
-func (r *MemoryRepository) Delete(id string) error {
+func (r *MemoryRepositoryImpl) Delete(id string) error {
 	return r.DB.Delete(&model.Memory{}, id).Error
+}
+
+func NewMemoryRepository(db *gorm.DB) MemoryRepositoryInterface {
+	return &MemoryRepositoryImpl{DB: db}
 }

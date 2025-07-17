@@ -5,15 +5,15 @@ import (
 	"github.com/godotask/model"
 )
 
-type AssessmentRepository struct {
+type AssessmentRepositoryImpl struct {
 	DB *gorm.DB
 }
 
-func (r *AssessmentRepository) Create(a *model.Assessment) error {
+func (r *AssessmentRepositoryImpl) Create(a *model.Assessment) error {
 	return r.DB.Create(a).Error
 }
 
-func (r *AssessmentRepository) FindByID(id string) (*model.Assessment, error) {
+func (r *AssessmentRepositoryImpl) FindByID(id string) (*model.Assessment, error) {
 	var assessment model.Assessment
 	if err := r.DB.Where("id = ?", id).First(&assessment).Error; err != nil {
 		return nil, err
@@ -21,7 +21,7 @@ func (r *AssessmentRepository) FindByID(id string) (*model.Assessment, error) {
 	return &assessment, nil
 }
 
-func (r *AssessmentRepository) FindAll() ([]model.Assessment, error) {
+func (r *AssessmentRepositoryImpl) FindAll() ([]model.Assessment, error) {
 	var assessments []model.Assessment
 	if err := r.DB.Find(&assessments).Error; err != nil {
 		return nil, err
@@ -29,10 +29,10 @@ func (r *AssessmentRepository) FindAll() ([]model.Assessment, error) {
 	return assessments, nil
 }
 
-func (r *AssessmentRepository) Update(id string, a *model.Assessment) error {
+func (r *AssessmentRepositoryImpl) Update(id string, a *model.Assessment) error {
 	return r.DB.Model(&model.Assessment{}).Where("id = ?", id).Updates(a).Error
 }
 
-func (r *AssessmentRepository) Delete(id string) error {
+func (r *AssessmentRepositoryImpl) Delete(id string) error {
 	return r.DB.Delete(&model.Assessment{}, id).Error
 }

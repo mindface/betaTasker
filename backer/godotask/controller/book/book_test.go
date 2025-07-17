@@ -10,14 +10,13 @@ import (
     "github.com/stretchr/testify/assert"
     "github.com/godotask/model"
     "github.com/godotask/service"
-    "github.com/godotask/repository"
 )
 
 // モックリポジトリを作成
 type MockBookRepository struct{}
 
 func (m *MockBookRepository) Create(book *model.Book) error {
-    return nil // テスト用なので常に成功
+    return nil
 }
 
 func (m *MockBookRepository) FindByID(id string) (*model.Book, error) {
@@ -78,6 +77,7 @@ func TestAddBook(t *testing.T) {
         "disc": "Test Description",
         "imgPath": "Test Image Path"
     }`
+
     req, err := http.NewRequest(http.MethodPost, "/api/book", bytes.NewBuffer([]byte(body)))
     if err != nil {
         t.Fatalf("Couldn't create request: %v\n", err)
@@ -123,7 +123,7 @@ func TestUpdateBook(t *testing.T) {
 
     r.ServeHTTP(w, req)
     assert.Equal(t, http.StatusOK, w.Code)
-    assert.Contains(t, w.Body.String(), "Book updated")
+    assert.Contains(t, w.Body.String(), "Book edited")
 }
 
 func TestDeleteBook(t *testing.T) {

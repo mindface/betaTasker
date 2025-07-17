@@ -6,8 +6,9 @@ import (
 )
 
 type AssessmentService struct {
-	Repo *repository.AssessmentRepository
+	Repo repository.AssessmentRepositoryInterface
 }
+
 // CreateAssessment creates a new assessment task.
 func (s *AssessmentService) CreateAssessment(task *model.Assessment) error {
 	return s.Repo.Create(task)

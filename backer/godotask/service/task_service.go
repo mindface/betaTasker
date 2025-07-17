@@ -6,7 +6,7 @@ import (
 )
 
 type TaskService struct {
-	Repo *repository.TaskRepository
+	Repo repository.TaskRepositoryInterface
 }
 
 func (s *TaskService) CreateTask(task *model.Task) error {
