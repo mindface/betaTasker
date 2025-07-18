@@ -37,19 +37,19 @@ func GetRouter() *gin.Engine {
 	r.Use(CORSMiddleware())
 
   
-  bookRepo := &repository.BookRepository{DB: model.DB}
+  bookRepo := &repository.BookRepositoryImpl{DB: model.DB}
 	bookService := &service.BookService{Repo: bookRepo}
 	bookController := book.BookController{Service: bookService}
 
-	memoryRepo := &repository.MemoryRepository{DB: model.DB}
+	memoryRepo := &repository.MemoryRepositoryImpl{DB: model.DB}
 	memoryService := &service.MemoryService{Repo: memoryRepo}
 	memoryController := memory.MemoryController{Service: memoryService}
 
-	taskRepo := &repository.TaskRepository{DB: model.DB}
+	taskRepo := &repository.TaskRepositoryImpl{DB: model.DB}
 	taskService := &service.TaskService{Repo: taskRepo}
 	taskController := task.TaskController{Service: taskService}
 
-  assessmentRepo := &repository.AssessmentRepository{DB: model.DB}
+  assessmentRepo := &repository.AssessmentRepositoryImpl{DB: model.DB}
 	assessmentService := &service.AssessmentService{Repo: assessmentRepo}
 	assessmentController := assessment.AssessmentController{Service: assessmentService}
 
