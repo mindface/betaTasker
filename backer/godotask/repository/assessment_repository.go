@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"gorm.io/gorm"
 	"github.com/godotask/model"
 )
@@ -35,4 +36,28 @@ func (r *AssessmentRepositoryImpl) Update(id string, a *model.Assessment) error 
 
 func (r *AssessmentRepositoryImpl) Delete(id string) error {
 	return r.DB.Delete(&model.Assessment{}, id).Error
+}
+
+
+// ErrorMockAssessmentRepository is a mock implementation of AssessmentRepositoryInterface that returns an error for FindByID
+type ErrorMockAssessmentRepository struct{}
+
+func (e *ErrorMockAssessmentRepository) Create(assessment *model.Assessment) error {
+	return errors.New("not implemented")
+}
+
+func (e *ErrorMockAssessmentRepository) FindByID(id string) (*model.Assessment, error) {
+	return nil, gorm.ErrRecordNotFound
+}
+
+func (e *ErrorMockAssessmentRepository) FindAll() ([]model.Assessment, error) {
+	return nil, errors.New("not implemented")
+}
+
+func (e *ErrorMockAssessmentRepository) Update(id string, assessment *model.Assessment) error {
+	return errors.New("not implemented")
+}
+
+func (e *ErrorMockAssessmentRepository) Delete(id string) error {
+	return errors.New("not implemented")
 }

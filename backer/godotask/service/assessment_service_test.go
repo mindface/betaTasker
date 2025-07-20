@@ -9,6 +9,8 @@ import (
 	"github.com/godotask/service"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/godotask/repository"
+	"gorm.io/gorm"
 )
 
 // --- モックリポジトリの定義 ---
@@ -110,3 +112,10 @@ func TestDeleteAssessment(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestGetAssessment_NotFound(t *testing.T) {
+    repo := &repository.ErrorMockAssessmentRepository{}
+    svc := service.NewAssessmentService(repo)
+
+    _, err := svc.GetAssessmentByID("999")
+    assert.ErrorIs(t, err, gorm.ErrRecordNotFound)
+}

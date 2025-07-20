@@ -187,3 +187,14 @@ func TestGetAssessment(t *testing.T) {
     assert.Equal(t, http.StatusOK, w.Code)
     assert.Contains(t, w.Body.String(), "Test feedback")
 }
+
+func setupRouterWithMockService(repo repository.AssessmentRepository) *gin.Engine {
+    gin.SetMode(gin.TestMode)
+    r := gin.Default()
+
+    service := service.NewAssessmentService(repo)
+    controller := NewAssessmentController(service)
+
+    r.GET("/api/assessment/:id", controller.GetAssessment)
+    return r
+}
