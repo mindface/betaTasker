@@ -6,7 +6,6 @@ import { loadAssessments, createAssessment, updateAssessment, removeAssessment }
 import { loadLearningData } from '../features/learningData/learningDataSlice'
 import ItemAssessment from "./parts/ItemAssessment"
 import AssessmentModal from "./parts/AssessmentModal"
-import MemoryAidList from "./MemoryAidList"
 import { AddAssessment, Assessment } from "../model/assessment"
 import { loadTasks } from '../features/task/taskSlice'
 
@@ -64,15 +63,8 @@ export default function SectionAssessment() {
     <div className="section__inner section--assessment">
       <div className="section-container">
         <div className="assessment-header">
-          <h2>アセスメント</h2>
-          <button
-            onClick={() => handleAddAssessment()}
-            className="btn btn-primary"
-          >
-            新規アセスメント
-          </button>
-          <div className="assessment-header">
-            <h2>アセスメント</h2>
+          <h2>アセスメントセクション</h2>
+          <div className="assessment-header p-8">
             {learningLoading ? (
               <div className="loading">学習構造データ取得中...</div>
             ) : learningError ? (
@@ -83,7 +75,6 @@ export default function SectionAssessment() {
                 <span className="d-block">学習サイクル: {learningData.learningStructure.studyCycle.map((item,index) => <span key={`studyCycle${index}`} className="d-iline-block p-1">{item}</span>)}</span>
               </div>
             ) : null}
-
             <button
               onClick={() => handleAddAssessment()}
               className="btn btn-primary"

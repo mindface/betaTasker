@@ -6,13 +6,14 @@ interface ItemTaskProps {
   task: Task;
   onEdit: (task: Task) => void;
   onDelete: (id: number) => void;
+  onSetTaskId?: (id: number) => void;
 }
 
-const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete }) => {
+const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete, onSetTaskId }) => {
   return (
     <div className="task-item">
       <div className="task-item__header">
-        <h3>{task.title}</h3>
+        <h3 className="p-b-2">{task.title}</h3>
         <div className="task-item__actions">
           <button onClick={() => onEdit(task)} className="btn btn-edit">
             編集
@@ -20,10 +21,17 @@ const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete }) => {
           <button onClick={() => onDelete(task.id)} className="btn btn-delete">
             削除
           </button>
+          <button onClick={() => {
+            if (onSetTaskId) {
+              onSetTaskId(task.id);
+            }
+          }} className="btn">
+            アセスメントの確認
+          </button>
         </div>
       </div>
       <div className="task-item__content">
-        <p>{task.title}</p>
+        <p className="pb-1">{task.title}</p>
         <p>{task.description}</p>
         {task.status && (
           <span className="task-status">{task.status}</span>

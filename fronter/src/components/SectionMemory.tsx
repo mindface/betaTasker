@@ -21,10 +21,6 @@ export default function SectionMemory() {
   }, [dispatch, isAuthenticated])
 
   const handleAddMemory = () => {
-    // if (!isAuthenticated) {
-    //   // TODO: ログインモーダルを表示
-    //   return
-    // }
     setEditingMemory(undefined)
     setIsModalOpen(true)
   }
@@ -36,7 +32,6 @@ export default function SectionMemory() {
 
   const handleSaveMemory = async (memoryData: AddMemory | Memory) => {
     if (editingMemory) {
-      console.log(memoryData)
       try {
         await dispatch(updateMemory(memoryData as Memory))
         await dispatch(loadMemories())
@@ -56,13 +51,6 @@ export default function SectionMemory() {
 
   const handleDeleteMemory = async (id: number) => {
     await dispatch(removeMemory(id))
-  }
-
-  const tes = (info:string) => {
-    const _info = info
-    return (test:string) => {
-      return test +_info;
-    }
   }
 
   return (

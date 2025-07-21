@@ -17,6 +17,7 @@ type AssessmentRepositoryInterface interface {
 	Create(assessment *model.Assessment) error
 	FindByID(id string) (*model.Assessment, error)
 	FindAll() ([]model.Assessment, error)
+	FindByTaskIDAndUserID(userID int, taskID int) ([]model.Assessment, error)
 	Update(id string, assessment *model.Assessment) error
 	Delete(id string) error
 }
@@ -41,4 +42,3 @@ type TaskRepositoryInterface interface {
 	Update(id string, task *model.Task) error
 	Delete(id string) error
 }
-

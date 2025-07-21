@@ -14,6 +14,22 @@ export const fetchAssessmentsService = async () => {
   }
 };
 
+export const getAssessmentsForTaskUserService = async (userId: number,taskId:number) => {
+  try {
+    const res = await fetch('/api/assessmentsForTaskUser', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, taskId }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error('アセスメント一覧取得失敗');
+    return data;
+  } catch (err: any) {
+    return { error: err.message };
+  }
+};
+
 export const addAssessmentService = async (assessment: AddAssessment) => {
   try {
     const res = await fetch('/api/assessment', {

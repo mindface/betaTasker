@@ -22,6 +22,9 @@ func (s *AssessmentService) GetAssessmentByID(id string) (*model.Assessment, err
 func (s *AssessmentService) ListAssessments() ([]model.Assessment, error) {
 	return s.Repo.FindAll()
 }
+func (s *AssessmentService) ListAssessmentsForTaskUser(userID int, taskID int) ([]model.Assessment, error) {
+	return s.Repo.FindByTaskIDAndUserID(userID,taskID)
+}
 func (s *AssessmentService) UpdateAssessment(id string, task *model.Assessment) error {
 	return s.Repo.Update(id, task)
 }

@@ -62,7 +62,7 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>{initialData ? 'アセスメントを編集' : '新規アセスメント'}</h2>
+        <h2 className="card-title">{initialData ? 'アセスメントを編集' : '新規アセスメント'}</h2>
         {/* 全メモリー一覧を表示（タイトルクリックで詳細トグル） */}
         {memories && memories.length > 0 && (
           <div className="all-memories-list" style={{margin: '1em 0', padding: '0.5em', background: '#f0f4fa', borderRadius: 6}}>

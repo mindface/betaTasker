@@ -21,16 +21,6 @@
   margin: 0
 
 
-.btn
-  padding: 0.5rem 1rem
-  border: none
-  border-radius: 4px
-  cursor: pointer
-  font-size: 1rem
-  transition: all 0.2s
-  margin-left: 0.5rem
-
-
 .btn-primary
   background-color: #007bff
   color: white
@@ -80,12 +70,34 @@
   padding: 2rem
   color: #666
 
+.task-list,
 .assessment-list,
 .memory-list
   display: grid
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
   gap: 1.5rem
 
+
+.card-title
+  font-size: 1.4rem
+  font-weight: 600
+  color: #222
+  margin: 0 0 0.5rem 0
+  line-height: 1.4
+  word-break: break-word
+
+.assessment-details
+  background-color: #ccc
+  transition: background-color 0.3s ease
+
+.card-subtitle
+  font-size: 1rem
+  font-weight: 400
+  color: #666
+  margin-bottom: 0.75rem
+
+
+.task-item,
 .assessment-item,
 .memory-item
   background-color: white
@@ -94,11 +106,13 @@
   padding: 1.5rem
   transition: transform 0.2s
 
+.task-item:hover,
 .assessment-item:hover,
 .memory-item:hover
   transform: translateY(-2px)
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15)
 
+.task-item-header,
 .assessment-item-header,
 .memory-item-header
   display: flex
@@ -106,7 +120,7 @@
   align-items: flex-start
   margin-bottom: 1rem
 
-
+.task-item__header h3,
 .assessment-item__header h3,
 .memory-item__header h3
   margin: 0
@@ -114,22 +128,24 @@
   color: #333
   flex: 1
 
-
+.task-item-actions,
 .assessment-item-actions,
 .memory-item-actions
   display: flex
   gap: 0.5rem
 
-
+.task-item__content,
 .assessment-item__content,
 .memory-item__content
   color: #666
 
+.task-item__content p,
 .assessment-item__content p,
 .memory-item__content p
   margin: 0 0 1rem 0
   line-height: 1.5
 
+.task-item__meta,
 .assessment-item__meta,
 .memory-item__meta
   display: flex

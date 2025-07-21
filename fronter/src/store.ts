@@ -21,7 +21,7 @@ export const setupStore = configureStore({
     task: taskReducer,
     assessment: assessmentReducer,
     learning: learningReducer,
-    memoryAid: memoryAidReducer, // 追加
+    memoryAid: memoryAidReducer,
   },
 })
 

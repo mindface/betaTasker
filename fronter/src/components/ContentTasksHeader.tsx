@@ -14,7 +14,6 @@ type Props = {
 }
 
 export default function ContentHeader( props: Props )  {
-  const store = useStore()
   const [searchText,setSearchText] = useState('')
   const formValue:Posts = { id:0,title:'',name:'',text:'',disc:'',imgPath:'' }
   const titleRef = useRef('')

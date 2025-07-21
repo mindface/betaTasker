@@ -75,7 +75,6 @@ func GetRouter() *gin.Engine {
 	r.PUT("/api/task/:id", taskController.EditTask)
 	r.DELETE("/api/task/:id", taskController.DeleteTask)
 
-	// User authentication routes
 	// Protected routes
 	r.GET("/api/user/profile", user.AuthMiddleware(), user.Profile)
 
@@ -90,6 +89,7 @@ func GetRouter() *gin.Engine {
 
 	r.POST("/api/assessment", assessmentController.AddAssessment)
 	r.GET("/api/assessment", assessmentController.ListAssessments)
+	r.POST("/api/assessmentsForTaskUser", assessmentController.ListAssessmentsForTaskUser)
 	r.GET("/api/assessment/:id", assessmentController.GetAssessment)
 	r.PUT("/api/assessment/:id", assessmentController.EditAssessment)
 	r.DELETE("/api/assessment/:id", assessmentController.DeleteAssessment)	

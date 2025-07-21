@@ -16,6 +16,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
     email: '',
     password: '',
     confirmPassword: '',
+    role: 'user',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +39,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
       username: formData.username,
       email: formData.email,
       password: formData.password,
+      role: formData.role,
     }));
 
     if (!result.error) {
@@ -51,7 +53,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
-          <h2>新規登録</h2>
+          <h2 className="card-title">新規登録</h2>
           <button onClick={onClose} className="modal-close">
             ×
           </button>

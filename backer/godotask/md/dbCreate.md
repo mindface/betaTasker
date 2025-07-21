@@ -4,6 +4,9 @@ docker exec -it dbgodotask bash
 ``` psqlでDBに接続 ```
 psql -U dbgodotask -d dbgodotask
 
+```
+
+```
 
 ```
 CREATE TABLE memory_contexts (

@@ -22,6 +22,16 @@ func (r *AssessmentRepositoryImpl) FindByID(id string) (*model.Assessment, error
 	return &assessment, nil
 }
 
+func (r *AssessmentRepositoryImpl) FindByTaskIDAndUserID(userID int, taskID int) ([]model.Assessment, error) {
+	var assessments []model.Assessment
+	if err := r.DB.
+		Where("task_id = ? AND user_id = ?", taskID, userID).
+		Find(&assessments).Error; err != nil {
+		return nil, err
+	}
+	return assessments, nil
+}
+
 func (r *AssessmentRepositoryImpl) FindAll() ([]model.Assessment, error) {
 	var assessments []model.Assessment
 	if err := r.DB.Find(&assessments).Error; err != nil {

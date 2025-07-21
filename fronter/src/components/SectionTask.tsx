@@ -5,6 +5,7 @@ import { RootState } from '../store'
 import { loadTasks, createTask, updateTask, removeTask } from '../features/task/taskSlice'
 import ItemTask from "./parts/ItemTask"
 import TaskModal from "./parts/TaskModal"
+import AssessmentListModal from "./parts/AssessmentListModal"
 import { AddTask, Task } from "../model/task";
 import { loadMemories } from '../features/memory/memorySlice';
 
@@ -15,6 +16,7 @@ export default function SectionTask() {
   const { memories } = useSelector((state: RootState) => state.memory)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<AddTask|Task|undefined>()
+  const [TaskId,setTaskId] = useState<number>(-1);
 
   useEffect(() => {
     dispatch(loadTasks())
@@ -49,7 +51,7 @@ export default function SectionTask() {
       <div className="section-container">
         <div className="task-header">
           <h2>タスク</h2>
-          <button 
+          <button
             onClick={() => handleAddTask()}
             className="btn btn-primary"
           >
@@ -61,7 +63,6 @@ export default function SectionTask() {
             {taskError}
           </div>
         )}
-
         {taskLoading ? (
           <div className="loading">読み込み中...</div>
         ) : (
@@ -72,10 +73,18 @@ export default function SectionTask() {
                 task={task}
                 onEdit={(editTask: Task) => handleEditTask(editTask)}
                 onDelete={() => handleDeleteTask(task.id)}
+                onSetTaskId={(id: number) => setTaskId(id)}
               />
             ))}
           </div>
         )}
+        {TaskId}
+        <AssessmentListModal
+          taskId={TaskId}
+          isOpen={TaskId !== -1}
+          onClose={() => setTaskId(-1)}
+          onSave={() => {}}   
+        />
         <TaskModal
           initialData={editingTask}
           isOpen={isModalOpen}
@@ -83,6 +92,7 @@ export default function SectionTask() {
           onSave={handleSaveTask}
           memories={memories}
         />
+
       </div>
     </div>
   )

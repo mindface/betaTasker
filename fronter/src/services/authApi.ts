@@ -29,7 +29,7 @@ export const logoutApi = async () => {
   }
 };
 
-export const regApi = async (user: { username: string; email: string; password: string }) => {
+export const regApi = async (user: { username: string; email: string; password: string, role: string }) => {
   try {
     const res = await fetch('/api/auth/register', {
       method: 'POST',

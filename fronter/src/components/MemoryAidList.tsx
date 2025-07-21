@@ -9,8 +9,6 @@ interface Props {
 const MemoryAidList: React.FC<Props> = ({ code }) => {
   const dispatch = useAppDispatch();
   const { contexts, loading, error } = useAppSelector(state => state.memoryAid);
-  const [selectedIds, setSelectedIds] = useState("")
-  const [selectedCode, setSelectedCode] = useState("")
 
   useEffect(() => {
     if (code) {
