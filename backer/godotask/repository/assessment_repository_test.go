@@ -76,3 +76,4 @@ func TestAssessmentRepository(t *testing.T) {
 	assert.Nil(t, deleted)
 	assert.Error(t, err)
 }
+
