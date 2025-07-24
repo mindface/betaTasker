@@ -1,10 +1,3 @@
-"use clinet"
-import React, {} from 'react'
-
-type Props = {
-  children?: React.ReactNode
-}
-
 function ContentModal(info:HTMLDivElement)  {
   const openBtn = document.createElement('button')
   openBtn.className = 'btn btn--primary open'

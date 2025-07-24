@@ -80,24 +80,6 @@ func main() {
 	// })
 	r := server.GetRouter()
 
-	// r.Use(cors.New(cors.Config{
-	// 	AllowOrigins: []string{
-	// 		"http://localhost:3000",
-	// 	},
-	// 	AllowMethods: []string{
-	// 		"POST",
-	// 		"GET",
-	// 		"OPTIONS",
-	// 	},
-	// 	AllowHeaders: []string{
-	// 		"Access-Control-Allow-Headers",
-	// 		"Content-Type",
-	// 		"Content-Length",
-	// 		"Origin",
-	// 		"X-CSRF-Token",
-	// 		"Authorization",
-	// 	},
-	// }))
 	r.Run(":8080")
 
 	http.HandleFunc("/json", hander001)

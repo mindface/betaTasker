@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AddAssessment, Assessment } from "../../model/assessment";
 import Cookies from 'js-cookie';
+import CommonModal from "./CommonModal";
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import { getAssessmentsForTaskUser } from "../../features/assessment/assessmentSlice";
@@ -32,10 +33,11 @@ const AssessmentListModal: React.FC<AssessmentListModalProps> = ({ isOpen, onClo
     //     qualitative_feedback: '',
     //   });
     // }
+
     console.log("assessmentId", taskId)
     console.log("user", user)
     if(taskId !== -1) {
-      dispatch(getAssessmentsForTaskUser({ userId: 0, taskId: taskId || 0 }))
+      dispatch(getAssessmentsForTaskUser({ userId: 1, taskId: taskId || 0 }))
     }
   }, [taskId]);
 
@@ -61,51 +63,48 @@ const AssessmentListModal: React.FC<AssessmentListModalProps> = ({ isOpen, onClo
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="Assessment-list__box">
-          <h2 className="Assessment-list--title">アセスメントリスト</h2>
-          {/* 全メモリー一覧を表示（タイトルクリックで詳細トグル） */}
-          {assessmentLoading ? (
-            <div className="loading">アセスメント取得中...</div>
-          ) : assessmentError ? (
-            <div className="error-message">{assessmentError}</div>
-          ) : assessments && assessments.length > 0 ? (
-            <ul className="assessment-list">
-              {assessments.map((assessment) => (
-                <li key={assessment.id} className="assessment-item">
-                  <div className="assessment-title card-title" onClick={() => setOpenMemoryId(assessment.id)}>
-                    {assessment.qualitative_feedback || 'アセスメント'}
+    <CommonModal isOpen={isOpen} onClose={onClose} title="アセスメントリスト">
+      <div className="Assessment-list__box">
+        {/* 全メモリー一覧を表示（タイトルクリックで詳細トグル） */}
+        {assessmentLoading ? (
+          <div className="loading">アセスメント取得中...</div>
+        ) : assessmentError ? (
+          <div className="error-message">{assessmentError}</div>
+        ) : assessments && assessments.length > 0 ? (
+          <ul className="assessment-list">
+            {assessments.map((assessment) => (
+              <li key={assessment.id} className="assessment-item">
+                <div className="assessment-title card-title" onClick={() => setOpenMemoryId(assessment.id)}>
+                  {assessment.qualitative_feedback || 'アセスメント'}
+                </div>
+                {openMemoryId === assessment.id && (
+                  <div className="assessment-details">
+                    <p><b>効果スコア:</b> {assessment.effectiveness_score}</p>
+                    <p><b>努力スコア:</b> {assessment.effort_score}</p>
+                    <p><b>影響スコア:</b> {assessment.impact_score}</p>
+                    <p><b>フィードバック:</b> {assessment.qualitative_feedback}</p>
                   </div>
-                  {openMemoryId === assessment.id && (
-                    <div className="assessment-details">
-                      <p><b>効果スコア:</b> {assessment.effectiveness_score}</p>
-                      <p><b>努力スコア:</b> {assessment.effort_score}</p>
-                      <p><b>影響スコア:</b> {assessment.impact_score}</p>
-                      <p><b>フィードバック:</b> {assessment.qualitative_feedback}</p>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="no-assessments">アセスメントがありません。</div>
-          )}
-          {/* 紐づくメモリー情報を表示 */}
-          {/* {relatedMemory && (
-            <div className="related-memory-info" style={{margin: '1em 0', padding: '0.5em', background: '#f6f8fa', borderRadius: 6}}>
-              <div><b>関連メモ:</b> {relatedMemory.title}</div>
-              <div><b>内容:</b> {relatedMemory.notes}</div>
-              <div><b>タグ:</b> {relatedMemory.tags}</div>
-              <div><b>ステータス:</b> {relatedMemory.read_status}</div>
-            </div>
-          )} */}
-          <div className="form-actions">
-            <button type="button" onClick={onClose} className="btn">閉じる</button>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="no-assessments">アセスメントがありません。</div>
+        )}
+        {/* 紐づくメモリー情報を表示 */}
+        {/* {relatedMemory && (
+          <div className="related-memory-info" style={{margin: '1em 0', padding: '0.5em', background: '#f6f8fa', borderRadius: 6}}>
+            <div><b>関連メモ:</b> {relatedMemory.title}</div>
+            <div><b>内容:</b> {relatedMemory.notes}</div>
+            <div><b>タグ:</b> {relatedMemory.tags}</div>
+            <div><b>ステータス:</b> {relatedMemory.read_status}</div>
           </div>
+        )} */}
+        <div className="form-actions">
+          <button type="button" onClick={onClose} className="btn">閉じる</button>
         </div>
       </div>
-    </div>
+    </CommonModal>
   );
 };
 

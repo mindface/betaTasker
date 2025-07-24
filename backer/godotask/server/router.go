@@ -36,7 +36,7 @@ func GetRouter() *gin.Engine {
 	r.LoadHTMLGlob("view/*.html")
 	r.Use(CORSMiddleware())
 
-  
+
   bookRepo := &repository.BookRepositoryImpl{DB: model.DB}
 	bookService := &service.BookService{Repo: bookRepo}
 	bookController := book.BookController{Service: bookService}

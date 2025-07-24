@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AddAssessment, Assessment } from "../../model/assessment";
 import Cookies from 'js-cookie';
+import CommonModal from "./CommonModal";
 import { Memory } from "../../model/memory";
 import { Task } from "../../model/task";
 
@@ -60,9 +61,7 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2 className="card-title">{initialData ? 'アセスメントを編集' : '新規アセスメント'}</h2>
+    <CommonModal isOpen={isOpen} onClose={onClose} title={initialData ? 'アセスメントを編集' : '新規アセスメント'}>
         {/* 全メモリー一覧を表示（タイトルクリックで詳細トグル） */}
         {memories && memories.length > 0 && (
           <div className="all-memories-list" style={{margin: '1em 0', padding: '0.5em', background: '#f0f4fa', borderRadius: 6}}>
@@ -163,8 +162,7 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
             <button type="submit" className="btn btn-primary">保存</button>
           </div>
         </form>
-      </div>
-    </div>
+    </CommonModal>
   );
 };
 

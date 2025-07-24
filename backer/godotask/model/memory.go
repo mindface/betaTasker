@@ -23,5 +23,5 @@ type Memory struct {
 }
 
 func (Memory) TableName() string {
-    return "memory"
+    return "memories"
 }

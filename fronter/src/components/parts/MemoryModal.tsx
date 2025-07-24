@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import CommonModal from "./CommonModal";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import CommonModal from './CommonModal';
 import { AddMemory, Memory } from "../../model/memory";
 
 

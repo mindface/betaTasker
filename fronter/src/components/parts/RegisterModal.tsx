@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CommonModal from './CommonModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { regApi } from '../../services/authApi';
 import { RootState } from '../../store';
@@ -50,85 +51,82 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h2 className="card-title">新規登録</h2>
-          <button onClick={onClose} className="modal-close">
-            ×
-          </button>
+    <CommonModal isOpen={isOpen} onClose={onClose} title="新規登録">
+      <div className="modal-header">
+        <button onClick={onClose} className="modal-close">
+          ×
+        </button>
+      </div>
+
+      <form onSubmit={handleSubmit} className="register-form">
+        {error && <div className="error-message">{error}</div>}
+
+        <div className="form-group">
+          <label htmlFor="username">ユーザー名</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+          />
         </div>
 
-        <form onSubmit={handleSubmit} className="register-form">
-          {error && <div className="error-message">{error}</div>}
+        <div className="form-group">
+          <label htmlFor="email">メールアドレス</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="username">ユーザー名</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        <div className="form-group">
+          <label htmlFor="password">パスワード</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="email">メールアドレス</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        <div className="form-group">
+          <label htmlFor="confirmPassword">パスワード（確認）</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="password">パスワード</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="confirmPassword">パスワード（確認）</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-actions">
-            <button
-              type="button"
-              onClick={onClose}
-              className="btn btn-secondary"
-            >
-              キャンセル
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading}
-            >
-              {loading ? '登録中...' : '登録'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <div className="form-actions">
+          <button
+            type="button"
+            onClick={onClose}
+            className="btn btn-secondary"
+          >
+            キャンセル
+          </button>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={loading}
+          >
+            {loading ? '登録中...' : '登録'}
+          </button>
+        </div>
+      </form>
+    </CommonModal>
   );
 };
 

@@ -7,51 +7,13 @@ import (
 	"fmt"
 	"log"
 	"time"
+	"github.com/godotask/model"
+	// "github.com/joho/godotenv"
 )
 
 var db *sql.DB
 
-type EvaluationMetric struct {
-	FactorName   string  // e.g. 寸法精度
-	Value        float64 // e.g. 0.015（誤差）
-	Threshold    float64 // e.g. 0.020（許容差）
-	PassFail     bool
-}
-
-type MemoryContext struct {
-	UserID     int
-	TaskID     int
-	Level      int
-	WorkTarget string
-	Machine    string
-	MaterialSpec string // ← material_spec
-	ChangeFactor string // ← change_factor
-	Goal       string
-	CreatedAt  time.Time
-	TechnicalFactors      []TechnicalFactor 
-	KnowledgeTransformations []KnowledgeTransformation
-}
-
-type TechnicalFactor struct {
-	ContextID   int
-	ToolSpec    string
-	EvalFactors string
-	Measurement string
-	Concern     string
-	CreatedAt   time.Time
-}
-
-type KnowledgeTransformation struct {
-	ContextID        int
-	Transformation   string
-	Countermeasure   string
-	ModelFeedback    string
-	LearnedKnowledge string
-	CreatedAt        time.Time
-}
-
-func RunSeed() {
-	// ここでDB接続
+func main() {
 	dsn := "host=dbgodotask user=dbgodotask password=dbgodotask dbname=dbgodotask port=5432 sslmode=disable"
 	var err error
 	var db *gorm.DB
@@ -59,45 +21,46 @@ func RunSeed() {
 	if err != nil {
 		log.Fatalf("failed to connect database: %v", err)
 	}
+
 	sqlDB, err := db.DB()
 	if err != nil {
 		log.Fatalf("failed to get sql.DB: %v", err)
 	}
 
 	// シードデータ投入前にテーブルを空にする
-	fmt.Println("テーブルをクリアしています...")
+	// fmt.Println("テーブルをクリアしています...")
 
-	// 外部キー制約を考慮して、子テーブルから削除
-	_, err = sqlDB.Exec("DELETE FROM knowledge_transformations")
-	if err != nil {
-		log.Printf("knowledge_transformations削除エラー: %v", err)
-	}
+	// // 外部キー制約を考慮して、子テーブルから削除
+	// _, err = sqlDB.Exec("DELETE FROM knowledge_transformations")
+	// if err != nil {
+	// 	log.Printf("knowledge_transformations削除エラー: %v", err)
+	// }
 
-	_, err = sqlDB.Exec("DELETE FROM technical_factors")
-	if err != nil {
-		log.Printf("technical_factors削除エラー: %v", err)
-	}
+	// _, err = sqlDB.Exec("DELETE FROM technical_factors")
+	// if err != nil {
+	// 	log.Printf("technical_factors削除エラー: %v", err)
+	// }
 	
-	_, err = sqlDB.Exec("DELETE FROM memory_contexts")
-	if err != nil {
-		log.Printf("memory_contexts削除エラー: %v", err)
-	}
+	// _, err = sqlDB.Exec("DELETE FROM memory_contexts")
+	// if err != nil {
+	// 	log.Printf("memory_contexts削除エラー: %v", err)
+	// }
 
-	// シーケンスをリセット（PostgreSQL）
-	_, err = sqlDB.Exec("ALTER SEQUENCE memory_contexts_id_seq RESTART WITH 1")
-	if err != nil {
-		log.Printf("memory_contexts_id_seqリセットエラー: %v", err)
-	}
+	// // シーケンスをリセット（PostgreSQL）
+	// _, err = sqlDB.Exec("ALTER SEQUENCE memory_contexts_id_seq RESTART WITH 1")
+	// if err != nil {
+	// 	log.Printf("memory_contexts_id_seqリセットエラー: %v", err)
+	// }
 	
-	_, err = sqlDB.Exec("ALTER SEQUENCE technical_factors_id_seq RESTART WITH 1")
-	if err != nil {
-		log.Printf("technical_factors_id_seqリセットエラー: %v", err)
-	}
+	// _, err = sqlDB.Exec("ALTER SEQUENCE technical_factors_id_seq RESTART WITH 1")
+	// if err != nil {
+	// 	log.Printf("technical_factors_id_seqリセットエラー: %v", err)
+	// }
 	
-	_, err = sqlDB.Exec("ALTER SEQUENCE knowledge_transformations_id_seq RESTART WITH 1")
-	if err != nil {
-		log.Printf("knowledge_transformations_id_seqリセットエラー: %v", err)
-	}
+	// _, err = sqlDB.Exec("ALTER SEQUENCE knowledge_transformations_id_seq RESTART WITH 1")
+	// if err != nil {
+	// 	log.Printf("knowledge_transformations_id_seqリセットエラー: %v", err)
+	// }
 
 	fmt.Println("テーブルクリア完了。シードデータを投入します...")
 
@@ -159,7 +122,7 @@ func RunSeed() {
 	}
 
 	for i, data := range level1Data {
-		ctx := MemoryContext{
+		ctx := model.MemoryContext{
 			UserID:     1,
 			TaskID:     i + 1,
 			Level:      1,
@@ -169,8 +132,6 @@ func RunSeed() {
 			ChangeFactor:     data.changeFactor,
 			Goal:       data.goal,
 			CreatedAt:  time.Now(),
-			TechnicalFactors:      []TechnicalFactor{},
-			KnowledgeTransformations: []KnowledgeTransformation{},
 		}
 
 		var contextID int
@@ -184,7 +145,7 @@ func RunSeed() {
 			continue
 		}
 
-		tf := TechnicalFactor{
+		tf := model.TechnicalFactor{
 			ContextID:   contextID,
 			ToolSpec:    data.toolSpec,
 			EvalFactors: "寸法精度, バリの有無, 面粗度",
@@ -201,7 +162,7 @@ func RunSeed() {
 			log.Printf("insert technical_factor err: %v", err)
 		}
 
-		kt := KnowledgeTransformation{
+		kt := model.KnowledgeTransformation{
 			ContextID:       contextID,
 			Transformation:  "基本的な加工現象の理解",
 			Countermeasure:  data.countermeasure,
@@ -285,7 +246,7 @@ func RunSeed() {
 	}
 
 	for i, data := range level2Data {
-		ctx := MemoryContext{
+		ctx := model.MemoryContext{
 			UserID:     1,
 			TaskID:     i + 1,
 			Level:      2,
@@ -295,8 +256,6 @@ func RunSeed() {
 			ChangeFactor:     data.changeFactor,
 			Goal:       data.goal,
 			CreatedAt:  time.Now(),
-			TechnicalFactors:      []TechnicalFactor{},
-			KnowledgeTransformations: []KnowledgeTransformation{},
 		}
 
 		var contextID int
@@ -310,7 +269,7 @@ func RunSeed() {
 			continue
 		}
 
-		tf := TechnicalFactor{
+		tf := model.TechnicalFactor{
 			ContextID:   contextID,
 			ToolSpec:    data.toolSpec,
 			EvalFactors: "加工面粗度, 工具刃先の摩耗状態, 切削音の変化, 切りくず形状",
@@ -327,7 +286,7 @@ func RunSeed() {
 			log.Printf("insert technical_factor err: %v", err)
 		}
 
-		kt := KnowledgeTransformation{
+		kt := model.KnowledgeTransformation{
 			ContextID:       contextID,
 			Transformation:  "条件最適化と材料特性の理解",
 			Countermeasure:  data.countermeasure,
@@ -411,7 +370,7 @@ func RunSeed() {
 	}
 
 	for i, data := range level3Data {
-		ctx := MemoryContext{
+		ctx := model.MemoryContext{
 			UserID:     1,
 			TaskID:     i + 1,
 			Level:      3,
@@ -421,8 +380,6 @@ func RunSeed() {
 			ChangeFactor:     data.changeFactor,
 			Goal:       data.goal,
 			CreatedAt:  time.Now(),
-			TechnicalFactors:      []TechnicalFactor{},
-			KnowledgeTransformations: []KnowledgeTransformation{},
 		}
 
 		var contextID int
@@ -436,7 +393,7 @@ func RunSeed() {
 			continue
 		}
 
-		tf := TechnicalFactor{
+		tf := model.TechnicalFactor{
 			ContextID:   contextID,
 			ToolSpec:    data.toolSpec,
 			EvalFactors: "加工サイクルタイム, 工具交換頻度, 設備稼働率, 異常振動パターン, 工具摩耗予測精度",
@@ -453,7 +410,7 @@ func RunSeed() {
 			log.Printf("insert technical_factor err: %v", err)
 		}
 
-		kt := KnowledgeTransformation{
+		kt := model.KnowledgeTransformation{
 			ContextID:       contextID,
 			Transformation:  "高度な制御システムと予測技術の統合",
 			Countermeasure:  data.countermeasure,

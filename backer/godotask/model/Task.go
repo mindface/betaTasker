@@ -9,12 +9,12 @@ type Task struct {
 	Title       string     `json:"title"`
 	Description string     `json:"description"`
 	Date        *time.Time `json:"date"`
-	Status      string     `json:"status"` // todo, in_progress, completed
+	Status      string     `json:"status"`
 	Priority    int        `json:"priority"`
 	CreatedAt   time.Time  `json:"created_at"`
 	UpdatedAt   time.Time  `json:"updated_at"`
 }
 
 func (Task) TableName() string {
-    return "task"
+    return "tasks"
 }

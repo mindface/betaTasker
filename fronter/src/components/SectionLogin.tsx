@@ -11,7 +11,7 @@ export default function SectionLogin() {
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const [loginSwitch, setLoginSwitch] = useState(false);
+  const [loginSwitch, setLoginSwitch] = useState(true);
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
