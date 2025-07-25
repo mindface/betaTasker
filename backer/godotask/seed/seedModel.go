@@ -149,7 +149,7 @@ func generateTaskTitle(scoreClass, baseTitle string) string {
 }
 
 
-func main() {
+func seed() {
 	rand.Seed(time.Now().UnixNano())
 
 	// PostgreSQL DSN

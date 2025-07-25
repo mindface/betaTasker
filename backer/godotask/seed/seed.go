@@ -13,7 +13,7 @@ import (
 
 var db *sql.DB
 
-func main() {
+func seed() {
 	dsn := "host=dbgodotask user=dbgodotask password=dbgodotask dbname=dbgodotask port=5432 sslmode=disable"
 	var err error
 	var db *gorm.DB
