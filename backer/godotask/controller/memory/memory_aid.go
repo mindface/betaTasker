@@ -2,13 +2,15 @@ package memory
 
 import (
 	"net/http"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/model"
 )
 
 // GET /api/memory/aid/:code
 func (ctl *MemoryController) GetMemoryAidByCode(c *gin.Context) {
-	code := c.Param("code") // 例: MA-Q-02
+	code := c.Param("code")
+	fmt.Printf("GetMemoryAidByCode code: %s", code)
 	var contexts []model.MemoryContext
 	err := ctl.Service.FindMemoryAidsByCode(code, &contexts)
 	if err != nil {
