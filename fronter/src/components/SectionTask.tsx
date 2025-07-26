@@ -50,7 +50,7 @@ export default function SectionTask() {
     <div className="section__inner section--task">
       <div className="section-container">
         <div className="task-header">
-          <h2>タスク</h2>
+          <h2>タスク一覧</h2>
           <button
             onClick={() => handleAddTask()}
             className="btn btn-primary"
@@ -66,7 +66,7 @@ export default function SectionTask() {
         {taskLoading ? (
           <div className="loading">読み込み中...</div>
         ) : (
-          <div className="task-list">
+          <div className="task-list card-list">
             {tasks.map((task: Task, index: number) => (
               <ItemTask
                 key={`task-item${index}`}

@@ -13,6 +13,7 @@ type MemoryRepositoryImpl struct {
 func (r *MemoryRepositoryImpl) Create(memory *model.Memory) error {
 	return r.DB.Create(memory).Error
 }
+
 func (r *MemoryRepositoryImpl) FindByID(id string) (*model.Memory, error) {
 	var m model.Memory
 	if err := r.DB.Where("id = ?", id).First(&m).Error; err != nil {

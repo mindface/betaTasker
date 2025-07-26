@@ -54,9 +54,7 @@
   border-radius: 4px
   margin-bottom: 1rem
 
-.task-list,
-.assessment-list,
-.memory-list
+.card-list
   display: grid
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
   gap: 1.5rem
@@ -75,63 +73,68 @@
   color: #666
   margin-bottom: 0.75rem
 
-.task-item,
-.assessment-item,
-.memory-item
+.card-item
   background-color: white
   border-radius: 8px
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
   padding: 1.5rem
   transition: transform 0.2s
 
-.task-item:hover,
-.assessment-item:hover,
-.memory-item:hover
+.card-item:hover
   transform: translateY(-2px)
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15)
 
-.task-item-header,
-.assessment-item-header,
-.memory-item-header
+.card-item-header
   display: flex
   justify-content: space-between
   align-items: flex-start
   margin-bottom: 1rem
 
-.task-item__header h3,
-.assessment-item__header h3,
-.memory-item__header h3
+.card-item__header h3
   margin: 0
   font-size: $subtitle_font_size
   color: #333
   flex: 1
 
-.task-item-actions,
-.assessment-item-actions,
-.memory-item-actions
+.card-item-actions
   display: flex
   gap: 0.5rem
 
-.task-item__content,
-.assessment-item__content,
-.memory-item__content
+.card-item__content
   color: #666
 
-.task-item__content p,
-.assessment-item__content p,
-.memory-item__content p
+.card-item__content p
   margin: 0 0 1rem 0
   line-height: 1.5
 
-.task-item__meta,
-.assessment-item__meta,
-.memory-item__meta
+.card-item__meta
   display: flex
   justify-content: space-between
   align-items: center
   font-size: 0.9rem
   color: #888
   margin-top: 1rem
+
+.assessment-edit-input,
+.memory-edit-input
+  width: 100%
+  padding: 0.5rem
+  border: 1px solid #ced4da
+  border-radius: 4px
+  font-size: 1.2rem
+  margin-bottom: 1rem
+
+.assessment-edit-textarea,
+.memory-edit-textarea
+  width: 100%
+  min-height: 100px
+  padding: 0.5rem
+  border: 1px solid #ced4da
+  border-radius: 4px
+  font-size: 1rem
+  margin-bottom: 1rem
+  resize: vertical
+
 
 .tags
   display: flex
@@ -166,26 +169,6 @@
 .status-completed
   background-color: #28a745
   color: #fff
-
-.assessment-edit-input,
-.memory-edit-input
-  width: 100%
-  padding: 0.5rem
-  border: 1px solid #ced4da
-  border-radius: 4px
-  font-size: 1.2rem
-  margin-bottom: 1rem
-
-.assessment-edit-textarea,
-.memory-edit-textarea
-  width: 100%
-  min-height: 100px
-  padding: 0.5rem
-  border: 1px solid #ced4da
-  border-radius: 4px
-  font-size: 1rem
-  margin-bottom: 1rem
-  resize: vertical
 
 
 /* Modal Styles */

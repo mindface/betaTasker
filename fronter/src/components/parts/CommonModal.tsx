@@ -5,6 +5,7 @@ interface CommonModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
+  contentStyle?: React.CSSProperties,
 }
 
 const CommonModal: React.FC<CommonModalProps> = ({
@@ -12,12 +13,13 @@ const CommonModal: React.FC<CommonModalProps> = ({
   onClose,
   title,
   children,
+  contentStyle = {},
 }) => {
 
   return (
     <>
       {isOpen && <div className="modal-overlay">
-        <div className="modal-content">
+        <div className="modal-content" style={contentStyle}>
           <div className="modal-header">
             <h2>{title}</h2>
             <button onClick={onClose} className="modal-close">

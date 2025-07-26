@@ -11,10 +11,10 @@ interface ItemMemoryProps {
 const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete }) => {
 
   return (
-    <div className="memory-item">
-      <div className="memory-item__header">
+    <div className="card-item">
+      <div className="card-item__header">
         <h3>{memory.title}</h3>
-        <div className="memory-item__actions">
+        <div className="card-item__actions">
           <button onClick={() => onEdit(memory)} className="btn btn-edit">
             編集
           </button>
@@ -23,10 +23,10 @@ const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete }) => 
           </button>
         </div>
       </div>
-      <div className="memory-item__content">
+      <div className="card-item__content card-item__content">
         <p>{memory.notes}</p>
         {memory.tags && (
-          <div className="memory-item__tags">
+          <div className="card-item__tags card-item__tags">
             <p className="item">{memory.title}</p>
             <p>
               {memory.tags.split(',').map((tag, index) => (
@@ -38,7 +38,7 @@ const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete }) => 
           </div>
         )}
       </div>
-      <div className="memory-item__footer">
+      <div className="card-item__footer card-item__footer">
         <span className="read-status">{memory.read_status}</span>
         <span className="date">{new Date(memory.created_at).toLocaleDateString()}</span>
       </div>

@@ -69,7 +69,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
       onClose={onClose}
       title={initialData?.title ? 'メモを編集' : '新規メモ'}
     >
-      <form onSubmit={handleSubmit} className="memory-form">
+      <form onSubmit={handleSubmit} className="memory-form card-form">
         {memoryError && <div className="error-message">{memoryError}</div>}
         <div>
           <div className="form-group">

@@ -98,7 +98,7 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
             <div><b>ステータス:</b> {relatedMemory.read_status}</div>
           </div>
         )}
-        <form onSubmit={handleSubmit} className="assessment-form">
+        <form onSubmit={handleSubmit} className="assessment-form card-form">
           <div className="form-group">
             <label htmlFor="task_id">タスクID</label>
             <input

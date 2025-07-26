@@ -9,9 +9,9 @@ interface ItemAssessmentProps {
 
 const ItemAssessment: React.FC<ItemAssessmentProps> = ({ assessment, onEdit, onDelete }) => {
   return (
-    <div className="assessment-item">
-      <div className="assessment-item__header">
-        <div className="assessment-item__actions">
+    <div className="assessment-item card-item">
+      <div className="assessment-item__header car-item__header">
+        <div className="assessment-item__actions card-item__actions">
           {onEdit && <button onClick={() => onEdit(assessment)} className="btn btn-edit">
             編集
           </button>}
@@ -20,14 +20,14 @@ const ItemAssessment: React.FC<ItemAssessmentProps> = ({ assessment, onEdit, onD
           </button>}
         </div>
       </div>
-      <div className="assessment-item__content">
+      <div className="assessment-item__content card-item__content">
         <p>effectiveness_score | {assessment.effectiveness_score}</p>
         <p>effort_score | {assessment.effort_score}</p>
-        <div className="assessment-item__score">
+        <div className="assessment-item__score card-item__score">
           qualitative_feedback: {assessment.qualitative_feedback}
         </div>
       </div>
-      <div className="assessment-item__footer">
+      <div className="assessment-item__footer card-item__footer">
         <span className="date">{assessment.created_at ? new Date(assessment.created_at).toLocaleDateString() : ''}</span>
       </div>
     </div>
