@@ -13,8 +13,8 @@ import (
 
 var db *sql.DB
 
-func seed() {
-	dsn := "host=dbgodotask user=dbgodotask password=dbgodotask dbname=dbgodotask port=5432 sslmode=disable"
+func main() {
+	dsn := "host=db user=dbgodotask password=dbgodotask dbname=dbgodotask port=5432 sslmode=disable"
 	var err error
 	var db *gorm.DB
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -31,36 +31,36 @@ func seed() {
 	// fmt.Println("テーブルをクリアしています...")
 
 	// // 外部キー制約を考慮して、子テーブルから削除
-	// _, err = sqlDB.Exec("DELETE FROM knowledge_transformations")
-	// if err != nil {
-	// 	log.Printf("knowledge_transformations削除エラー: %v", err)
-	// }
+	_, err = sqlDB.Exec("DELETE FROM knowledge_transformations")
+	if err != nil {
+		log.Printf("knowledge_transformations削除エラー: %v", err)
+	}
 
-	// _, err = sqlDB.Exec("DELETE FROM technical_factors")
-	// if err != nil {
-	// 	log.Printf("technical_factors削除エラー: %v", err)
-	// }
+	_, err = sqlDB.Exec("DELETE FROM technical_factors")
+	if err != nil {
+		log.Printf("technical_factors削除エラー: %v", err)
+	}
 	
-	// _, err = sqlDB.Exec("DELETE FROM memory_contexts")
-	// if err != nil {
-	// 	log.Printf("memory_contexts削除エラー: %v", err)
-	// }
+	_, err = sqlDB.Exec("DELETE FROM memory_contexts")
+	if err != nil {
+		log.Printf("memory_contexts削除エラー: %v", err)
+	}
 
-	// // シーケンスをリセット（PostgreSQL）
-	// _, err = sqlDB.Exec("ALTER SEQUENCE memory_contexts_id_seq RESTART WITH 1")
-	// if err != nil {
-	// 	log.Printf("memory_contexts_id_seqリセットエラー: %v", err)
-	// }
+	// シーケンスをリセット（PostgreSQL）
+	_, err = sqlDB.Exec("ALTER SEQUENCE memory_contexts_id_seq RESTART WITH 1")
+	if err != nil {
+		log.Printf("memory_contexts_id_seqリセットエラー: %v", err)
+	}
 	
-	// _, err = sqlDB.Exec("ALTER SEQUENCE technical_factors_id_seq RESTART WITH 1")
-	// if err != nil {
-	// 	log.Printf("technical_factors_id_seqリセットエラー: %v", err)
-	// }
+	_, err = sqlDB.Exec("ALTER SEQUENCE technical_factors_id_seq RESTART WITH 1")
+	if err != nil {
+		log.Printf("technical_factors_id_seqリセットエラー: %v", err)
+	}
 	
-	// _, err = sqlDB.Exec("ALTER SEQUENCE knowledge_transformations_id_seq RESTART WITH 1")
-	// if err != nil {
-	// 	log.Printf("knowledge_transformations_id_seqリセットエラー: %v", err)
-	// }
+	_, err = sqlDB.Exec("ALTER SEQUENCE knowledge_transformations_id_seq RESTART WITH 1")
+	if err != nil {
+		log.Printf("knowledge_transformations_id_seqリセットエラー: %v", err)
+	}
 
 	fmt.Println("テーブルクリア完了。シードデータを投入します...")
 

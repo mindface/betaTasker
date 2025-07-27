@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  backender:
+    container_name: backender
+    build:
+      context: .
+      dockerfile: ./backer/godotask/Dockerfile.local
+    stdin_open: true
+    tty: true
+    command: bash -c "/bin/bash"
+    volumes:
+      - ./backer/godotask:/usr/local/go/godotask
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  fronter:
+    build:
+      context: ./fronter
+      dockerfile: Dockerfile
+    container_name: fronter
+    depends_on:
+      - backender
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - fronter
+      - backender
+    networks:
+      - app-network
+
+  db:
+    image: postgres:16
+    container_name: db
+    environment:
+      POSTGRES_USER: dbgodotask
+      POSTGRES_PASSWORD: dbgodotask
+      POSTGRES_DB: dbgodotask
+      POSTGRES_TEST_DB: test_db
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

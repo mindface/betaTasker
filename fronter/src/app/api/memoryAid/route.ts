@@ -6,7 +6,6 @@ export async function GET(req: NextRequest) {
   const token = cookieStore.get('token')?.value;
   const { searchParams } = new URL(req.url);
   const code = searchParams.get('code') || '';
-  console.log('Memory Aid Code@@@:', code);
 
   const res = await fetch(`http://localhost:8080/api/memory/aid/${code}`, {
       method: 'GET',

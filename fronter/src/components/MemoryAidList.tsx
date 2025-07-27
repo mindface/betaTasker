@@ -42,25 +42,25 @@ const MemoryAidList: React.FC<Props> = ({ code }) => {
               {/* 他のコードも必要に応じて追加 */}
             </select>
           </div>
-          {contexts.length === 0 ? (
+          {(contexts ?? []).length === 0 ? (
             <div>該当データなし</div>
           ) : (
             <div className="card-list p-8">
               {contexts.map(ctx => (
                 <div key={ctx.id} className="card-item">
-                  <div className="p-b-5"><b>WorkTarget:</b> {ctx.work_target}</div>
-                  <div className="p-b-5"><b>Machine:</b> {ctx.machine}</div>
-                  <div className="p-b-5"><b>Material:</b> {ctx.material_spec}</div>
-                  <div className="p-b-5"><b>Goal:</b> {ctx.goal}</div>
+                  <div className="p-b-5 card-title"><b>対象仕事:</b> {ctx.work_target}</div>
+                  <div className="p-b-5"><b>機材:</b> {ctx.machine}</div>
+                  <div className="p-b-5"><b>材料:</b> {ctx.material_spec}</div>
+                  <div className="p-b-5"><b>目的:</b> {ctx.goal}</div>
                   <div className="p-b-5"><b>Level:</b> {ctx.level}</div>
-                  <div className="p-b-5"><b>Technical Factors:</b>
+                  <div className="p-b-5"><b>技術的要素:</b>
                     <ul>
                       {ctx.technical_factors.map(tf => (
                         <li className="p-b-5" key={tf.id}>{tf.tool_spec} / {tf.eval_factors}</li>
                       ))}
                     </ul>
                   </div>
-                  <div><b>Knowledge Transformations:</b>
+                  <div><b>Knowledge Transformations:(知識の変換:)</b>
                     <ul>
                       {ctx.knowledge_transformations.map(kt => (
                         <li key={kt.id}>{kt.transformation} / {kt.countermeasure}</li>

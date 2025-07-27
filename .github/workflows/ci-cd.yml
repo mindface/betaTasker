@@ -198,3 +198,15 @@ jobs:
   #         # 本番環境へのデプロイスクリプトを実行
   #         echo "Deploying to production..."
   #         # ここに実際のデプロイコマンドを追加 
+
+  # Nginxビルド
+  nginx:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build nginx Docker image
+        working-directory: ./nginx
+        run: |
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ github.sha }} . 
