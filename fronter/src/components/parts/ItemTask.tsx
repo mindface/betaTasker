@@ -11,10 +11,10 @@ interface ItemTaskProps {
 
 const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete, onSetTaskId }) => {
   return (
-    <div className="task-item">
-      <div className="task-item__header">
+    <div className="card-item">
+      <div className="card-item__header">
         <h3 className="p-b-2">{task.title}</h3>
-        <div className="task-item__actions">
+        <div className="card-item__actions">
           <button onClick={() => onEdit(task)} className="btn btn-edit">
             編集
           </button>
@@ -30,14 +30,14 @@ const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete, onSetTaskId
           </button>
         </div>
       </div>
-      <div className="task-item__content">
+      <div className="card-item__content">
         <p className="pb-1">{task.title}</p>
         <p>{task.description}</p>
         {task.status && (
-          <span className="task-status">{task.status}</span>
+          <span className="card-status">{task.status}</span>
         )}
       </div>
-      <div className="task-item__footer">
+      <div className="card-item__footer">
         <span className="priority">優先度: {task.priority}</span>
         <span className="date">{new Date(task.created_at).toLocaleDateString()}</span>
       </div>

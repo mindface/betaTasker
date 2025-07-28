@@ -72,7 +72,7 @@ export default function SectionAssessment() {
             ) : learningData ? (
               <div className="learning-structure-info">
                 <span className="d-block">学習カテゴリ: {learningData.learningStructure.category}</span>
-                <span className="d-block">学習サイクル: {learningData.learningStructure.studyCycle.map((item,index) => <span key={`studyCycle${index}`} className="d-iline-block p-1">{item}</span>)}</span>
+                <span className="d-block p-4">学習サイクル: {learningData.learningStructure.studyCycle.map((item,index) => <span key={`studyCycle${index}`} className="d-iline-block p-4">{item}</span>)}</span>
               </div>
             ) : null}
             <button
@@ -91,7 +91,7 @@ export default function SectionAssessment() {
         {assessmentLoading ? (
           <div className="loading">読み込み中...</div>
         ) : (
-          <div className="assessment-list">
+          <div className="assessment-list card-list">
             {assessments.map((assessment: Assessment, index: number) => (
               <ItemAssessment
                 key={`assessment-item${index}`}

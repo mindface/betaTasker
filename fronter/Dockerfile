@@ -31,4 +31,4 @@ USER nextjs
 EXPOSE 3000
 
 # ✅ `next start` を実行（yarn 経由）
-CMD ["yarn", "start"]
+CMD ["yarn", "dev"]

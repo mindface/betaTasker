@@ -57,7 +57,7 @@ export default function SectionMemory() {
     <div className="section__inner section--memory">
       <div className="section-container">
         <div className="memory-header">
-          <h2>メモ</h2>
+          <h2>メモ一覧</h2>
           <button 
             onClick={() => handleAddMemory()}
             className="btn btn-primary"
@@ -80,10 +80,10 @@ export default function SectionMemory() {
         {memoryError ? (
           <div className="loading">読み込み中...</div>
         ) : (
-          <div className="memory-list">
+          <div className="card-list">
             {memories.map((memory,index) => (
               <ItemMemory
-                key={`memory-item${index}`}
+                key={`card-item${index}`}
                 memory={memory}
                 onEdit={(editMemory) => handleEditMemory(editMemory)}
                 onDelete={() => handleDeleteMemory(memory.id)}

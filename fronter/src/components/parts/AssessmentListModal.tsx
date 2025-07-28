@@ -71,14 +71,14 @@ const AssessmentListModal: React.FC<AssessmentListModalProps> = ({ isOpen, onClo
         ) : assessmentError ? (
           <div className="error-message">{assessmentError}</div>
         ) : assessments && assessments.length > 0 ? (
-          <ul className="assessment-list">
+          <ul className="assessment-list card-list">
             {assessments.map((assessment) => (
-              <li key={assessment.id} className="assessment-item">
+              <li key={assessment.id} className="assessment-item card-item">
                 <div className="assessment-title card-title" onClick={() => setOpenMemoryId(assessment.id)}>
                   {assessment.qualitative_feedback || 'アセスメント'}
                 </div>
                 {openMemoryId === assessment.id && (
-                  <div className="assessment-details">
+                  <div className="assessment-details card-details">
                     <p><b>効果スコア:</b> {assessment.effectiveness_score}</p>
                     <p><b>努力スコア:</b> {assessment.effort_score}</p>
                     <p><b>影響スコア:</b> {assessment.impact_score}</p>

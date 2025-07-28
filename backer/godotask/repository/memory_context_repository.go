@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/godotask/model"
 	"gorm.io/gorm"
 )
@@ -23,9 +24,14 @@ func (r *MemoryContextRepositoryImpl) FindByCode(code string, contexts *[]model.
 // }
 
 func (r *MemoryContextRepositoryImpl) FindWithAidsByCode(code string, contexts *[]model.MemoryContext) error {
+	fmt.Printf("Finding memory contexts with code: %s\n", code)
 	return r.DB.
 		Preload("TechnicalFactors").
 		Preload("KnowledgeTransformations").
 		Where("work_target LIKE ?", "%"+code+"%").
 		Find(contexts).Error
+}
+
+func NewMemoryContextRepository(db *gorm.DB) MemoryContextRepositoryInterface {
+	return &MemoryContextRepositoryImpl{DB: db}
 }

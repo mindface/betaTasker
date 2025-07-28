@@ -1,51 +1,51 @@
 "use client"
 import React, { useState } from "react"
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import { loginRequest, loginSuccess, loginFailure } from "../features/user/userSlice";
-import { loginApi, logoutApi, regApi } from "../services/authApi";
-import { fetchMemoriesService } from "../services/memoryApi";
-import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../store"
+import { loginRequest, loginSuccess, loginFailure } from "../features/user/userSlice"
+import { loginApi, logoutApi, regApi } from "../services/authApi"
+import { fetchMemoriesService } from "../services/memoryApi"
+import { useRouter } from "next/navigation"
 
 export default function SectionLogin() {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.user);
-  const [loginSwitch, setLoginSwitch] = useState(true);
-  const [email, setEmail] = useState("");
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const user = useSelector((state: RootState) => state.user)
+  const [loginSwitch, setLoginSwitch] = useState(true)
+  const [email, setEmail] = useState("")
+  const [userName, setUserName] = useState("")
+  const [password, setPassword] = useState("")
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(loginRequest());
+    e.preventDefault()
+    dispatch(loginRequest())
 
-    const result = await loginApi(email, password);
+    const result = await loginApi(email, password)
     if (result.token && result.user) {
-      dispatch(loginSuccess({ token: result.token, user: result.user }));
-      router.push("/");
+      dispatch(loginSuccess({ token: result.token, user: result.user }))
+      router.push("/")
     } else {
-      dispatch(loginFailure(result.error || 'ログイン失敗'));
+      dispatch(loginFailure(result.error || 'ログイン失敗'))
     }
-  };
+  }
 
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = await regApi({ username: userName, email, password, role: "user" });
+    e.preventDefault()
+    const result = await regApi({ username: userName, email, password, role: "user" })
     if (result.token && result.user) {
-      dispatch(loginSuccess({ token: result.token, user: result.user }));
-      router.push("/");
+      dispatch(loginSuccess({ token: result.token, user: result.user }))
+      router.push("/")
     } else {
-      dispatch(loginFailure(result.error || '登録失敗'));
+      dispatch(loginFailure(result.error || '登録失敗'))
     }
-  };
+  }
 
   const handleLogout = async () => {
-    const result = await logoutApi();
+    const result = await logoutApi()
   }
 
   const getMemory = async () => {
-    const result = await fetchMemoriesService();
+    const result = await fetchMemoriesService()
   }
 
   const switchAction = () => {
@@ -94,5 +94,5 @@ export default function SectionLogin() {
         <button onClick={getMemory}>getMemory</button>
       </div>
     </div>
-  );
+  )
 }

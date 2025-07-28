@@ -27,8 +27,8 @@ func (r *AssessmentRepositoryImpl) FindByTaskIDAndUserID(userID int, taskID int)
 	if err := r.DB.
 		Where("task_id = ? AND user_id = ?", taskID, userID).
 		Find(&assessments).Error; err != nil {
-		return nil, err
-	}
+			return nil, err
+		}
 	return assessments, nil
 }
 

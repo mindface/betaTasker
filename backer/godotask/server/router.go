@@ -42,7 +42,11 @@ func GetRouter() *gin.Engine {
 	bookController := book.BookController{Service: bookService}
 
 	memoryRepo := &repository.MemoryRepositoryImpl{DB: model.DB}
-	memoryService := &service.MemoryService{Repo: memoryRepo}
+	memoryContextRepo := &repository.MemoryContextRepositoryImpl{DB: model.DB}
+	memoryService := &service.MemoryService{
+		Repo: memoryRepo,
+		ContextRepo: memoryContextRepo,
+	}
 	memoryController := memory.MemoryController{Service: memoryService}
 
 	taskRepo := &repository.TaskRepositoryImpl{DB: model.DB}

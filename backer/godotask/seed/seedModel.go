@@ -153,7 +153,7 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	// PostgreSQL DSN
-	dsn := "host=dbgodotask user=dbgodotask password=dbgodotask dbname=dbgodotask port=5432 sslmode=disable"
+	dsn := "host=db user=dbgodotask password=dbgodotask dbname=dbgodotask port=5432 sslmode=disable"
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
