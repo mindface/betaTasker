@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       body: JSON.stringify(body),
     });
 
-    const data = await backendRes.json();
+    const data = await backendRes.json()
     if (!backendRes.ok) {
       return NextResponse.json({ error: data.error || '登録に失敗しました' }, { status: backendRes.status });
     }

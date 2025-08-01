@@ -70,7 +70,7 @@ export default function SectionLogin() {
             <label>パスワード</label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
           </div>
-          {userName && <div className="p-b-8">
+          {!loginSwitch && <div className="p-b-8">
             <label>ユーザー名</label>
             <input type="text" value={userName} onChange={e => setUserName(e.target.value)} required />
           </div>}
