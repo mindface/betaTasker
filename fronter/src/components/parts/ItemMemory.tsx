@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { Memory } from "../../model/memory";
 
+
 interface ItemMemoryProps {
   memory: Memory;
   onEdit: (memory: Memory) => void;
@@ -9,6 +10,21 @@ interface ItemMemoryProps {
 }
 
 const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete }) => {
+
+  // const handleOpenMemoryModal = async (memoryId: string) => {
+  //   if (memoryCache[memoryId]) {
+  //     // キャッシュがあればそれを使う
+  //     setSelectedMemory(memoryCache[memoryId]);
+  //     setModalOpen(true);
+  //   } else {
+  //     // なければAPIリクエスト
+  //     const res = await fetch(`/api/memory/${memoryId}`);
+  //     const data = await res.json();
+  //     setMemoryCache(prev => ({ ...prev, [memoryId]: data }));
+  //     setSelectedMemory(data);
+  //     setModalOpen(true);
+  //   }
+  // };
 
   return (
     <div className="card-item">

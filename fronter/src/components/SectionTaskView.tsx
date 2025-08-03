@@ -7,7 +7,7 @@ import { Posts } from '../model/posts'
 
 import ContentTask01 from "./ContentTask01"
 import ContentHeader from "./ContentTasksHeader"
-import ItemCard from "./ItemCard"
+import ItemCard from "./parts/ItemCard"
 import Loading from "./Loading"
 import { RootState } from "../store"
 
@@ -91,15 +91,15 @@ export default function SectionTaskView() {
             </button>
           </div>
           {isClient &&
-          <div className={`task-box _flex_ ${switchClass}`}>
-            {currentLoding && <Loading />}
-            {!postsSwtch.current && postsStateSelector.map((item:Posts) => {
-              return (<ItemCard posts={item} key={Number(item.id)}></ItemCard>)
-            })}
-            {postsSwtch.current && posts.map((item:Posts) => {
-              return (<ItemCard posts={item} key={Number(item.id)}></ItemCard>)
-            })}
-          </div>
+            <div className={`task-box _flex_ ${switchClass}`}>
+              {currentLoding && <Loading />}
+              {!postsSwtch.current && postsStateSelector.map((item:Posts) => {
+                return (<ItemCard posts={item} key={Number(item.id)}></ItemCard>)
+              })}
+              {postsSwtch.current && posts.map((item:Posts) => {
+                return (<ItemCard posts={item} key={Number(item.id)}></ItemCard>)
+              })}
+            </div>
           }
         </div>
       </>

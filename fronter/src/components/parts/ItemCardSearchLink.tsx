@@ -1,6 +1,6 @@
 "use client"
 import React, { ChangeEvent, useRef, useState, useEffect } from 'react'
-import LinkData from '../json/link.json'
+import LinkData from '../../json/link.json'
 
 type Props = {
   title: string;

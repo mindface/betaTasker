@@ -1,15 +1,33 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchMemoriesService, addMemoryService, updateMemoryService, deleteMemoryService } from '../../services/memoryApi';
+import { fetchMemoriesService, fetchMemoryService, addMemoryService, updateMemoryService, deleteMemoryService } from '../../services/memoryApi';
 import { AddMemory, Memory } from '../../model/memory';
 
 interface MemoryState {
   memories: Memory[];
+  memoryItem: Memory;
   memoryLoading: boolean;
   memoryError: string | null;
 }
 
 const initialState: MemoryState = {
   memories: [],
+  memoryItem: {
+    id: 0,
+    user_id: 0,
+    title: 'no title',
+    notes: '',
+    created_at: '',
+    updated_at: '',
+    source_type: '',
+    author: '',
+    factor: '',
+    process: '',
+    evaluation_axis: '',
+    information_amount: '',
+    tags: '',
+    read_status: '',
+    read_date: '',
+  },
   memoryLoading: false,
   memoryError: null,
 }
@@ -28,6 +46,23 @@ export const loadMemories = createAsyncThunk(
     }
   }
 )
+
+
+export const getMemory = createAsyncThunk(
+  'memory/getMemory',
+  async (memoryId: number, { rejectWithValue }) => {
+    try {
+      const response = await fetchMemoryService(memoryId);
+      if (response.error) {
+        return rejectWithValue(response.error);
+      }
+      return response.memory;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+)
+
 
 export const createMemory = createAsyncThunk(
   'memory/createMemory',
@@ -93,6 +128,18 @@ const memorySlice = createSlice({
         state.memories = action.payload;
       })
       .addCase(loadMemories.rejected, (state, action) => {
+        state.memoryLoading = false;
+        state.memoryError = action.payload as string;
+      })
+      .addCase(getMemory.pending, (state) => {
+        state.memoryLoading = true;
+        state.memoryError = null;
+      })
+      .addCase(getMemory.fulfilled, (state, action: PayloadAction<Memory>) => {
+        state.memoryLoading = false;
+        state.memoryItem = action.payload;
+      })
+      .addCase(getMemory.rejected, (state, action) => {
         state.memoryLoading = false;
         state.memoryError = action.payload as string;
       })

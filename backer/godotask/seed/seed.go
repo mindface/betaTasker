@@ -276,6 +276,12 @@ func main() {
 			Measurement: "表面粗さ計, 顕微鏡観察, 騒音計データ, 切りくず形状観察",
 			Concern:     data.concern,
 			CreatedAt:   time.Now(),
+
+			// Factor:            "材料硬度",          // 任意の初期値（レベル別に変えてもOK）
+			// Process:           "切削→評価→補正",
+			// EvaluationAxis:    "面粗度, 寸法精度",
+			// InformationAmount: "3件の加工ログ、1件の参考資料",
+
 		}
 
 		_, err = sqlDB.Exec(`

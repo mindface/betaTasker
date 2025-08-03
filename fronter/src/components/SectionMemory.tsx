@@ -94,6 +94,7 @@ export default function SectionMemory() {
         <MemoryModal
           initialData={editingMemory}
           isOpen={isModalOpen}
+          isViewType={false}
           onClose={() => setIsModalOpen(false)}
           onSave={handleSaveMemory}
         />
