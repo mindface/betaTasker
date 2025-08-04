@@ -1,7 +1,11 @@
 import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export type Params = { params: Promise<{ id: string }>  };
+export async function GET(
+  req: NextRequest,
+  { params }: Params
+) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
@@ -10,7 +14,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: 'IDが指定されていません' }, { status: 400 });
     }

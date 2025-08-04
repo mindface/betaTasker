@@ -37,7 +37,7 @@ const MemoryAidList: React.FC<Props> = ({ code }) => {
           <div className="select-box">
             <select onChange={(e) => dispatch(loadMemoryAidsByCode(e.target.value))}>
               <option value="MA-C-01">MA-C-01</option>
-              <option value="MA-Q-02">MA-Q-03</option>
+              <option value="MA-Q-02">MA-Q-02</option>
               <option value="PM-P-03">PM-P-03</option>
               {/* 他のコードも必要に応じて追加 */}
             </select>

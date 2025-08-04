@@ -71,7 +71,7 @@ export async function PUT(request: Request) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
-  
+
     if (!token) {
       return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 })
     }
