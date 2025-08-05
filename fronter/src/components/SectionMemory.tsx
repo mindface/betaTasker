@@ -14,13 +14,17 @@ export default function SectionMemory() {
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingMemory, setEditingMemory] = useState<AddMemory|Memory|undefined>()
-  const [aidCode, setAidCode] = useState('MA-Q-02');
+  const [aidCode, setAidCode] = useState('MA-Q-02'); // デフォルト値は任意
 
   useEffect(() => {
     dispatch(loadMemories())
   }, [dispatch, isAuthenticated])
 
   const handleAddMemory = () => {
+    // if (!isAuthenticated) {
+    //   // TODO: ログインモーダルを表示
+    //   return
+    // }
     setEditingMemory(undefined)
     setIsModalOpen(true)
   }
@@ -53,11 +57,18 @@ export default function SectionMemory() {
     await dispatch(removeMemory(id))
   }
 
+  const tes = (info:string) => {
+    const _info = info
+    return (test:string) => {
+      return test +_info;
+    }
+  }
+
   return (
     <div className="section__inner section--memory">
       <div className="section-container">
         <div className="memory-header">
-          <h2>メモ一覧</h2>
+          <h2>メモ</h2>
           <button 
             onClick={() => handleAddMemory()}
             className="btn btn-primary"
@@ -80,10 +91,10 @@ export default function SectionMemory() {
         {memoryError ? (
           <div className="loading">読み込み中...</div>
         ) : (
-          <div className="card-list">
+          <div className="memory-list card-list">
             {memories.map((memory,index) => (
               <ItemMemory
-                key={`card-item${index}`}
+                key={`memory-item${index}`}
                 memory={memory}
                 onEdit={(editMemory) => handleEditMemory(editMemory)}
                 onDelete={() => handleDeleteMemory(memory.id)}
@@ -94,7 +105,6 @@ export default function SectionMemory() {
         <MemoryModal
           initialData={editingMemory}
           isOpen={isModalOpen}
-          isViewType={false}
           onClose={() => setIsModalOpen(false)}
           onSave={handleSaveMemory}
         />

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { AddAssessment, Assessment } from "../../model/assessment";
 import Cookies from 'js-cookie';
-import CommonModal from "./CommonModal";
 import { Memory } from "../../model/memory";
 import { Task } from "../../model/task";
+import CommonModal from './CommonModal';
+
 
 interface AssessmentModalProps {
   isOpen: boolean;
@@ -58,10 +59,13 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
   const selectedTask = tasks?.find(t => t.id === Number(formData?.task_id));
   const relatedMemory = memories?.find(m => m.id === selectedTask?.memory_id);
 
-  if (!isOpen) return null;
-
   return (
-    <CommonModal isOpen={isOpen} onClose={onClose} title={initialData ? 'アセスメントを編集' : '新規アセスメント'}>
+    <CommonModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={initialData ? 'アセスメントを編集' : '新規アセスメント'}
+    >
+      <div className="assessment-modal-content">
         {/* 全メモリー一覧を表示（タイトルクリックで詳細トグル） */}
         {memories && memories.length > 0 && (
           <div className="all-memories-list" style={{margin: '1em 0', padding: '0.5em', background: '#f0f4fa', borderRadius: 6}}>
@@ -98,7 +102,7 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
             <div><b>ステータス:</b> {relatedMemory.read_status}</div>
           </div>
         )}
-        <form onSubmit={handleSubmit} className="assessment-form card-form">
+        <form onSubmit={handleSubmit} className="assessment-form">
           <div className="form-group">
             <label htmlFor="task_id">タスクID</label>
             <input
@@ -162,6 +166,7 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
             <button type="submit" className="btn btn-primary">保存</button>
           </div>
         </form>
+      </div>
     </CommonModal>
   );
 };

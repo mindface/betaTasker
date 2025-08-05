@@ -73,7 +73,7 @@ export default function SectionTask() {
                 task={task}
                 onEdit={(editTask: Task) => handleEditTask(editTask)}
                 onDelete={() => handleDeleteTask(task.id)}
-                onSetTaskId={(id: number) => setTaskId(id)}
+                // onSetTaskId={(id: number) => setTaskId(id)}
               />
             ))}
           </div>
@@ -92,7 +92,6 @@ export default function SectionTask() {
           onSave={handleSaveTask}
           memories={memories}
         />
-
       </div>
     </div>
   )
