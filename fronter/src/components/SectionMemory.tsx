@@ -103,6 +103,7 @@ export default function SectionMemory() {
           </div>
         )}
         <MemoryModal
+          isViewType={false}
           initialData={editingMemory}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
