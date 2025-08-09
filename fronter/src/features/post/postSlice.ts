@@ -6,6 +6,7 @@ interface UserState {
   isAuthenticated: boolean;
   error: string | null;
   post: Posts | null;
+  rePosts: Posts[];
 }
 
 const initialState: UserState = {
@@ -13,6 +14,14 @@ const initialState: UserState = {
   isAuthenticated: false,
   error: null,
   post: null,
+  rePosts: [{
+    id: 1,
+    title: "test01",
+    text: "test01",
+    name: "test01",
+    disc: "test01",
+    imgPath: "test01",
+  }],
 };
 
 const userSlice = createSlice({

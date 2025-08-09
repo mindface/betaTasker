@@ -1,8 +1,7 @@
 "use client"
 import React, { useState,useRef, useEffect } from 'react'
-import { useDispatch, useStore, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Image from 'next/image'
-import { getPostAction } from '../modules/getPostAction'
 import { Posts } from '../model/posts'
 
 import ContentTask01 from "./ContentTask01"
@@ -19,7 +18,6 @@ export interface State {
 }
 
 export default function SectionTaskView() {
-  const dispatch = useDispatch()
   const [switchClass,setSwitchClass] = useState('')
   const [posts,setPosts] = useState<Posts[]>([])
   const postsSwtch = useRef<boolean>(false)
@@ -55,7 +53,6 @@ export default function SectionTaskView() {
   }
 
   useEffect(() => {
-    dispatch(getPostAction())
     setIsClient(true)
   },[])
 

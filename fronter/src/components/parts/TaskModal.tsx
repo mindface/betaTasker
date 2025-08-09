@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useApiCall } from '../../hooks/useApiCall';
+import { taskApiClient } from '../../services/taskApiRefactored';
 import { AddTask, Task } from "../../model/task";
 import { Memory } from "../../model/memory";
 import CommonModal from './CommonModal';
@@ -13,6 +15,15 @@ interface TaskModalProps {
 
 const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialData, memories }) => {
   const [formData, setFormData] = useState<AddTask | Task | undefined>();
+
+  const { execute: saveTask } = useApiCall(
+    taskApiClient.addTask,
+    {
+      onSuccess: () => {
+        onClose();
+      }
+    }
+  );
 
   useEffect(() => {
     if (initialData) {
@@ -38,7 +49,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData) return;
-    await onSave(formData);
+    await saveTask(formData);
   };
 
   // 選択中のmemory_idに該当するMemoryを取得
