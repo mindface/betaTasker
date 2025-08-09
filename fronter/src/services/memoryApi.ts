@@ -14,6 +14,20 @@ export const fetchMemoriesService = async () => {
   }
 };
 
+export const fetchMemoryService = async (memoryId: number) => {
+  try {
+    const res = await fetch(`/api/memory/${memoryId}`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error('メモリ一覧取得失敗');
+    return data;
+  } catch (err: any) {
+    return { error: err.message };
+  }
+};
+
 export const addMemoryService = async (memory: AddMemory) => {
   try {
     const res = await fetch('/api/memory', {

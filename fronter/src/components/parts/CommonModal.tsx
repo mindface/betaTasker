@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface CommonModalProps {
   isOpen: boolean;
@@ -15,6 +15,9 @@ const CommonModal: React.FC<CommonModalProps> = ({
   children,
   contentStyle = {},
 }) => {
+  useEffect(() => {
+    document.body.setAttribute("style", isOpen ? "overflow: hidden;" : "");
+  }, [isOpen]);
 
   return (
     <>
@@ -35,4 +38,4 @@ const CommonModal: React.FC<CommonModalProps> = ({
   );
 };
 
-export default CommonModal; 
+export default CommonModal;

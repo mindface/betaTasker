@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchAssessmentsService, getAssessmentsForTaskUserService, addAssessmentService, updateAssessmentService, deleteAssessmentService } from '../../services/assessmentApi';
+import { fetchAssessmentsService, getAssessmentsForTaskUserService,  addAssessmentService, updateAssessmentService, deleteAssessmentService } from '../../services/assessmentApi';
 import { AddAssessment, Assessment } from '../../model/assessment';
 
 interface AssessmentState {
@@ -29,6 +29,21 @@ export const loadAssessments = createAsyncThunk(
   }
 )
 
+export const createAssessment = createAsyncThunk(
+  'assessment/createAssessment',
+  async (assessmentData: AddAssessment, { rejectWithValue }) => {
+    try {
+      const response = await addAssessmentService(assessmentData);
+      if (response.error) {
+        return rejectWithValue(response.error);
+      }
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+)
+
 export const getAssessmentsForTaskUser = createAsyncThunk(
   'assessment/getAssessmentsForTaskUser',
   async (payload: { userId: number,taskId: number }, { rejectWithValue }) => {
@@ -40,21 +55,6 @@ export const getAssessmentsForTaskUser = createAsyncThunk(
       console.log("payload", response)
 
       return response.assessments || response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
-    }
-  }
-)
-
-export const createAssessment = createAsyncThunk(
-  'assessment/createAssessment',
-  async (assessmentData: AddAssessment, { rejectWithValue }) => {
-    try {
-      const response = await addAssessmentService(assessmentData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -108,9 +108,6 @@ const assessmentSlice = createSlice({
       .addCase(loadAssessments.rejected, (state, action) => {
         state.assessmentLoading = false;
         state.assessmentError = action.payload as string;
-      })
-      .addCase(getAssessmentsForTaskUser.fulfilled, (state, action: PayloadAction<Assessment[]>) => {
-        state.assessments = action.payload || [];
       })
       .addCase(createAssessment.fulfilled, (state, action: PayloadAction<Assessment>) => {
         state.assessments.push(action.payload);

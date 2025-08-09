@@ -7,6 +7,7 @@ import { AddMemory, Memory } from "../../model/memory";
 
 interface MemoryModalProps {
   isOpen: boolean;
+  isViewType: boolean;
   onClose: () => void;
   onSave: (memoryData: (AddMemory|Memory)) => void;
   initialData?: (AddMemory|Memory);
@@ -25,6 +26,7 @@ const initiaSetlData = {
 
 const MemoryModal: React.FC<MemoryModalProps> = ({
   isOpen,
+  isViewType,
   onClose,
   onSave,
   initialData,
@@ -80,10 +82,10 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               name="title"
               value={formData?.title || ''}
               onChange={handleChange}
+              disabled={isViewType}
               required
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="notes">メモ内容</label>
             <textarea
@@ -92,10 +94,10 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               value={formData?.notes || ''}
               onChange={handleChange}
               rows={5}
+              disabled={isViewType}
               required
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="tags">タグ（カンマ区切り）</label>
             <input
@@ -105,9 +107,9 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               value={formData?.tags || ''}
               onChange={handleChange}
               placeholder="例: 仕事, 重要, 後で"
+              disabled={isViewType}
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="read_status">ステータス</label>
             <select
@@ -115,13 +117,13 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               name="read_status"
               value={formData?.read_status || ''}
               onChange={handleChange}
+              disabled={isViewType}
             >
               <option value="unread">未読</option>
               <option value="reading">読書中</option>
               <option value="completed">完了</option>
             </select>
           </div>
-
           <div className="form-group">
             <label htmlFor="factor">因子</label>
             <input
@@ -131,6 +133,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               value={formData?.factor || ''}
               onChange={handleChange}
               placeholder="例: 環境, 動機, 習慣 など"
+              disabled={isViewType}
             />
           </div>
           <div className="form-group">
@@ -142,6 +145,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               value={formData?.process || ''}
               onChange={handleChange}
               placeholder="例: どのように学んだか・使ったか"
+              disabled={isViewType}
             />
           </div>
           <div className="form-group">
@@ -153,6 +157,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               value={formData?.evaluation_axis || ''}
               onChange={handleChange}
               placeholder="例: 理解度, 応用度, 継続性 など"
+              disabled={isViewType}
             />
           </div>
           <div className="form-group">
@@ -164,25 +169,28 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               value={formData?.information_amount || ''}
               onChange={handleChange}
               placeholder="例: 参考文献数やメモの分量など"
+              disabled={isViewType}
             />
           </div>
 
-          <div className="form-actions">
-            <button
-              type="button"
-              onClick={onClose}
-              className="btn btn-secondary"
-            >
-              キャンセル
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={memoryLoading}
-            >
-              {memoryLoading ? '保存中...' : '保存'}
-            </button>
-          </div>
+          { !isViewType &&
+            <div className="form-actions">
+              <button
+                type="button"
+                onClick={onClose}
+                className="btn btn-secondary"
+              >
+                キャンセル
+              </button>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={memoryLoading}
+              >
+                {memoryLoading ? '保存中...' : '保存'}
+              </button>
+            </div>
+          }
         </div>
       </form>
     </CommonModal>

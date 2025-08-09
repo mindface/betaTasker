@@ -87,7 +87,7 @@ func classifyScore(score int) string {
 	case score >= 50:
 		return "d"
 	default:
-		return "e"      // 再考・再検証が必要
+		return "e"  // 再考・再検証が必要
 	}
 }
 
@@ -146,6 +146,74 @@ func generateTaskTitle(scoreClass, baseTitle string) string {
 		"e":      "使用不可",
 	}
 	return fmt.Sprintf("%s: %s", prefix[scoreClass], baseTitle)
+}
+
+func generateFactor(scoreClass string) string {
+	factors := map[string]string{
+		"s_plus": "応用実績",
+		"s":      "成熟度",
+		"a_plus": "信頼性",
+		"a":      "互換性",
+		"b_plus": "使用条件",
+		"b":      "導入障壁",
+		"c_plus": "改善余地",
+		"c":      "未検証要素",
+		"d_plus": "リスク因子",
+		"d":      "技術的不確実性",
+		"e":      "不適格要素",
+	}
+	return factors[scoreClass]
+}
+
+func generateProcess(scoreClass string) string {
+	processes := map[string]string{
+		"s_plus": "導入済→評価完了",
+		"s":      "プロト導入→業務適用",
+		"a_plus": "評価→試験導入",
+		"a":      "適用検討→試験実施",
+		"b_plus": "パイロット導入中",
+		"b":      "追加検討段階",
+		"c_plus": "初期評価段階",
+		"c":      "導入見送り検討中",
+		"d_plus": "再検討フロー中",
+		"d":      "停止中→他技術選定",
+		"e":      "評価対象外",
+	}
+	return processes[scoreClass]
+}
+
+func generateEvaluationAxis(scoreClass string) string {
+	axes := map[string]string{
+		"s_plus": "実装性・効果",
+		"s":      "即効性・応用性",
+		"a_plus": "適用性・持続性",
+		"a":      "効果・効率",
+		"b_plus": "有用性・安定性",
+		"b":      "導入コスト・効果",
+		"c_plus": "試行適性・調整可能性",
+		"c":      "妥当性・拡張性",
+		"d_plus": "技術課題・適用難度",
+		"d":      "問題点・置換可能性",
+		"e":      "不可要因・改善不能性",
+	}
+	return axes[scoreClass]
+}
+
+func generateInformationAmount(scoreClass string) string {
+	info := map[string]string{
+		"s_plus": "多数の応用事例と論文",
+		"s":      "十分な文献と業界実績",
+		"a_plus": "実証データ多数あり",
+		"a":      "プロトデータ一部あり",
+		"b_plus": "社内試験記録あり",
+		"b":      "社内メモ・少数サンプル",
+		"c_plus": "関連資料少数",
+		"c":      "参考文献のみ",
+		"d_plus": "社外参考事例のみ",
+		"d":      "データ未整備",
+		"e":      "情報不足",
+	}
+	return info[scoreClass]
 }
 
 
@@ -269,6 +337,10 @@ func main() {
 				Tags:       strings.Join(tags, ","),
 				ReadStatus: "finished",
 				ReadDate:   &date,
+				Factor:            generateFactor(scoreClass),
+				Process:           generateProcess(scoreClass),
+				EvaluationAxis:    generateEvaluationAxis(scoreClass),
+				InformationAmount: generateInformationAmount(scoreClass),
 				CreatedAt:  date,
 				UpdatedAt:  date,
 			}

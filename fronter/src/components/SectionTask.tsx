@@ -2,7 +2,9 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store'
-import { loadTasks, createTask, updateTask, removeTask } from '../features/task/taskSlice'
+import { useApiCall } from '../hooks/useApiCall';
+ import { taskApiClient } from '../services/taskApiRefactored';
+import { createTask, updateTask, removeTask } from '../features/task/taskSlice'
 import ItemTask from "./parts/ItemTask"
 import TaskModal from "./parts/TaskModal"
 import AssessmentListModal from "./parts/AssessmentListModal"
@@ -11,15 +13,21 @@ import { loadMemories } from '../features/memory/memorySlice';
 
 export default function SectionTask() {
   const dispatch = useDispatch()
-  const { tasks, taskLoading, taskError } = useSelector((state: RootState) => state.task)
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const { memories } = useSelector((state: RootState) => state.memory)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<AddTask|Task|undefined>()
   const [TaskId,setTaskId] = useState<number>(-1);
 
+  const { execute: loadTasks, loading, data: tasks } = useApiCall(
+    taskApiClient.getTasks,
+    {
+      onSuccess: (data) => console.log('タスク取得成功'),
+      onError: (error) => console.error('エラー:', error)
+    }
+  );
+
   useEffect(() => {
-    dispatch(loadTasks())
     dispatch(loadMemories())
   }, [dispatch, isAuthenticated])
 
@@ -46,6 +54,8 @@ export default function SectionTask() {
     await dispatch(removeTask(id))
   }
 
+  if (loading) return <div className="loading">読み込み中...</div>;
+
   return (
     <div className="section__inner section--task">
       <div className="section-container">
@@ -58,26 +68,17 @@ export default function SectionTask() {
             新規タスク
           </button>
         </div>
-        {taskError && (
-          <div className="error-message">
-            {taskError}
-          </div>
-        )}
-        {taskLoading ? (
-          <div className="loading">読み込み中...</div>
-        ) : (
-          <div className="task-list card-list">
-            {tasks.map((task: Task, index: number) => (
-              <ItemTask
-                key={`task-item${index}`}
-                task={task}
-                onEdit={(editTask: Task) => handleEditTask(editTask)}
-                onDelete={() => handleDeleteTask(task.id)}
-                onSetTaskId={(id: number) => setTaskId(id)}
-              />
-            ))}
-          </div>
-        )}
+        <div className="task-list card-list">
+          {(tasks ?? []).map((task: Task, index: number) => (
+            <ItemTask
+              key={`task-item${index}`}
+              task={task}
+              onEdit={(editTask: Task) => handleEditTask(editTask)}
+              onDelete={() => handleDeleteTask(task.id)}
+              // onSetTaskId={(id: number) => setTaskId(id)}
+            />
+          ))}
+        </div>
         {TaskId}
         <AssessmentListModal
           taskId={TaskId}
@@ -92,7 +93,6 @@ export default function SectionTask() {
           onSave={handleSaveTask}
           memories={memories}
         />
-
       </div>
     </div>
   )

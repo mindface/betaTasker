@@ -1,15 +1,15 @@
 "use client"
 import React, { useRef } from 'react'
 import ReactDOM from'react-dom'
-import { Posts } from '../model/posts'
+import { Posts } from '../../model/posts'
 import { useDispatch } from 'react-redux'
 import Image from 'next/image'
 import ItemCardSearchLink from "./ItemCardSearchLink"
 import ContentViewItemModal from "./ContentViewItemModal"
-import { deletePostAction } from '../modules/deletePostAction'
-import { updatePostAction } from '../modules/updatePostAction'
+import { deletePostAction } from '../../modules/deletePostAction'
+import { updatePostAction } from '../../modules/updatePostAction'
 
-import { categoryText } from '../helper/category-Text'
+import { categoryText } from '../../helper/category-Text'
 
 type Props = {
   posts: Posts;
@@ -20,12 +20,12 @@ export default function ItemCard( props: Props )  {
   const cardInfo = props.posts
   const dispatch = useDispatch()
   const ItemsRef = () => {
-    const list = []
+    const list = [];
     for (const [key,value] of Object.entries(cardInfo)) {
       list.push({id:key,value:value})
       AddSetAction(key,value)
     }
-    return list
+    return list;
   }
 
   const titleRef = useRef("")

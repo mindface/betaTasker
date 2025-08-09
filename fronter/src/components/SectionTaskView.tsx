@@ -1,13 +1,12 @@
 "use client"
 import React, { useState,useRef, useEffect } from 'react'
-import { useDispatch, useStore, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Image from 'next/image'
-import { getPostAction } from '../modules/getPostAction'
 import { Posts } from '../model/posts'
 
 import ContentTask01 from "./ContentTask01"
 import ContentHeader from "./ContentTasksHeader"
-import ItemCard from "./ItemCard"
+import ItemCard from "./parts/ItemCard"
 import Loading from "./Loading"
 import { RootState } from "../store"
 
@@ -19,7 +18,6 @@ export interface State {
 }
 
 export default function SectionTaskView() {
-  const dispatch = useDispatch()
   const [switchClass,setSwitchClass] = useState('')
   const [posts,setPosts] = useState<Posts[]>([])
   const postsSwtch = useRef<boolean>(false)
@@ -55,7 +53,6 @@ export default function SectionTaskView() {
   }
 
   useEffect(() => {
-    dispatch(getPostAction())
     setIsClient(true)
   },[])
 
@@ -91,15 +88,15 @@ export default function SectionTaskView() {
             </button>
           </div>
           {isClient &&
-          <div className={`task-box _flex_ ${switchClass}`}>
-            {currentLoding && <Loading />}
-            {!postsSwtch.current && postsStateSelector.map((item:Posts) => {
-              return (<ItemCard posts={item} key={Number(item.id)}></ItemCard>)
-            })}
-            {postsSwtch.current && posts.map((item:Posts) => {
-              return (<ItemCard posts={item} key={Number(item.id)}></ItemCard>)
-            })}
-          </div>
+            <div className={`task-box _flex_ ${switchClass}`}>
+              {currentLoding && <Loading />}
+              {!postsSwtch.current && postsStateSelector.map((item:Posts) => {
+                return (<ItemCard posts={item} key={Number(item.id)}></ItemCard>)
+              })}
+              {postsSwtch.current && posts.map((item:Posts) => {
+                return (<ItemCard posts={item} key={Number(item.id)}></ItemCard>)
+              })}
+            </div>
           }
         </div>
       </>
