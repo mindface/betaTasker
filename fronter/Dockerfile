@@ -28,8 +28,8 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=builder /app ./
 
 # .nextディレクトリの権限を設定
-RUN mkdir -p .next/cache .next/trace && \
-    chown -R nextjs:nodejs .next && \
+# 既存のディレクトリはそのまま、権限のみ変更
+RUN chown -R nextjs:nodejs .next && \
     chmod -R 755 .next
 
 USER nextjs
