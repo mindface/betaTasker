@@ -19,7 +19,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/betaTasker || git clone https://github.com/mindface/betaTasker.git
+            cd ~/ || git clone https://github.com/mindface/betaTasker.git
             cd betaTasker
             git pull origin main
             docker-compose pull
