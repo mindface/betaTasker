@@ -1,15 +1,16 @@
 package task
 
 import (
-	"strings"
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/errors"
 	"github.com/godotask/model"
 )
 
-// AddTask: POST /api/task
-func (ctl *TaskController) AddTask(c *gin.Context) {
+// AddTaskWithErrorCode: エラーコードを使用したタスク追加の実装例
+func (ctl *TaskController) AddTaskWithErrorCode(c *gin.Context) {
 	var task model.Task
+	
+	// リクエストボディのバインドとバリデーション
 	if err := c.ShouldBindJSON(&task); err != nil {
 		appErr := errors.NewAppError(
 			errors.VAL_INVALID_INPUT,
@@ -23,8 +24,8 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 		})
 		return
 	}
-	
-	// 必須フィールドのバリデーション
+
+	// 必須フィールドのチェック
 	if task.Title == "" {
 		appErr := errors.NewAppError(
 			errors.VAL_MISSING_FIELD,
@@ -38,19 +39,20 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 		})
 		return
 	}
-	
+
+	// タスクの作成
 	if err := ctl.Service.CreateTask(&task); err != nil {
+		// エラーの種類に応じて適切なエラーコードを設定
 		var appErr *errors.AppError
-		
-		// エラー内容に応じた適切なエラーコードを設定
-		errMsg := err.Error()
-		if strings.Contains(errMsg, "duplicate") || strings.Contains(errMsg, "UNIQUE constraint") {
+
+		// 重複エラーの例
+		if isDuplicateError(err) {
 			appErr = errors.NewAppError(
 				errors.VAL_DUPLICATE_ENTRY,
 				errors.GetErrorMessage(errors.VAL_DUPLICATE_ENTRY),
 				"同じタイトルのタスクが既に存在します",
 			)
-		} else if strings.Contains(errMsg, "connection refused") || strings.Contains(errMsg, "no such host") {
+		} else if isDBConnectionError(err) {
 			appErr = errors.NewAppError(
 				errors.DB_CONNECTION_FAILED,
 				errors.GetErrorMessage(errors.DB_CONNECTION_FAILED),
@@ -60,7 +62,7 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 			appErr = errors.NewAppError(
 				errors.SYS_INTERNAL_ERROR,
 				errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
-				"",
+				err.Error(),
 			)
 		}
 		
@@ -71,6 +73,8 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 		})
 		return
 	}
+
+	// 成功レスポンス
 	c.JSON(200, gin.H{
 		"success": true,
 		"message": "タスクが正常に作成されました",
@@ -78,4 +82,17 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 			"task": task,
 		},
 	})
+}
+
+// エラー判定のヘルパー関数（実際の実装では適切なエラー判定を行う）
+func isDuplicateError(err error) bool {
+	// データベースエラーメッセージなどから重複エラーを判定
+	// 例: strings.Contains(err.Error(), "duplicate key")
+	return false
+}
+
+func isDBConnectionError(err error) bool {
+	// データベース接続エラーを判定
+	// 例: strings.Contains(err.Error(), "connection refused")
+	return false
 }

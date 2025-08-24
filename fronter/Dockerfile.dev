@@ -1,0 +1,25 @@
+# 開発環境用Dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+# rootユーザーで実行（開発環境のみ）
+# 本番環境では使用しないこと
+
+# package.jsonとyarn.lockをコピー
+COPY package.json yarn.lock ./
+
+# 依存関係をインストール
+RUN yarn install
+
+# ソースコードをコピー
+COPY . .
+
+# .nextディレクトリの権限を設定
+RUN mkdir -p .next/cache .next/trace && \
+    chmod -R 777 .next
+
+EXPOSE 3000
+
+# 開発サーバーを起動
+CMD ["yarn", "dev"]

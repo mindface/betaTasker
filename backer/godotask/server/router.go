@@ -10,14 +10,15 @@ import (
 	"github.com/godotask/repository"
 	"github.com/godotask/service"
 	"github.com/godotask/model"
+	// "github.com/godotask/middleware" // 一時的にコメントアウト
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
-func CORSMiddleware() gin.HandlerFunc {
+// シンプルなCORSミドルウェア（デバッグ用）
+func CORSMiddlewareSimple() gin.HandlerFunc {
 	return func(c *gin.Context) {
-
 		c.Header("Access-Control-Allow-Origin", "http://localhost:3000")
 		c.Header("Access-Control-Allow-Credentials", "true")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
@@ -27,14 +28,23 @@ func CORSMiddleware() gin.HandlerFunc {
 			c.AbortWithStatus(204)
 			return
 		}
+		
+		c.Next()
 	}
 }
 
 func GetRouter() *gin.Engine {
 	r := gin.Default()
+	
+	// CORSミドルウェアのみ適用（他のミドルウェアは一旦コメントアウト）
+	// r.Use(middleware.LoggingMiddleware())
+	// r.Use(middleware.ErrorHandlerMiddleware())
+	r.Use(CORSMiddlewareSimple())
+	// r.Use(middleware.RequestValidationMiddleware())
+	// r.Use(middleware.RateLimitMiddleware())
+	
 	r.Use(static.Serve("/usr/local/go/godotask/static", static.LocalFile("./images", true)))
 	r.LoadHTMLGlob("view/*.html")
-	r.Use(CORSMiddleware())
 
 
   bookRepo := &repository.BookRepositoryImpl{DB: model.DB}
@@ -57,29 +67,30 @@ func GetRouter() *gin.Engine {
 	assessmentService := &service.AssessmentService{Repo: assessmentRepo}
 	assessmentController := assessment.AssessmentController{Service: assessmentService}
 
+	// 認証不要のエンドポイント
 	r.POST("/api/login", user.Login)
-	r.POST("/api/logout", user.Logout)
 	r.POST("/api/register", user.Register)
-
-	// r.Use(user.AuthMiddleware())
-
+	r.POST("/api/logout", user.Logout)
+	
+	// 一時的に認証を無効化（デバッグ用）
+	
 	r.GET("/", top.IndexDisplayAction)
-	// r.GET("/book", book.BookListDisplayAction)
-	// r.GET("/book/add", book.BookAddDisplayAction)
+		
+	// Book API (CRUD)
 	r.GET("/api/book", bookController.ListBooks)
 	r.POST("/api/file", book.HundleUplond)
 	r.POST("/api/book", bookController.AddBook)
 	r.DELETE("/api/deletebook/:id", bookController.DeleteBook)
 	r.PUT("/api/updatebook/:id", bookController.EditBook)
 
-	// // Task API (CRUD)
+	// Task API (CRUD)
 	r.POST("/api/task", taskController.AddTask)
 	r.GET("/api/task", taskController.ListTasks)
 	r.GET("/api/task/:id", taskController.GetTask)
 	r.PUT("/api/task/:id", taskController.EditTask)
 	r.DELETE("/api/task/:id", taskController.DeleteTask)
 
-	// Protected routes
+	// User profile
 	r.GET("/api/user/profile", user.AuthMiddleware(), user.Profile)
 
 	// Memory API (CRUD)
@@ -91,6 +102,7 @@ func GetRouter() *gin.Engine {
 	r.PUT("/api/memory/:id", memoryController.EditMemory)
 	r.DELETE("/api/memory/:id", memoryController.DeleteMemory)
 
+	// Assessment API (CRUD)
 	r.POST("/api/assessment", assessmentController.AddAssessment)
 	r.GET("/api/assessment", assessmentController.ListAssessments)
 	r.POST("/api/assessmentsForTaskUser", assessmentController.ListAssessmentsForTaskUser)
@@ -98,5 +110,8 @@ func GetRouter() *gin.Engine {
 	r.PUT("/api/assessment/:id", assessmentController.EditAssessment)
 	r.DELETE("/api/assessment/:id", assessmentController.DeleteAssessment)	
 
+	// 404ハンドラー（一時的にコメントアウト）
+	// r.NoRoute(middleware.NotFoundMiddleware())
+	
 	return r
 }

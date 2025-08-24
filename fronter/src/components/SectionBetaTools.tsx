@@ -1,19 +1,13 @@
 "use client"
-import React, { useState, useEffect, useRef } from 'react'
-import ReactDOM from'react-dom'
-import { useDispatch, useStore, useSelector } from 'react-redux';
+import React, { useState, useRef } from 'react'
 import SvgRect from './partsSvg/SvgRect';
 
 export default function SectionBetaTools() {
   const svgElement = useRef(null)
   const [items,setItems] = useState<{id:number,text:string}[]>([])
 
-  useEffect(() => {
-  },[])
-
   const addRect = () => {
     setItems([...items,{id:items.length,text:'text'}])
-    console.log(items)
   }
 
   return(
