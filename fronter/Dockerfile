@@ -20,12 +20,18 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# アプリ本体をコピー
-COPY --from=builder /app ./
-
 # 非rootユーザーの作成（セキュリティ）
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
+
+# アプリ本体をコピー
+COPY --from=builder /app ./
+
+# .nextディレクトリの権限を設定
+# 既存のディレクトリはそのまま、権限のみ変更
+RUN chown -R nextjs:nodejs .next && \
+    chmod -R 755 .next
+
 USER nextjs
 
 EXPOSE 3000

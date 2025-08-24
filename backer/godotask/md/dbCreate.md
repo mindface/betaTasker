@@ -32,6 +32,7 @@ CREATE TABLE technical_factors (
   concern TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL
 );
+ALTER TABLE technical_factors ADD COLUMN measurement_method TEXT NOT NULL DEFAULT '';
 
 -- knowledge_transformations テーブル
 CREATE TABLE knowledge_transformations (

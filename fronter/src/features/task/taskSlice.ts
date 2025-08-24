@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchTasksService, addTaskService, updateTaskService, deleteTaskService } from '../../services/taskApi';
+import { fetchTasksService, addTaskService, updateTaskService, deleteTaskService, SuccessResponse } from '../../services/taskApi';
 import { AddTask, Task } from '../../model/task';
+import { ErrorCode } from '../../errors/errorCodes';
 
 interface TaskState {
   tasks: Task[];
@@ -19,11 +20,14 @@ export const loadTasks = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetchTasksService();
-      if (response.error) {
+      if ('error' in response) {
         return rejectWithValue(response.error);
       }
       console.log(response)
-      return response.tasks || response;
+      if ('data' in response) {
+        return response.data || [];
+      }
+      return response as Task[];
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -35,10 +39,14 @@ export const createTask = createAsyncThunk(
   async (taskData: AddTask, { rejectWithValue }) => {
     try {
       const response = await addTaskService(taskData);
-      if (response.error) {
+      if ('error' in response) {
         return rejectWithValue(response.error);
       }
-      return response;
+      // Check if response is SuccessResponse<Task> or Task
+      if ('data' in response) {
+        return response.data as Task;
+      }
+      return response as Task;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -50,10 +58,14 @@ export const updateTask = createAsyncThunk(
   async (taskData: Task, { rejectWithValue }) => {
     try {
       const response = await updateTaskService(taskData);
-      if (response.error) {
+      if ('error' in response) {
         return rejectWithValue(response.error);
       }
-      return response;
+      // Check if response is SuccessResponse<Task> or Task
+      if ('data' in response) {
+        return response.data as Task;
+      }
+      return response as Task;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -65,7 +77,7 @@ export const removeTask = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       const response = await deleteTaskService(String(id));
-      if (response.error) {
+      if ('error' in response) {
         return rejectWithValue(response.error);
       }
       return { id };
