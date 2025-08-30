@@ -1,0 +1,33 @@
+# Git files
+.git
+.gitignore
+
+# Go build files
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+vendor/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Don't ignore .env files - we need them in Docker
+# .env
+# .env.*

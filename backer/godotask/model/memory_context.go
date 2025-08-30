@@ -23,7 +23,7 @@ type TechnicalFactor struct {
 	ContextID  int       `json:"context_id"`
 	ToolSpec   string    `json:"tool_spec"`
 	EvalFactors string   `json:"eval_factors"`
-	Measurement string   `json:"measurement_method"`
+	MeasurementMethod string   `gorm:"column:measurement_method" json:"measurement_method"`
 	Concern    string    `json:"concern"`
 	CreatedAt  time.Time `json:"created_at"`
 }

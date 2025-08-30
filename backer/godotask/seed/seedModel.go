@@ -1,4 +1,4 @@
-package main
+package seed
 
 import (
 	"fmt"
@@ -217,7 +217,7 @@ func generateInformationAmount(scoreClass string) string {
 }
 
 
-func main() {
+func SeedBooksAndTasks() error {
 	rand.Seed(time.Now().UnixNano())
 
 	// PostgreSQL DSN
@@ -376,4 +376,5 @@ func main() {
 	}
 
 	fmt.Println("✅ PostgreSQL用のseedデータ生成が完了しました。")
+	return nil
 }

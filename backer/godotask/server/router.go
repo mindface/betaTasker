@@ -7,6 +7,7 @@ import (
 	"github.com/godotask/controller/user"
 	"github.com/godotask/controller/task"
 	"github.com/godotask/controller/assessment"
+	"github.com/godotask/controller/heuristics"
 	"github.com/godotask/repository"
 	"github.com/godotask/service"
 	"github.com/godotask/model"
@@ -67,6 +68,10 @@ func GetRouter() *gin.Engine {
 	assessmentService := &service.AssessmentService{Repo: assessmentRepo}
 	assessmentController := assessment.AssessmentController{Service: assessmentService}
 
+	heuristicsRepo := &repository.HeuristicsRepositoryImpl{DB: model.DB}
+	heuristicsService := &service.HeuristicsService{Repo: heuristicsRepo}
+	heuristicsController := heuristics.HeuristicsController{Service: heuristicsService}
+
 	// 認証不要のエンドポイント
 	r.POST("/api/login", user.Login)
 	r.POST("/api/register", user.Register)
@@ -109,6 +114,16 @@ func GetRouter() *gin.Engine {
 	r.GET("/api/assessment/:id", assessmentController.GetAssessment)
 	r.PUT("/api/assessment/:id", assessmentController.EditAssessment)
 	r.DELETE("/api/assessment/:id", assessmentController.DeleteAssessment)	
+
+	// Heuristics API (ML Pipeline & Analytics)
+	r.POST("/api/heuristics/analyze", heuristicsController.Analyze)
+	r.GET("/api/heuristics/analyze/:id", heuristicsController.GetAnalysis)
+	r.POST("/api/heuristics/track", heuristicsController.TrackBehavior)
+	r.GET("/api/heuristics/track/:user_id", heuristicsController.GetTrackingData)
+	r.GET("/api/heuristics/insights", heuristicsController.ListInsights)
+	r.GET("/api/heuristics/insights/:id", heuristicsController.GetInsight)
+	r.GET("/api/heuristics/patterns", heuristicsController.DetectPatterns)
+	r.POST("/api/heuristics/patterns/train", heuristicsController.TrainModel)
 
 	// 404ハンドラー（一時的にコメントアウト）
 	// r.NoRoute(middleware.NotFoundMiddleware())
