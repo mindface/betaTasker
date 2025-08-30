@@ -1,4 +1,4 @@
-package main
+package seed
 
 import (
 	"gorm.io/driver/postgres"
@@ -13,7 +13,7 @@ import (
 
 var db *sql.DB
 
-func main() {
+func SeedMemoryContexts() error {
 	dsn := "host=db user=dbgodotask password=dbgodotask dbname=dbgodotask port=5432 sslmode=disable"
 	var err error
 	var db *gorm.DB
@@ -149,7 +149,7 @@ func main() {
 			ContextID:   contextID,
 			ToolSpec:    data.toolSpec,
 			EvalFactors: "寸法精度, バリの有無, 面粗度",
-			Measurement: "ノギス, マイクロメータ, 目視確認",
+			MeasurementMethod: "ノギス, マイクロメータ, 目視確認",
 			Concern:     data.concern,
 			CreatedAt:   time.Now(),
 		}
@@ -157,7 +157,7 @@ func main() {
 		_, err = sqlDB.Exec(`
 			INSERT INTO technical_factors (context_id, tool_spec, eval_factors, measurement_method, concern, created_at)
 			VALUES ($1,$2,$3,$4,$5,$6)
-		`, tf.ContextID, tf.ToolSpec, tf.EvalFactors, tf.Measurement, tf.Concern, tf.CreatedAt)
+		`, tf.ContextID, tf.ToolSpec, tf.EvalFactors, tf.MeasurementMethod, tf.Concern, tf.CreatedAt)
 		if err != nil {
 			log.Printf("insert technical_factor err: %v", err)
 		}
@@ -273,7 +273,7 @@ func main() {
 			ContextID:   contextID,
 			ToolSpec:    data.toolSpec,
 			EvalFactors: "加工面粗度, 工具刃先の摩耗状態, 切削音の変化, 切りくず形状",
-			Measurement: "表面粗さ計, 顕微鏡観察, 騒音計データ, 切りくず形状観察",
+			MeasurementMethod: "表面粗さ計, 顕微鏡観察, 騒音計データ, 切りくず形状観察",
 			Concern:     data.concern,
 			CreatedAt:   time.Now(),
 
@@ -287,7 +287,7 @@ func main() {
 		_, err = sqlDB.Exec(`
 			INSERT INTO technical_factors (context_id, tool_spec, eval_factors, measurement_method, concern, created_at)
 			VALUES ($1,$2,$3,$4,$5,$6)
-		`, tf.ContextID, tf.ToolSpec, tf.EvalFactors, tf.Measurement, tf.Concern, tf.CreatedAt)
+		`, tf.ContextID, tf.ToolSpec, tf.EvalFactors, tf.MeasurementMethod, tf.Concern, tf.CreatedAt)
 		if err != nil {
 			log.Printf("insert technical_factor err: %v", err)
 		}
@@ -403,7 +403,7 @@ func main() {
 			ContextID:   contextID,
 			ToolSpec:    data.toolSpec,
 			EvalFactors: "加工サイクルタイム, 工具交換頻度, 設備稼働率, 異常振動パターン, 工具摩耗予測精度",
-			Measurement: "AI画像解析, IoTセンサーモニタリング, 自動データ収集システム, 予測モデル精度評価",
+			MeasurementMethod: "AI画像解析, IoTセンサーモニタリング, 自動データ収集システム, 予測モデル精度評価",
 			Concern:     data.concern,
 			CreatedAt:   time.Now(),
 		}
@@ -411,7 +411,7 @@ func main() {
 		_, err = sqlDB.Exec(`
 			INSERT INTO technical_factors (context_id, tool_spec, eval_factors, measurement_method, concern, created_at)
 			VALUES ($1,$2,$3,$4,$5,$6)
-		`, tf.ContextID, tf.ToolSpec, tf.EvalFactors, tf.Measurement, tf.Concern, tf.CreatedAt)
+		`, tf.ContextID, tf.ToolSpec, tf.EvalFactors, tf.MeasurementMethod, tf.Concern, tf.CreatedAt)
 		if err != nil {
 			log.Printf("insert technical_factor err: %v", err)
 		}
@@ -436,4 +436,5 @@ func main() {
 
 	fmt.Println("Level 3データ投入完了")
 	fmt.Println("全てのシードデータの投入が完了しました")
+	return nil
 }

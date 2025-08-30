@@ -99,7 +99,7 @@ perform_check() {
     check_container_health "fronter" "Frontend"
     check_container_health "nginx" "Nginx"
     echo ""
-    
+
     # 3. サービスの応答確認
     echo "${CYAN}🌐 サービス応答${NC}"
     check_service "PostgreSQL" "localhost" "db"

@@ -10,5 +10,10 @@ func Models() []interface{} {
 		&TechnicalFactor{},
 		&KnowledgeTransformation{},
 		&Book{},
+		&HeuristicsAnalysis{},
+		&HeuristicsTracking{},
+		&HeuristicsInsight{},
+		&HeuristicsPattern{},
+		&HeuristicsModel{},
 	}
 }
