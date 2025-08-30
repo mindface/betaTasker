@@ -60,7 +60,7 @@ export async function POST(request: Request) {
 
     const data = await backendRes.json()
 
-    return NextResponse.json(data, { status: 201 })
+    return NextResponse.json({ code: data.code, task: data.task, message: data.message }, { status: 201 })
   } catch (error) {
     console.error('Task API エラー:', error)
     return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 })

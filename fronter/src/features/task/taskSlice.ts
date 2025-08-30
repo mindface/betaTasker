@@ -23,10 +23,6 @@ export const loadTasks = createAsyncThunk(
       if ('error' in response) {
         return rejectWithValue(response.error);
       }
-      console.log(response)
-      if ('data' in response) {
-        return response.data || [];
-      }
       return response as Task[];
     } catch (error: any) {
       return rejectWithValue(error.message);
