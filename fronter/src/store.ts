@@ -7,6 +7,7 @@ import postReducer from './features/post/postSlice'
 import assessmentReducer from './features/assessment/assessmentSlice'
 import learningReducer from './features/learningData/learningDataSlice'
 import memoryAidReducer from './features/memoryAid/memoryAidSlice';
+import heuristicsReducer from './features/heuristics/heuristicsSlice';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export type AppState = {
@@ -22,6 +23,7 @@ export const setupStore = configureStore({
     assessment: assessmentReducer,
     learning: learningReducer,
     memoryAid: memoryAidReducer,
+    heuristics: heuristicsReducer,
   },
 })
 

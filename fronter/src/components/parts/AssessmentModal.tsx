@@ -55,9 +55,6 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
     await onSave({ ...formData, user_id });
   };
 
-  if(!tasks) return <>loading...</>
-  console.log(tasks)
-
   // 選択中のタスクに紐づくメモリーを取得
   const selectedTask = (tasks ?? []).find(t => t.id === Number(formData?.task_id));
   const relatedMemory = (memories ?? []).find(m => m.id === selectedTask?.memory_id);

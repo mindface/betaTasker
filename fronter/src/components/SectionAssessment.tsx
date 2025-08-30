@@ -8,6 +8,7 @@ import ItemAssessment from "./parts/ItemAssessment"
 import AssessmentModal from "./parts/AssessmentModal"
 import { AddAssessment, Assessment } from "../model/assessment"
 import { loadTasks } from '../features/task/taskSlice'
+import { HeuristicsDashboard } from './heuristics'
 
 export default function SectionAssessment() {
   const dispatch = useDispatch()
@@ -18,6 +19,7 @@ export default function SectionAssessment() {
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingAssessment, setEditingAssessment] = useState<AddAssessment|Assessment|undefined>()
+  const [showHeuristics, setShowHeuristics] = useState(false)
 
   useEffect(() => {
     dispatch(loadAssessments())
@@ -75,41 +77,63 @@ export default function SectionAssessment() {
                 <span className="d-block p-4">学習サイクル: {learningData.learningStructure.studyCycle.map((item,index) => <span key={`studyCycle${index}`} className="d-iline-block p-4">{item}</span>)}</span>
               </div>
             ) : null}
-            <button
-              onClick={() => handleAddAssessment()}
-              className="btn btn-primary"
-            >
-              新規アセスメント
-            </button>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                onClick={() => handleAddAssessment()}
+                className="btn btn-primary"
+              >
+                新規アセスメント
+              </button>
+              <button
+                onClick={() => setShowHeuristics(!showHeuristics)}
+                className="btn btn-secondary"
+                style={{ 
+                  backgroundColor: showHeuristics ? '#667eea' : '#6c757d',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                {showHeuristics ? 'アセスメント表示' : 'ヒューリスティック分析'}
+              </button>
+            </div>
           </div>
         </div>
-        {assessmentError && (
-          <div className="error-message">
-            {assessmentError}
-          </div>
-        )}
-        {assessmentLoading ? (
-          <div className="loading">読み込み中...</div>
+        {showHeuristics ? (
+          <HeuristicsDashboard />
         ) : (
-          <div className="assessment-list card-list">
-            {assessments.map((assessment: Assessment, index: number) => (
-              <ItemAssessment
-                key={`assessment-item${index}`}
-                assessment={assessment}
-                onEdit={(editAssessment: Assessment) => handleEditAssessment(editAssessment)}
-                onDelete={() => handleDeleteAssessment(assessment.id)}
-              />
-            ))}
-          </div>
+          <>
+            {assessmentError && (
+              <div className="error-message">
+                {assessmentError}
+              </div>
+            )}
+            {assessmentLoading ? (
+              <div className="loading">読み込み中...</div>
+            ) : (
+              <div className="assessment-list card-list">
+                {assessments.map((assessment: Assessment, index: number) => (
+                  <ItemAssessment
+                    key={`assessment-item${index}`}
+                    assessment={assessment}
+                    onEdit={(editAssessment: Assessment) => handleEditAssessment(editAssessment)}
+                    onDelete={() => handleDeleteAssessment(assessment.id)}
+                  />
+                ))}
+              </div>
+            )}
+            <AssessmentModal
+              initialData={editingAssessment}
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              onSave={handleSaveAssessment}
+              tasks={tasks}
+              memories={memories}
+            />
+          </>
         )}
-        <AssessmentModal
-          initialData={editingAssessment}
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSave={handleSaveAssessment}
-          tasks={tasks}
-          memories={memories}
-        />
       </div>
     </div>
   )
