@@ -41,6 +41,31 @@ export enum ErrorCode {
   NET_CONNECTION_FAILED = 'NET_001',
   NET_REQUEST_TIMEOUT = 'NET_002',
   NET_REQUEST_ABORTED = 'NET_003',
+
+  // ヒューリスティクス関連のエラーコード
+  ANALYSIS_FAILED: 'ANALYSIS_FAILED',
+  ANALYSIS_INVALID_TYPE: 'ANALYSIS_INVALID_TYPE',
+  ANALYSIS_INVALID_PARAMETERS: 'ANALYSIS_INVALID_PARAMETERS',
+  ANALYSIS_TIMEOUT: 'ANALYSIS_TIMEOUT',
+  
+  // トラッキング関連
+  TRACKING_FAILED: 'TRACKING_FAILED',
+  TRACKING_INVALID_ACTION: 'TRACKING_INVALID_ACTION',
+  TRACKING_SESSION_EXPIRED: 'TRACKING_SESSION_EXPIRED',
+  
+  // パターン関連
+  PATTERN_DETECTION_FAILED: 'PATTERN_DETECTION_FAILED',
+  PATTERN_INVALID_CATEGORY: 'PATTERN_INVALID_CATEGORY',
+  PATTERN_TRAINING_FAILED: 'PATTERN_TRAINING_FAILED',
+  
+  // インサイト関連
+  INSIGHT_GENERATION_FAILED: 'INSIGHT_GENERATION_FAILED',
+  INSIGHT_INVALID_TYPE: 'INSIGHT_INVALID_TYPE',
+  
+  // モデル関連
+  MODEL_TRAINING_FAILED: 'MODEL_TRAINING_FAILED',
+  MODEL_INVALID_TYPE: 'MODEL_INVALID_TYPE',
+  MODEL_NOT_READY: 'MODEL_NOT_READY',
 }
 
 export interface AppError {
@@ -108,6 +133,27 @@ const errorMessages: Record<ErrorCode, string> = {
   [ErrorCode.NET_CONNECTION_FAILED]: 'ネットワーク接続に失敗しました',
   [ErrorCode.NET_REQUEST_TIMEOUT]: 'リクエストがタイムアウトしました',
   [ErrorCode.NET_REQUEST_ABORTED]: 'リクエストが中断されました',
+
+  // ヒューリスティクス関連のエラーメッセージ
+  [HeuristicsErrorCode.ANALYSIS_FAILED]: '分析処理に失敗しました',
+  [HeuristicsErrorCode.ANALYSIS_INVALID_TYPE]: '無効な分析タイプです',
+  [HeuristicsErrorCode.ANALYSIS_INVALID_PARAMETERS]: '分析パラメータが無効です',
+  [HeuristicsErrorCode.ANALYSIS_TIMEOUT]: '分析処理がタイムアウトしました',
+  
+  [HeuristicsErrorCode.TRACKING_FAILED]: '行動追跡に失敗しました',
+  [HeuristicsErrorCode.TRACKING_INVALID_ACTION]: '無効なアクションです',
+  [HeuristicsErrorCode.TRACKING_SESSION_EXPIRED]: 'セッションが期限切れです',
+  
+  [HeuristicsErrorCode.PATTERN_DETECTION_FAILED]: 'パターン検出に失敗しました',
+  [HeuristicsErrorCode.PATTERN_INVALID_CATEGORY]: '無効なパターンカテゴリです',
+  [HeuristicsErrorCode.PATTERN_TRAINING_FAILED]: 'パターン学習に失敗しました',
+  
+  [HeuristicsErrorCode.INSIGHT_GENERATION_FAILED]: 'インサイト生成に失敗しました',
+  [HeuristicsErrorCode.INSIGHT_INVALID_TYPE]: '無効なインサイトタイプです',
+  
+  [HeuristicsErrorCode.MODEL_TRAINING_FAILED]: 'モデル学習に失敗しました',
+  [HeuristicsErrorCode.MODEL_INVALID_TYPE]: '無効なモデルタイプです',
+  [HeuristicsErrorCode.MODEL_NOT_READY]: 'モデルが準備できていません',
 };
 
 export function getErrorMessage(code: ErrorCode): string {

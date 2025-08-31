@@ -5,222 +5,452 @@ import {
   HeuristicsTrackingData,
   HeuristicsPattern,
   HeuristicsModel,
-  HeuristicsTrainRequest
+  HeuristicsTrainRequest,
+  HeuristicsInsight,
+  AnalysisFilters,
+  PatternFilters,
+  InsightFilters,
+  PaginationState,
+  validateAnalysisRequest,
+  validateTrackingData,
+  validateTrainRequest,
+  VALID_ANALYSIS_TYPES,
+  DEFAULT_PAGINATION
 } from '../model/heuristics';
-import { ApplicationError, ErrorCode, parseErrorResponse } from '../errors/errorCodes';
-import { SuccessResponse } from './taskApi';
+import { 
+  ApplicationError, 
+  ErrorCode, 
+  parseErrorResponse,
+  HeuristicsErrorCode
+} from '../errors/errorCodes';
 
 const API_BASE = '/api/heuristics';
 
+// 統一されたエラーハンドリング
 const handleApiError = async (response: Response): Promise<never> => {
   let errorData: any;
 
   try {
     errorData = await response.json();
   } catch {
-    switch (response.status) {
-      case 400:
-        throw new ApplicationError(ErrorCode.VAL_INVALID_INPUT, 'リクエストが無効です');
-      case 401:
-        throw new ApplicationError(ErrorCode.AUTH_INVALID_CREDENTIALS, '認証が必要です');
-      case 403:
-        throw new ApplicationError(ErrorCode.AUTH_UNAUTHORIZED, 'アクセス権限がありません');
-      case 404:
-        throw new ApplicationError(ErrorCode.RES_NOT_FOUND, 'リソースが見つかりません');
-      case 500:
-        throw new ApplicationError(ErrorCode.SYS_INTERNAL_ERROR, 'サーバーエラーが発生しました');
-      default:
-        throw new ApplicationError(ErrorCode.SYS_INTERNAL_ERROR, `HTTPエラー: ${response.status}`);
-    }
+    errorData = { message: 'Unknown error' };
   }
 
-  if (errorData.code) {
-    throw new ApplicationError(errorData.code, errorData.message, errorData.detail);
-  }
-  
-  throw new ApplicationError(ErrorCode.SYS_INTERNAL_ERROR, '予期しないエラーが発生しました');
+  // HTTPステータスコードに基づくエラーコードのマッピング
+  const errorCode = mapHttpStatusToErrorCode(response.status);
+  throw new ApplicationError(errorCode, errorData.message || 'API呼び出しに失敗しました');
 };
 
-// 分析関連
-export const analyzeData = async (request: HeuristicsAnalysisRequest) => {
+// HTTPステータスコードをエラーコードにマッピング
+const mapHttpStatusToErrorCode = (status: number): ErrorCode => {
+  switch (status) {
+    case 400:
+      return ErrorCode.VAL_INVALID_INPUT;
+    case 401:
+      return ErrorCode.AUTH_INVALID_CREDENTIALS;
+    case 403:
+      return ErrorCode.AUTH_UNAUTHORIZED;
+    case 404:
+      return ErrorCode.RES_NOT_FOUND;
+    case 408:
+      return HeuristicsErrorCode.ANALYSIS_TIMEOUT;
+    case 409:
+      return ErrorCode.RES_CONFLICT;
+    case 500:
+      return ErrorCode.SYS_INTERNAL_ERROR;
+    default:
+      return ErrorCode.SYS_INTERNAL_ERROR;
+  }
+};
+
+// 統一されたレスポンス処理
+const handleResponse = async <T>(response: Response): Promise<T> => {
+  if (!response.ok) {
+    await handleApiError(response);
+  }
+  
+  const data = await response.json();
+  
+  // レスポンス構造の正規化
+  if (data.success === false) {
+    throw new ApplicationError(
+      ErrorCode.API_ERROR,
+      data.message || 'API呼び出しに失敗しました'
+    );
+  }
+  
+  return data.data || data;
+};
+
+// 分析関連のAPI
+export const analyzeData = async (request: HeuristicsAnalysisRequest): Promise<HeuristicsAnalysis> => {
   try {
-    const res = await fetch(`${API_BASE}/analyze`, {
+    // バリデーション
+    const validation = validateAnalysisRequest(request);
+    if (!validation.isValid) {
+      throw new ApplicationError(
+        HeuristicsErrorCode.ANALYSIS_INVALID_PARAMETERS,
+        validation.errors.join(', ')
+      );
+    }
+
+    const response = await fetch(`${API_BASE}/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(request),
       credentials: 'include',
     });
 
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-    
-    const data: SuccessResponse<HeuristicsAnalysis, 'analysis'> = await res.json();
-    console.log("analyzeData HeuristicsAnalysis response");
-    console.log(data);
-    return data.analysis || data;
+    return await handleResponse<HeuristicsAnalysis>(response);
   } catch (err) {
+    if (err instanceof ApplicationError) {
+      throw err;
+    }
     const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
+    throw new ApplicationError(
+      HeuristicsErrorCode.ANALYSIS_FAILED,
+      '分析処理に失敗しました',
+      appError.message
+    );
   }
 };
 
-export const getAnalysisById = async (id: string) => {
+export const getAnalysisById = async (id: string): Promise<HeuristicsAnalysis> => {
   try {
-    const res = await fetch(`${API_BASE}/analyze/${id}`, {
+    const response = await fetch(`${API_BASE}/analyze/${id}`, {
       method: 'GET',
       credentials: 'include',
     });
     
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-
-    const data: SuccessResponse<HeuristicsAnalysis, 'analysis'> = await res.json();
-    return data.analysis || data;
+    return await handleResponse<HeuristicsAnalysis>(response);
   } catch (err) {
+    if (err instanceof ApplicationError) {
+      throw err;
+    }
     const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
+    throw new ApplicationError(
+      HeuristicsErrorCode.ANALYSIS_FAILED,
+      '分析結果の取得に失敗しました',
+      appError.message
+    );
   }
 };
 
-// トラッキング関連
-export const trackBehavior = async (trackData: HeuristicsTrackingData) => {
+export const getAnalyses = async (filters?: AnalysisFilters, pagination?: Partial<PaginationState>): Promise<{
+  analyses: HeuristicsAnalysis[];
+  pagination: PaginationState;
+}> => {
   try {
-    const res = await fetch(`${API_BASE}/track`, {
+    const queryParams = new URLSearchParams();
+    
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          if (key === 'date_range' && value.start && value.end) {
+            queryParams.append('date_start', value.start);
+            queryParams.append('date_end', value.end);
+          } else {
+            queryParams.append(key, String(value));
+          }
+        }
+      });
+    }
+    
+    if (pagination) {
+      if (pagination.page) queryParams.append('page', pagination.page.toString());
+      if (pagination.limit) queryParams.append('limit', pagination.limit.toString());
+    }
+    
+    const url = `${API_BASE}/analyze${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    
+    const data = await handleResponse<{
+      analyses: HeuristicsAnalysis[];
+      pagination: PaginationState;
+    }>(response);
+    
+    return {
+      analyses: data.analyses || [],
+      pagination: data.pagination || DEFAULT_PAGINATION
+    };
+  } catch (err) {
+    if (err instanceof ApplicationError) {
+      throw err;
+    }
+    const appError = parseErrorResponse(err);
+    throw new ApplicationError(
+      HeuristicsErrorCode.ANALYSIS_FAILED,
+      '分析一覧の取得に失敗しました',
+      appError.message
+    );
+  }
+};
+
+// トラッキング関連のAPI
+export const trackBehavior = async (trackData: HeuristicsTrackingData): Promise<{ tracking_id: number }> => {
+  try {
+    // バリデーション
+    const validation = validateTrackingData(trackData);
+    if (!validation.isValid) {
+      throw new ApplicationError(
+        HeuristicsErrorCode.TRACKING_INVALID_ACTION,
+        validation.errors.join(', ')
+      );
+    }
+
+    const response = await fetch(`${API_BASE}/track`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(trackData),
       credentials: 'include',
     });
 
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-
-    const data = await res.json();
-    console.log("trackBehavior HeuristicsTracking response");
-    console.log(data);
-    
-    return data;
+    return await handleResponse<{ tracking_id: number }>(response);
   } catch (err) {
+    if (err instanceof ApplicationError) {
+      throw err;
+    }
     const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
+    throw new ApplicationError(
+      HeuristicsErrorCode.TRACKING_FAILED,
+      '行動追跡に失敗しました',
+      appError.message
+    );
   }
 };
 
-export const getTrackingData = async (userId: string) => {
+export const getTrackingData = async (userId: string): Promise<HeuristicsTracking[]> => {
   try {
-    const res = await fetch(`${API_BASE}/track/${userId}`, {
+    const response = await fetch(`${API_BASE}/track/${userId}`, {
       method: 'GET',
       credentials: 'include',
     });
     
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-
-    const response: { success: boolean; data: { tracking_data: HeuristicsTracking[] } } = await res.json();
-    return response.data?.tracking_data || [];
+    const data = await handleResponse<{ tracking_data: HeuristicsTracking[] }>(response);
+    return data.tracking_data || [];
   } catch (err) {
+    if (err instanceof ApplicationError) {
+      throw err;
+    }
     const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
+    throw new ApplicationError(
+      HeuristicsErrorCode.TRACKING_FAILED,
+      'トラッキングデータの取得に失敗しました',
+      appError.message
+    );
   }
 };
 
-// インサイト関連
-export const fetchInsights = async (params?: { limit?: number; offset?: number; user_id?: string }) => {
+// インサイト関連のAPI
+export const fetchInsights = async (params?: {
+  limit?: number;
+  offset?: number;
+  user_id?: string;
+  filters?: InsightFilters;
+}): Promise<{
+  insights: HeuristicsInsight[];
+  total: number;
+  limit: number;
+  offset: number;
+}> => {
   try {
     const queryParams = new URLSearchParams();
+    
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.offset) queryParams.append('offset', params.offset.toString());
     if (params?.user_id) queryParams.append('user_id', params.user_id);
+    
+    if (params?.filters) {
+      Object.entries(params.filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          if (key === 'date_range' && value.start && value.end) {
+            queryParams.append('date_start', value.start);
+            queryParams.append('date_end', value.end);
+          } else {
+            queryParams.append(key, String(value));
+          }
+        }
+      });
+    }
 
     const url = `${API_BASE}/insights${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
     
-    const res = await fetch(url, {
+    const response = await fetch(url, {
       method: 'GET',
       credentials: 'include',
     });
     
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-
-    const response = await res.json();
-    // レスポンス構造: { success: true, data: { insights: [...], total: number, limit: number, offset: number } }
-    console.log("fetchInsights response");
-    console.log(response);
-    return response.data || response;
+    const data = await handleResponse<{
+      insights: HeuristicsInsight[];
+      total: number;
+      limit: number;
+      offset: number;
+    }>(response);
+    
+    return {
+      insights: data.insights || [],
+      total: data.total || 0,
+      limit: data.limit || 20,
+      offset: data.offset || 0
+    };
   } catch (err) {
+    if (err instanceof ApplicationError) {
+      throw err;
+    }
     const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
+    throw new ApplicationError(
+      HeuristicsErrorCode.INSIGHT_GENERATION_FAILED,
+      'インサイトの取得に失敗しました',
+      appError.message
+    );
   }
 };
 
-export const getInsightById = async (id: string) => {
+export const getInsightById = async (id: string): Promise<HeuristicsInsight> => {
   try {
-    const res = await fetch(`${API_BASE}/insights/${id}`, {
+    const response = await fetch(`${API_BASE}/insights/${id}`, {
       method: 'GET',
       credentials: 'include',
     });
-
-    if (!res.ok) {
-      await handleApiError(res);
-    }
     
-    const response = await res.json();
-    // レスポンス構造: { success: true, data: { insight: {...} } }
-    console.log("getInsightById response");
-    console.log(response);
-    return response.data?.insight || response;
+    const data = await handleResponse<{ insight: HeuristicsInsight }>(response);
+    return data.insight;
   } catch (err) {
+    if (err instanceof ApplicationError) {
+      throw err;
+    }
     const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
+    throw new ApplicationError(
+      HeuristicsErrorCode.INSIGHT_GENERATION_FAILED,
+      'インサイトの取得に失敗しました',
+      appError.message
+    );
   }
 };
 
-// パターン検出関連
-export const detectPatterns = async (params?: { user_id?: string; data_type?: string; period?: string }) => {
-  const queryParams = new URLSearchParams();
-  if (params?.user_id) queryParams.append('user_id', params.user_id);
-  if (params?.data_type) queryParams.append('data_type', params.data_type);
-  if (params?.period) queryParams.append('period', params.period);
+// パターン検出関連のAPI
+export const detectPatterns = async (params?: {
+  user_id?: string;
+  data_type?: string;
+  period?: string;
+  filters?: PatternFilters;
+}): Promise<{
+  patterns: HeuristicsPattern[];
+  metadata: {
+    user_id: string;
+    data_type: string;
+    period: string;
+  };
+}> => {
+  try {
+    const queryParams = new URLSearchParams();
+    
+    if (params?.user_id) queryParams.append('user_id', params.user_id);
+    if (params?.data_type) queryParams.append('data_type', params.data_type);
+    if (params?.period) queryParams.append('period', params.period);
+    
+    if (params?.filters) {
+      Object.entries(params.filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, String(value));
+        }
+      });
+    }
 
-  const url = `${API_BASE}/patterns${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    const url = `${API_BASE}/patterns${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
  
-  const res = await fetch(url, {
-    method: 'GET',
-    credentials: 'include',
-  });
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+    });
 
-  if (!res.ok) {
-    await handleApiError(res);
+    const data = await handleResponse<{
+      patterns: HeuristicsPattern[];
+      metadata: {
+        user_id: string;
+        data_type: string;
+        period: string;
+      };
+    }>(response);
+    
+    return {
+      patterns: data.patterns || [],
+      metadata: data.metadata || {
+        user_id: params?.user_id || '',
+        data_type: params?.data_type || 'all',
+        period: params?.period || 'week'
+      }
+    };
+  } catch (err) {
+    if (err instanceof ApplicationError) {
+      throw err;
+    }
+    const appError = parseErrorResponse(err);
+    throw new ApplicationError(
+      HeuristicsErrorCode.PATTERN_DETECTION_FAILED,
+      'パターン検出に失敗しました',
+      appError.message
+    );
   }
-
-  const data: SuccessResponse<{ metadata: any; patterns:
-  HeuristicsPattern[] }, 'data'> = await res.json();
-  return data.data?.patterns || data;
 };
 
-// モデルトレーニング関連
-export const trainModel = async (request: HeuristicsTrainRequest) => {
+// モデルトレーニング関連のAPI
+export const trainModel = async (request: HeuristicsTrainRequest): Promise<HeuristicsModel> => {
   try {
-    const res = await fetch(`${API_BASE}/patterns/train`, {
+    // バリデーション
+    const validation = validateTrainRequest(request);
+    if (!validation.isValid) {
+      throw new ApplicationError(
+        HeuristicsErrorCode.MODEL_INVALID_TYPE,
+        validation.errors.join(', ')
+      );
+    }
+
+    const response = await fetch(`${API_BASE}/patterns/train`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(request),
       credentials: 'include',
     });
     
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-
-    const data: SuccessResponse<HeuristicsModel, 'model'> = await res.json();
-    return data.model || data;
+    const data = await handleResponse<{ model: HeuristicsModel }>(response);
+    return data.model;
   } catch (err) {
+    if (err instanceof ApplicationError) {
+      throw err;
+    }
     const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
+    throw new ApplicationError(
+      HeuristicsErrorCode.MODEL_TRAINING_FAILED,
+      'モデル学習に失敗しました',
+      appError.message
+    );
   }
+};
+
+// ユーティリティ関数
+export const getAnalysisTypeLabel = (type: string): string => {
+  const labels: Record<string, string> = {
+    performance: 'パフォーマンス',
+    behavior: '行動',
+    pattern: 'パターン',
+    cognitive: '認知的',
+    efficiency: '効率性'
+  };
+  return labels[type] || type;
+};
+
+export const getStatusColor = (status: string): string => {
+  const colors: Record<string, string> = {
+    pending: '#FF9800',
+    completed: '#4CAF50',
+    failed: '#F44336',
+    training: '#2196F3',
+    ready: '#4CAF50',
+    deprecated: '#9E9E9E'
+  };
+  return colors[status] || '#9E9E9E';
 };
