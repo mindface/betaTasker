@@ -286,16 +286,16 @@ export class HeuristicsDiscoveryService {
 
     // モデルテスト入力
     const testInput = this.prepareModelTestInput();
-    
+
     // パターン抽出（Web Worker使用）
     const patterns = await this.extractPatternsAsync(testInput);
-    
+
     // ヒューリスティクス発見
     const heuristics = this.discoverHeuristics(patterns);
-    
+
     // モデル更新
     this.updateModel(heuristics);
-    
+
     // バックエンドに送信
     this.syncWithBackend(heuristics);
   }

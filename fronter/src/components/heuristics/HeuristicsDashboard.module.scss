@@ -1,0 +1,131 @@
+.dashboard {
+  min-height: 100vh;
+  background: #f8f9fa;
+  
+  .header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    margin-bottom: 0;
+    
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    
+    p {
+      margin: 0;
+      font-size: 16px;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+  }
+  
+  .tabNavigation {
+    display: flex;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    
+    .tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 16px 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-bottom: 3px solid transparent;
+      
+      &:hover {
+        background: #f8f9fa;
+      }
+      
+      &.active {
+        background: #f8f9fa;
+        border-bottom-color: #007bff;
+        color: #007bff;
+        
+        .icon {
+          transform: scale(1.1);
+        }
+      }
+      
+      .icon {
+        font-size: 20px;
+        transition: transform 0.2s ease;
+      }
+      
+      .label {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
+  
+  .tabContent {
+    background: #f8f9fa;
+    min-height: calc(100vh - 140px);
+    
+    // Reset margins for child components in dashboard context
+    > * {
+      background: transparent;
+      padding: 0;
+      
+      .container {
+        background: transparent;
+        padding: 20px;
+      }
+    }
+  }
+  
+  // Responsive design
+  @media (max-width: 768px) {
+    .header {
+      padding: 24px 16px;
+      
+      h1 {
+        font-size: 24px;
+      }
+      
+      p {
+        font-size: 14px;
+      }
+    }
+    
+    .tabNavigation {
+      .tab {
+        padding: 12px 8px;
+        
+        .icon {
+          font-size: 18px;
+        }
+        
+        .label {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .tabNavigation {
+      .tab {
+        .label {
+          display: none;
+        }
+      }
+    }
+  }
+}

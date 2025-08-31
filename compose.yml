@@ -21,12 +21,12 @@ services:
   fronter:
     build:
       context: ./fronter
-      dockerfile: Dockerfile.dev  # 開発環境用Dockerfileを使用
+      dockerfile: Dockerfile.dev
     container_name: fronter
     volumes:
-      - ./fronter:/app  # ソースコードをマウント（ホットリロード用）
-      - /app/node_modules  # node_modulesは除外
-      - /app/.next  # .nextディレクトリも除外
+      - ./fronter:/app
+      - /app/node_modules
+      - /app/.next
     depends_on:
       - backender
     networks:

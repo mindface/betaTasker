@@ -7,11 +7,12 @@ interface ErrorResponse {
   detail?: string;
 }
 
-export interface SuccessResponse<T> {
+export type SuccessResponse<T = any, K extends string = "data"> = {
   success: boolean;
-  data?: T;
   message?: string;
-}
+} & {
+  [key in K]?: T;
+};
 
 const handleApiError = async (response: Response): Promise<never> => {
   let errorData: ErrorResponse;
@@ -40,7 +41,7 @@ const handleApiError = async (response: Response): Promise<never> => {
   if (errorData.code) {
     throw new ApplicationError(errorData.code, errorData.message, errorData.detail);
   }
-  
+
   throw new ApplicationError(ErrorCode.SYS_INTERNAL_ERROR, '予期しないエラーが発生しました');
 };
 
@@ -54,9 +55,9 @@ export const fetchTasksService = async () => {
     if (!res.ok) {
       await handleApiError(res);
     }
-    
-    const data: SuccessResponse<Task[]> = await res.json();
-    return data.data || data;
+
+    const data: SuccessResponse<Task[], 'tasks'> = await res.json();
+    return data.tasks || data;
   } catch (err) {
     const appError = parseErrorResponse(err);
     return { error: appError.message, code: appError.code };
@@ -79,13 +80,13 @@ export const addTaskService = async (task: AddTask) => {
       body: JSON.stringify(task),
       credentials: 'include',
     });
-    
+
     if (!res.ok) {
       await handleApiError(res);
     }
-    
-    const data: SuccessResponse<Task> = await res.json();
-    return data.data || data;
+
+    const data: SuccessResponse<Task, 'task'> = await res.json();
+    return data.task || data;
   } catch (err) {
     const appError = parseErrorResponse(err);
     return { error: appError.message, code: appError.code };
@@ -112,8 +113,8 @@ export const updateTaskService = async (task: Task) => {
       await handleApiError(res);
     }
 
-    const data: SuccessResponse<Task> = await res.json();
-    return data.data || data;
+    const data: SuccessResponse<Task, 'task'> = await res.json();
+    return data.task || data;
   } catch (err) {
     const appError = parseErrorResponse(err);
     return { error: appError.message, code: appError.code };

@@ -11,7 +11,7 @@ interface AssessmentModalProps {
   onClose: () => void;
   onSave: (assessmentData: AddAssessment | Assessment) => void;
   initialData?: AddAssessment | Assessment;
-  tasks?: Task[];
+  tasks: Task[];
   memories?: Memory[];
 }
 
@@ -56,8 +56,8 @@ const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSa
   };
 
   // 選択中のタスクに紐づくメモリーを取得
-  const selectedTask = tasks?.find(t => t.id === Number(formData?.task_id));
-  const relatedMemory = memories?.find(m => m.id === selectedTask?.memory_id);
+  const selectedTask = (tasks ?? []).find(t => t.id === Number(formData?.task_id));
+  const relatedMemory = (memories ?? []).find(m => m.id === selectedTask?.memory_id);
 
   return (
     <CommonModal

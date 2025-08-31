@@ -96,6 +96,7 @@ export default function SectionAssessmentRelation() {
       </div>
       <AssessmentModal
         isOpen={isModalOpen}
+        tasks={tasks}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveAssessment}
         initialData={selectedMemory ? { task_id: selectedTask?.id || 0, user_id: selectedTask?.user_id || 0, effectiveness_score: 0, effort_score: 0, impact_score: 0, qualitative_feedback: '' } : undefined}

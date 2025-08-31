@@ -1,0 +1,264 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    
+    h2 {
+      margin: 0;
+      color: #333;
+      font-size: 28px;
+      font-weight: 600;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      
+      .userInput {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        width: 120px;
+        
+        &:focus {
+          outline: none;
+          border-color: #007bff;
+        }
+      }
+      
+      .loadButton {
+        padding: 8px 16px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        
+        &:hover {
+          background: #218838;
+        }
+      }
+      
+      .trackButton {
+        padding: 8px 16px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        
+        &:hover {
+          background: #0056b3;
+        }
+      }
+    }
+  }
+  
+  .loading, .noData {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+  }
+  
+  .error {
+    text-align: center;
+    padding: 40px;
+    color: #dc3545;
+    
+    .retryButton {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      
+      &:hover {
+        background: #c82333;
+      }
+    }
+  }
+  
+  .trackForm {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    
+    h3 {
+      margin: 0 0 20px 0;
+      color: #333;
+    }
+    
+    .formGroup {
+      margin-bottom: 16px;
+      
+      label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 600;
+        color: #555;
+      }
+      
+      input, textarea {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        
+        &:focus {
+          outline: none;
+          border-color: #007bff;
+        }
+      }
+      
+      textarea {
+        resize: vertical;
+        font-family: monospace;
+      }
+    }
+    
+    .formActions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      
+      .submitButton {
+        padding: 10px 20px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        
+        &:hover {
+          background: #218838;
+        }
+      }
+      
+      .cancelButton {
+        padding: 10px 20px;
+        background: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        
+        &:hover {
+          background: #5a6268;
+        }
+      }
+    }
+  }
+  
+  .trackingList {
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+      
+      .statCard {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        
+        h4 {
+          margin: 0 0 8px 0;
+          color: #666;
+          font-size: 14px;
+          font-weight: 500;
+          text-transform: uppercase;
+        }
+        
+        span {
+          font-size: 24px;
+          font-weight: 700;
+          color: #333;
+        }
+      }
+    }
+    
+    .trackingItems {
+      display: grid;
+      gap: 16px;
+      
+      .trackingCard {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        
+        .trackingHeader {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+          
+          h4 {
+            margin: 0;
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+          }
+          
+          .timestamp {
+            color: #666;
+            font-size: 14px;
+          }
+        }
+        
+        .trackingDetails {
+          .detail {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+            
+            strong {
+              color: #333;
+            }
+          }
+          
+          .context {
+            margin-top: 12px;
+            
+            strong {
+              display: block;
+              margin-bottom: 4px;
+              color: #333;
+            }
+            
+            pre {
+              background: #f8f9fa;
+              border: 1px solid #e9ecef;
+              border-radius: 4px;
+              padding: 8px;
+              font-size: 12px;
+              overflow-x: auto;
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

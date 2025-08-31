@@ -38,7 +38,7 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 		})
 		return
 	}
-	
+
 	if err := ctl.Service.CreateTask(&task); err != nil {
 		var appErr *errors.AppError
 		

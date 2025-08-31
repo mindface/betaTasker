@@ -1,0 +1,285 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    
+    h2 {
+      margin: 0;
+      color: #333;
+      font-size: 28px;
+      font-weight: 600;
+    }
+    
+    .headerButtons {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .analyzeButton, .fetchButton {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      
+      &:hover {
+        background: #0056b3;
+      }
+    }
+    
+    .fetchButton {
+      background: #17a2b8;
+      
+      &:hover {
+        background: #138496;
+      }
+    }
+  }
+  
+  .loading, .noData {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+  }
+  
+  .error {
+    text-align: center;
+    padding: 40px;
+    color: #dc3545;
+    
+    .retryButton {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      
+      &:hover {
+        background: #c82333;
+      }
+    }
+  }
+  
+  .fetchForm, .analysisForm {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    
+    h3 {
+      margin: 0 0 20px 0;
+      color: #333;
+    }
+    
+    .formRow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .formGroup {
+      margin-bottom: 16px;
+      
+      label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 600;
+        color: #555;
+      }
+      
+      input, select, textarea {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        
+        &:focus {
+          outline: none;
+          border-color: #007bff;
+        }
+      }
+      
+      textarea {
+        resize: vertical;
+        font-family: monospace;
+      }
+      
+      select {
+        cursor: pointer;
+      }
+    }
+    
+    .formActions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      
+      .submitButton {
+        padding: 10px 20px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        
+        &:hover {
+          background: #218838;
+        }
+      }
+      
+      .cancelButton {
+        padding: 10px 20px;
+        background: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        
+        &:hover {
+          background: #5a6268;
+        }
+      }
+    }
+  }
+  
+  .currentAnalysis {
+    margin-bottom: 32px;
+    
+    h3 {
+      margin: 0 0 16px 0;
+      color: #333;
+    }
+  }
+  
+  .analysesList {
+    h3 {
+      margin: 0 0 20px 0;
+      color: #333;
+    }
+    
+    .analysisGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+  }
+  
+  .analysisCard {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease;
+    
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .analysisHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      
+      .analysisType {
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+      
+      .score {
+        font-weight: 600;
+        color: #28a745;
+        font-size: 14px;
+      }
+      
+      .status {
+        background: #d4edda;
+        color: #155724;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+    }
+    
+    .analysisInfo, .analysisDetails {
+      margin-bottom: 16px;
+      
+      .metadata {
+        font-size: 14px;
+        color: #666;
+        
+        div {
+          margin-bottom: 4px;
+        }
+      }
+      
+      .date {
+        font-size: 12px;
+        color: #999;
+        margin-top: 8px;
+      }
+      
+      .result {
+        margin-top: 12px;
+        
+        strong {
+          display: block;
+          margin-bottom: 8px;
+          color: #333;
+        }
+        
+        pre {
+          background: #f8f9fa;
+          border: 1px solid #e9ecef;
+          border-radius: 4px;
+          padding: 12px;
+          font-size: 12px;
+          overflow-x: auto;
+          margin: 0;
+          max-height: 200px;
+          overflow-y: auto;
+        }
+      }
+    }
+    
+    .viewButton {
+      width: 100%;
+      padding: 8px 16px;
+      background: #17a2b8;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      
+      &:hover {
+        background: #138496;
+      }
+    }
+  }
+}
