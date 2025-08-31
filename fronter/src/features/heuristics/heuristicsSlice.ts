@@ -97,7 +97,6 @@ export const trackUserBehavior = createAsyncThunk(
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
-    console.log(response)
     if ('data' in response) {
       return response.data;
     }
@@ -147,8 +146,6 @@ export const loadPatterns = createAsyncThunk(
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
-    console.log("response")
-    console.log(response)
     return response as HeuristicsPattern[];
   }
 );
@@ -204,7 +201,7 @@ const heuristicsSlice = createSlice({
       .addCase(fetchAnalysisById.fulfilled, (state, action) => {
         state.currentAnalysis = action.payload;
       });
-    
+
     // トラッキング関連
     builder
       .addCase(trackUserBehavior.pending, (state) => {
@@ -240,7 +237,7 @@ const heuristicsSlice = createSlice({
       .addCase(fetchInsightById.fulfilled, (state, action) => {
         state.currentInsight = action.payload;
       });
-    
+
     // パターン検出関連
     builder
       .addCase(loadPatterns.pending, (state) => {
@@ -255,7 +252,7 @@ const heuristicsSlice = createSlice({
         state.patternsLoading = false;
         state.patternsError = action.payload as string;
       });
-    
+
     // モデルトレーニング関連
     builder
       .addCase(trainHeuristicsModel.pending, (state) => {

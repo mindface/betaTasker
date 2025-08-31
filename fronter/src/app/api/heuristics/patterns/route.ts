@@ -8,7 +8,6 @@ export async function GET(request: NextRequest) {
     // クエリパラメータを取得
     const searchParams = request.nextUrl.searchParams;
     const queryString = searchParams.toString();
-    console.log("@@@@@", queryString);
 
     // クッキーからトークンを取得
     const cookieStore = await cookies();
@@ -17,6 +16,8 @@ export async function GET(request: NextRequest) {
     if (!token) {
       return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
     }
+    console.log('Patterns API トークン:', queryString);
+    console.log('searchParams API トークン:', searchParams);
     
     // バックエンドAPIにリクエスト
     const response = await fetch(

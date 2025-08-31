@@ -16,7 +16,12 @@
       font-weight: 600;
     }
     
-    .analyzeButton {
+    .headerButtons {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .analyzeButton, .fetchButton {
       padding: 10px 20px;
       background: #007bff;
       color: white;
@@ -28,6 +33,14 @@
       
       &:hover {
         background: #0056b3;
+      }
+    }
+    
+    .fetchButton {
+      background: #17a2b8;
+      
+      &:hover {
+        background: #138496;
       }
     }
   }
@@ -59,7 +72,7 @@
     }
   }
   
-  .analysisForm {
+  .fetchForm, .analysisForm {
     background: #f8f9fa;
     border: 1px solid #e9ecef;
     border-radius: 12px;

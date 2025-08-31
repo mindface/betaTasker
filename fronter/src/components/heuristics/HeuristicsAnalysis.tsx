@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHeuristicsAnalysis } from '../../hooks/useHeuristics';
 import { HeuristicsAnalysisRequest } from '../../model/heuristics';
 import styles from './HeuristicsAnalysis.module.scss';
@@ -13,6 +13,26 @@ export default function HeuristicsAnalysis() {
     analysis_type: 'performance',
     data: {},
   });
+  const [loadingAnalyses, setLoadingAnalyses] = useState(false);
+  const [analysisIdInput, setAnalysisIdInput] = useState('');
+  const [showFetchForm, setShowFetchForm] = useState(false);
+
+  useEffect(() => {
+    loadAnalyses();
+  }, []);
+
+  const loadAnalyses = async () => {
+    setLoadingAnalyses(true);
+    try {
+      // TODO: 過去の分析結果を取得するAPIエンドポイントを実装後、ここで呼び出す
+      // 現時点では個別の分析結果取得のみ実装されている
+      console.log('Loading analyses list...');
+    } catch (err) {
+      console.error('Failed to load analyses:', err);
+    } finally {
+      setLoadingAnalyses(false);
+    }
+  };
 
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +61,15 @@ export default function HeuristicsAnalysis() {
     getAnalysis(id.toString());
   };
 
+  const handleFetchAnalysis = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (analysisIdInput) {
+      await getAnalysis(analysisIdInput);
+      setAnalysisIdInput('');
+      setShowFetchForm(false);
+    }
+  };
+
   const analysisTypes = [
     { value: 'performance', label: 'パフォーマンス分析' },
     { value: 'behavior', label: '行動分析' },
@@ -49,10 +78,12 @@ export default function HeuristicsAnalysis() {
     { value: 'efficiency', label: '効率性分析' },
   ];
 
-  if (loading) {
+  if (loading || loadingAnalyses) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>分析を実行中...</div>
+        <div className={styles.loading}>
+          {loadingAnalyses ? '分析結果を読み込み中...' : '分析を実行中...'}
+        </div>
       </div>
     );
   }
@@ -74,13 +105,54 @@ export default function HeuristicsAnalysis() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h2>ヒューリスティック分析</h2>
-        <button 
-          onClick={() => setShowAnalysisForm(!showAnalysisForm)} 
-          className={styles.analyzeButton}
-        >
-          新しい分析
-        </button>
+        <div className={styles.headerButtons}>
+          <button 
+            onClick={() => setShowAnalysisForm(!showAnalysisForm)} 
+            className={styles.analyzeButton}
+          >
+            新しい分析
+          </button>
+          <button 
+            onClick={() => setShowFetchForm(!showFetchForm)} 
+            className={styles.fetchButton}
+          >
+            分析結果取得
+          </button>
+        </div>
       </div>
+
+      {showFetchForm && (
+        <div className={styles.fetchForm}>
+          <h3>分析結果を取得</h3>
+          <form onSubmit={handleFetchAnalysis}>
+            <div className={styles.formGroup}>
+              <label>分析ID:</label>
+              <input
+                type="text"
+                value={analysisIdInput}
+                onChange={(e) => setAnalysisIdInput(e.target.value)}
+                placeholder="分析IDを入力"
+                required
+              />
+            </div>
+            <div className={styles.formActions}>
+              <button type="submit" className={styles.submitButton}>
+                取得
+              </button>
+              <button 
+                type="button" 
+                onClick={() => {
+                  setShowFetchForm(false);
+                  setAnalysisIdInput('');
+                }}
+                className={styles.cancelButton}
+              >
+                キャンセル
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       {showAnalysisForm && (
         <div className={styles.analysisForm}>
@@ -171,7 +243,7 @@ export default function HeuristicsAnalysis() {
               </div>
               <div className={styles.result}>
                 <strong>結果:</strong>
-                <pre>{JSON.stringify(JSON.parse(currentAnalysis.result), null, 2)}</pre>
+                <pre>{currentAnalysis.result}</pre>
               </div>
             </div>
           </div>

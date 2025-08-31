@@ -14,7 +14,7 @@ const API_BASE = '/api/heuristics';
 
 const handleApiError = async (response: Response): Promise<never> => {
   let errorData: any;
-  
+
   try {
     errorData = await response.json();
   } catch {
@@ -33,7 +33,7 @@ const handleApiError = async (response: Response): Promise<never> => {
         throw new ApplicationError(ErrorCode.SYS_INTERNAL_ERROR, `HTTPエラー: ${response.status}`);
     }
   }
-  
+
   if (errorData.code) {
     throw new ApplicationError(errorData.code, errorData.message, errorData.detail);
   }
@@ -50,12 +50,14 @@ export const analyzeData = async (request: HeuristicsAnalysisRequest) => {
       body: JSON.stringify(request),
       credentials: 'include',
     });
-    
+
     if (!res.ok) {
       await handleApiError(res);
     }
     
     const data: SuccessResponse<HeuristicsAnalysis, 'analysis'> = await res.json();
+    console.log("analyzeData HeuristicsAnalysis response");
+    console.log(data);
     return data.analysis || data;
   } catch (err) {
     const appError = parseErrorResponse(err);
@@ -73,7 +75,7 @@ export const getAnalysisById = async (id: string) => {
     if (!res.ok) {
       await handleApiError(res);
     }
-    
+
     const data: SuccessResponse<HeuristicsAnalysis, 'analysis'> = await res.json();
     return data.analysis || data;
   } catch (err) {
@@ -91,12 +93,15 @@ export const trackBehavior = async (trackData: HeuristicsTrackingData) => {
       body: JSON.stringify(trackData),
       credentials: 'include',
     });
-    
+
     if (!res.ok) {
       await handleApiError(res);
     }
-    
+
     const data = await res.json();
+    console.log("trackBehavior HeuristicsTracking response");
+    console.log(data);
+    
     return data;
   } catch (err) {
     const appError = parseErrorResponse(err);
@@ -114,9 +119,9 @@ export const getTrackingData = async (userId: string) => {
     if (!res.ok) {
       await handleApiError(res);
     }
-    
-    const data: SuccessResponse<HeuristicsTracking[], 'tracking'> = await res.json();
-    return data.tracking || data;
+
+    const response: { success: boolean; data: { tracking_data: HeuristicsTracking[] } } = await res.json();
+    return response.data?.tracking_data || [];
   } catch (err) {
     const appError = parseErrorResponse(err);
     return { error: appError.message, code: appError.code };
@@ -130,7 +135,7 @@ export const fetchInsights = async (params?: { limit?: number; offset?: number; 
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.offset) queryParams.append('offset', params.offset.toString());
     if (params?.user_id) queryParams.append('user_id', params.user_id);
-    
+
     const url = `${API_BASE}/insights${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
     
     const res = await fetch(url, {
@@ -141,9 +146,11 @@ export const fetchInsights = async (params?: { limit?: number; offset?: number; 
     if (!res.ok) {
       await handleApiError(res);
     }
-    
+
     const response = await res.json();
     // レスポンス構造: { success: true, data: { insights: [...], total: number, limit: number, offset: number } }
+    console.log("fetchInsights response");
+    console.log(response);
     return response.data || response;
   } catch (err) {
     const appError = parseErrorResponse(err);
@@ -157,13 +164,15 @@ export const getInsightById = async (id: string) => {
       method: 'GET',
       credentials: 'include',
     });
-    
+
     if (!res.ok) {
       await handleApiError(res);
     }
     
     const response = await res.json();
     // レスポンス構造: { success: true, data: { insight: {...} } }
+    console.log("getInsightById response");
+    console.log(response);
     return response.data?.insight || response;
   } catch (err) {
     const appError = parseErrorResponse(err);
@@ -173,30 +182,25 @@ export const getInsightById = async (id: string) => {
 
 // パターン検出関連
 export const detectPatterns = async (params?: { user_id?: string; data_type?: string; period?: string }) => {
-  try {
-    const queryParams = new URLSearchParams();
-    if (params?.user_id) queryParams.append('user_id', params.user_id);
-    if (params?.data_type) queryParams.append('data_type', params.data_type);
-    if (params?.period) queryParams.append('period', params.period);
-    
-    const url = `${API_BASE}/patterns${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-    
-    const res = await fetch(url, {
-      method: 'GET',
-      credentials: 'include',
-    });
-    
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-    
-    const data: SuccessResponse<HeuristicsPattern[], 'patterns'> = await res.json();
-    console.log(data)
-    return data.patterns || data;
-  } catch (err) {
-    const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
+  const queryParams = new URLSearchParams();
+  if (params?.user_id) queryParams.append('user_id', params.user_id);
+  if (params?.data_type) queryParams.append('data_type', params.data_type);
+  if (params?.period) queryParams.append('period', params.period);
+
+  const url = `${API_BASE}/patterns${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+ 
+  const res = await fetch(url, {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  if (!res.ok) {
+    await handleApiError(res);
   }
+
+  const data: SuccessResponse<{ metadata: any; patterns:
+  HeuristicsPattern[] }, 'data'> = await res.json();
+  return data.data?.patterns || data;
 };
 
 // モデルトレーニング関連
@@ -212,7 +216,7 @@ export const trainModel = async (request: HeuristicsTrainRequest) => {
     if (!res.ok) {
       await handleApiError(res);
     }
-    
+
     const data: SuccessResponse<HeuristicsModel, 'model'> = await res.json();
     return data.model || data;
   } catch (err) {

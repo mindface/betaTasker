@@ -32,6 +32,7 @@ export default function HeuristicsPatterns() {
       ...(filters.period && { period: filters.period }),
     };
     console.log("Loading patterns with params:", params);
+    getPatterns(params);
   };
 
   const handleFilterChange = (field: string, value: string) => {
