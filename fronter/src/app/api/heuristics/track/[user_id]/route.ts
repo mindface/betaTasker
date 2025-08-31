@@ -5,11 +5,11 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { user_id: string } }
+  { params }: { params: Promise<{ user_id: string }> }
 ) {
   try {
-    const { user_id } = params;
-    
+    const { user_id } = await params;
+
     // クッキーからトークンを取得
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
