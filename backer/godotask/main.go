@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/godotask/server"
 	"github.com/godotask/model"
+	"github.com/godotask/seed"
 	"github.com/joho/godotenv"
 	// "giner/calculation"
 	// "giner/controller"
@@ -52,6 +54,26 @@ func main() {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 	model.InitDB()
+
+	// Check if seed flag is provided
+	if len(os.Args) > 1 && os.Args[1] == "seed" {
+		log.Println("Running database seeding...")
+		if err := seed.RunAllSeeds(); err != nil {
+			log.Fatalf("Seeding failed: %v", err)
+		}
+		log.Println("Seeding completed successfully!")
+		return
+	}
+
+	// Check if clean-seed flag is provided
+	if len(os.Args) > 1 && os.Args[1] == "clean-seed" {
+		log.Println("Cleaning database and running seeding...")
+		if err := seed.CleanAndSeed(); err != nil {
+			log.Fatalf("Clean and seed failed: %v", err)
+		}
+		log.Println("Clean and seed completed successfully!")
+		return
+	}
 	// bytes, err := ioutil.ReadFile("data.json")
 	// if err != nil {
 	// 	 log.Fatal(err)

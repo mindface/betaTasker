@@ -1,63 +1,143 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
-
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    // クエリパラメータを取得
-    const searchParams = request.nextUrl.searchParams;
-    const queryString = searchParams.toString();
-
-    // クッキーからトークンを取得
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
     if (!token) {
       return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
     }
-    console.log('Patterns API トークン:', queryString);
-    console.log('searchParams API トークン:', searchParams);
-    
-    // バックエンドAPIにリクエスト
-    const response = await fetch(
-      `${API_BASE_URL}/api/heuristics/patterns${queryString ? `?${queryString}` : ''}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        credentials: 'include',
-      }
-    );
+    console.log('Heuristics Patterns API トークン:', token);
 
-    // レスポンスの処理
-    if (!response.ok) {
-      const error = await response.json();
+    const backendRes = await fetch('http://localhost:8080/api/heuristics/patterns', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!backendRes.ok) {
+      return NextResponse.json({ error: 'バックエンドからの取得に失敗' }, { status: backendRes.status });
+    }
+
+    const data = await backendRes.json();
+
+    return NextResponse.json({ patterns: data.patterns || [] }, { status: 200 });
+  } catch (error) {
+    console.error('Heuristics Patterns API エラー:', error);
+    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
+  
+    if (!token) {
+      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 })
+    }
+
+    const body = await request.json()
+    const backendRes = await fetch('http://localhost:8080/api/heuristics/patterns', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body)
+    })
+
+    if (!backendRes.ok) {
       return NextResponse.json(
-        { 
-          success: false,
-          error: error.message || 'Failed to fetch patterns',
-          code: error.code 
-        },
-        { status: response.status }
+        { error: 'バックエンドへの保存に失敗' }, 
+        { status: backendRes.status }
+      )
+    }
+
+    const data = await backendRes.json()
+
+    return NextResponse.json(data, { status: 201 })
+  } catch (error) {
+    console.error('Heuristics Patterns API エラー:', error)
+    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 })
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
+  
+    if (!token) {
+      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 })
+    }
+
+    const body = await request.json()
+
+    const backendRes = await fetch(`http://localhost:8080/api/heuristics/patterns/${body.id}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body)
+    })
+
+    if (!backendRes.ok) {
+      return NextResponse.json(
+        { error: 'バックエンドへの保存に失敗' }, 
+        { status: backendRes.status }
+      )
+    }
+
+    const data = await backendRes.json()
+    console.log('Heuristics Patterns API レスポンス:', data)
+
+    return NextResponse.json(data, { status: 201 })
+  } catch (error) {
+    console.error('Heuristics Patterns API エラー:', error)
+    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 })
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
+
+    if (!token) {
+      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const id = body.id;
+    if (!id) {
+      return NextResponse.json({ error: 'IDが指定されていません' }, { status: 400 });
+    }
+
+    const backendRes = await fetch(`http://localhost:8080/api/heuristics/patterns/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!backendRes.ok) {
+      return NextResponse.json(
+        { error: 'バックエンドでの削除に失敗' },
+        { status: backendRes.status }
       );
     }
 
-    const data = await response.json();
-    console.log(data)
-    return NextResponse.json(data);
-    
+    const data = await backendRes.json();
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error('Error fetching patterns:', error);
-    return NextResponse.json(
-      { 
-        success: false,
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    );
+    console.error('Heuristics Patterns API エラー:', error);
+    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
   }
 }

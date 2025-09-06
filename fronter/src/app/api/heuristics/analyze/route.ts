@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     if (!token) {
       return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
     }
-    
+
     // バックエンドAPIにリクエスト
     const response = await fetch(
       `${API_BASE_URL}/api/heuristics/analyze`,

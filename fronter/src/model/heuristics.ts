@@ -62,6 +62,43 @@ export interface HeuristicsModel {
 }
 
 // リクエスト用の型
+export interface AddHeuristicsAnalysis {
+  user_id: number;
+  task_id: number;
+  analysis_type: string;
+  result: any;
+  score: number;
+  status: string;
+}
+
+export interface AddHeuristicsTracking {
+  user_id: number;
+  action: string;
+  context: any;
+  session_id: string;
+  timestamp: string;
+  duration: number;
+}
+
+export interface AddHeuristicsInsight {
+  user_id: number;
+  type: string;
+  title: string;
+  description: string;
+  confidence: number;
+  data: any;
+  is_active: boolean;
+}
+
+export interface AddHeuristicsPattern {
+  name: string;
+  category: string;
+  pattern: any;
+  frequency: number;
+  accuracy: number;
+  last_seen: string;
+}
+
 export interface HeuristicsAnalysisRequest {
   user_id?: number;
   task_id?: number;
