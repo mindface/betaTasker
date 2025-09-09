@@ -3,7 +3,7 @@
 // ラベル付けされた定量化データ
 export interface QuantificationLabel {
   id: string;
-  
+
   // 言語情報
   linguistic: {
     originalText: string;              // 元のテキスト（例: "コップ半分"）

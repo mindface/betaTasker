@@ -72,9 +72,69 @@ func (ctrl *MultimodalController) UploadImage(ctx *gin.Context) {
 		return
 	}
 
+	// 仮実装
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":   "success",
 		"imageUrl": imageURL,
 		"result":   result,
 	})
 }
+
+// SaveImage - 画像を保存して Visual 情報を DB に登録
+// func (s *MultimodalService) SaveImage(file multipart.File, imagePath string, userID, taskID uint) (*model.QuantificationLabel, error) {
+// 	// 保存先ディレクトリがなければ作成
+// 	if err := os.MkdirAll("./uploads/images", 0755); err != nil {
+// 		return nil, fmt.Errorf("ディレクトリ作成失敗: %w", err)
+// 	}
+
+// 	// ファイル保存
+// 	out, err := os.Create("." + imagePath)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("画像ファイル作成失敗: %w", err)
+// 	}
+// 	defer out.Close()
+
+// 	_, err = io.Copy(out, file)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("画像保存失敗: %w", err)
+// 	}
+
+// 	// サムネイルURLはダミー（本来はリサイズ処理）
+// 	thumbnailURL := imagePath
+
+// 	// 画像メタデータ（ダミー実装）
+// 	visual := map[string]interface{}{
+// 		"imageUrl":        imagePath,
+// 		"thumbnailUrl":    thumbnailURL,
+// 		"imageDescription": "アップロードされた画像です。",
+// 		"annotations":     []map[string]interface{}{},
+// 		"metadata": map[string]interface{}{
+// 			"width":      0,
+// 			"height":     0,
+// 			"format":     "jpeg",
+// 			"capturedAt": time.Now().Format(time.RFC3339),
+// 		},
+// 	}
+
+// 	// JSON変換
+// 	visualJSON, err := json.Marshal(visual)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("JSON変換失敗: %w", err)
+// 	}
+
+// 	// DB保存用データ（QuantificationLabel を新規保存）
+// 	label := &model.QuantificationLabel{
+// 		ID:        uuid.New().String(),
+// 		Visual:    model.JSON{"visual": string(visualJSON)},
+// 		CreatedAt: time.Now(),
+// 		UpdatedAt: time.Now(),
+// 	}
+
+// 	if err := s.db.Create(label).Error; err != nil {
+// 		return nil, fmt.Errorf("画像ラベル保存失敗: %w", err)
+// 	}
+
+// 	return label, nil
+// }
+
+

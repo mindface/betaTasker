@@ -1,15 +1,13 @@
 package service
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	"math"
 	"math/rand"
 	"mime/multipart"
-	"strings"
-	"time"
+	"encoding/json"
 
+	"strings"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
@@ -24,6 +22,15 @@ func NewMultimodalService(db *gorm.DB) *MultimodalService {
 	return &MultimodalService{
 		db: db,
 	}
+}
+
+func (s *MultimodalService) GetUserCalibration(userID string) (*model.UserCalibration, error) {
+	// 仮実装例
+	var calibration model.UserCalibration
+	if err := s.db.Where("user_id = ?", userID).First(&calibration).Error; err != nil {
+		return nil, err
+	}
+	return &calibration, nil
 }
 
 // ProcessTextAndImage - テキストと画像のマルチモーダル処理
@@ -84,7 +91,7 @@ func (s *MultimodalService) ProcessTextAndImage(text, imageURL string, userID, t
 		MinRange:   quantification.MinRange,
 		MaxRange:   quantification.MaxRange,
 		Confidence: quantification.Confidence,
-		
+	
 		// メタデータ
 		Verified: false,
 	}
@@ -100,7 +107,7 @@ func (s *MultimodalService) ProcessTextAndImage(text, imageURL string, userID, t
 func (s *MultimodalService) CalibrateUser(userID uint, referenceObject, imageURL string, imageFile multipart.File) (map[string]interface{}, error) {
 	// 画像からサイズを測定（実際の実装では画像解析APIを使用）
 	measurements, confidence := s.measureFromImage(imageFile, referenceObject)
-	
+
 	// キャリブレーションデータを保存
 	calibration := &model.UserCalibration{
 		ID:              uuid.New().String(),
@@ -456,7 +463,6 @@ func (s *MultimodalService) performQuantification(text string, textFeatures *Tex
 	if imageFeatures != nil {
 		for _, measurement := range imageFeatures.Measurements {
 			if measurement.Type == "volume" && quantification.Unit == "ml" {
-				// 画像から得られた測定値で調整
 				confidence := (quantification.Confidence + imageFeatures.Confidence) / 2
 				quantification.Confidence = confidence
 				mapping.CorrelationScore = confidence
@@ -468,11 +474,9 @@ func (s *MultimodalService) performQuantification(text string, textFeatures *Tex
 }
 
 func (s *MultimodalService) measureFromImage(imageFile multipart.File, referenceObject string) (model.JSON, float64) {
-	// 実際の実装では画像解析による測定
-	
 	measurements := map[string]float64{}
 	confidence := 0.7
-	
+
 	switch referenceObject {
 	case "hand":
 		measurements["width"] = 10.0
@@ -487,8 +491,13 @@ func (s *MultimodalService) measureFromImage(imageFile multipart.File, reference
 		measurements["height"] = 5.0
 		confidence = 0.5
 	}
-	
-	return model.JSON(measurements), confidence
+
+	jsonBytes, err := json.Marshal(measurements)
+	if err != nil {
+		return nil, 0.0
+	}
+	// []byte → model.JSON (struct の場合)
+	return model.JSON{"measurements": jsonBytes}, confidence
 }
 
 func convertImageObjects(imageFeatures *ImageFeatures) model.JSON {
@@ -504,7 +513,7 @@ func convertImageObjects(imageFeatures *ImageFeatures) model.JSON {
 			"bounding_box": obj.BoundingBox,
 		}
 	}
-	
+
 	return model.JSON{"objects": objects}
 }
 
@@ -641,4 +650,27 @@ func (s *MultimodalService) exportToXML(data []model.MultimodalData) string {
 	
 	xml += "</multimodal_data>"
 	return xml
+}
+
+// SaveImage - ダミー実装（最低限コンパイルを通す用）
+func (s *MultimodalService) SaveImage(file multipart.File, imagePath string, userID, taskID uint) (*model.QuantificationLabel, error) {
+	// TODO: ここで画像を保存 & DB 登録する処理を実装予定
+	return &model.QuantificationLabel{}, nil
+}
+
+// SubmitFeedback - ダミー実装（コンパイル通す用）
+// func (s *MultimodalService) SubmitFeedback(labelID string, feedback string, userID uint) (*model.QuantificationLabel, error) {
+// 	// TODO: 本実装では labelID を元に DB を更新して feedback を保存
+// 	return &model.QuantificationLabel{}, nil
+// }
+func (s *MultimodalService) SubmitFeedback(
+	labelID string,
+	feedback string,
+	score float64,
+	userID string,
+	taskID string,
+	attempt int,
+) error {
+	// TODO: 本実装で feedback を DB に保存
+	return nil
 }

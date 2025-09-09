@@ -236,7 +236,7 @@ func main() {
     if err := seed.RunAllSeeds(); err != nil {
         log.Fatalf("Seeding failed: %v", err)
     }
-    
+
     // または個別実行
     if err := seed.SeedStateEvaluations(model.DB); err != nil {
         log.Fatalf("State evaluation seeding failed: %v", err)

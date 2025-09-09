@@ -98,7 +98,7 @@ func (da *DataAccumulator) CreateDifferentialBackup() error {
 	if err := os.MkdirAll(backupPath, 0755); err != nil {
 		return err
 	}
-	
+
 	// 最後のバックアップ以降の変更データを抽出
 	lastBackup := da.getLastBackupTime()
 	
@@ -112,7 +112,7 @@ func (da *DataAccumulator) CreateDifferentialBackup() error {
 		{"knowledge_patterns", &model.KnowledgePattern{}},
 		{"optimization_models", &model.OptimizationModel{}},
 	}
-	
+
 	for _, table := range tables {
 		query := da.db.Model(table.model).Where("updated_at > ?", lastBackup)
 		
@@ -135,7 +135,7 @@ func (da *DataAccumulator) CreateDifferentialBackup() error {
 		"from":      lastBackup,
 		"to":        time.Now(),
 	}
-	
+
 	metaFile := filepath.Join(backupPath, "metadata.json")
 	data, _ := json.MarshalIndent(metadata, "", "  ")
 	return os.WriteFile(metaFile, data, 0644)

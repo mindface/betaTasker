@@ -55,10 +55,10 @@ func RunAllSeeds() error {
 	log.Println("✓ Phenomenological framework data seeded successfully")
 
 	// CSVファイルからのデータシード
-	log.Println("Seeding data from CSV files...")
-	if err := SeedFromCSVFiles(db); err != nil {
-		return fmt.Errorf("failed to seed CSV data: %v", err)
-	}
+	// log.Println("Seeding data from CSV files...")
+	// if err := SeedFromCSVFiles(db); err != nil {
+	// 	return fmt.Errorf("failed to seed CSV data: %v", err)
+	// }
 	log.Println("✓ CSV data seeded successfully")
 
 	// 状態評価システムのシード

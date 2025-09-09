@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"math"
 	"math/rand"
 	"sync"
 	"time"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/model"
@@ -64,8 +66,8 @@ func NewProcessMonitoringService(db *gorm.DB) *ProcessMonitoringService {
 		connections: make(map[string]*websocket.Conn),
 		monitors:    make(map[string]*ProcessMonitor),
 		upgrader: websocket.Upgrader{
-			CheckOrigin: func(r *gin.Request) bool {
-				return true // Allow connections from any origin in development
+			CheckOrigin: func(r *http.Request) bool {
+				return true
 			},
 		},
 	}

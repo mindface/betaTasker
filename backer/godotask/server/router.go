@@ -9,7 +9,7 @@ import (
 	"github.com/godotask/controller/assessment"
 	"github.com/godotask/controller/heuristics"
 	"github.com/godotask/controller/multimodal"
-	"github.com/godotask/controller/quantification_label"
+	// "github.com/godotask/controller/quantification_label"
 	"github.com/godotask/controller/state_evaluation"
 	"github.com/godotask/controller/tool_matching"
 	"github.com/godotask/controller/process_monitoring"
@@ -83,9 +83,9 @@ func GetRouter() *gin.Engine {
 	quantificationLabelRepo.InitializeDatabase()
 	
 	quantificationLabelService := service.NewQuantificationLabelService(model.DB)
-	quantificationLabelController := &quantification_label.QuantificationLabelController{
-		Service: quantificationLabelService,
-	}
+	// quantificationLabelController := &quantification_label.QuantificationLabelController{
+	// 	Service: quantificationLabelService,
+	// }
 	
 	multimodalService := service.NewMultimodalService(model.DB)
 	multimodalController := &multimodal.MultimodalController{
@@ -163,19 +163,19 @@ func GetRouter() *gin.Engine {
 	r.POST("/api/heuristics/patterns/train", heuristicsController.TrainModel)
 
 	// Quantification Label API
-	r.GET("/api/labels", quantificationLabelController.GetLabels)
-	r.POST("/api/labels", quantificationLabelController.CreateLabel)
-	r.PUT("/api/labels/:id", quantificationLabelController.UpdateLabel)
-	r.DELETE("/api/labels/:id", quantificationLabelController.DeleteLabel)
-	r.GET("/api/labels/search", quantificationLabelController.SearchLabels)
-	r.POST("/api/labels/:id/verify", quantificationLabelController.VerifyLabel)
-	r.GET("/api/labels/statistics", quantificationLabelController.GetStatistics)
-	r.POST("/api/labels/suggest", quantificationLabelController.SuggestQuantification)
-	r.GET("/api/labels/:id/history", quantificationLabelController.GetLabelHistory)
-	r.GET("/api/labels/similar", quantificationLabelController.FindSimilar)
-	r.POST("/api/labels/bulk", quantificationLabelController.BulkOperation)
-	r.GET("/api/labels/export", quantificationLabelController.ExportLabels)
-	r.GET("/api/labels/user-stats", quantificationLabelController.GetUserStats)
+	// r.GET("/api/labels", quantificationLabelController.GetLabels)
+	// r.POST("/api/labels", quantificationLabelController.CreateLabel)
+	// r.PUT("/api/labels/:id", quantificationLabelController.UpdateLabel)
+	// r.DELETE("/api/labels/:id", quantificationLabelController.DeleteLabel)
+	// r.GET("/api/labels/search", quantificationLabelController.SearchLabels)
+	// r.POST("/api/labels/:id/verify", quantificationLabelController.VerifyLabel)
+	// r.GET("/api/labels/statistics", quantificationLabelController.GetStatistics)
+	// r.POST("/api/labels/suggest", quantificationLabelController.SuggestQuantification)
+	// r.GET("/api/labels/:id/history", quantificationLabelController.GetLabelHistory)
+	// r.GET("/api/labels/similar", quantificationLabelController.FindSimilar)
+	// r.POST("/api/labels/bulk", quantificationLabelController.BulkOperation)
+	// r.GET("/api/labels/export", quantificationLabelController.ExportLabels)
+	// r.GET("/api/labels/user-stats", quantificationLabelController.GetUserStats)
 
 	// Multimodal API
 	r.POST("/api/multimodal/process", multimodalController.ProcessMultimodal)

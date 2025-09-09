@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"encoding/json"
 
 	"github.com/godotask/model"
 	"github.com/google/uuid"
@@ -24,9 +25,9 @@ func SeedFromCSVFiles(db *gorm.DB) error {
 	}
 
 	// Seed optimization models
-	if err := seedOptimizationModelsFromCSV(db); err != nil {
-		log.Printf("Warning: Failed to seed optimization models: %v", err)
-	}
+	// if err := seedOptimizationModelsFromCSV(db); err != nil {
+	// 	log.Printf("Warning: Failed to seed optimization models: %v", err)
+	// }
 
 	// Seed phenomenological frameworks
 	if err := seedPhenomenologicalFrameworksFromCSV(db); err != nil {
@@ -138,21 +139,33 @@ func seedOptimizationModelsFromCSV(db *gorm.DB) error {
 			continue
 		}
 
+		var constraints map[string]interface{}
+		json.Unmarshal([]byte(record[4]), &constraints)
+
+		var parameters map[string]interface{}
+		json.Unmarshal([]byte(record[5]), &parameters)
+
+		var performanceMetric map[string]interface{}
+		json.Unmarshal([]byte(record[6]), &performanceMetric)
+
+		// iterationCount, _ := strconv.Atoi(record[7])
+		// convergenceRate, _ := strconv.ParseFloat(record[8], 64)
+
 		iterationCount, _ := strconv.ParseFloat(record[7], 64)
 		convergenceRate, _ := strconv.ParseFloat(record[8], 64)
 
 		optModel := model.OptimizationModel{
-			ID:               record[0],
-			Name:             record[1],
-			Type:             record[2],
-			ObjectiveFunction: record[3],
-			Constraints:      record[4],
-			Parameters:       &model.NullString{String: record[5], Valid: record[5] != ""},
-			PerformanceMetric: &model.NullString{String: record[6], Valid: record[6] != ""},
-			IterationCount:   &model.NullFloat64{Float64: iterationCount, Valid: iterationCount > 0},
-			ConvergenceRate:  &model.NullFloat64{Float64: convergenceRate, Valid: convergenceRate > 0},
-			Domain:           record[9],
-			Application:      record[10],
+				ID:               record[0],
+				Name:             record[1],
+				Type:             record[2],
+				ObjectiveFunction: record[3],
+				Constraints:      constraints,
+				Parameters:       parameters,
+				PerformanceMetric: performanceMetric,
+				IterationCount:   iterationCount,
+				ConvergenceRate:  convergenceRate,
+				Domain:           record[9],
+				Application:      record[10],
 		}
 
 		models = append(models, optModel)

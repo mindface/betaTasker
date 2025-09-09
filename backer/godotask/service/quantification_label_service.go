@@ -330,9 +330,11 @@ func (s *QuantificationLabelService) VerifyLabel(id string, verification map[str
 // GetStatistics - 統計情報取得
 func (s *QuantificationLabelService) GetStatistics() (*model.LabelStatistics, error) {
 	var stats model.LabelStatistics
+	var total int64
 
 	// 総ラベル数
-	s.db.Model(&model.QuantificationLabel{}).Count(&stats.TotalLabels)
+	s.db.Model(&model.QuantificationLabel{}).Count(&total)
+	stats.TotalLabels = int(total)
 
 	// ドメイン別分布
 	var domainResults []struct {
@@ -352,7 +354,7 @@ func (s *QuantificationLabelService) GetStatistics() (*model.LabelStatistics, er
 	// カテゴリ別分布
 	var categoryResults []struct {
 		Category string
-		Count    int64
+		Count    int
 	}
 	s.db.Model(&model.QuantificationLabel{}).
 		Select("category, count(*) as count").
@@ -544,21 +546,6 @@ func (s *QuantificationLabelService) BulkOperation(operation string, labelIDs []
 	return result, nil
 }
 
-// GetLabelHistory - ラベル履歴取得
-func (s *QuantificationLabelService) GetLabelHistory(labelID string) ([]model.LabelRevision, error) {
-	var revisions []model.LabelRevision
-	
-	err := s.db.Where("label_id = ?", labelID).
-		Order("timestamp DESC").
-		Find(&revisions).Error
-	
-	if err != nil {
-		return nil, err
-	}
-	
-	return revisions, nil
-}
-
 // CreateRevision - リビジョン作成（内部用）
 func (s *QuantificationLabelService) createRevision(labelID string, changes map[string]interface{}, reason, userID string) error {
 	revision := model.LabelRevision{
@@ -596,7 +583,7 @@ func (s *QuantificationLabelService) ExportLabels(format string, query model.Lab
 			"AbstractLevel", "Source", "Validated", "CreatedAt",
 		}
 		writer.Write(headers)
-		
+
 		// データ
 		for _, label := range labels {
 			record := []string{

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
-	"strconv"
 	"strings"
 	"time"
 
@@ -219,23 +218,23 @@ func (s *ToolMatchingService) calculateModelScore(model *model.OptimizationModel
 	}
 
 	// Performance metrics matching
-	if model.PerformanceMetric.Valid {
-		metrics := strings.Split(model.PerformanceMetric.String, "|")
-		for _, metric := range metrics {
+	if model.PerformanceMetric != nil {
+		for key := range model.PerformanceMetric {
+			metric := fmt.Sprintf("%v", key)
 			if strings.Contains(strings.ToLower(stateEval.WorkTarget), extractMetricKeyword(metric)) {
-				totalScore += 15.0
+					totalScore += 15.0
 			}
 		}
 	}
 
 	// Convergence rate bonus
-	if model.ConvergenceRate.Valid && model.ConvergenceRate.Float64 > 0.9 {
+	if model.ConvergenceRate > 0.9 {
 		totalScore += 20.0
 	}
 
 	// Iteration count efficiency
-	if model.IterationCount.Valid {
-		iterationEfficiency := math.Min(25.0, 10000.0/model.IterationCount.Float64*25.0)
+	if model.IterationCount > 0 {
+		iterationEfficiency := math.Min(25.0, 10000.0/model.IterationCount*25.0)
 		totalScore += iterationEfficiency
 	}
 
@@ -348,11 +347,11 @@ func (s *ToolMatchingService) generateRobotUseCase(robot *model.RobotSpecificati
 }
 
 func (s *ToolMatchingService) estimateImprovement(model *model.OptimizationModel, stateEval *model.StateEvaluation) string {
-	if model.PerformanceMetric.Valid {
-		metrics := strings.Split(model.PerformanceMetric.String, "|")
-		for _, metric := range metrics {
-			if improvement := extractImprovementValue(metric); improvement != "" {
-				return improvement
+	if model.PerformanceMetric != nil && len(model.PerformanceMetric) > 0 {
+		for key, val := range model.PerformanceMetric {
+			metricStr := fmt.Sprintf("%v:%v", key, val)
+			if improvement := extractImprovementValue(metricStr); improvement != "" {
+					return improvement
 			}
 		}
 	}
@@ -384,7 +383,10 @@ func extractImprovementValue(metric string) string {
 	return ""
 }
 
-func (s *ToolMatchingService) assessComplexity(model *model.OptimizationModel, level int) string {
+func (s *ToolMatchingService) assessComplexity(
+	model *model.OptimizationModel,
+	level int,
+) string {
 	complexityLevels := map[string]int{
 		"control_theory":    3,
 		"ml_based":         4,
@@ -400,7 +402,7 @@ func (s *ToolMatchingService) assessComplexity(model *model.OptimizationModel, l
 
 	modelComplexity, exists := complexityLevels[model.Type]
 	if !exists {
-		modelComplexity = 3 // Default
+		modelComplexity = 3
 	}
 
 	if level >= modelComplexity {
@@ -412,7 +414,12 @@ func (s *ToolMatchingService) assessComplexity(model *model.OptimizationModel, l
 	}
 }
 
-func (s *ToolMatchingService) generateProcessRecommendations(robot *model.RobotSpecification, model *model.OptimizationModel, stateEval *model.StateEvaluation, requirements map[string]interface{}) map[string]interface{} {
+func (s *ToolMatchingService) generateProcessRecommendations(
+	robot *model.RobotSpecification,
+	model *model.OptimizationModel,
+	stateEval *model.StateEvaluation,
+	requirements map[string]interface{},
+) map[string]interface{} {
 	process := make(map[string]interface{})
 
 	// Setup recommendations
@@ -442,16 +449,14 @@ func (s *ToolMatchingService) generateProcessRecommendations(robot *model.RobotS
 	return process
 }
 
-func (s *ToolMatchingService) extractKeyMetrics(model *model.OptimizationModel) []string {
+func (s *ToolMatchingService) extractKeyMetrics(
+	model *model.OptimizationModel,
+) []string {
 	metrics := []string{}
 	
-	if model.PerformanceMetric.Valid {
-		metricPairs := strings.Split(model.PerformanceMetric.String, "|")
-		for _, pair := range metricPairs {
-			if strings.Contains(pair, ":") {
-				metric := strings.Split(pair, ":")[0]
-				metrics = append(metrics, metric)
-			}
+	if model.PerformanceMetric != nil && len(model.PerformanceMetric) > 0 {
+		for key := range model.PerformanceMetric {
+				metrics = append(metrics, fmt.Sprintf("%v", key))
 		}
 	}
 
@@ -463,30 +468,35 @@ func (s *ToolMatchingService) extractKeyMetrics(model *model.OptimizationModel) 
 	return metrics
 }
 
-func (s *ToolMatchingService) determineUpdateFrequency(model *model.OptimizationModel) string {
-	if model.IterationCount.Valid {
-		if model.IterationCount.Float64 > 5000 {
-			return "real_time"
-		} else if model.IterationCount.Float64 > 1000 {
-			return "every_10_seconds"
-		} else {
-			return "every_minute"
-		}
+func (s *ToolMatchingService) determineUpdateFrequency(
+	model *model.OptimizationModel,
+) string {
+	if model.IterationCount > 5000 {
+		return "real_time"
+	} else if model.IterationCount > 1000 {
+		return "every_10_seconds"
+	} else {
+		return "every_minute"
 	}
 	return "every_30_seconds"
 }
 
-func (s *ToolMatchingService) generateAlertThresholds(stateEval *model.StateEvaluation) map[string]float64 {
+func (s *ToolMatchingService) generateAlertThresholds(
+		stateEval *model.StateEvaluation,
+	) map[string]float64 {
 	baseThreshold := stateEval.EvaluationScore * 0.8 // Alert if performance drops below 80% of current
 
 	return map[string]float64{
 		"performance_degradation": baseThreshold,
-		"error_rate_increase":     0.05, // 5% error rate threshold
-		"response_time_increase":  2.0,  // 2x response time threshold
+		"error_rate_increase":     0.05,
+		"response_time_increase":  2.0,
 	}
 }
 
-func (s *ToolMatchingService) generateSuccessCriteria(stateEval *model.StateEvaluation, requirements map[string]interface{}) map[string]interface{} {
+func (s *ToolMatchingService) generateSuccessCriteria(
+		stateEval *model.StateEvaluation,
+		requirements map[string]interface{},
+	) map[string]interface{} {
 	criteria := make(map[string]interface{})
 
 	// Base improvement target
@@ -509,46 +519,36 @@ func (s *ToolMatchingService) generateSuccessCriteria(stateEval *model.StateEval
 	return criteria
 }
 
-func (s *ToolMatchingService) generateOptimalParameters(robot *model.RobotSpecification, model *model.OptimizationModel, stateEval *model.StateEvaluation, requirements map[string]interface{}) map[string]interface{} {
+func (s *ToolMatchingService) generateOptimalParameters(
+		robot *model.RobotSpecification,
+		model *model.OptimizationModel, 
+		stateEval *model.StateEvaluation,
+		requirements map[string]interface{},
+	)	map[string]interface{} {
 	parameters := make(map[string]interface{})
 
 	// Robot parameters
 	robotParams := map[string]interface{}{
-		"max_payload":      robot.PayloadKg * 0.8,        // Use 80% of max payload for safety
-		"working_speed":    robot.MaxSpeedMmS * 0.6,      // Use 60% of max speed initially
-		"precision_mode":   robot.RepeatAccuracyMm < 0.02, // Enable precision mode for high-accuracy robots
+		"max_payload":      robot.PayloadKg * 0.8,
+		"working_speed":    robot.MaxSpeedMmS * 0.6,
+		"precision_mode":   robot.RepeatAccuracyMm < 0.02,
 	}
 
 	// Adjust based on level
 	if stateEval.Level <= 2 {
-		robotParams["working_speed"] = robot.MaxSpeedMmS * 0.4 // Slower for beginners
+		robotParams["working_speed"] = robot.MaxSpeedMmS * 0.4
 		robotParams["safety_factor"] = 1.5
 	}
 
 	parameters["robot"] = robotParams
 
-	// Optimization parameters
-	if model.Parameters.Valid {
-		modelParams := make(map[string]interface{})
-		paramPairs := strings.Split(model.Parameters.String, "|")
-		
-		for _, pair := range paramPairs {
-			if strings.Contains(pair, ":") {
-				parts := strings.Split(pair, ":")
-				if len(parts) == 2 {
-					key := strings.TrimSpace(parts[0])
-					value := strings.TrimSpace(parts[1])
-					
-					// Try to parse as number
-					if floatVal, err := strconv.ParseFloat(value, 64); err == nil {
-						modelParams[key] = floatVal
-					} else {
-						modelParams[key] = value
-					}
-				}
-			}
+	if model.Parameters != nil && len(model.Parameters) > 0 {
+    // jsonStr, _ := json.Marshal(model.Parameters)
+
+		if model.Parameters != nil && len(model.Parameters) > 0 {
+			parameters["optimization"] = model.Parameters
 		}
-		parameters["optimization"] = modelParams
+
 	}
 
 	// Process parameters based on requirements
@@ -568,7 +568,12 @@ func (s *ToolMatchingService) generateOptimalParameters(robot *model.RobotSpecif
 	return parameters
 }
 
-func (s *ToolMatchingService) predictPerformance(robot *model.RobotSpecification, model *model.OptimizationModel, parameters map[string]interface{}, stateEval *model.StateEvaluation) map[string]interface{} {
+func (s *ToolMatchingService) predictPerformance(
+	robot *model.RobotSpecification,
+	model *model.OptimizationModel,
+	parameters map[string]interface{},
+	stateEval *model.StateEvaluation,
+) map[string]interface{} {
 	performance := make(map[string]interface{})
 
 	// Base performance prediction
@@ -577,21 +582,19 @@ func (s *ToolMatchingService) predictPerformance(robot *model.RobotSpecification
 	// Robot capability factor
 	robotFactor := 1.0
 	if robot.RepeatAccuracyMm <= 0.01 {
-		robotFactor += 0.15 // High precision bonus
+		robotFactor += 0.15
 	}
 	if robot.AICapability.Valid && strings.Contains(robot.AICapability.String, "learning") {
-		robotFactor += 0.10 // AI capability bonus
+		robotFactor += 0.10
 	}
 
-	// Model effectiveness factor
 	modelFactor := 1.0
-	if model.ConvergenceRate.Valid && model.ConvergenceRate.Float64 > 0.95 {
-		modelFactor += 0.20 // High convergence rate bonus
+	if model.ConvergenceRate > 0.95 {
+		modelFactor += 0.20
 	}
 
-	// Combined prediction
 	predictedScore := baseScore * robotFactor * modelFactor
-	predictedScore = math.Min(98.0, predictedScore) // Cap at 98% to be realistic
+	predictedScore = math.Min(98.0, predictedScore)
 
 	performance["predicted_score"] = predictedScore
 	performance["confidence_level"] = s.calculateConfidenceLevel(robot, model, stateEval)
@@ -608,7 +611,11 @@ func (s *ToolMatchingService) predictPerformance(robot *model.RobotSpecification
 	return performance
 }
 
-func (s *ToolMatchingService) calculateConfidenceLevel(robot *model.RobotSpecification, model *model.OptimizationModel, stateEval *model.StateEvaluation) string {
+func (s *ToolMatchingService) calculateConfidenceLevel(
+	robot *model.RobotSpecification,
+	model *model.OptimizationModel,
+	stateEval *model.StateEvaluation,
+) string {
 	confidence := 0.7 // Base confidence
 
 	// Robot maturity factor
@@ -617,7 +624,7 @@ func (s *ToolMatchingService) calculateConfidenceLevel(robot *model.RobotSpecifi
 	}
 
 	// Model convergence factor
-	if model.ConvergenceRate.Valid && model.ConvergenceRate.Float64 > 0.9 {
+	if model.ConvergenceRate > 0.9 {
 		confidence += 0.15
 	}
 
@@ -654,7 +661,9 @@ func (s *ToolMatchingService) estimateTimeline(level int, improvement float64) s
 	return fmt.Sprintf("%d weeks", baseTime)
 }
 
-func (s *ToolMatchingService) GetMatchingHistory(stateEvaluationID string) ([]model.ToolMatchingResult, error) {
+func (s *ToolMatchingService) GetMatchingHistory(
+	  stateEvaluationID string,
+	) ([]model.ToolMatchingResult, error) {
 	var results []model.ToolMatchingResult
 
 	if err := s.db.Where("state_evaluation_id = ?", stateEvaluationID).Order("created_at DESC").Find(&results).Error; err != nil {

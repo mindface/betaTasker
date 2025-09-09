@@ -40,12 +40,12 @@ type OptimizationModel struct {
 	ID               string        `gorm:"type:varchar(255);primaryKey" json:"id"`
 	Name             string        `gorm:"type:varchar(255);not null" json:"name"`
 	Type             string        `gorm:"type:varchar(100);not null" json:"type"`
-	ObjectiveFunction string       `gorm:"type:text" json:"objective_function"`
-	Constraints      string        `gorm:"type:text" json:"constraints"`
-	Parameters       *NullString   `gorm:"type:text" json:"parameters"`
-	PerformanceMetric *NullString  `gorm:"type:text" json:"performance_metric"`
-	IterationCount   *NullFloat64  `gorm:"type:decimal(10,2)" json:"iteration_count"`
-	ConvergenceRate  *NullFloat64  `gorm:"type:decimal(5,4)" json:"convergence_rate"`
+	ObjectiveFunction string                 `gorm:"type:text" json:"objective_function"`
+	Constraints       map[string]interface{} `gorm:"type:jsonb" json:"constraints"`
+	Parameters        map[string]interface{} `gorm:"type:jsonb" json:"parameters"`
+	PerformanceMetric map[string]interface{} `gorm:"type:jsonb" json:"performance_metric"`
+	IterationCount    float64                    `json:"iteration_count"`
+	ConvergenceRate   float64                `json:"convergence_rate"`
 	Domain           string        `gorm:"type:varchar(100)" json:"domain"`
 	Application      string        `gorm:"type:text" json:"application"`
 	CreatedAt        time.Time     `json:"created_at"`

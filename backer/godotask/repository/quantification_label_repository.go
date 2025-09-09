@@ -26,7 +26,7 @@ func (r *QuantificationLabelRepository) AutoMigrate() error {
 		&model.VisualMetaphor{},
 		&model.UserCalibration{},
 		&model.MultimodalData{},
-		// 現象学的フレームワーク関連
+		// 現象的フレームワーク関連
 		&model.PhenomenologicalFramework{},
 		&model.KnowledgePattern{},
 		&model.OptimizationModel{},
@@ -690,21 +690,21 @@ func (r *QuantificationLabelRepository) SeedPhenomenologicalData() error {
 			ID:            "trajectory_optimization",
 			Name:          "軌道最適化",
 			Type:          "control_theory",
-			ObjectiveFunc: "minimize(time) + minimize(energy) subject to collision_free",
-			Constraints: model.JSON(map[string]interface{}{
+			ObjectiveFunction: "minimize(time) + minimize(energy) subject to collision_free",
+			Constraints: map[string]interface{}{
 				"joint_limits": true,
 				"collision_avoidance": true,
 				"singularity_avoidance": true,
-			}),
-			Parameters: model.JSON(map[string]interface{}{
+			},
+			Parameters: map[string]interface{}{
 				"max_velocity": 1000,
 				"max_acceleration": 5000,
 				"sampling_time": 0.001,
-			}),
-			Performance: model.JSON(map[string]interface{}{
+			},
+			PerformanceMetric: map[string]interface{}{
 				"avg_improvement": 25.5,
 				"computation_time": 0.15,
-			}),
+			},
 			IterationCount:  1000,
 			ConvergenceRate: 0.95,
 			Domain:          "robot_motion",
