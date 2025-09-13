@@ -8,7 +8,6 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/contrib v0.0.0-20250113154928-93b827325fec
 	github.com/gin-gonic/gin v1.7.4
-	github.com/go-sql-driver/mysql v1.9.2
 	github.com/mattn/go-sqlite3 v1.14.28
 	github.com/olahol/go-imageupload v1.0.1
 	github.com/stretchr/testify v1.10.0
@@ -46,5 +45,6 @@ require (
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	gorm.io/datatypes v1.2.6 // indirect
 	gorm.io/driver/sqlite v1.6.0 // indirect
 )
