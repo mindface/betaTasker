@@ -6,7 +6,7 @@ import (
 )
 
 type HeuristicsService struct {
-	Repo repository.HeuristicsRepository
+	Repo repository.HeuristicsRepositoryInterface
 }
 
 func (s *HeuristicsService) AnalyzeData(request *model.HeuristicsAnalysisRequest) (*model.HeuristicsAnalysis, error) {
@@ -18,7 +18,7 @@ func (s *HeuristicsService) AnalyzeData(request *model.HeuristicsAnalysisRequest
 		Score:        calculateScore(request.Data),
 		Status:       "completed",
 	}
-	
+
 	if err := s.Repo.CreateAnalysis(analysis); err != nil {
 		return nil, err
 	}

@@ -6,17 +6,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type HeuristicsRepository interface {
-	CreateAnalysis(analysis *model.HeuristicsAnalysis) error
-	GetAnalysisById(id string) (*model.HeuristicsAnalysis, error)
-	CreateTracking(tracking *model.HeuristicsTracking) error
-	GetTrackingByUserID(userID string) ([]model.HeuristicsTracking, error)
-	GetInsights(userID string, limit, offset int) ([]model.HeuristicsInsight, int, error)
-	GetInsightById(id string) (*model.HeuristicsInsight, error)
-	DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error)
-	CreateModel(model *model.HeuristicsModel) error
-}
-
 type HeuristicsRepositoryImpl struct {
 	DB *gorm.DB
 }

@@ -7,14 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Book struct {
-	id      int
-	name    string
-	text    string
-	disc    string
-	imgPath string
-}
-
 func BookAddDisplayAction(c *gin.Context) {
 	c.HTML(200, "book-add.html", gin.H{})
 }
