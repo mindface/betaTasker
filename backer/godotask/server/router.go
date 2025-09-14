@@ -8,6 +8,8 @@ import (
 	"github.com/godotask/controller/task"
 	"github.com/godotask/controller/assessment"
 	"github.com/godotask/controller/heuristics"
+	"github.com/godotask/controller/process_optimization"
+	"github.com/godotask/controller/qualitative_label"
 	"github.com/godotask/repository"
 	"github.com/godotask/service"
 	"github.com/godotask/model"
@@ -29,7 +31,7 @@ func CORSMiddlewareSimple() gin.HandlerFunc {
 			c.AbortWithStatus(204)
 			return
 		}
-		
+
 		c.Next()
 	}
 }
@@ -72,13 +74,20 @@ func GetRouter() *gin.Engine {
 	heuristicsService := &service.HeuristicsService{Repo: heuristicsRepo}
 	heuristicsController := heuristics.HeuristicsController{Service: heuristicsService}
 
+	processOptimizationRepo := &repository.ProcessOptimizationRepositoryImpl{DB: model.DB}
+	processOptimizationService := &service.ProcessOptimizationService{Repo: processOptimizationRepo}
+	processOptimizationController := process_optimization.ProcessOptimizationController{Service: processOptimizationService}
+
+	qualitativeLabelRepo := &repository.QualitativeLabelRepositoryImpl{DB: model.DB}
+	qualitativeLabelService := &service.QualitativeLabelService{Repo: qualitativeLabelRepo}
+	qualitativeLabelController := qualitative_label.QualitativeLabelController{Service: qualitativeLabelService}
+
 	// 認証不要のエンドポイント
 	r.POST("/api/login", user.Login)
 	r.POST("/api/register", user.Register)
 	r.POST("/api/logout", user.Logout)
 	
 	// 一時的に認証を無効化（デバッグ用）
-	
 	r.GET("/", top.IndexDisplayAction)
 		
 	// Book API (CRUD)
@@ -125,6 +134,21 @@ func GetRouter() *gin.Engine {
 	r.GET("/api/heuristics/patterns", heuristicsController.DetectPatterns)
 	r.POST("/api/heuristics/patterns/train", heuristicsController.TrainModel)
 
+	// Process Optimization API (CRUD)
+	r.POST("/api/process_optimization", processOptimizationController.AddProcessOptimization)
+	r.GET("/api/process_optimization", processOptimizationController.ListProcessOptimizations)
+	r.GET("/api/process_optimization/:id", processOptimizationController.GetProcessOptimization)
+	r.PUT("/api/process_optimization/:id", processOptimizationController.EditProcessOptimization)
+	r.DELETE("/api/process_optimization/:id", processOptimizationController.DeleteProcessOptimization)
+
+	// Qualitative Label API (CRUD)
+	r.POST("/api/qualitative_label", qualitativeLabelController.AddQualitativeLabel)
+	r.GET("/api/qualitative_label", qualitativeLabelController.ListQualitativeLabels)
+	r.GET("/api/qualitative_label/:id", qualitativeLabelController.GetQualitativeLabel)
+	r.PUT("/api/qualitative_label/:id", qualitativeLabelController.EditQualitativeLabel)
+	r.DELETE("/api/qualitative_label/:id", qualitativeLabelController.DeleteQualitativeLabel)
+
+	
 	// 404ハンドラー（一時的にコメントアウト）
 	// r.NoRoute(middleware.NotFoundMiddleware())
 	
