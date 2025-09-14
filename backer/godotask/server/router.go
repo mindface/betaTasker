@@ -10,6 +10,7 @@ import (
 	"github.com/godotask/controller/heuristics"
 	"github.com/godotask/controller/process_optimization"
 	"github.com/godotask/controller/qualitative_label"
+	"github.com/godotask/controller/knowledge_pattern"
 	"github.com/godotask/repository"
 	"github.com/godotask/service"
 	"github.com/godotask/model"
@@ -82,6 +83,10 @@ func GetRouter() *gin.Engine {
 	qualitativeLabelService := &service.QualitativeLabelService{Repo: qualitativeLabelRepo}
 	qualitativeLabelController := qualitative_label.QualitativeLabelController{Service: qualitativeLabelService}
 
+	knowledgePatternRepo := &repository.KnowledgePatternRepositoryImpl{DB: model.DB}
+	knowledgePatternService := &service.KnowledgePatternService{Repo: knowledgePatternRepo}
+	knowledgePatternController := knowledge_pattern.KnowledgePatternController{Service: knowledgePatternService}
+
 	// 認証不要のエンドポイント
 	r.POST("/api/login", user.Login)
 	r.POST("/api/register", user.Register)
@@ -148,7 +153,14 @@ func GetRouter() *gin.Engine {
 	r.PUT("/api/qualitative_label/:id", qualitativeLabelController.EditQualitativeLabel)
 	r.DELETE("/api/qualitative_label/:id", qualitativeLabelController.DeleteQualitativeLabel)
 
-	
+	// Knowledge Pattern API (CRUD)
+	r.POST("/api/knowledge_pattern", knowledgePatternController.AddKnowledgePattern)
+	r.GET("/api/knowledge_pattern", knowledgePatternController.ListKnowledgePatterns)
+	r.GET("/api/knowledge_pattern/:id", knowledgePatternController.GetKnowledgePattern)
+	r.PUT("/api/knowledge_pattern/:id", knowledgePatternController.EditKnowledgePattern)
+	r.DELETE("/api/knowledge_pattern/:id", knowledgePatternController.DeleteKnowledgePattern)
+
+
 	// 404ハンドラー（一時的にコメントアウト）
 	// r.NoRoute(middleware.NotFoundMiddleware())
 	
