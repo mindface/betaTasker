@@ -61,6 +61,14 @@ type ProcessOptimizationRepositoryInterface interface {
 	Delete(id string) error
 }
 
+type PhenomenologicalFrameworkRepositoryInterface interface {
+	Create(phenomenologicalFramework *model.PhenomenologicalFramework) error
+	FindByID(id string) (*model.PhenomenologicalFramework, error)
+	FindAll() ([]model.PhenomenologicalFramework, error)
+	Update(id string, phenomenologicalFramework *model.PhenomenologicalFramework) error
+	Delete(id string) error
+}
+
 type QualitativeLabelRepositoryInterface interface {
 	Create(qualitativeLabel *model.QualitativeLabel) error
 	FindByID(id string) (*model.QualitativeLabel, error)

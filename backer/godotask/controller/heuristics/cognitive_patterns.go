@@ -176,7 +176,7 @@ func (ca *CognitiveAnalyzer) detectAvailabilityHeuristic(actions []UserAction) *
 				matchCount++
 			}
 		}
-		
+
 		// 60%以上が最近のアクションと一致
 		if float64(matchCount)/float64(len(nextActions)) > 0.6 {
 			return &CognitivePattern{

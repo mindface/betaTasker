@@ -22,35 +22,27 @@ func (m *MockQualitativeLabelRepository) Create(ql *model.QualitativeLabel) erro
 
 func (m *MockQualitativeLabelRepository) FindByID(id string) (*model.QualitativeLabel, error) {
   return &model.QualitativeLabel{
-    ID:               "1",
-    ProcessID:        "proc_001",
-    OptimizationType: "speed",
-    InitialState:     model.JSON{"step": 1},
-    OptimizedState:   model.JSON{"step": 2},
-    Improvement:      10.5,
-    Method:           "GradientDescent",
-    Iterations:       5,
-    ConvergenceTime:  12.3,
-    ValidatedBy:      "tester",
-    ValidationDate:   time.Now(),
+		ID:        "1",
+		TaskID:    100,
+		UserID:    1,
+		Content:   "Test label content",
+		Category:  "CategoryA",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
   }, nil
 }
 
 func (m *MockQualitativeLabelRepository) FindAll() ([]model.QualitativeLabel, error) {
   return []model.QualitativeLabel{
-    {
-      ID:               "1",
-      ProcessID:        "proc_001",
-      OptimizationType: "speed",
-      InitialState:     model.JSON{"step": 1},
-      OptimizedState:   model.JSON{"step": 2},
-      Improvement:      10.5,
-      Method:           "GradientDescent",
-      Iterations:       5,
-      ConvergenceTime:  12.3,
-      ValidatedBy:      "tester",
-      ValidationDate:   time.Now(),
-    },
+		{
+			ID:        "1",
+			TaskID:    100,
+			UserID:    1,
+			Content:   "Test label content",
+			Category:  "CategoryA",
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		},
   }, nil
 }
 
@@ -80,16 +72,10 @@ func TestAddQualitativeLabel(t *testing.T) {
     r := setupRouter()
 
     body := `{
-        "process_id": "proc_001",
-        "optimization_type": "speed",
-        "initial_state": {"step":1},
-        "optimized_state": {"step":2},
-        "improvement": 10.5,
-        "method": "GradientDescent",
-        "iterations": 5,
-        "convergence_time": 12.3,
-        "validated_by": "tester",
-        "validation_date": "2025-09-13T12:00:00Z"
+      "task_id": 100,
+      "user_id": 1,
+      "content": "Test label content",
+      "category": "CategoryA"
     }`
 
     req, _ := http.NewRequest(http.MethodPost, "/api/qualitative_label", bytes.NewBuffer([]byte(body)))
@@ -106,8 +92,8 @@ func TestUpdateQualitativeLabel(t *testing.T) {
     r := setupRouter()
 
     body := `{
-        "optimization_type": "accuracy",
-        "improvement": 15.0
+      "content": "Updated label content",
+      "category": "CategoryB"
     }`
 
     req, _ := http.NewRequest(http.MethodPut, "/api/qualitative_label/1", bytes.NewBuffer([]byte(body)))
@@ -116,7 +102,7 @@ func TestUpdateQualitativeLabel(t *testing.T) {
     r.ServeHTTP(w, req)
 
     assert.Equal(t, http.StatusOK, w.Code)
-    assert.Contains(t, w.Body.String(), "Process optimization edited")
+    assert.Contains(t, w.Body.String(), "Qualitative label edited")
 }
 
 func TestDeleteQualitativeLabel(t *testing.T) {

@@ -22,34 +22,36 @@ func (m *MockKnowledgePatternsRepository) Create(knowledgePattern *model.Knowled
 
 func (m *MockKnowledgePatternsRepository) FindByID(id string) (*model.KnowledgePattern, error) {
   return &model.KnowledgePattern{
-    ID:               "1",
-    ProcessID:        "proc_001",
-    OptimizationType: "speed",
-    InitialState:     model.JSON{"step": 1},
-    OptimizedState:   model.JSON{"step": 2},
-    Improvement:      10.5,
-    Method:           "GradientDescent",
-    Iterations:       5,
-    ConvergenceTime:  12.3,
-    ValidatedBy:      "tester",
-    ValidationDate:   time.Now(),
+      ID:             "1",
+      Type:           "tacit",
+      Domain:         "AI",
+      TacitKnowledge: "Experienced insight",
+      ExplicitForm:   "Documented procedure",
+      ConversionPath: model.JSON{"from": "tacit", "to": "explicit"},
+      Accuracy:       0.95,
+      Coverage:       0.9,
+      Consistency:    0.92,
+      AbstractLevel:  "Medium",
+      CreatedAt:      time.Now(),
+      UpdatedAt:      time.Now(),
   }, nil
 }
 
 func (m *MockKnowledgePatternsRepository) FindAll() ([]model.KnowledgePattern, error) {
   return []model.KnowledgePattern{
     {
-      ID:               "1",
-      ProcessID:        "proc_001",
-      OptimizationType: "speed",
-      InitialState:     model.JSON{"step": 1},
-      OptimizedState:   model.JSON{"step": 2},
-      Improvement:      10.5,
-      Method:           "GradientDescent",
-      Iterations:       5,
-      ConvergenceTime:  12.3,
-      ValidatedBy:      "tester",
-      ValidationDate:   time.Now(),
+			ID:             "1",
+			Type:           "tacit",
+			Domain:         "AI",
+			TacitKnowledge: "Experienced insight",
+			ExplicitForm:   "Documented procedure",
+			ConversionPath: model.JSON{"from": "tacit", "to": "explicit"},
+			Accuracy:       0.95,
+			Coverage:       0.9,
+			Consistency:    0.92,
+			AbstractLevel:  "Medium",
+			CreatedAt:      time.Now(),
+			UpdatedAt:      time.Now(),
     },
   }, nil
 }
@@ -66,8 +68,8 @@ func (m *MockKnowledgePatternsRepository) Delete(id string) error {
 func setupRouter() *gin.Engine {
     r := gin.Default()
     mockRepo := &MockKnowledgePatternsRepository{}
-    mockService := &service.KnowledgePatternsService{Repo: mockRepo}
-    ctl := &KnowledgePatternsController{Service: mockService}
+    mockService := &service.KnowledgePatternService{Repo: mockRepo}
+    ctl := &KnowledgePatternController{Service: mockService}
 
     r.POST("/api/knowledge_patterns", ctl.AddKnowledgePattern)
     r.PUT("/api/knowledge_patterns/:id", ctl.EditKnowledgePattern)
@@ -80,16 +82,15 @@ func TestAddKnowledgePattern(t *testing.T) {
     r := setupRouter()
 
     body := `{
-        "process_id": "proc_001",
-        "optimization_type": "speed",
-        "initial_state": {"step":1},
-        "optimized_state": {"step":2},
-        "improvement": 10.5,
-        "method": "GradientDescent",
-        "iterations": 5,
-        "convergence_time": 12.3,
-        "validated_by": "tester",
-        "validation_date": "2025-09-13T12:00:00Z"
+      "type": "tacit",
+      "domain": "AI",
+      "tacit_knowledge": "Experienced insight",
+      "explicit_form": "Documented procedure",
+      "conversion_path": {"from":"tacit","to":"explicit"},
+      "accuracy": 0.95,
+      "coverage": 0.9,
+      "consistency": 0.92,
+      "abstract_level": "Medium"
     }`
 
     req, _ := http.NewRequest(http.MethodPost, "/api/knowledge_patterns", bytes.NewBuffer([]byte(body)))
@@ -106,8 +107,8 @@ func TestUpdateKnowledgePattern(t *testing.T) {
     r := setupRouter()
 
     body := `{
-        "optimization_type": "accuracy",
-        "improvement": 15.0
+      "accuracy": 0.97,
+      "coverage": 0.92
     }`
 
     req, _ := http.NewRequest(http.MethodPut, "/api/knowledge_patterns/1", bytes.NewBuffer([]byte(body)))

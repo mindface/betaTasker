@@ -6,7 +6,7 @@ import (
 	// "fmt"
 	// "strconv"
 
-	_ "github.com/go-sql-driver/mysql"
+	// _ "github.com/go-sql-driver/mysql"
 )
 
 //  create table book(id int not null primary key auto_increment, title text, name varchar(299), text text,disc text,imgPath varchar(12999), status varchar(299));

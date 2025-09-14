@@ -3,7 +3,6 @@ package server
 import (
 	"github.com/godotask/controller/book"
 	"github.com/godotask/controller/memory"
-	"github.com/godotask/controller/top"
 	"github.com/godotask/controller/user"
 	"github.com/godotask/controller/task"
 	"github.com/godotask/controller/assessment"
@@ -101,9 +100,6 @@ func GetRouter() *gin.Engine {
 	r.POST("/api/register", user.Register)
 	r.POST("/api/logout", user.Logout)
 	
-	// 一時的に認証を無効化（デバッグ用）
-	r.GET("/", top.IndexDisplayAction)
-		
 	// Book API (CRUD)
 	r.GET("/api/book", bookController.ListBooks)
 	r.POST("/api/file", book.HundleUplond)

@@ -12,7 +12,7 @@ func (ctl *HeuristicsController) DetectPatterns(c *gin.Context) {
 	userID := c.Query("user_id")
 	dataType := c.DefaultQuery("type", "all")
 	period := c.DefaultQuery("period", "7d")
-	
+
 	patterns, err := ctl.Service.DetectPatterns(userID, dataType, period)
 	if err != nil {
 		appErr := errors.NewAppError(

@@ -19,5 +19,5 @@ func (ctl *KnowledgePatternController) EditKnowledgePattern(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to edit process optimization"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Process optimization edited", "process_optimization": KnowledgePattern})
+	c.JSON(http.StatusOK, gin.H{"message": "Knowledge pattern edited", "knowledge_pattern": KnowledgePattern})
 }
