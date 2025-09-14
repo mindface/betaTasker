@@ -11,6 +11,7 @@ import (
 	"github.com/godotask/controller/process_optimization"
 	"github.com/godotask/controller/qualitative_label"
 	"github.com/godotask/controller/knowledge_pattern"
+	"github.com/godotask/controller/language_optimization"
 	"github.com/godotask/repository"
 	"github.com/godotask/service"
 	"github.com/godotask/model"
@@ -50,7 +51,6 @@ func GetRouter() *gin.Engine {
 	r.Use(static.Serve("/usr/local/go/godotask/static", static.LocalFile("./images", true)))
 	r.LoadHTMLGlob("view/*.html")
 
-
   bookRepo := &repository.BookRepositoryImpl{DB: model.DB}
 	bookService := &service.BookService{Repo: bookRepo}
 	bookController := book.BookController{Service: bookService}
@@ -86,6 +86,10 @@ func GetRouter() *gin.Engine {
 	knowledgePatternRepo := &repository.KnowledgePatternRepositoryImpl{DB: model.DB}
 	knowledgePatternService := &service.KnowledgePatternService{Repo: knowledgePatternRepo}
 	knowledgePatternController := knowledge_pattern.KnowledgePatternController{Service: knowledgePatternService}
+
+	LanguageOptimizationRepo := &repository.LanguageOptimizationRepositoryImpl{DB: model.DB}
+	LanguageOptimizationService := &service.LanguageOptimizationService{Repo: LanguageOptimizationRepo}
+	LanguageOptimizationController := language_optimization.LanguageOptimizationController{Service: LanguageOptimizationService}
 
 	// 認証不要のエンドポイント
 	r.POST("/api/login", user.Login)
@@ -159,6 +163,14 @@ func GetRouter() *gin.Engine {
 	r.GET("/api/knowledge_pattern/:id", knowledgePatternController.GetKnowledgePattern)
 	r.PUT("/api/knowledge_pattern/:id", knowledgePatternController.EditKnowledgePattern)
 	r.DELETE("/api/knowledge_pattern/:id", knowledgePatternController.DeleteKnowledgePattern)
+
+	// Language Optimization API (CRUD)
+	r.POST("/api/language_optimization", LanguageOptimizationController.AddLanguageOptimization)
+	r.GET("/api/language_optimization", LanguageOptimizationController.ListLanguageOptimizations)
+	r.GET("/api/language_optimization/:id", LanguageOptimizationController.GetLanguageOptimization)
+	r.PUT("/api/language_optimization/:id", LanguageOptimizationController.EditLanguageOptimization)
+	r.DELETE("/api/language_optimization/:id", LanguageOptimizationController.DeleteLanguageOptimization)
+
 
 
 	// 404ハンドラー（一時的にコメントアウト）
