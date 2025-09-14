@@ -12,6 +12,7 @@ import (
 	"github.com/godotask/controller/qualitative_label"
 	"github.com/godotask/controller/knowledge_pattern"
 	"github.com/godotask/controller/language_optimization"
+	"github.com/godotask/controller/teaching_free_control"
 	"github.com/godotask/repository"
 	"github.com/godotask/service"
 	"github.com/godotask/model"
@@ -90,6 +91,10 @@ func GetRouter() *gin.Engine {
 	LanguageOptimizationRepo := &repository.LanguageOptimizationRepositoryImpl{DB: model.DB}
 	LanguageOptimizationService := &service.LanguageOptimizationService{Repo: LanguageOptimizationRepo}
 	LanguageOptimizationController := language_optimization.LanguageOptimizationController{Service: LanguageOptimizationService}
+
+	TeachingFreeControlRepo := &repository.TeachingFreeControlRepositoryImpl{DB: model.DB}
+	TeachingFreeControlService := &service.TeachingFreeControlService{Repo: TeachingFreeControlRepo}
+	TeachingFreeControlController := teaching_free_control.TeachingFreeControlController{Service: TeachingFreeControlService}
 
 	// 認証不要のエンドポイント
 	r.POST("/api/login", user.Login)
@@ -171,7 +176,12 @@ func GetRouter() *gin.Engine {
 	r.PUT("/api/language_optimization/:id", LanguageOptimizationController.EditLanguageOptimization)
 	r.DELETE("/api/language_optimization/:id", LanguageOptimizationController.DeleteLanguageOptimization)
 
-
+	// Teaching Free Control API (CRUD)
+	r.POST("/api/teaching_free_control", TeachingFreeControlController.AddTeachingFreeControl)
+	r.GET("/api/teaching_free_control", TeachingFreeControlController.ListTeachingFreeControls)
+	r.GET("/api/teaching_free_control/:id", TeachingFreeControlController.GetTeachingFreeControl)
+	r.PUT("/api/teaching_free_control/:id", TeachingFreeControlController.EditTeachingFreeControl)
+	r.DELETE("/api/teaching_free_control/:id", TeachingFreeControlController.DeleteTeachingFreeControl)
 
 	// 404ハンドラー（一時的にコメントアウト）
 	// r.NoRoute(middleware.NotFoundMiddleware())
