@@ -3,11 +3,15 @@ package server
 import (
 	"github.com/godotask/controller/book"
 	"github.com/godotask/controller/memory"
-	"github.com/godotask/controller/top"
 	"github.com/godotask/controller/user"
 	"github.com/godotask/controller/task"
 	"github.com/godotask/controller/assessment"
 	"github.com/godotask/controller/heuristics"
+	"github.com/godotask/controller/process_optimization"
+	"github.com/godotask/controller/qualitative_label"
+	"github.com/godotask/controller/knowledge_pattern"
+	"github.com/godotask/controller/language_optimization"
+	"github.com/godotask/controller/teaching_free_control"
 	"github.com/godotask/repository"
 	"github.com/godotask/service"
 	"github.com/godotask/model"
@@ -29,7 +33,7 @@ func CORSMiddlewareSimple() gin.HandlerFunc {
 			c.AbortWithStatus(204)
 			return
 		}
-		
+
 		c.Next()
 	}
 }
@@ -46,7 +50,6 @@ func GetRouter() *gin.Engine {
 	
 	r.Use(static.Serve("/usr/local/go/godotask/static", static.LocalFile("./images", true)))
 	r.LoadHTMLGlob("view/*.html")
-
 
   bookRepo := &repository.BookRepositoryImpl{DB: model.DB}
 	bookService := &service.BookService{Repo: bookRepo}
@@ -72,15 +75,31 @@ func GetRouter() *gin.Engine {
 	heuristicsService := &service.HeuristicsService{Repo: heuristicsRepo}
 	heuristicsController := heuristics.HeuristicsController{Service: heuristicsService}
 
+	processOptimizationRepo := &repository.ProcessOptimizationRepositoryImpl{DB: model.DB}
+	processOptimizationService := &service.ProcessOptimizationService{Repo: processOptimizationRepo}
+	processOptimizationController := process_optimization.ProcessOptimizationController{Service: processOptimizationService}
+
+	qualitativeLabelRepo := &repository.QualitativeLabelRepositoryImpl{DB: model.DB}
+	qualitativeLabelService := &service.QualitativeLabelService{Repo: qualitativeLabelRepo}
+	qualitativeLabelController := qualitative_label.QualitativeLabelController{Service: qualitativeLabelService}
+
+	knowledgePatternRepo := &repository.KnowledgePatternRepositoryImpl{DB: model.DB}
+	knowledgePatternService := &service.KnowledgePatternService{Repo: knowledgePatternRepo}
+	knowledgePatternController := knowledge_pattern.KnowledgePatternController{Service: knowledgePatternService}
+
+	LanguageOptimizationRepo := &repository.LanguageOptimizationRepositoryImpl{DB: model.DB}
+	LanguageOptimizationService := &service.LanguageOptimizationService{Repo: LanguageOptimizationRepo}
+	LanguageOptimizationController := language_optimization.LanguageOptimizationController{Service: LanguageOptimizationService}
+
+	TeachingFreeControlRepo := &repository.TeachingFreeControlRepositoryImpl{DB: model.DB}
+	TeachingFreeControlService := &service.TeachingFreeControlService{Repo: TeachingFreeControlRepo}
+	TeachingFreeControlController := teaching_free_control.TeachingFreeControlController{Service: TeachingFreeControlService}
+
 	// 認証不要のエンドポイント
 	r.POST("/api/login", user.Login)
 	r.POST("/api/register", user.Register)
 	r.POST("/api/logout", user.Logout)
 	
-	// 一時的に認証を無効化（デバッグ用）
-	
-	r.GET("/", top.IndexDisplayAction)
-		
 	// Book API (CRUD)
 	r.GET("/api/book", bookController.ListBooks)
 	r.POST("/api/file", book.HundleUplond)
@@ -124,6 +143,41 @@ func GetRouter() *gin.Engine {
 	r.GET("/api/heuristics/insights/:id", heuristicsController.GetInsight)
 	r.GET("/api/heuristics/patterns", heuristicsController.DetectPatterns)
 	r.POST("/api/heuristics/patterns/train", heuristicsController.TrainModel)
+
+	// Process Optimization API (CRUD)
+	r.POST("/api/process_optimization", processOptimizationController.AddProcessOptimization)
+	r.GET("/api/process_optimization", processOptimizationController.ListProcessOptimizations)
+	r.GET("/api/process_optimization/:id", processOptimizationController.GetProcessOptimization)
+	r.PUT("/api/process_optimization/:id", processOptimizationController.EditProcessOptimization)
+	r.DELETE("/api/process_optimization/:id", processOptimizationController.DeleteProcessOptimization)
+
+	// Qualitative Label API (CRUD)
+	r.POST("/api/qualitative_label", qualitativeLabelController.AddQualitativeLabel)
+	r.GET("/api/qualitative_label", qualitativeLabelController.ListQualitativeLabels)
+	r.GET("/api/qualitative_label/:id", qualitativeLabelController.GetQualitativeLabel)
+	r.PUT("/api/qualitative_label/:id", qualitativeLabelController.EditQualitativeLabel)
+	r.DELETE("/api/qualitative_label/:id", qualitativeLabelController.DeleteQualitativeLabel)
+
+	// Knowledge Pattern API (CRUD)
+	r.POST("/api/knowledge_pattern", knowledgePatternController.AddKnowledgePattern)
+	r.GET("/api/knowledge_pattern", knowledgePatternController.ListKnowledgePatterns)
+	r.GET("/api/knowledge_pattern/:id", knowledgePatternController.GetKnowledgePattern)
+	r.PUT("/api/knowledge_pattern/:id", knowledgePatternController.EditKnowledgePattern)
+	r.DELETE("/api/knowledge_pattern/:id", knowledgePatternController.DeleteKnowledgePattern)
+
+	// Language Optimization API (CRUD)
+	r.POST("/api/language_optimization", LanguageOptimizationController.AddLanguageOptimization)
+	r.GET("/api/language_optimization", LanguageOptimizationController.ListLanguageOptimizations)
+	r.GET("/api/language_optimization/:id", LanguageOptimizationController.GetLanguageOptimization)
+	r.PUT("/api/language_optimization/:id", LanguageOptimizationController.EditLanguageOptimization)
+	r.DELETE("/api/language_optimization/:id", LanguageOptimizationController.DeleteLanguageOptimization)
+
+	// Teaching Free Control API (CRUD)
+	r.POST("/api/teaching_free_control", TeachingFreeControlController.AddTeachingFreeControl)
+	r.GET("/api/teaching_free_control", TeachingFreeControlController.ListTeachingFreeControls)
+	r.GET("/api/teaching_free_control/:id", TeachingFreeControlController.GetTeachingFreeControl)
+	r.PUT("/api/teaching_free_control/:id", TeachingFreeControlController.EditTeachingFreeControl)
+	r.DELETE("/api/teaching_free_control/:id", TeachingFreeControlController.DeleteTeachingFreeControl)
 
 	// 404ハンドラー（一時的にコメントアウト）
 	// r.NoRoute(middleware.NotFoundMiddleware())

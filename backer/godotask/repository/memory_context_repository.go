@@ -11,7 +11,7 @@ type MemoryContextRepositoryImpl struct {
 }
 
 // func (r *MemoryContextRepositoryImpl) FindByCode(code string, contexts *[]model.MemoryContext) error {
-// 	return r.DB.Where("work_target LIKE ?", "%"+code+"%").Find(contexts).Error
+// 	 return r.DB.Where("work_target LIKE ?", "%"+code+"%").Find(contexts).Error
 // }
 
 func (r *MemoryContextRepositoryImpl) FindByCode(code string, contexts *[]model.MemoryContext) error {

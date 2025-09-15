@@ -17,4 +17,8 @@ type User struct {
 	Process           string    `json:"process"`
 	EvaluationAxis    string    `json:"evaluation_axis"`
 	InformationAmount string    `json:"information_amount"`
+
+	Tasks               []Task               `json:"tasks" gorm:"foreignKey:UserID"`
+	QuantificationLabels []QuantificationLabel `json:"labels" gorm:"foreignKey:UserID"`
+	MultimodalData      []MultimodalData     `json:"multimodal_data" gorm:"foreignKey:UserID"`
 }

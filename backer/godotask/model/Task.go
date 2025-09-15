@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type Task struct {
 	ID          int        `gorm:"primaryKey" json:"id"`
@@ -13,6 +15,11 @@ type Task struct {
 	Priority    int        `json:"priority"`
 	CreatedAt   time.Time  `json:"created_at"`
 	UpdatedAt   time.Time  `json:"updated_at"`
+
+	User       User        `json:"user" gorm:"foreignKey:UserID"`
+	QualitativeLabels []QualitativeLabel `json:"qualitative_labels" gorm:"foreignKey:TaskID"`
+	QuantificationLabels []QuantificationLabel `json:"quantification_labels" gorm:"foreignKey:TaskID"`
+	MultimodalData   []MultimodalData   `json:"multimodal_data" gorm:"foreignKey:TaskID"`
 }
 
 func (Task) TableName() string {
