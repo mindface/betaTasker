@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+import { URLs } from '@/constants/url';
 
 export type Params = { params: Promise<{ id: string }>  };
 export async function GET(
@@ -19,7 +20,7 @@ export async function GET(
       return NextResponse.json({ error: 'IDが指定されていません' }, { status: 400 });
     }
 
-    const backendRes = await fetch(`http://localhost:8080/api/memory/${id}`, {
+    const backendRes = await fetch(`${URLs.memory}/${id}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

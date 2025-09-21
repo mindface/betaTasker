@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+import { URLs } from '@/constants/url';
 
 export async function GET(
   request: NextRequest,
@@ -20,7 +19,7 @@ export async function GET(
     
     // バックエンドAPIにリクエスト
     const response = await fetch(
-      `${API_BASE_URL}/api/heuristics/insights/${id}`,
+      `${URLs.heuristicsInsights}/${id}`,
       {
         method: 'GET',
         headers: {

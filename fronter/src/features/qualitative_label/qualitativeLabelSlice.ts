@@ -22,7 +22,7 @@ export const loadQualitativeLabels = createAsyncThunk(
       if (response.error) {
         return rejectWithValue(response.error);
       }
-      return response.languageOptimization || response;
+      return response.qualitativeLabels || response;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -74,7 +74,7 @@ export const removeQualitativeLabel = createAsyncThunk(
   }
 )
 
-const languageOptimizationSlice = createSlice({
+const qualitativeLabelSlice = createSlice({
   name: 'qualitativeLabel',
   initialState,
   reducers: {},
@@ -105,4 +105,4 @@ const languageOptimizationSlice = createSlice({
   },
 });
 
-export default languageOptimizationSlice.reducer;
+export default qualitativeLabelSlice.reducer;

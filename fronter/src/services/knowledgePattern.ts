@@ -2,7 +2,7 @@ import { AddKnowledgePattern, KnowledgePattern } from "../model/knowledgePattern
 
 export const fetchKnowledgePatternsService = async () => {
   try {
-    const res = await fetch('/api/knowledgePatterns', {
+    const res = await fetch('/api/knowledgePattern', {
       method: 'GET',
       credentials: 'include',
     });
@@ -16,7 +16,7 @@ export const fetchKnowledgePatternsService = async () => {
 
 export const addKnowledgePatternService = async (knowledgePattern: AddKnowledgePattern) => {
   try {
-    const res = await fetch('/api/knowledgePatterns', {
+    const res = await fetch('/api/knowledgePattern', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(knowledgePattern),
@@ -32,7 +32,7 @@ export const addKnowledgePatternService = async (knowledgePattern: AddKnowledgeP
 
 export const updateKnowledgePatternService = async (knowledgePattern: KnowledgePattern) => {
   try {
-    const res = await fetch('/api/knowledgePatterns', {
+    const res = await fetch('/api/knowledgePattern', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(knowledgePattern),
@@ -48,7 +48,7 @@ export const updateKnowledgePatternService = async (knowledgePattern: KnowledgeP
 
 export const deleteKnowledgePatternService = async (id: string) => {
   try {
-    const res = await fetch(`/api/knowledgePatterns`, {
+    const res = await fetch(`/api/knowledgePattern`, {
       method: 'DELETE',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

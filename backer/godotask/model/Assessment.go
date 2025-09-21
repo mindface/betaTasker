@@ -15,5 +15,5 @@ type Assessment struct {
 }
 
 func (Assessment) TableName() string {
-    return "assessments"
+  return "assessments"
 }

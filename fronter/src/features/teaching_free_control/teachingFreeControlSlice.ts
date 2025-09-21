@@ -74,8 +74,8 @@ export const removeTeachingFreeControl = createAsyncThunk(
   }
 )
 
-const languageOptimizationSlice = createSlice({
-  name: 'processOptimization',
+const TeachingFreeControlSlice = createSlice({
+  name: 'teachingFreeControl',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -105,4 +105,4 @@ const languageOptimizationSlice = createSlice({
   },
 });
 
-export default languageOptimizationSlice.reducer;
+export default TeachingFreeControlSlice.reducer;

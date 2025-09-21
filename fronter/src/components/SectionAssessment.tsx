@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store'
 import { loadAssessments, createAssessment, updateAssessment, removeAssessment } from '../features/assessment/assessmentSlice'
-import { loadLearningData } from '../features/learningData/learningDataSlice'
+import { loadKnowledgePatterns, createKnowledgePattern  } from '../features/knowledge_pattern/knowledgePatternSlice'
+import { loadLearningData } from '../features/learning_data/learningDataSlice'
 import ItemAssessment from "./parts/ItemAssessment"
 import AssessmentModal from "./parts/AssessmentModal"
 import { AddAssessment, Assessment } from "../model/assessment"
@@ -14,6 +15,7 @@ export default function SectionAssessment() {
   const dispatch = useDispatch()
   const { tasks, taskLoading, taskError } = useSelector((state: RootState) => state.task)
   const { assessments, assessmentLoading, assessmentError } = useSelector((state: RootState) => state.assessment)
+  const { knowledgePatterns, knowledgePatternsError, knowledgePatternsLoading } = useSelector((state: RootState) => state.knowledgePattern)
   const { memories, memoryLoading, memoryError } = useSelector((state: RootState) => state.memory)
   const { learningData, learningLoading, learningError } = useSelector((state: RootState) => state.learning);
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
@@ -24,6 +26,7 @@ export default function SectionAssessment() {
   useEffect(() => {
     dispatch(loadAssessments())
     dispatch(loadLearningData())
+    dispatch(loadKnowledgePatterns())
   }, [dispatch, isAuthenticated])
 
   const handleAddAssessment = () => {
@@ -60,6 +63,13 @@ export default function SectionAssessment() {
       console.log(learningData.learningStructure)
     }
   },[learningData])
+
+  useEffect(() => {
+    if(knowledgePatterns) {
+      console.log("knowledgePatterns")
+      console.log(knowledgePatterns)
+    }
+  },[knowledgePatterns])
 
   return (
     <div className="section__inner section--assessment">

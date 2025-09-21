@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+import { URLs } from '@/constants/url';
 
 export async function GET(
   request: NextRequest,
@@ -17,10 +16,10 @@ export async function GET(
     if (!token) {
       return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
     }
-    
+  
     // バックエンドAPIにリクエスト
     const response = await fetch(
-      `${API_BASE_URL}/api/heuristics/analyze/${id}`,
+      `${URLs.heuristicsAnalyze}/${id}`,
       {
         method: 'GET',
         headers: {

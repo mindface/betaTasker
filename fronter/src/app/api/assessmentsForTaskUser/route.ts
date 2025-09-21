@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { URLs } from '@/constants/url';
 
 export async function POST(request: Request) {
   try {
@@ -12,7 +13,7 @@ export async function POST(request: Request) {
 
     const body = await request.json()
     console.log("POST /api/assessmentsForTaskUser body:", body)
-    const backendRes = await fetch('http://localhost:8080/api/assessmentsForTaskUser', {
+    const backendRes = await fetch(URLs.assessmentsForTaskUser, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

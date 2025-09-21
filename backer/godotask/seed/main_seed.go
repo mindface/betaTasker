@@ -1,4 +1,4 @@
-package seed
+package main
 
 import (
 	"fmt"
@@ -6,8 +6,7 @@ import (
 	"github.com/godotask/model"
 )
 
-// RunAllSeeds - 全てのシードデータを実行
-func RunAllSeeds() error {
+func main() error {
 	db := model.DB
 
 	log.Println("Starting database seeding...")
