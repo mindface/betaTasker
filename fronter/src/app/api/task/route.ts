@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { URLs } from '@/constants/url';
 
 export async function GET() {
   try {
@@ -11,7 +12,7 @@ export async function GET() {
     }
     console.log('Task API トークン:', token);
 
-    const backendRes = await fetch('http://localhost:8080/api/task', {
+    const backendRes = await fetch(URLs.task, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const backendRes = await fetch('http://localhost:8080/api/task', {
+    const backendRes = await fetch(URLs.task, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -78,7 +79,7 @@ export async function PUT(request: Request) {
 
     const body = await request.json()
 
-    const backendRes = await fetch(`http://localhost:8080/api/task/${body.id}`, {
+    const backendRes = await fetch(`${URLs.task}/${body.id}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -120,7 +121,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'IDが指定されていません' }, { status: 400 });
     }
 
-    const backendRes = await fetch(`http://localhost:8080/api/task/${id}`, {
+    const backendRes = await fetch(`${URLs.task}/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,

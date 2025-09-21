@@ -39,6 +39,7 @@ func TestRegisterUser(t *testing.T) {
 		"email": "testuser@example.com",
 		"password": "password123"
 	}`
+
 	req, err := http.NewRequest(http.MethodPost, "/api/register", bytes.NewBuffer([]byte(body)))
 	if err != nil {
 		t.Fatalf("Failed to create request: %v", err)

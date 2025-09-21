@@ -95,7 +95,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	user := model.User{
+	user := model.User {
 		Username:     input.Username,
 		Email:        input.Email,
 		PasswordHash: string(hashedPassword),
@@ -181,10 +181,22 @@ func Login(c *gin.Context) {
 
 	fmt.Printf("Generated token2: %s\n", tokenString)
 	fmt.Printf("FetchGenerateded user: %+v\n", user)
-	c.JSON(http.StatusOK, gin.H{
-		"token": tokenString,
-		"user": user,
-	})
+	response := LoginResponse{
+		Token: tokenString,
+		User: struct {
+			ID       uint   `json:"id"`
+			Username string `json:"username"`
+			Email    string `json:"email"`
+			Role     string `json:"role"`
+		}{
+			ID:       user.ID,
+			Username: user.Username,
+			Email:    user.Email,
+			Role:     user.Role,
+		},
+	}
+	
+	c.JSON(http.StatusOK, response)
 }
 
 func Profile(c *gin.Context) {

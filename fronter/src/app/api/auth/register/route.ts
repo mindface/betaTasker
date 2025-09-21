@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
+import { URLs } from '@/constants/url';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const backendRes = await fetch('http://localhost:8080/api/register', {
+    const backendRes = await fetch(URLs.register, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { URLs } from '@/constants/url';
 
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
@@ -10,7 +11,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const res = await fetch('http://localhost:8080/api/login', {
+  const res = await fetch(URLs.login, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+import { URLs } from '@/constants/url';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,7 +16,7 @@ export async function POST(request: NextRequest) {
     
     // バックエンドAPIにリクエスト
     const response = await fetch(
-      `${API_BASE_URL}/api/heuristics/patterns/train`,
+      URLs.heuristicsTrack,
       {
         method: 'POST',
         headers: {

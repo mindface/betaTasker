@@ -1,0 +1,179 @@
+package seed
+
+import (
+	"log"
+	"time"
+
+	"github.com/godotask/model"
+	"gorm.io/gorm"
+)
+
+// SeedTasks - タスクデータのシード
+func SeedTasks(db *gorm.DB) error {
+	log.Println("Starting tasks seeding...")
+
+	tasks := []model.Task{
+		{
+			ID:          1,
+			Title:       "初品加工・基本寸法確認",
+			Description: "NC旋盤を使用した基本的な切削加工と寸法確認作業",
+			Category:    "切削・初品確認",
+			Level:       1,
+			Difficulty:  "初級",
+			Domain:      "製造技術",
+			Skills:      "基本切削技術,寸法測定,品質確認",
+			Tools:       "NC旋盤,ノギス,マイクロメータ",
+			Duration:    120, // 分
+			CreatedAt:   time.Now().Add(-30 * 24 * time.Hour),
+			UpdatedAt:   time.Now().Add(-30 * 24 * time.Hour),
+		},
+		{
+			ID:          2,
+			Title:       "材料硬度変動への対応",
+			Description: "材料の硬度変動に対する切削条件の最適化",
+			Category:    "品質改善・条件最適化",
+			Level:       2,
+			Difficulty:  "中級",
+			Domain:      "製造技術",
+			Skills:      "材料特性理解,条件最適化,工具寿命管理",
+			Tools:       "NC旋盤,硬度計,切削工具",
+			Duration:    180,
+			CreatedAt:   time.Now().Add(-25 * 24 * time.Hour),
+			UpdatedAt:   time.Now().Add(-25 * 24 * time.Hour),
+		},
+		{
+			ID:          3,
+			Title:       "真円度0.005mm以下の高精度加工",
+			Description: "超高精度が要求される部品の加工技術",
+			Category:    "高精度加工・品質保証",
+			Level:       3,
+			Difficulty:  "上級",
+			Domain:      "製造技術",
+			Skills:      "精密加工技術,温度管理,測定技術",
+			Tools:       "5軸マシニングセンタ,三次元測定機,CBN工具",
+			Duration:    240,
+			CreatedAt:   time.Now().Add(-20 * 24 * time.Hour),
+			UpdatedAt:   time.Now().Add(-20 * 24 * time.Hour),
+		},
+		{
+			ID:          4,
+			Title:       "インコネル718の高効率加工",
+			Description: "難削材であるインコネル718の高効率加工技術",
+			Category:    "難削材加工・特殊技術",
+			Level:       4,
+			Difficulty:  "エキスパート",
+			Domain:      "製造技術",
+			Skills:      "難削材加工,特殊工具選定,加工戦略立案",
+			Tools:       "5軸マシニングセンタ,セラミック工具,高圧クーラント",
+			Duration:    360,
+			CreatedAt:   time.Now().Add(-15 * 24 * time.Hour),
+			UpdatedAt:   time.Now().Add(-15 * 24 * time.Hour),
+		},
+		{
+			ID:          5,
+			Title:       "若手技術者への体系的指導",
+			Description: "技術知識とスキルの体系的な伝承",
+			Category:    "技術指導・知識伝承",
+			Level:       5,
+			Difficulty:  "マスター",
+			Domain:      "人材育成",
+			Skills:      "指導技術,知識体系化,コミュニケーション",
+			Tools:       "教育用教材,シミュレータ,VR訓練システム",
+			Duration:    480,
+			CreatedAt:   time.Now().Add(-10 * 24 * time.Hour),
+			UpdatedAt:   time.Now().Add(-10 * 24 * time.Hour),
+		},
+		{
+			ID:          6,
+			Title:       "ロボット協働組立作業",
+			Description: "人間とロボットが協働する組立作業の最適化",
+			Category:    "ロボット協働・自動化",
+			Level:       3,
+			Difficulty:  "上級",
+			Domain:      "ロボティクス",
+			Skills:      "ロボット操作,安全管理,協働作業設計",
+			Tools:       "協働ロボット,力覚センサ,視覚システム",
+			Duration:    200,
+			CreatedAt:   time.Now().Add(-12 * 24 * time.Hour),
+			UpdatedAt:   time.Now().Add(-12 * 24 * time.Hour),
+		},
+		{
+			ID:          7,
+			Title:       "AI駆動品質検査システム",
+			Description: "AIを活用した自動品質検査システムの構築",
+			Category:    "AI・機械学習応用",
+			Level:       4,
+			Difficulty:  "エキスパート",
+			Domain:      "品質管理",
+			Skills:      "機械学習,画像処理,データ分析",
+			Tools:       "産業用カメラ,GPU計算機,検査ソフトウェア",
+			Duration:    300,
+			CreatedAt:   time.Now().Add(-8 * 24 * time.Hour),
+			UpdatedAt:   time.Now().Add(-8 * 24 * time.Hour),
+		},
+		{
+			ID:          8,
+			Title:       "予知保全システム構築",
+			Description: "IoTセンサーを活用した設備の予知保全システム",
+			Category:    "IoT・予知保全",
+			Level:       4,
+			Difficulty:  "エキスパート",
+			Domain:      "保全・メンテナンス",
+			Skills:      "IoT技術,データ解析,設備診断",
+			Tools:       "振動センサ,温度センサ,データ分析ソフト",
+			Duration:    320,
+			CreatedAt:   time.Now().Add(-6 * 24 * time.Hour),
+			UpdatedAt:   time.Now().Add(-6 * 24 * time.Hour),
+		},
+		{
+			ID:          9,
+			Title:       "デジタルツイン活用最適化",
+			Description: "デジタルツイン技術を活用した製造プロセス最適化",
+			Category:    "デジタル化・最適化",
+			Level:       5,
+			Difficulty:  "マスター",
+			Domain:      "デジタル技術",
+			Skills:      "シミュレーション技術,システム設計,最適化理論",
+			Tools:       "シミュレーションソフト,CAD/CAM,最適化ツール",
+			Duration:    400,
+			CreatedAt:   time.Now().Add(-4 * 24 * time.Hour),
+			UpdatedAt:   time.Now().Add(-4 * 24 * time.Hour),
+		},
+		{
+			ID:          10,
+			Title:       "サスティナブル製造システム",
+			Description: "環境負荷を最小化する持続可能な製造システムの設計",
+			Category:    "サスティナビリティ・環境",
+			Level:       5,
+			Difficulty:  "マスター",
+			Domain:      "環境技術",
+			Skills:      "環境影響評価,エネルギー最適化,LCA分析",
+			Tools:       "環境測定器,エネルギー解析ツール,LCAソフト",
+			Duration:    360,
+			CreatedAt:   time.Now().Add(-2 * 24 * time.Hour),
+			UpdatedAt:   time.Now().Add(-2 * 24 * time.Hour),
+		},
+	}
+
+	// Insert data with duplicate handling
+	for _, task := range tasks {
+		var existingTask model.Task
+		if err := db.Where("id = ?", task.ID).First(&existingTask).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				// Task doesn't exist, create it
+				if err := db.Create(&task).Error; err != nil {
+					log.Printf("Error inserting task %d: %v", task.ID, err)
+					return err
+				}
+			} else {
+				log.Printf("Error checking task %d: %v", task.ID, err)
+				return err
+			}
+		} else {
+			log.Printf("Task %d already exists, skipping", task.ID)
+		}
+	}
+
+	log.Printf("✓ Successfully seeded %d tasks", len(tasks))
+	return nil
+}

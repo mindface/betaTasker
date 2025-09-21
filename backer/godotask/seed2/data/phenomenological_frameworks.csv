@@ -1,0 +1,21 @@
+id,name,description,goal,scope,process_type,feedback_type,limit_min,limit_max,goal_function,abstract_level,domain
+robot_precision_framework,ロボット精度最適化フレームワーク,位置決め精度を目的とした現象学的アプローチ,G: 位置決め精度±0.01mm達成,A: 6軸ロボットアームの動作範囲全体,キャリブレーション→測定→補正→検証の反復プロセス,continuous,0.005,0.02,minimize(abs(measured_position - target_position)),L1,robot_calibration
+force_control_framework,力制御最適化フレームワーク,人の感覚を数値化した力制御,G: 破損なく確実な把持,A: 多様な形状・材質の対象物,力センサフィードバック制御,real_time,10.0,100.0,optimize(grip_force constraints=[no_damage secure_grip]),L2,robot_gripper
+adaptive_learning_framework,適応学習フレームワーク,作業環境変化への自律適応,G: 未知物体への適応時間<10秒,A: 製造ライン上の多様な部品,観察→特徴抽出→戦略選択→実行→評価,iterative,1.0,10.0,minimize(adaptation_time) + maximize(success_rate),L2,robot_learning
+energy_optimization_framework,エネルギー最適化フレームワーク,消費電力の最小化,G: エネルギー効率30%向上,A: 全動作サイクル,動作プロファイル最適化,periodic,50.0,200.0,minimize(energy_consumption) subject to performance_constraints,L1,robot_efficiency
+safety_compliance_framework,安全規格準拠フレームワーク,ISO10218準拠の安全動作,G: 事故ゼロ・規格100%準拠,A: 人間共存環境,リスクアセスメント→対策実装→検証,continuous,0.0,1.0,minimize(risk_index) + maximize(compliance_score),L0,robot_safety
+quality_control_framework,品質管理フレームワーク,製品品質の一貫性確保,G: 不良率0.1%以下,A: 生産ライン全体,統計的プロセス管理(SPC),real_time,0.0,0.001,minimize(defect_rate) + maximize(consistency),L1,manufacturing_quality
+maintenance_prediction_framework,予知保全フレームワーク,故障予測と最適保守,G: 稼働率99%以上,A: ロボットシステム全体,センサデータ→異常検知→予測→保守計画,predictive,0.0,1.0,maximize(uptime) - minimize(maintenance_cost),L2,robot_maintenance
+human_robot_collaboration,人間ロボット協調フレームワーク,安全で効率的な協働作業,G: 作業効率50%向上・事故ゼロ,A: 共同作業空間,意図推定→動作計画→実行→フィードバック,adaptive,0.0,2.0,maximize(efficiency) * safety_factor,L3,robot_collaboration
+vision_guided_framework,ビジョンガイドフレームワーク,視覚情報による高精度制御,G: 認識精度99%・処理時間<100ms,A: カメラ視野内全対象,画像取得→前処理→認識→位置推定→制御,continuous,0.001,0.1,maximize(recognition_accuracy) / processing_time,L1,robot_vision
+trajectory_optimization_framework,軌道最適化フレームワーク,最適動作経路の生成,G: 移動時間最小・滑らか動作,A: 作業空間内の全経路,経路計画→速度プロファイル→実行→評価,iterative,0.1,10.0,minimize(time) + minimize(jerk) + minimize(energy),L1,robot_motion
+material_handling_framework,材料取扱い最適化フレームワーク,多様な材料の適切な取扱い,G: 破損率0%・処理速度最大化,A: 全材料タイプ,材料識別→パラメータ選択→実行→結果評価,adaptive,0.0,1.0,minimize(damage_rate) + maximize(throughput),L2,robot_handling
+cutting_process_framework,切削加工最適化フレームワーク,切削条件の動的最適化,G: 表面粗さRa<1.6・工具寿命延長,A: 全切削工程,条件設定→加工→測定→調整,continuous,0.0,10.0,minimize(surface_roughness) + maximize(tool_life),L1,machining
+assembly_optimization_framework,組立最適化フレームワーク,組立精度と効率の両立,G: 組立精度±0.05mm・タクト30秒,A: 全組立工程,部品認識→位置合わせ→組立→検証,iterative,0.01,0.1,minimize(assembly_error) + minimize(cycle_time),L2,robot_assembly
+welding_quality_framework,溶接品質フレームワーク,溶接品質の安定化,G: 溶接強度規格値以上・外観良好,A: 全溶接箇所,パラメータ設定→溶接→検査→補正,continuous,0.0,5.0,maximize(weld_strength) + minimize(defects),L1,robot_welding
+painting_uniformity_framework,塗装均一性フレームワーク,塗装品質の均一化,G: 膜厚偏差±10%以内,A: 全塗装面,スプレーパターン→塗装→測定→調整,periodic,50.0,150.0,minimize(thickness_variance) + maximize(coverage),L1,robot_painting
+inspection_accuracy_framework,検査精度向上フレームワーク,検査の高精度化,G: 検出率99.9%・誤検出率<0.1%,A: 全検査項目,検査計画→実行→判定→フィードバック,continuous,0.0,1.0,maximize(detection_rate) - minimize(false_positive_rate),L1,robot_inspection
+logistics_optimization_framework,物流最適化フレームワーク,内部物流の効率化,G: 搬送時間30%短縮,A: 工場内全搬送経路,経路計画→搬送→到着確認→最適化,dynamic,0.0,100.0,minimize(transport_time) + minimize(congestion),L2,robot_logistics
+skill_transfer_framework,スキル転移フレームワーク,熟練技能のロボット化,G: 熟練度90%再現,A: 全熟練作業,観察→モデル化→実装→評価,iterative,0.0,1.0,maximize(skill_similarity) + minimize(learning_time),L3,robot_learning
+cost_optimization_framework,コスト最適化フレームワーク,運用コストの最小化,G: 総コスト20%削減,A: システム全体,コスト分析→最適化→実施→評価,periodic,0.0,1000000.0,minimize(total_cost) subject to quality_constraints,L2,robot_economics
+innovation_framework,イノベーションフレームワーク,新技術の体系的導入,G: 革新的ソリューション創出,A: R&D全領域,探索→実験→評価→実装,exploratory,0.0,1.0,maximize(innovation_index) + maximize(feasibility),L3,robot_research
