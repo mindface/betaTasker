@@ -1,13 +1,16 @@
 import { AddKnowledgePattern, KnowledgePattern } from "../model/knowledgePattern";
+import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 export const fetchKnowledgePatternsService = async () => {
   try {
-    const res = await fetch('/api/knowledgePattern', {
+    const data = await fetchApiJsonCore<undefined,KnowledgePattern[]>({
+      endpoint: '/api/knowledgePattern',
       method: 'GET',
-      credentials: 'include',
+      errorMessage: 'error fetchKnowledgePatternsService プロセス最適化一覧取得失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化一覧取得失敗');
+    if ('error' in data) {
+      return data.error;
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };
@@ -16,14 +19,15 @@ export const fetchKnowledgePatternsService = async () => {
 
 export const addKnowledgePatternService = async (knowledgePattern: AddKnowledgePattern) => {
   try {
-    const res = await fetch('/api/knowledgePattern', {
+    const data = await fetchApiJsonCore<AddKnowledgePattern,KnowledgePattern>({
+      endpoint: '/api/knowledgePattern',
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(knowledgePattern),
-      credentials: 'include',
+      body: knowledgePattern,
+      errorMessage: 'error addKnowledgePatternService アセスメント一覧取得失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化追加失敗');
+    if ('error' in data) {
+      return data.error;
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };
@@ -32,15 +36,15 @@ export const addKnowledgePatternService = async (knowledgePattern: AddKnowledgeP
 
 export const updateKnowledgePatternService = async (knowledgePattern: KnowledgePattern) => {
   try {
-    const res = await fetch('/api/knowledgePattern', {
+    const data = await fetchApiJsonCore<KnowledgePattern,KnowledgePattern>({
+      endpoint: '/api/knowledgePattern',
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(knowledgePattern),
-      credentials: 'include',
+      body: knowledgePattern,
+      errorMessage: 'error updateKnowledgePatternService プロセス最適化更新失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化更新失敗');
-    return data;
+    if ('error' in data) {
+      return data.error;
+    }
   } catch (err: any) {
     return { error: err.message };
   }
@@ -48,14 +52,15 @@ export const updateKnowledgePatternService = async (knowledgePattern: KnowledgeP
 
 export const deleteKnowledgePatternService = async (id: string) => {
   try {
-    const res = await fetch(`/api/knowledgePattern`, {
+    const data = await fetchApiJsonCore<{id:string},undefined>({
+      endpoint: '/api/knowledgePattern',
       method: 'DELETE',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
+      body: { id },
+      errorMessage: 'error deleteKnowledgePatternService プロセス最適化削除失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化削除失敗');
+    if ('error' in data) {
+      return data.error;
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };

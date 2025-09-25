@@ -19,10 +19,10 @@ export const loadAssessments = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetchAssessmentsService();
-      if (response.error) {
+      if ('error' in response) {
         return rejectWithValue(response.error);
       }
-      return response.assessments || response;
+      return response.value;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -34,10 +34,13 @@ export const createAssessment = createAsyncThunk(
   async (assessmentData: AddAssessment, { rejectWithValue }) => {
     try {
       const response = await addAssessmentService(assessmentData);
-      if (response.error) {
-        return rejectWithValue(response.error);
+     if ("error" in response) {
+        return rejectWithValue({
+          message: response.error.message,
+          name: response.error.name,
+        });
       }
-      return response;
+      return response.value;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -49,12 +52,13 @@ export const getAssessmentsForTaskUser = createAsyncThunk(
   async (payload: { userId: number,taskId: number }, { rejectWithValue }) => {
     try {
       const response = await getAssessmentsForTaskUserService(payload.userId, payload.taskId);
-      if (response.error) {
-        return rejectWithValue(response.error);
+     if ("error" in response) {
+        return rejectWithValue({
+          message: response.error.message,
+          name: response.error.name,
+        });
       }
-      console.log("payload", response)
-
-      return response.assessments || response;
+      return response;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -66,10 +70,13 @@ export const updateAssessment = createAsyncThunk(
   async (assessmentData: Assessment, { rejectWithValue }) => {
     try {
       const response = await updateAssessmentService(assessmentData);
-      if (response.error) {
-        return rejectWithValue(response.error);
+      if ("error" in response) {
+        return rejectWithValue({
+          message: response.error.message,
+          name: response.error.name,
+        });
       }
-      return response;
+      return response.value;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -81,8 +88,11 @@ export const removeAssessment = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       const response = await deleteAssessmentService(String(id));
-      if (response.error) {
-        return rejectWithValue(response.error);
+      if ("error" in response) {
+        return rejectWithValue({
+          message: response.error.message,
+          name: response.error.name,
+        });
       }
       return { id };
     } catch (error: any) {

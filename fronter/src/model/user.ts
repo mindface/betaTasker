@@ -5,7 +5,7 @@ export interface UserSys {
 }
 
 export interface User extends UserSys {
- id: Number;
+ id: number;
  username: string;
  email: string;
  role: string;
@@ -15,6 +15,13 @@ export interface User extends UserSys {
 export interface UserInfo {
   id: number;
   username: string;
+  email: string;
+  role: string;
+}
+
+export interface LoginUserInfo {
+  username: string;
+  password: string;
   email: string;
   role: string;
 }

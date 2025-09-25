@@ -43,16 +43,16 @@ export class TaskApiStrategy implements ApiStrategy<Task, AddTask> {
 export class MemoryApiStrategy implements ApiStrategy<Memory, AddMemory> {
   async getAll(): Promise<Memory[]> {
     const result = await fetchMemoriesService();
-    if (result.error) {
-      throw new Error(result.error);
+    if ('error' in result) {
+      return result.error;
     }
     return result;
   }
 
   async create(memory: AddMemory): Promise<Memory> {
     const result = await addMemoryService(memory);
-    if (result.error) {
-      throw new Error(result.error);
+    if ('error' in result) {
+      return result.error;
     }
     return result;
   }
@@ -60,7 +60,7 @@ export class MemoryApiStrategy implements ApiStrategy<Memory, AddMemory> {
   async update(memory: Memory): Promise<Memory> {
     const result = await updateMemoryService(memory);
     if (result.error) {
-      throw new Error(result.error);
+      return result.error;
     }
     return result;
   }
@@ -68,7 +68,7 @@ export class MemoryApiStrategy implements ApiStrategy<Memory, AddMemory> {
   async delete(id: number): Promise<{ success: boolean }> {
     const result = await deleteMemoryService(String(id));
     if (result.error) {
-      throw new Error(result.error);
+      return result.error;
     }
     return { success: true };
   }
@@ -77,32 +77,32 @@ export class MemoryApiStrategy implements ApiStrategy<Memory, AddMemory> {
 export class AssessmentApiStrategy implements ApiStrategy<Assessment, AddAssessment> {
   async getAll(): Promise<Assessment[]> {
     const result = await fetchAssessmentsService();
-    if (result.error) {
-      throw new Error(result.error);
+    if ('error' in result) {
+      return result.error;
     }
-    return result;
+    return 'value' in result ? result.value : [];
   }
 
   async create(assessment: AddAssessment): Promise<Assessment> {
     const result = await addAssessmentService(assessment);
-    if (result.error) {
-      throw new Error(result.error);
+    if('error' in result) {
+      return result.error;
     }
-    return result;
+    return result.value;
   }
 
   async update(assessment: Assessment): Promise<Assessment> {
     const result = await updateAssessmentService(assessment);
-    if (result.error) {
-      throw new Error(result.error);
+    if('error' in result) {
+      return result.error;
     }
-    return result;
+    return result.value;
   }
 
   async delete(id: number): Promise<{ success: boolean }> {
     const result = await deleteAssessmentService(String(id));
-    if (result.error) {
-      throw new Error(result.error);
+    if('error' in result) {
+      return result.error;
     }
     return { success: true };
   }

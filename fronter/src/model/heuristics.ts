@@ -5,7 +5,7 @@ export interface HeuristicsAnalysis {
   user_id: number;
   task_id: number;
   analysis_type: string;
-  result: any; // JSONデータ
+  result: any;
   score: number;
   status: string;
   created_at: string;

@@ -1,46 +1,50 @@
-export const loginApi = async (email: string, password: string) => {
-  try {
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    });
+import { ResponseError } from "@/model/fetchTypes";
+import { UserInfo, User, LoginUserInfo } from "../model/user";
+import { fetchApiJsonCore } from "@/utils/fetchApi";
 
-    const data = await res.json();
-    if (!res.ok) throw new Error('ログイン失敗');
-    return data;
+export const loginApi = async (email: string, password: string): Promise<ResponseError | { token: string; user: User }>  => {
+  try {
+    const data = await fetchApiJsonCore<{email: string, password: string},{ token: string, user: User }>({
+      endpoint: '/api/auth/login',
+      method: 'POST',
+      body: ({ email, password }),
+      errorMessage: 'error loginApi ログイン失敗',
+    });
+    if ('error' in data) {
+      return data;
+    }
+    return data.value;
   } catch (err: any) {
-    return { error: err.message };
+    return err;
   }
 };
 
-export const logoutApi = async () => {
+export const logoutApi = async (): Promise<Error | undefined> => {
   try {
-    const res = await fetch('/api/auth/logout', {
+    const data = await fetchApiJsonCore<undefined,undefined>({
+      endpoint: '/api/auth/logout',
       method: 'POST',
-      credentials: 'include',
+      errorMessage: 'error logoutApi ログアウトに失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('ログアウト失敗');
-    return data;
+    return undefined;
   } catch (err: any) {
-    return { error: err.message };
+    return err;
   }
 };
 
-export const regApi = async (user: { username: string; email: string; password: string, role: string }) => {
+export const regApi = async (user: LoginUserInfo): Promise<ResponseError | { token: string, user: User }> => {
   try {
-    const res = await fetch('/api/auth/register', {
+    const data = await fetchApiJsonCore<LoginUserInfo, { token: string, user: User }>({
+      endpoint: '/api/auth/register',
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(user),
-      credentials: 'include',
+      body: user,
+      errorMessage: 'error regApi 登録に失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || '登録失敗');
-    return data;
-  } catch (err: any) {
-    return { error: err.message };
+    if ('error' in data) {
+      return data;
+    }
+    return data.value;
+  } catch (err: unknown ) {
+    return err as ResponseError;
   }
 };

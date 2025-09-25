@@ -1,13 +1,16 @@
+import { fetchApiJsonCore } from "@/utils/fetchApi";
 import { AddLanguageOptimization, LanguageOptimization } from "../model/languageOptimization";
 
 export const fetchLanguageOptimizationsService = async () => {
   try {
-    const res = await fetch('/api/languageOptimization', {
+    const data = await fetchApiJsonCore<undefined,LanguageOptimization>({
+      endpoint: '/api/languageOptimization',
       method: 'GET',
-      credentials: 'include',
+      errorMessage: 'error fetchLanguageOptimizationsService 言語最適化データ一覧取得失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化一覧取得失敗');
+    if ('error' in data) {
+      return data;
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };
@@ -16,14 +19,15 @@ export const fetchLanguageOptimizationsService = async () => {
 
 export const addLanguageOptimizationService = async (languageOptimization: AddLanguageOptimization) => {
   try {
-    const res = await fetch('/api/languageOptimization', {
+    const data = await fetchApiJsonCore<AddLanguageOptimization,LanguageOptimization>({
+      endpoint: '/api/languageOptimization',
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(languageOptimization),
-      credentials: 'include',
+      body: languageOptimization,
+      errorMessage: 'error addLanguageOptimizationService 言語最適化データ追加失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化追加失敗');
+    if ('error' in data) {
+      return data;
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };
@@ -32,14 +36,15 @@ export const addLanguageOptimizationService = async (languageOptimization: AddLa
 
 export const updateLanguageOptimizationService = async (languageOptimization: LanguageOptimization) => {
   try {
-    const res = await fetch('/api/languageOptimization', {
+    const data = await fetchApiJsonCore<LanguageOptimization,LanguageOptimization>({
+      endpoint: '/api/languageOptimization',
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(languageOptimization),
-      credentials: 'include',
+      body: languageOptimization,
+      errorMessage: 'error updateLanguageOptimizationService 言語最適化データ更新失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化更新失敗');
+    if ('error' in data) {
+      return data;
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };
@@ -48,14 +53,15 @@ export const updateLanguageOptimizationService = async (languageOptimization: La
 
 export const deleteLanguageOptimizationService = async (id: string) => {
   try {
-    const res = await fetch(`/api/languageOptimization`, {
+    const data = await fetchApiJsonCore<{id:string},undefined>({
+      endpoint: `/api/languageOptimization`,
       method: 'DELETE',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
+      body: ({ id }),
+      errorMessage: 'error deleteLanguageOptimizationService 言語最適化データ削除失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化削除失敗');
+    if ('error' in data) {
+      return data;
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };

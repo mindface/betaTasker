@@ -1,13 +1,16 @@
 import { AddMemory, Memory } from "../model/memory";
+import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 export const fetchMemoriesService = async () => {
   try {
-    const res = await fetch('/api/memory', {
+    const data = await fetchApiJsonCore<undefined,Memory[]>({
+      endpoint: '/api/memory',
       method: 'GET',
-      credentials: 'include',
+      errorMessage: 'error fetchMemoriesService メモリ一覧取得失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('メモリ一覧取得失敗');
+    if('error' in data) {
+      return data.error
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };
@@ -16,12 +19,14 @@ export const fetchMemoriesService = async () => {
 
 export const fetchMemoryService = async (memoryId: number) => {
   try {
-    const res = await fetch(`/api/memory/${memoryId}`, {
+    const data = await fetchApiJsonCore<undefined,Memory>({
+      endpoint: `/api/memory/${memoryId}`,
       method: 'GET',
-      credentials: 'include',
+      errorMessage: 'error fetchMemoriesService メモリ情報取得失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('メモリ一覧取得失敗');
+    if('error' in data) {
+      return data.error
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };
@@ -30,14 +35,15 @@ export const fetchMemoryService = async (memoryId: number) => {
 
 export const addMemoryService = async (memory: AddMemory) => {
   try {
-    const res = await fetch('/api/memory', {
+    const data = await fetchApiJsonCore<AddMemory,Memory>({
+      endpoint: '/api/memory',
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(memory),
-      credentials: 'include',
+      body: memory,
+      errorMessage: 'error addMemoryService メモリ情報追加失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('メモリ追加失敗');
+    if('error' in data) {
+      return data.error
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };
@@ -46,14 +52,15 @@ export const addMemoryService = async (memory: AddMemory) => {
 
 export const updateMemoryService = async (memory: Memory) => {
   try {
-    const res = await fetch('/api/memory', {
+    const data = await fetchApiJsonCore<Memory,Memory>({
+      endpoint: '/api/memory',
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(memory),
-      credentials: 'include',
+      body: memory,
+      errorMessage: 'error updateMemoryService メモリ追加失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('メモリ追加失敗');
+    if('error' in data) {
+      return data.error
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };
@@ -62,14 +69,15 @@ export const updateMemoryService = async (memory: Memory) => {
 
 export const deleteMemoryService = async (id: string) => {
   try {
-    const res = await fetch(`/api/memory`, {
+    const data = await fetchApiJsonCore<{ id: string },Memory>({
+      endpoint: '/api/memory',
       method: 'DELETE',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
+      body: {id},
+      errorMessage: 'error deleteMemoryService メモリ削除失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('メモリ削除失敗');
+    if('error' in data) {
+      return data.error
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };

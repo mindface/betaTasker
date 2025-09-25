@@ -1,29 +1,34 @@
 import { AddAssessment, Assessment } from "../model/assessment";
+import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 export const fetchAssessmentsService = async () => {
   try {
-    const res = await fetch('/api/assessment', {
+    const data = await fetchApiJsonCore<undefined,Assessment[]>({
+      endpoint: '/api/assessment',
       method: 'GET',
-      credentials: 'include',
+      errorMessage: 'error fetchAssessmentsService アセスメント一覧取得失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('アセスメント一覧取得失敗');
+    if ('error' in data) {
+      return data;
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };
   }
 };
 
+// Todoデータ内容を確認
 export const getAssessmentsForTaskUserService = async (userId: number,taskId:number) => {
   try {
-    const res = await fetch('/api/assessmentsForTaskUser', {
+    const data = await fetchApiJsonCore<{userId: number, taskId: number},Assessment[]>({
+      endpoint: '/api/assessmentsForTaskUser',
       method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, taskId }),
+      body: ({ userId, taskId }),
+      errorMessage: 'error getAssessmentsForTaskUserService アセスメントIdでの情報取得失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('アセスメント一覧取得失敗');
+    if ('error' in data) {
+      return data;
+    }
     return data;
   } catch (err: any) {
     return { error: err.message };
@@ -32,15 +37,13 @@ export const getAssessmentsForTaskUserService = async (userId: number,taskId:num
 
 export const addAssessmentService = async (assessment: AddAssessment) => {
   try {
-    const res = await fetch('/api/assessment', {
+    const data = await fetchApiJsonCore<AddAssessment,Assessment>({
+      endpoint: '/api/assessment',
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(assessment),
-      credentials: 'include',
+      body: assessment,
+      errorMessage: 'error addAssessmentService アセスメント追加失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('アセスメント追加失敗');
-    return data;
+    return data
   } catch (err: any) {
     return { error: err.message };
   }
@@ -48,14 +51,12 @@ export const addAssessmentService = async (assessment: AddAssessment) => {
 
 export const updateAssessmentService = async (assessment: Assessment) => {
   try {
-    const res = await fetch('/api/assessment', {
+    const data = await fetchApiJsonCore<Assessment,Assessment>({
+      endpoint: '/api/assessment',
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(assessment),
-      credentials: 'include',
+      body: assessment,
+      errorMessage: 'error updateAssessmentService アセスメント更新失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('アセスメント更新失敗');
     return data;
   } catch (err: any) {
     return { error: err.message };
@@ -64,14 +65,12 @@ export const updateAssessmentService = async (assessment: Assessment) => {
 
 export const deleteAssessmentService = async (id: string) => {
   try {
-    const res = await fetch(`/api/assessment`, {
-      method: 'DELETE',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
+    const data = await fetchApiJsonCore<{id: string},undefined>({
+      endpoint: '/api/assessment',
+      method: 'PUT',
+      body: { id },
+      errorMessage: 'error updateAssessmentService アセスメント更新失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('アセスメント削除失敗');
     return data;
   } catch (err: any) {
     return { error: err.message };

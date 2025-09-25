@@ -99,6 +99,7 @@ func Register(c *gin.Context) {
 		Username:     input.Username,
 		Email:        input.Email,
 		PasswordHash: string(hashedPassword),
+		Role:         input.Role
 	}
 
 	if err := model.DB.Create(&user).Error; err != nil {

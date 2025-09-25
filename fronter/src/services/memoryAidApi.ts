@@ -1,15 +1,15 @@
 // /src/services/memoryAidApi.ts
 import { MemoryContext } from "../model/memoryAid";
+import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 export const fetchMemoryAidsByCode = async (code: string) => {
   try {
-    const res = await fetch(`/api/memoryAid?code=${code}`, {
+    const data = await fetchApiJsonCore<undefined,MemoryContext>({
+      endpoint: `/api/memoryAid?code=${code}`,
       method: 'GET',
-      credentials: 'include',
+      errorMessage: 'error fetchMemoryAidsByCode メモリー支援データ取得失敗',
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error('メモリー支援データ取得失敗');
-    return data;
+    return data
   } catch (err: any) {
     return { error: err.message };
   }

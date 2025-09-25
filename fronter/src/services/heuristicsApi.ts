@@ -5,10 +5,12 @@ import {
   HeuristicsTrackingData,
   HeuristicsPattern,
   HeuristicsModel,
-  HeuristicsTrainRequest
+  HeuristicsTrainRequest,
+  HeuristicsInsight,
 } from '../model/heuristics';
 import { ApplicationError, ErrorCode, parseErrorResponse } from '../errors/errorCodes';
 import { SuccessResponse } from './taskApi';
+import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 const API_BASE = '/api/heuristics';
 
@@ -44,21 +46,14 @@ const handleApiError = async (response: Response): Promise<never> => {
 // 分析関連
 export const analyzeData = async (request: HeuristicsAnalysisRequest) => {
   try {
-    const res = await fetch(`${API_BASE}/analyze`, {
+    const data = await fetchApiJsonCore<HeuristicsAnalysisRequest,HeuristicsAnalysis[]>({
+      endpoint: `${API_BASE}/analyze`,
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request),
-      credentials: 'include',
+      body: request,
+      errorMessage: 'error analyzeData アナリシス一覧取得失敗',
     });
 
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-    
-    const data: SuccessResponse<HeuristicsAnalysis, 'analysis'> = await res.json();
-    console.log("analyzeData HeuristicsAnalysis response");
-    console.log(data);
-    return data.analysis || data;
+    return data;
   } catch (err) {
     const appError = parseErrorResponse(err);
     return { error: appError.message, code: appError.code };
@@ -67,17 +62,13 @@ export const analyzeData = async (request: HeuristicsAnalysisRequest) => {
 
 export const getAnalysisById = async (id: string) => {
   try {
-    const res = await fetch(`${API_BASE}/analyze/${id}`, {
+    const data = await fetchApiJsonCore<HeuristicsAnalysisRequest,HeuristicsAnalysis>({
+      endpoint: `${API_BASE}/analyze/${id}`,
       method: 'GET',
-      credentials: 'include',
+      errorMessage: 'error getAnalysisById アナリシス情報取得失敗',
     });
-    
-    if (!res.ok) {
-      await handleApiError(res);
-    }
 
-    const data: SuccessResponse<HeuristicsAnalysis, 'analysis'> = await res.json();
-    return data.analysis || data;
+    return data;
   } catch (err) {
     const appError = parseErrorResponse(err);
     return { error: appError.message, code: appError.code };
@@ -87,21 +78,13 @@ export const getAnalysisById = async (id: string) => {
 // トラッキング関連
 export const trackBehavior = async (trackData: HeuristicsTrackingData) => {
   try {
-    const res = await fetch(`${API_BASE}/track`, {
+    const data = await fetchApiJsonCore<HeuristicsAnalysisRequest,HeuristicsTracking>({
+      endpoint: `${API_BASE}/track`,
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(trackData),
-      credentials: 'include',
+      body: trackData,
+      errorMessage: 'error trackBehavior トラッキング情報一覧の情報取得失敗',
     });
 
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-
-    const data = await res.json();
-    console.log("trackBehavior HeuristicsTracking response");
-    console.log(data);
-    
     return data;
   } catch (err) {
     const appError = parseErrorResponse(err);
@@ -111,17 +94,12 @@ export const trackBehavior = async (trackData: HeuristicsTrackingData) => {
 
 export const getTrackingData = async (userId: string) => {
   try {
-    const res = await fetch(`${API_BASE}/track/${userId}`, {
+    const data = await fetchApiJsonCore<undefined,HeuristicsTracking>({
+      endpoint: `${API_BASE}/track/${userId}`,
       method: 'GET',
-      credentials: 'include',
+      errorMessage: 'error getTrackingData トラッキング一覧取得失敗',
     });
-    
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-
-    const response: { success: boolean; data: { tracking_data: HeuristicsTracking[] } } = await res.json();
-    return response.data?.tracking_data || [];
+    return data;
   } catch (err) {
     const appError = parseErrorResponse(err);
     return { error: appError.message, code: appError.code };
@@ -137,21 +115,13 @@ export const fetchInsights = async (params?: { limit?: number; offset?: number; 
     if (params?.user_id) queryParams.append('user_id', params.user_id);
 
     const url = `${API_BASE}/insights${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-    
-    const res = await fetch(url, {
-      method: 'GET',
-      credentials: 'include',
-    });
-    
-    if (!res.ok) {
-      await handleApiError(res);
-    }
 
-    const response = await res.json();
-    // レスポンス構造: { success: true, data: { insights: [...], total: number, limit: number, offset: number } }
-    console.log("fetchInsights response");
-    console.log(response);
-    return response.data || response;
+    const data = await fetchApiJsonCore<undefined,HeuristicsInsight[]>({
+      endpoint: url,
+      method: 'GET',
+      errorMessage: 'error getTrackingData トラッキング一覧取得失敗',
+    });
+    return data;
   } catch (err) {
     const appError = parseErrorResponse(err);
     return { error: appError.message, code: appError.code };
@@ -160,20 +130,14 @@ export const fetchInsights = async (params?: { limit?: number; offset?: number; 
 
 export const getInsightById = async (id: string) => {
   try {
-    const res = await fetch(`${API_BASE}/insights/${id}`, {
+
+    const data = await fetchApiJsonCore<undefined,HeuristicsInsight>({
+      endpoint: `${API_BASE}/insights/${id}`,
       method: 'GET',
-      credentials: 'include',
+      errorMessage: 'error getInsightById インサイト情報取得失敗',
     });
 
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-    
-    const response = await res.json();
-    // レスポンス構造: { success: true, data: { insight: {...} } }
-    console.log("getInsightById response");
-    console.log(response);
-    return response.data?.insight || response;
+    return data;
   } catch (err) {
     const appError = parseErrorResponse(err);
     return { error: appError.message, code: appError.code };
@@ -188,37 +152,32 @@ export const detectPatterns = async (params?: { user_id?: string; data_type?: st
   if (params?.period) queryParams.append('period', params.period);
 
   const url = `${API_BASE}/patterns${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
- 
-  const res = await fetch(url, {
+
+  const data = await fetchApiJsonCore<undefined,HeuristicsInsight>({
+    endpoint: url,
     method: 'GET',
-    credentials: 'include',
+    errorMessage: 'error detectPatterns パターンでの情報取得失敗',
   });
-
-  if (!res.ok) {
-    await handleApiError(res);
+  if('error' in data) {
+    return data.error
   }
-
-  const data: SuccessResponse<{ metadata: any; patterns:
-  HeuristicsPattern[] }, 'data'> = await res.json();
-  return data.data?.patterns || data;
+  return data
 };
 
 // モデルトレーニング関連
 export const trainModel = async (request: HeuristicsTrainRequest) => {
   try {
-    const res = await fetch(`${API_BASE}/patterns/train`, {
+    const data = await fetchApiJsonCore<HeuristicsTrainRequest,HeuristicsInsight>({
+      endpoint: `${API_BASE}/patterns/train`,
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request),
-      credentials: 'include',
+      body: request,
+      errorMessage: 'error trainModel trainModelでの情報取得失敗',
     });
-    
-    if (!res.ok) {
-      await handleApiError(res);
-    }
 
-    const data: SuccessResponse<HeuristicsModel, 'model'> = await res.json();
-    return data.model || data;
+    if('error' in data) {
+      return data.error
+    }
+    return data
   } catch (err) {
     const appError = parseErrorResponse(err);
     return { error: appError.message, code: appError.code };
