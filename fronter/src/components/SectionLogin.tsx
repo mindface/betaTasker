@@ -19,24 +19,27 @@ export default function SectionLogin() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     dispatch(loginRequest())
-
-    const result = await loginApi(email, password)
-    if (result.token && result.user) {
-      dispatch(loginSuccess({ token: result.token, user: result.user }))
-      router.push("/")
-    } else {
-      dispatch(loginFailure(result.error || 'ログイン失敗'))
+    try {
+      const result = await loginApi(email, password)
+      if ('error' in result) {
+        dispatch(loginFailure(result.error.message || 'ログイン失敗'))
+      } else if('token' in result) {
+        dispatch(loginSuccess({ token: result.token, user: result.user }))
+        router.push("/")
+      }
+    } catch (ex) {
+      console.error("error")
     }
   }
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     const result = await regApi({ username: userName, email, password, role: "user" })
-    if (result.token && result.user) {
+    if ('error' in result) {
+      dispatch(loginFailure(result.error.message || '登録失敗'))
+    } else {
       dispatch(loginSuccess({ token: result.token, user: result.user }))
       router.push("/")
-    } else {
-      dispatch(loginFailure(result.error || '登録失敗'))
     }
   }
 

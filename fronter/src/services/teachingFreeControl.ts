@@ -1,63 +1,41 @@
 import { AddTeachingFreeControl, TeachingFreeControl } from "../model/teachingFreeControl";
+import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 export const fetchTeachingFreeControlService = async () => {
-  try {
-    const res = await fetch('/api/teachingFreeControl', {
-      method: 'GET',
-      credentials: 'include',
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化一覧取得失敗');
-    return data;
-  } catch (err: any) {
-    return { error: err.message };
-  }
+  const data = await fetchApiJsonCore<undefined,TeachingFreeControl[]>({
+    endpoint: '/api/teachingFreeControl',
+    method: 'GET',
+    errorMessage: 'error fetchTeachingFreeControlService テックコントロールサービス一覧取得失敗',
+  });
+  return data;
 };
 
 export const addTeachingFreeControlService = async (teachingFreeControl: AddTeachingFreeControl) => {
-  try {
-    const res = await fetch('/api/teachingFreeControl', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(teachingFreeControl),
-      credentials: 'include',
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化追加失敗');
-    return data;
-  } catch (err: any) {
-    return { error: err.message };
-  }
+  const data = await fetchApiJsonCore<AddTeachingFreeControl,TeachingFreeControl>({
+    endpoint: '/api/teachingFreeControl',
+    method: 'POST',
+    body: teachingFreeControl,
+    errorMessage: 'error addTeachingFreeControlService テックコントロールサービス追加失敗',
+  });
+  return data;
 };
 
 export const updateTeachingFreeControlService = async (teachingFreeControl: TeachingFreeControl) => {
-  try {
-    const res = await fetch('/api/teachingFreeControl', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(teachingFreeControl),
-      credentials: 'include',
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化更新失敗');
-    return data;
-  } catch (err: any) {
-    return { error: err.message };
-  }
+  const data = await fetchApiJsonCore<AddTeachingFreeControl,TeachingFreeControl>({
+    endpoint: '/api/teachingFreeControl',
+    method: 'PUT',
+    body: teachingFreeControl,
+    errorMessage: 'error updateTeachingFreeControlService テックコントロールサービス更新失敗',
+  });
+  return data;
 };
 
 export const deleteTeachingFreeControlService = async (id: string) => {
-  try {
-    const res = await fetch(`/api/teachingFreeControl`, {
-      method: 'DELETE',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error('プロセス最適化削除失敗');
-    return data;
-  } catch (err: any) {
-    return { error: err.message };
-  }
+  const data = await fetchApiJsonCore<{id:string},TeachingFreeControl>({
+    endpoint: `/api/teachingFreeControl`,
+    method: 'DELETE',
+    body: { id },
+    errorMessage: 'error deleteTeachingFreeControlService テックコントロールサービス削除失敗',
+  });
+  return data;
 };

@@ -17,77 +17,67 @@ const initialState: AssessmentState = {
 export const loadAssessments = createAsyncThunk(
   'assessment/loadAssessments',
   async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetchAssessmentsService();
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response.assessments || response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await fetchAssessmentsService();
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const createAssessment = createAsyncThunk(
   'assessment/createAssessment',
   async (assessmentData: AddAssessment, { rejectWithValue }) => {
-    try {
-      const response = await addAssessmentService(assessmentData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await addAssessmentService(assessmentData);
+    if ("error" in response) {
+      return rejectWithValue({
+        message: response.error.message,
+        name: response.error.name,
+      });
     }
+    return response;
   }
 )
 
 export const getAssessmentsForTaskUser = createAsyncThunk(
   'assessment/getAssessmentsForTaskUser',
   async (payload: { userId: number,taskId: number }, { rejectWithValue }) => {
-    try {
-      const response = await getAssessmentsForTaskUserService(payload.userId, payload.taskId);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      console.log("payload", response)
-
-      return response.assessments || response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await getAssessmentsForTaskUserService(payload.userId, payload.taskId);
+    if ("error" in response) {
+      return rejectWithValue({
+        message: response.error.message,
+        name: response.error.name,
+      });
     }
+    return response;
   }
 )
 
 export const updateAssessment = createAsyncThunk(
   'assessment/updateAssessment',
   async (assessmentData: Assessment, { rejectWithValue }) => {
-    try {
-      const response = await updateAssessmentService(assessmentData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await updateAssessmentService(assessmentData);
+    if ("error" in response) {
+      return rejectWithValue({
+        message: response.error.message,
+        name: response.error.name,
+      });
     }
+    return response;
   }
 )
 
 export const removeAssessment = createAsyncThunk(
   'assessment/removeAssessment',
   async (id: number, { rejectWithValue }) => {
-    try {
-      const response = await deleteAssessmentService(String(id));
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return { id };
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await deleteAssessmentService(String(id));
+    if ("error" in response) {
+      return rejectWithValue({
+        message: response.error.message,
+        name: response.error.name,
+      });
     }
+    return { id };
   }
 )
 

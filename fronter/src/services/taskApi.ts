@@ -1,5 +1,6 @@
 import { AddTask, Task } from "../model/task";
 import { ApplicationError, ErrorCode, parseErrorResponse } from "../errors/errorCodes";
+import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 interface ErrorResponse {
   code: ErrorCode;
@@ -14,6 +15,7 @@ export type SuccessResponse<T = any, K extends string = "data"> = {
   [key in K]?: T;
 };
 
+// Todo どこかで参考に使う
 const handleApiError = async (response: Response): Promise<never> => {
   let errorData: ErrorResponse;
 
@@ -46,105 +48,42 @@ const handleApiError = async (response: Response): Promise<never> => {
 };
 
 export const fetchTasksService = async () => {
-  try {
-    const res = await fetch('/api/task', {
-      method: 'GET',
-      credentials: 'include',
-    });
-    
-    if (!res.ok) {
-      await handleApiError(res);
-    }
+  const data = await fetchApiJsonCore<undefined,Task[]>({
+    endpoint: '/api/task',
+    method: 'GET',
+    errorMessage: 'error fetchTasksService タスク一覧取得失敗',
+  });
 
-    const data: SuccessResponse<Task[], 'tasks'> = await res.json();
-    return data.tasks || data;
-  } catch (err) {
-    const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
-  }
+  return data;
 };
 
 export const addTaskService = async (task: AddTask) => {
-  try {
-    // クライアントサイドバリデーション
-    if (!task.title || task.title.trim() === '') {
-      throw new ApplicationError(
-        ErrorCode.VAL_MISSING_FIELD,
-        'タイトルは必須項目です'
-      );
-    }
-
-    const res = await fetch('/api/task', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(task),
-      credentials: 'include',
-    });
-
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-
-    const data: SuccessResponse<Task, 'task'> = await res.json();
-    return data.task || data;
-  } catch (err) {
-    const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
-  }
+  const data = await fetchApiJsonCore<AddTask,Task>({
+    endpoint: '/api/task',
+    method: 'POST',
+    body: task,
+    errorMessage: 'error addTaskService タスク追加失敗',
+  });
+  return data;
 };
 
 export const updateTaskService = async (task: Task) => {
-  try {
-    if (!task.id) {
-      throw new ApplicationError(
-        ErrorCode.VAL_MISSING_FIELD,
-        'タスクIDが指定されていません'
-      );
-    }
-
-    const res = await fetch('/api/task', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(task),
-      credentials: 'include',
-    });
-    
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-
-    const data: SuccessResponse<Task, 'task'> = await res.json();
-    return data.task || data;
-  } catch (err) {
-    const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
-  }
+  const data = await fetchApiJsonCore<Task,Task>({
+    endpoint: '/api/task', 
+    method: 'PUT',
+    body: task,
+    errorMessage: 'error updateTaskService タスク更新失敗',
+  });
+  return data;
 };
 
 export const deleteTaskService = async (id: string) => {
-  try {
-    if (!id) {
-      throw new ApplicationError(
-        ErrorCode.VAL_MISSING_FIELD,
-        '削除するタスクのIDが指定されていません'
-      );
-    }
-
-    const res = await fetch(`/api/task`, {
-      method: 'DELETE',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
-    
-    if (!res.ok) {
-      await handleApiError(res);
-    }
-    
-    const data: SuccessResponse<void> = await res.json();
-    return data;
-  } catch (err) {
-    const appError = parseErrorResponse(err);
-    return { error: appError.message, code: appError.code };
-  }
+  const data = await fetchApiJsonCore<{id:string},Task>({
+    endpoint: `/api/task`,
+    method: 'DELETE',
+    body: { id },
+    errorMessage: 'error deleteTaskService タスク削除失敗',
+  });
+  
+  return data;
 };

@@ -17,15 +17,11 @@ const initialState: LearningDataState = {
 export const loadLearningData = createAsyncThunk(
   'learningData/loadLearningData',
   async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetchLearningData();
-      if ('error' in response) {
-        return rejectWithValue(response.error)
-      }
-      return response
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await fetchLearningData();
+    if ('error' in response) {
+      return rejectWithValue(response.error)
     }
+    return response.value
   }
 );
 

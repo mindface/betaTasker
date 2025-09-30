@@ -18,68 +18,44 @@ const initialState: TaskState = {
 export const loadTasks = createAsyncThunk(
   'task/loadTasks',
   async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetchTasksService();
-      if ('error' in response) {
-        return rejectWithValue(response.error);
-      }
-      return response as Task[];
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await fetchTasksService();
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const createTask = createAsyncThunk(
   'task/createTask',
   async (taskData: AddTask, { rejectWithValue }) => {
-    try {
-      const response = await addTaskService(taskData);
-      if ('error' in response) {
-        return rejectWithValue(response.error);
-      }
-      // Check if response is SuccessResponse<Task> or Task
-      if ('data' in response) {
-        return response.data as Task;
-      }
-      return response as Task;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await addTaskService(taskData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const updateTask = createAsyncThunk(
   'task/updateTask',
   async (taskData: Task, { rejectWithValue }) => {
-    try {
-      const response = await updateTaskService(taskData);
-      if ('error' in response) {
-        return rejectWithValue(response.error);
-      }
-      // Check if response is SuccessResponse<Task> or Task
-      if ('data' in response) {
-        return response.data as Task;
-      }
-      return response as Task;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await updateTaskService(taskData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
-  }
+    return response.value;
+}
 )
 
 export const removeTask = createAsyncThunk(
   'task/removeTask',
   async (id: number, { rejectWithValue }) => {
-    try {
-      const response = await deleteTaskService(String(id));
-      if ('error' in response) {
-        return rejectWithValue(response.error);
-      }
-      return { id };
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await deleteTaskService(String(id));
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return { id };
   }
 )
 

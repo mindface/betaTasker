@@ -43,7 +43,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
       role: formData.role,
     }));
 
-    if (!result.error) {
+    if ('error' in result) {
       onClose();
     }
   };

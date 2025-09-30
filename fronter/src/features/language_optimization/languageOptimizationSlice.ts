@@ -17,60 +17,44 @@ const initialState: languageOptimizationState = {
 export const loadLanguageOptimization = createAsyncThunk(
   'languageOptimization/loadLanguageOptimization',
   async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetchLanguageOptimizationsService();
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response.languageOptimization || response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await fetchLanguageOptimizationsService();
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const createLanguageOptimization = createAsyncThunk(
   'languageOptimization/createLanguageOptimization',
   async (languageOptimizationData: AddLanguageOptimization, { rejectWithValue }) => {
-    try {
-      const response = await addLanguageOptimizationService(languageOptimizationData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await addLanguageOptimizationService(languageOptimizationData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const updateLanguageOptimization = createAsyncThunk(
   'languageOptimization/updateLanguageOptimization',
   async (languageOptimizationData: LanguageOptimization, { rejectWithValue }) => {
-    try {
-      const response = await updateLanguageOptimizationService(languageOptimizationData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await updateLanguageOptimizationService(languageOptimizationData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const removeLanguageOptimization = createAsyncThunk(
   'languageOptimization/removeLanguageOptimization',
   async (id: string, { rejectWithValue }) => {
-    try {
-      const response = await deleteLanguageOptimizationService(String(id));
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return { id };
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await deleteLanguageOptimizationService(String(id));
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return { id };
   }
 )
 

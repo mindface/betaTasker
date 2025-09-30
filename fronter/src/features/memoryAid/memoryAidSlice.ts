@@ -17,16 +17,12 @@ const initialState: MemoryAidState = {
 export const loadMemoryAidsByCode = createAsyncThunk(
   'memoryAid/loadMemoryAidsByCode',
   async (code: string, { rejectWithValue }) => {
-    try {
-      const response = await fetchMemoryAidsByCode(code);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      // APIレスポンスが {contexts: MemoryContext[]} 形式の場合
-      return response.contexts;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await fetchMemoryAidsByCode(code);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    // APIレスポンスが {contexts: MemoryContext[]} 形式の場合
+    return response.value;
   }
 );
 

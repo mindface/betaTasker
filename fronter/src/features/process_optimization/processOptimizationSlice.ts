@@ -17,60 +17,44 @@ const initialState: processOptimizationState = {
 export const loadProcessOptimization = createAsyncThunk(
   'processOptimization/loadProcessOptimization',
   async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetchProcessOptimizationsService();
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response.processOptimization || response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await fetchProcessOptimizationsService();
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const createProcessOptimization = createAsyncThunk(
   'processOptimization/createProcessOptimization',
   async (processOptimizationData: AddProcessOptimization, { rejectWithValue }) => {
-    try {
-      const response = await addProcessOptimizationService(processOptimizationData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await addProcessOptimizationService(processOptimizationData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const updateProcessOptimization = createAsyncThunk(
   'processOptimization/updateProcessOptimization',
   async (processOptimizationData: ProcessOptimization, { rejectWithValue }) => {
-    try {
-      const response = await updateProcessOptimizationService(processOptimizationData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await updateProcessOptimizationService(processOptimizationData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const removeProcessOptimization = createAsyncThunk(
   'processOptimization/removeProcessOptimization',
   async (id: string, { rejectWithValue }) => {
-    try {
-      const response = await deleteProcessOptimizationService(String(id));
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return { id };
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await deleteProcessOptimizationService(String(id));
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return { id };
   }
 )
 

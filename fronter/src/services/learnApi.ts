@@ -1,10 +1,14 @@
 import { LearningData } from '../model/learning';
+import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 // APIからlearningDataを取得する関数
-export async function fetchLearningData(): Promise<LearningData> {
-  const res = await fetch('/api/learning');
-  if (!res.ok) {
-    throw new Error('learningDataの取得に失敗しました');
-  }
-  return res.json();
+export async function fetchLearningData() {
+  // TODO 調整が必要
+  const data = await fetchApiJsonCore<undefined,LearningData>({
+    endpoint: '/api/learning',
+    method: 'GET',
+    errorMessage: 'error fetchLearningData アセスメント追加失敗',
+  });
+
+  return data;
 }

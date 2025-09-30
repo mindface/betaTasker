@@ -35,15 +35,11 @@ const initialState: MemoryState = {
 export const loadMemories = createAsyncThunk(
   'memory/loadMemories',
   async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetchMemoriesService();
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response.memories;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await fetchMemoriesService();
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
@@ -51,15 +47,11 @@ export const loadMemories = createAsyncThunk(
 export const getMemory = createAsyncThunk(
   'memory/getMemory',
   async (memoryId: number, { rejectWithValue }) => {
-    try {
-      const response = await fetchMemoryService(memoryId);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response.memory;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await fetchMemoryService(memoryId);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
@@ -67,45 +59,33 @@ export const getMemory = createAsyncThunk(
 export const createMemory = createAsyncThunk(
   'memory/createMemory',
   async (memoryData: AddMemory, { rejectWithValue }) => {
-    try {
-      const response = await addMemoryService(memoryData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await addMemoryService(memoryData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const updateMemory = createAsyncThunk(
   'memory/updateMemory',
   async (memoryData: Memory, { rejectWithValue }) => {
-    try {
-      const response = await updateMemoryService(memoryData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await updateMemoryService(memoryData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const removeMemory = createAsyncThunk(
   'memory/removeMemory',
   async (id: number, { rejectWithValue }) => {
-    try {
-      const response = await deleteMemoryService(id.toString());
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return id;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await deleteMemoryService(id.toString());
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return id;
   }
 );
 

@@ -1,46 +1,41 @@
-export const loginApi = async (email: string, password: string) => {
-  try {
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    });
+import { ResponseError } from "@/model/fetchTypes";
+import { UserInfo, User, LoginUserInfo } from "../model/user";
+import { fetchApiJsonCore } from "@/utils/fetchApi";
 
-    const data = await res.json();
-    if (!res.ok) throw new Error('ログイン失敗');
+export const loginApi = async (email: string, password: string): Promise<ResponseError | { token: string; user: User }>  => {
+  const data = await fetchApiJsonCore<{email: string, password: string},{ token: string, user: User }>({
+    endpoint: '/api/auth/login',
+    method: 'POST',
+    body: ({ email, password }),
+    errorMessage: 'error loginApi ログイン失敗',
+  });
+  if ('error' in data) {
     return data;
-  } catch (err: any) {
-    return { error: err.message };
   }
+  return data.value;
 };
 
-export const logoutApi = async () => {
-  try {
-    const res = await fetch('/api/auth/logout', {
-      method: 'POST',
-      credentials: 'include',
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error('ログアウト失敗');
+export const logoutApi = async (): Promise<ResponseError | undefined> => {
+  const data = await fetchApiJsonCore<undefined,undefined>({
+    endpoint: '/api/auth/logout',
+    method: 'POST',
+    errorMessage: 'error logoutApi ログアウトに失敗',
+  });
+  if ('error' in data) {
     return data;
-  } catch (err: any) {
-    return { error: err.message };
   }
+  return undefined;
 };
 
-export const regApi = async (user: { username: string; email: string; password: string, role: string }) => {
-  try {
-    const res = await fetch('/api/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(user),
-      credentials: 'include',
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || '登録失敗');
+export const regApi = async (user: LoginUserInfo): Promise<ResponseError | { token: string, user: User }> => {
+  const data = await fetchApiJsonCore<LoginUserInfo, { token: string, user: User }>({
+    endpoint: '/api/auth/register',
+    method: 'POST',
+    body: user,
+    errorMessage: 'error regApi 登録に失敗',
+  });
+  if ('error' in data) {
     return data;
-  } catch (err: any) {
-    return { error: err.message };
   }
+  return data.value;
 };

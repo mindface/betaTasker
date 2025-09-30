@@ -17,45 +17,33 @@ const initialState: knowledgePatternState = {
 export const loadKnowledgePatterns = createAsyncThunk(
   'knowledgePatterns/loadKnowledgePatterns',
   async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetchKnowledgePatternsService();
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response.languageOptimization || response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await fetchKnowledgePatternsService();
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value || response;
   }
 )
 
 export const createKnowledgePattern = createAsyncThunk(
   'knowledgePatterns/createKnowledgePattern',
   async (knowledgePatternData: AddKnowledgePattern, { rejectWithValue }) => {
-    try {
-      const response = await addKnowledgePatternService(knowledgePatternData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await addKnowledgePatternService(knowledgePatternData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response;
   }
 )
 
 export const updateKnowledgePattern = createAsyncThunk(
   'knowledgePatterns/updateKnowledgePattern',
   async (knowledgePatternData: KnowledgePattern, { rejectWithValue }) => {
-    try {
-      const response = await updateKnowledgePatternService(knowledgePatternData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await updateKnowledgePatternService(knowledgePatternData);
+    if (response && 'error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response;
   }
 )
 
@@ -64,7 +52,7 @@ export const removeKnowledgePattern = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const response = await deleteKnowledgePatternService(String(id));
-      if (response.error) {
+      if ('error' in response) {
         return rejectWithValue(response.error);
       }
       return { id };
@@ -92,13 +80,14 @@ const knowledgePatternSlice = createSlice({
         state.knowledgePatternsLoading = false;
         state.knowledgePatternsError = action.payload as string;
       })
-      .addCase(createKnowledgePattern.fulfilled, (state, action: PayloadAction<KnowledgePattern>) => {
-        state.knowledgePatterns.push(action.payload);
-      })
-      .addCase(updateKnowledgePattern.fulfilled, (state, action: PayloadAction<KnowledgePattern>) => {
-        const idx = state.knowledgePatterns.findIndex(a => a.id === action.payload.id);
-        if (idx !== -1) state.knowledgePatterns[idx] = action.payload;
-      })
+      // TODO機能実装時に確認する
+      // .addCase(createKnowledgePattern.fulfilled, (state, action: PayloadAction<KnowledgePattern>) => {
+      //   state.knowledgePatterns.push(action.payload);
+      // })
+      // .addCase(updateKnowledgePattern.fulfilled, (state, action: PayloadAction<KnowledgePattern>) => {
+      //   const idx = state.knowledgePatterns.findIndex(a => a.id === action.payload.id);
+      //   if (idx !== -1) state.knowledgePatterns[idx] = action.payload;
+      // })
       .addCase(removeKnowledgePattern.fulfilled, (state, action: PayloadAction<{ id: string }>) => {
         state.knowledgePatterns = state.knowledgePatterns.filter(a => a.id !== action.payload.id);
       });

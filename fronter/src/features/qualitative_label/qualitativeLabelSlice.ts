@@ -17,60 +17,44 @@ const initialState: qualitativeLabelState = {
 export const loadQualitativeLabels = createAsyncThunk(
   'qualitativeLabel/loadQualitativeLabels',
   async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetchQualitativeLabelsService();
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response.qualitativeLabels || response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await fetchQualitativeLabelsService();
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const createQualitativeLabel = createAsyncThunk(
   'qualitativeLabel/createQualitativeLabel',
   async (qualitativeLabelData: AddQualitativeLabel, { rejectWithValue }) => {
-    try {
-      const response = await addQualitativeLabelService(qualitativeLabelData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await addQualitativeLabelService(qualitativeLabelData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const updateQualitativeLabel = createAsyncThunk(
   'qualitativeLabel/updateQualitativeLabel',
   async (qualitativeLabelData: QualitativeLabel, { rejectWithValue }) => {
-    try {
-      const response = await updateQualitativeLabelService(qualitativeLabelData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await updateQualitativeLabelService(qualitativeLabelData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const removeQualitativeLabel = createAsyncThunk(
   'qualitativeLabel/removeQualitativeLabel',
   async (id: string, { rejectWithValue }) => {
-    try {
-      const response = await deleteQualitativeLabelService(String(id));
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return { id };
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await deleteQualitativeLabelService(String(id));
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return { id };
   }
 )
 

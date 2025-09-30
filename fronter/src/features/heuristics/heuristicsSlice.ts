@@ -74,7 +74,7 @@ export const analyzeData = createAsyncThunk(
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
-    return response as HeuristicsAnalysis;
+    return response.value as HeuristicsAnalysis[];
   }
 );
 
@@ -107,11 +107,11 @@ export const trackUserBehavior = createAsyncThunk(
 export const fetchTrackingData = createAsyncThunk(
   'heuristics/fetchTrackingData',
   async (userId: string, { rejectWithValue }) => {
-    const response = await heuristicsApi.getTrackingData(userId);
+    const response = await heuristicsApi.getTrackingData();
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
-    return response as HeuristicsTracking[];
+    return response.value as HeuristicsTracking[];
   }
 );
 
@@ -123,7 +123,7 @@ export const loadInsights = createAsyncThunk(
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
-    return response as { insights: HeuristicsInsight[]; total: number };
+    return { insights: response.value, total: response.value.length } as { insights: HeuristicsInsight[]; total: number };
   }
 );
 
@@ -134,7 +134,7 @@ export const fetchInsightById = createAsyncThunk(
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
-    return response as HeuristicsInsight;
+    return response.value as HeuristicsInsight;
   }
 );
 
@@ -146,7 +146,7 @@ export const loadPatterns = createAsyncThunk(
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
-    return response as HeuristicsPattern[];
+    return response.value;
   }
 );
 
@@ -158,7 +158,7 @@ export const trainHeuristicsModel = createAsyncThunk(
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
-    return response as HeuristicsModel;
+    return response.value;
   }
 );
 
@@ -191,8 +191,8 @@ const heuristicsSlice = createSlice({
       })
       .addCase(analyzeData.fulfilled, (state, action) => {
         state.analysisLoading = false;
-        state.currentAnalysis = action.payload;
-        state.analyses.unshift(action.payload);
+        state.analyses = action.payload;
+        // state.analyses.unshift(action.payload);
       })
       .addCase(analyzeData.rejected, (state, action) => {
         state.analysisLoading = false;
