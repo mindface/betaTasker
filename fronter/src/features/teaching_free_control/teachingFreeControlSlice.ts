@@ -17,60 +17,44 @@ const initialState: teachingFreeControlState = {
 export const loadTeachingFreeControl = createAsyncThunk(
   'teachingFreeControl/loadTeachingFreeControl',
   async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetchTeachingFreeControlService();
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response.teachingFreeControl || response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await fetchTeachingFreeControlService();
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const createTeachingFreeControl = createAsyncThunk(
   'teachingFreeControl/createTeachingFreeControl',
   async (teachingFreeControlData: AddTeachingFreeControl, { rejectWithValue }) => {
-    try {
-      const response = await addTeachingFreeControlService(teachingFreeControlData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await addTeachingFreeControlService(teachingFreeControlData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const updateTeachingFreeControl = createAsyncThunk(
   'teachingFreeControl/updateTeachingFreeControl',
   async (teachingFreeControlData: TeachingFreeControl, { rejectWithValue }) => {
-    try {
-      const response = await updateTeachingFreeControlService(teachingFreeControlData);
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await updateTeachingFreeControlService(teachingFreeControlData);
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return response.value;
   }
 )
 
 export const removeTeachingFreeControl = createAsyncThunk(
   'teachingFreeControl/removeTeachingFreeControl',
   async (id: string, { rejectWithValue }) => {
-    try {
-      const response = await deleteTeachingFreeControlService(String(id));
-      if (response.error) {
-        return rejectWithValue(response.error);
-      }
-      return { id };
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    const response = await deleteTeachingFreeControlService(String(id));
+    if ('error' in response) {
+      return rejectWithValue(response.error);
     }
+    return { id };
   }
 )
 
