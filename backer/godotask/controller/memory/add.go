@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/model"
+	"github.com/godotask/errors"
 	"fmt"
 )
 
@@ -11,13 +12,31 @@ import (
 func (ctl *MemoryController) AddMemory(c *gin.Context) {
 	var memory model.Memory
 	if err := c.ShouldBindJSON(&memory); err != nil {
+		appErr := errors.NewAppError(
+			errors.VAL_INVALID_INPUT,
+			errors.GetErrorMessage(errors.VAL_INVALID_INPUT),
+			err.Error(),
+		)
 		fmt.Printf("AddMemory BindJSON error: %v\n", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
 		return
 	}
 	if err := ctl.Service.CreateMemory(&memory); err != nil {
+		appErr := errors.NewAppError(
+			errors.SYS_INTERNAL_ERROR,
+			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
+			err.Error(),
+		)
 		fmt.Printf("AddMemory CreateMemory error: %v\n", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add memory"})
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
 		return
 	}
 	fmt.Printf("AddMemory success: %+v\n", memory)
