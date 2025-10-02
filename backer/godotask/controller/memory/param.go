@@ -24,5 +24,9 @@ func (ctl *MemoryController) GetMemoryContextByCode(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"contexts": contexts})
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Memory contexts retrieved",
+		"contexts": contexts,
+	})
 }

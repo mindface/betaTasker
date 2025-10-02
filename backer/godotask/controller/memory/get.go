@@ -23,5 +23,9 @@ func (ctl *MemoryController) GetMemory(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"memory": memory})
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Memory retrieved",
+		"memory": memory,
+	})
 }

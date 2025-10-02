@@ -40,5 +40,10 @@ func (ctl *MemoryController) AddMemory(c *gin.Context) {
 		return
 	}
 	fmt.Printf("AddMemory success: %+v\n", memory)
-	c.JSON(http.StatusOK, gin.H{"message": "Memory added", "memory": memory})
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Memory added",
+		"memory": memory,
+	})
 }

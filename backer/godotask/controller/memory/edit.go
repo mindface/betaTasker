@@ -37,9 +37,9 @@ func (ctl *MemoryController) EditMemory(c *gin.Context) {
 		})
 		return
 	}
-	if err := ctl.Service.UpdateMemory(id, &memory); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to edit memory"})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"message": "Memory edited", "memory": memory})
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Memory edited",
+		"memory": memory,
+	})
 }
