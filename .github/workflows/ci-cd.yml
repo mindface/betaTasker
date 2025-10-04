@@ -221,6 +221,7 @@ jobs:
   #         docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ github.sha }} . 
 
   build:
+    needs: upload-artifact
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
