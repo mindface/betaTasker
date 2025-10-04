@@ -219,3 +219,42 @@ jobs:
   #       working-directory: ./nginx
   #       run: |
   #         docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ github.sha }} . 
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: ./build-output
+
+      - name: Upload backend
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "./build-output/betaTasker/backer/godotask/main"
+          target: "/home/ec2-user/betaTasker/backend/"
+
+      - name: Upload frontend
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "./build-output/betaTasker/fronter/.next"
+          target: "/home/ec2-user/betaTasker/fronter/"
+
+      - name: Restart backend service
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo systemctl restart godotask
+            sudo rm -rf /var/www/html/*
+            sudo cp -r /home/ec2-user/betaTasker/backend/* /var/www/html/
+            sudo cp -r /home/ec2-user/betaTasker/fronter/* /var/www/html/
