@@ -10,6 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"github.com/godotask/model"
+	"github.com/godotask/errors"
 )
 
 var jwtKey = []byte("your_secret_key")
@@ -89,11 +90,13 @@ func Register(c *gin.Context) {
 		return
 	}
 
+
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
 		return
 	}
+
 
 	user := model.User {
 		Username:     input.Username,
@@ -140,7 +143,16 @@ func Login(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		appErr := errors.NewAppError(
+			errors.VAL_INVALID_INPUT,
+			errors.GetErrorMessage(errors.VAL_INVALID_INPUT),
+			err.Error(),
+		)
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
 		return
 	}
   fmt.Printf("Login input: %+v\n", input)
@@ -149,15 +161,45 @@ func Login(c *gin.Context) {
 	if err := model.DB.Where("email = ?", input.Email).First(&user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+			appErr := errors.NewAppError(
+				errors.RES_NOT_FOUND,
+				errors.GetErrorMessage(errors.RES_NOT_FOUND),
+				err.Error() + " | Invalid email or password",
+			)
+			c.JSON(appErr.HTTPStatus, gin.H{
+				"code":    appErr.Code,
+				"message": appErr.Message,
+				"detail":  appErr.Detail,
+			})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
+		appErr := errors.NewAppError(
+			errors.SYS_INTERNAL_ERROR,
+			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
+			err.Error(),
+		)
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
+
 		return
 	}
 	fmt.Printf("Fetched user: %+v\n", user)
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(input.Password)); err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+		appErr := errors.NewAppError(
+			errors.AUTH_UNAUTHORIZED,
+			"Invalid email or password",
+			err.Error(),
+		)
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
 		return
 	}
 
@@ -175,7 +217,16 @@ func Login(c *gin.Context) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		appErr := errors.NewAppError(
+			errors.SYS_INTERNAL_ERROR,
+			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
+			"Failed to generate token: "+err.Error(),
+		)
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
 		return
 	}
 
@@ -195,7 +246,7 @@ func Login(c *gin.Context) {
 			Role:     user.Role,
 		},
 	}
-	
+
 	c.JSON(http.StatusOK, response)
 }
 
@@ -214,13 +265,13 @@ func Profile(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"user": gin.H{
-				"id":        user.ID,
-				"username":  user.Username,
-				"email":     user.Email,
-				"createdAt": user.CreatedAt,
-				"updatedAt": user.UpdatedAt,
-				"isActive":  user.IsActive,
-				"role":      user.Role,
+			"id":        user.ID,
+			"username":  user.Username,
+			"email":     user.Email,
+			"createdAt": user.CreatedAt,
+			"updatedAt": user.UpdatedAt,
+			"isActive":  user.IsActive,
+			"role":      user.Role,
 		},
 	})
 }

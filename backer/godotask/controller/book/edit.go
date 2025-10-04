@@ -5,6 +5,7 @@ import (
 
 	"github.com/godotask/model"
 	"github.com/gin-gonic/gin"
+	"github.com/godotask/errors"
 )
 
 
@@ -13,10 +14,29 @@ func (ctl *BookController) EditBook(c *gin.Context) {
 	id := c.Param("id")
 	var book model.Book
 	if err := c.ShouldBindJSON(&book); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		appErr := errors.NewAppError(
+			errors.VAL_INVALID_INPUT,
+			errors.GetErrorMessage(errors.VAL_INVALID_INPUT),
+			err.Error(),
+		)
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
 		return
 	}
 	if err := ctl.Service.UpdateBook(id, &book); err != nil {
+		appErr := errors.NewAppError(
+			errors.SYS_INTERNAL_ERROR,
+			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
+			err.Error() + " | Failed to edit book",
+		)
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to edit book"})
 		return
 	}

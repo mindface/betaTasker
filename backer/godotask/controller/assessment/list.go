@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"github.com/gin-gonic/gin"
+	"github.com/godotask/errors"
 )
 
 type TaskUserRequest struct {
@@ -15,17 +16,39 @@ type TaskUserRequest struct {
 func (ctl *AssessmentController) ListAssessments(c *gin.Context) {
 	assessments, err := ctl.Service.ListAssessments()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to list assessments"})
+		appErr := errors.NewAppError(
+			errors.SYS_INTERNAL_ERROR,
+			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
+			err.Error() + " | Failed to list assessments",
+		)
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"assessments": assessments})
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Assessments retrieved",
+		"assessments": assessments,
+	})
 }
 
 func (ctl *AssessmentController) ListAssessmentsForTaskUser(c *gin.Context) {
 	var req TaskUserRequest
 	// JSON Body をバインド
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		appErr := errors.NewAppError(
+			errors.SYS_INTERNAL_ERROR,
+			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
+			err.Error() + " | Invalid request body",
+		)
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
 		return
 	}
 

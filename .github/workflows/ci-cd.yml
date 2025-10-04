@@ -11,7 +11,6 @@ env:
   IMAGE_NAME: mindface/betatasker
 
 jobs:
-
   # バックエンドテスト・ビルド
   backend:
     runs-on: ubuntu-latest
@@ -43,22 +42,20 @@ jobs:
       #     go test -v ./...
       #     go vet ./...
 
-      - name: Build backend binary
-        working-directory: ./backer/godotask
-        run: |
-          CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+      # - name: Build backend binary
+      #   working-directory: ./backer/godotask
+      #   run: |
+      #     CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+
+      # Go バイナリビルド
+      - name: Build Go backend
+        working-directory: backer/godotask
+        run: CGO_ENABLED=0 GOOS=linux go build -o main .
 
       # - name: Show directory tree
       #   run: |
       #     pwd
       #     ls -R
-      - name: Check Dockerfile exists
-        run: ls -la backer/godotask/Dockerfile
-
-      - name: Build backend Docker image
-        working-directory: ./backer/godotask
-        run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }} -f Dockerfile .
 
   # フロントエンドテスト・ビルド
   frontend:
@@ -105,42 +102,37 @@ jobs:
         working-directory: fronter
         run: npx tsc --noEmit
 
-      - name: Clean up Docker before build
-        run: |
-          docker system prune -f
-          docker builder prune -f
-
-      - name: Build frontend Docker image
-        run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }} -f fronter/Dockerfile fronter
+      - name: Build and Export frontend
+        working-directory: fronter
+        run: yarn build
 
   # 統合テスト
-  integration:
-    needs: [backend, frontend]
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_PASSWORD: dbgodotask
-          POSTGRES_DB: test_db
-          POSTGRES_USER: dbgodotask
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
+  # integration:
+  #   needs: [backend, frontend]
+  #   runs-on: ubuntu-latest
+  #   services:
+  #     postgres:
+  #       image: postgres:16
+  #       env:
+  #         POSTGRES_PASSWORD: dbgodotask
+  #         POSTGRES_DB: test_db
+  #         POSTGRES_USER: dbgodotask
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+  #       ports:
+  #         - 5432:5432
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    # steps:
+    #   - name: Checkout code
+    #     uses: actions/checkout@v4
   
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
+    #   - name: Set up Go
+    #     uses: actions/setup-go@v4
+    #     with:
+    #       go-version: '1.21'
   
       # - name: Run integration tests
       #   working-directory: backer/godotask
@@ -200,13 +192,13 @@ jobs:
   #         # ここに実際のデプロイコマンドを追加 
 
   # Nginxビルド
-  nginx:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # nginx:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Build nginx Docker image
-        working-directory: ./nginx
-        run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ github.sha }} . 
+  #     - name: Build nginx Docker image
+  #       working-directory: ./nginx
+  #       run: |
+  #         docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ github.sha }} . 

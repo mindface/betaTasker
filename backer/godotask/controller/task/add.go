@@ -29,7 +29,7 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 		appErr := errors.NewAppError(
 			errors.VAL_MISSING_FIELD,
 			errors.GetErrorMessage(errors.VAL_MISSING_FIELD),
-			"タイトルは必須項目です",
+			"Missing required field: title",
 		)
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,
@@ -48,7 +48,7 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 			appErr = errors.NewAppError(
 				errors.VAL_DUPLICATE_ENTRY,
 				errors.GetErrorMessage(errors.VAL_DUPLICATE_ENTRY),
-				"同じタイトルのタスクが既に存在します",
+				"Note: Target task with the same title already exists",
 			)
 		} else if strings.Contains(errMsg, "connection refused") || strings.Contains(errMsg, "no such host") {
 			appErr = errors.NewAppError(
@@ -63,7 +63,7 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 				"",
 			)
 		}
-		
+
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,
 			"message": appErr.Message,
@@ -73,9 +73,7 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 	}
 	c.JSON(200, gin.H{
 		"success": true,
-		"message": "タスクが正常に作成されました",
-		"data": gin.H{
-			"task": task,
-		},
+		"message": "Task added",
+		"task": task,
 	})
 }
