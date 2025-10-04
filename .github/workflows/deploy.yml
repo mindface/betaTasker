@@ -5,32 +5,33 @@ on:
     branches: [ "main" ]
 
 jobs:
-  runs-on: ubuntu-latest
-  needs: build
-  steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: build-output
-        path: ./build-output
+  build:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: ./build-output
 
-    - name: Upload files to EC2
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ec2-user
-        key: ${{ secrets.EC2_SSH_KEY }}
-        source: "./build-output/*"
-        target: "/home/ec2-user/betaTasker/"
+      - name: Upload files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "./build-output/*"
+          target: "/home/ec2-user/betaTasker/"
 
-    - name: Restart backend service
-      uses: appleboy/ssh-action@v0.1.6
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ec2-user
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          sudo systemctl restart godotask
-          sudo rm -rf /var/www/html/*
-          sudo cp -r /home/ec2-user/betaTasker/fronter/out/* /var/www/html/
+      - name: Restart backend service
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo systemctl restart godotask
+            sudo rm -rf /var/www/html/*
+            sudo cp -r /home/ec2-user/betaTasker/fronter/out/* /var/www/html/
 
