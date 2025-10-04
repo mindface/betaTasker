@@ -106,14 +106,6 @@ jobs:
         working-directory: fronter
         run: yarn build
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-output
-          path: |
-            backer/godotask/main
-            fronter/.next
-            fronter/public
 
   # 統合テスト
   # integration:

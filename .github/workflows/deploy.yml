@@ -17,8 +17,6 @@ jobs:
       - name: Upload backend
         uses: appleboy/scp-action@v0.1.7
         with:
-          name: build-output
-          path: backer/godotask/main
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
@@ -28,10 +26,6 @@ jobs:
       - name: Upload frontend
         uses: appleboy/scp-action@v0.1.7
         with:
-          name: build-output
-          path: |
-            fronter/.next
-            fronter/public
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
