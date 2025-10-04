@@ -230,14 +230,19 @@ jobs:
           name: build-output
           path: ./build-output
 
+      - name: Check downloaded files
+        run: |
+          echo "=== build-output directory structure ==="
+          ls -R ./build-output || true
+
       - name: Upload backend
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "./build-output/betaTasker/backer/godotask/main"
-          target: "/home/ec2-user/betaTasker/backend/"
+          source: ./build-output/backer/godotask/main
+          target: /home/ec2-user/betaTasker/backend/
 
       - name: Upload frontend
         uses: appleboy/scp-action@v0.1.7
@@ -245,8 +250,10 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "./build-output/betaTasker/fronter/.next"
-          target: "/home/ec2-user/betaTasker/fronter/"
+          source: |
+            ./build-output/fronter/.next
+            ./build-output/fronter/public
+          target: /home/ec2-user/betaTasker/fronter/
 
       - name: Restart backend service
         uses: appleboy/ssh-action@v0.1.6
