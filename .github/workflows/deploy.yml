@@ -14,18 +14,24 @@ jobs:
           name: build-output
           path: ./build-output
 
-      - name: Upload files to EC2
+      - name: Upload backend
         uses: appleboy/scp-action@v0.1.7
         with:
+          name: build-output
+          path: backer/godotask/main
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "./build-output/betaTasker/backer/godotask/main"
           target: "/home/ec2-user/betaTasker/backend/"
 
-      - name: Upload frontend files
+      - name: Upload frontend
         uses: appleboy/scp-action@v0.1.7
         with:
+          name: build-output
+          path: |
+            fronter/.next
+            fronter/public
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
@@ -41,5 +47,6 @@ jobs:
           script: |
             sudo systemctl restart godotask
             sudo rm -rf /var/www/html/*
-            sudo cp -r /home/ec2-user/betaTasker/fronter/out/* /var/www/html/
+            sudo cp -r /home/ec2-user/betaTasker/backend/* /var/www/html/
+            sudo cp -r /home/ec2-user/betaTasker/fronter/* /var/www/html/
 
