@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  output: 'export',
   reactStrictMode: true,
   async headers() {
     if (process.env.NODE_ENV === 'development') {
