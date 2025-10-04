@@ -65,7 +65,7 @@ func (ca *CognitiveAnalyzer) detectConfirmationBias(actions []UserAction) *Cogni
 	for _, action := range actions {
 		repetitions[action.ActionType]++
 	}
-	
+
 	// 最も頻繁なアクション
 	maxCount := 0
 	var maxAction string

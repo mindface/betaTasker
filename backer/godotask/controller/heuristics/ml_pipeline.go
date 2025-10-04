@@ -109,7 +109,7 @@ func (ml *MLPipeline) runCycle() {
 	if len(ml.patternHistory) > 100 {
 		ml.patternHistory = ml.patternHistory[1:]
 	}
-	
+
 	ml.lastCycleTime = time.Now()
 }
 

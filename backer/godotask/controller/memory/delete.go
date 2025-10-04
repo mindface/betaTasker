@@ -25,6 +25,6 @@ func (ctl *MemoryController) DeleteMemory(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Memory deleted",
-		"delete_memory_id": id,
+		"memory_id": id,
 	})
 }

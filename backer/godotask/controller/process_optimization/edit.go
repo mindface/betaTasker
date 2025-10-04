@@ -5,6 +5,7 @@ import (
 
 	"github.com/godotask/model"
 	"github.com/gin-gonic/gin"
+	"github.com/godotask/errors"
 )
 
 // EditProcessOptimization: PUT /api/process_optimization/:id
@@ -12,12 +13,34 @@ func (ctl *ProcessOptimizationController) EditProcessOptimization(c *gin.Context
 	id := c.Param("id")
 	var processOptimization model.ProcessOptimization
 	if err := c.ShouldBindJSON(&processOptimization); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		appErr := errors.NewAppError(
+			errors.VAL_INVALID_INPUT,
+			errors.GetErrorMessage(errors.VAL_INVALID_INPUT),
+			err.Error(),
+		)
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
 		return
 	}
 	if err := ctl.Service.UpdateProcessOptimization(id, &processOptimization); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to edit process optimization"})
+		appErr := errors.NewAppError(
+			errors.SYS_INTERNAL_ERROR,
+			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
+			err.Error()  + " | Failed to edit process optimization",
+		)
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Process optimization edited", "process_optimization": processOptimization})
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Process optimization edited",
+		"process_optimization": processOptimization,
+	})
 }
