@@ -241,7 +241,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: ./build-output/backer/godotask/main
+          source: ./build-output/godotask/main
           target: /home/ec2-user/betaTasker/backend/
 
       - name: Upload frontend
