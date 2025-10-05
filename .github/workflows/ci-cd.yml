@@ -26,15 +26,30 @@ jobs:
         with:
           go-version: '1.21'
 
-      - name: Cache Go modules
-        uses: actions/cache@v3
+      - name: Build Go backend
+        working-directory: backer/godotask
+        run: |
+          echo "Building Go backend..."
+          CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+          echo "=== Build result ==="
+          ls -lh .
+
+      - name: Upload backend artifact
+        uses: actions/upload-artifact@v4
         with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
+          name: backend-output
+          path: backer/godotask/main
+
+
+      # - name: Cache Go modules
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/.cache/go-build
+      #       ~/go/pkg/mod
+      #     key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-go-
 
       # - name: Run backend tests
       #   working-directory: backer/godotask
@@ -46,11 +61,6 @@ jobs:
       #   working-directory: ./backer/godotask
       #   run: |
       #     CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
-
-      # Go バイナリビルド
-      - name: Build Go backend
-        working-directory: backer/godotask
-        run: CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
       # - name: Show directory tree
       #   run: |
@@ -106,11 +116,13 @@ jobs:
         working-directory: fronter
         run: yarn build
 
-      - name: Show built folder structure (before upload)1
-        run: |
-          echo "=== Project structure after build ==="
-          ls -R ./backer || true
-          ls -a -R ./fronter || true
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-output
+          path: |
+            fronter/.next
+            fronter/public
 
   # 統合テスト
   # integration:
@@ -210,14 +222,17 @@ jobs:
           ls -R ./backer || true
           ls -a -R ./fronter || true
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+      - name: Download backend artifact
+        uses: actions/download-artifact@v4
         with:
-          name: build-output
-          path: |
-            backer/godotask/main
-            fronter/.next
-            fronter/public
+          name: backend-output
+          path: ./build-output/godotask
+
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-output
+          path: ./build-output/fronter
 
   # Nginxビルド
   # nginx:
