@@ -121,8 +121,18 @@ jobs:
         with:
           name: frontend-output
           path: |
-            fronter/.next
-            fronter/public
+            .next
+            public
+
+      - name: Show built folder structure22
+        run: |
+          echo "=== Project structure after build ==="
+          ls -a -R ./ || true
+
+      - name: Show built folder structure33
+        run: |
+          echo "=== Project structure after build ==="
+          ls -a -R ./fronter || true
 
   # 統合テスト
   # integration:
@@ -215,12 +225,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Show built folder structure
-        run: |
-          echo "=== Project structure after build ==="
-          ls -R ./backer || true
-          ls -a -R ./fronter || true
 
       - name: Download backend artifact
         uses: actions/download-artifact@v4
