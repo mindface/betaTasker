@@ -298,5 +298,5 @@ jobs:
           script: |
             sudo systemctl restart godotask
             sudo rm -rf /var/www/html/*
-            sudo cp -r /home/ec2-user/betaTasker/backend/* /var/www/html/
-            sudo cp -r /home/ec2-user/betaTasker/fronter/* /var/www/html/
+            sudo cp -r /home/ec2-user/backend/* /var/www/html/
+            sudo cp -r /home/ec2-user/fronter/* /var/www/html/
