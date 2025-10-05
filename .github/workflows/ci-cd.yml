@@ -106,6 +106,12 @@ jobs:
         working-directory: fronter
         run: yarn build
 
+      # === 🔍 ビルド後に構造を確認 ===
+      - name: Show built folder structure (before upload)
+        run: |
+          echo "=== Project structure after build ==="
+          ls -R ./backer || true
+          ls -R ./fronter || true
 
   # 統合テスト
   # integration:
@@ -198,6 +204,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      # === 🔍 ビルド後に構造を確認 ===
+      - name: Show built folder structure (before upload)
+        run: |
+          echo "=== Project structure after build ==="
+          ls -R ./backer || true
+          ls -R ./fronter || true
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
