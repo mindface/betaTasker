@@ -121,18 +121,8 @@ jobs:
         with:
           name: frontend-output
           path: |
-            .next
-            public
-
-      - name: Show built folder structure22
-        run: |
-          echo "=== Project structure after build ==="
-          ls -a -R ./ || true
-
-      - name: Show built folder structure33
-        run: |
-          echo "=== Project structure after build ==="
-          ls -a -R ./fronter || true
+            ./fronter/.next
+            ./fronter/public
 
   # 統合テスト
   # integration:
@@ -219,24 +209,24 @@ jobs:
   #         echo "Deploying to production..."
   #         # ここに実際のデプロイコマンドを追加 
 
-  upload-artifact:
-    needs: [backend, frontend]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # upload-artifact:
+  #   needs: [backend, frontend]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Download backend artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: backend-output
-          path: ./build-output/godotask
+  #     - name: Download backend artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: backend-output
+  #         path: ./build-output/godotask
 
-      - name: Download frontend artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-output
-          path: ./build-output/fronter
+  #     - name: Download frontend artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: frontend-output
+  #         path: ./build-output/fronter
 
   # Nginxビルド
   # nginx:
