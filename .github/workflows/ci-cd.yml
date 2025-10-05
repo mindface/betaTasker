@@ -123,6 +123,7 @@ jobs:
           path: |
             ./fronter/.next
             ./fronter/public
+          include-hidden-files: true
 
   # 統合テスト
   # integration:
