@@ -244,7 +244,7 @@ jobs:
       - name: Check downloaded files
         run: |
           echo "=== build-output directory structure ==="
-          ls -R ./build-output || true
+          ls -a -R ./build-output || true
 
       - name: Upload backend
         uses: appleboy/scp-action@v0.1.7
