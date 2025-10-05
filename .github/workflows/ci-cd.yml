@@ -110,7 +110,7 @@ jobs:
         run: |
           echo "=== Project structure after build ==="
           ls -R ./backer || true
-          ls -R ./fronter || true
+          ls -a -R ./fronter || true
 
   # 統合テスト
   # integration:
