@@ -49,7 +49,7 @@ func GetRouter() *gin.Engine {
 	// r.Use(middleware.RateLimitMiddleware())
 	
 	r.Use(static.Serve("/usr/local/go/godotask/static", static.LocalFile("./images", true)))
-	r.LoadHTMLGlob("view/*.html")
+	// r.LoadHTMLGlob("view/*.html")
 
   bookRepo := &repository.BookRepositoryImpl{DB: model.DB}
 	bookService := &service.BookService{Repo: bookRepo}
