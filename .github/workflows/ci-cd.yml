@@ -106,8 +106,7 @@ jobs:
         working-directory: fronter
         run: yarn build
 
-      # === 🔍 ビルド後に構造を確認 ===
-      - name: Show built folder structure (before upload)
+      - name: Show built folder structure (before upload)1
         run: |
           echo "=== Project structure after build ==="
           ls -R ./backer || true
@@ -205,7 +204,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # === 🔍 ビルド後に構造を確認 ===
       - name: Show built folder structure (before upload)
         run: |
           echo "=== Project structure after build ==="
