@@ -242,6 +242,7 @@ jobs:
 
   build:
     # needs: upload-artifact
+    needs: [backend, frontend]
     runs-on: ubuntu-latest
     steps:
       - name: Download backend artifact
