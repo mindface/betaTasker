@@ -250,11 +250,17 @@ jobs:
     needs: upload-artifact
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifact
+      - name: Download backend artifact
         uses: actions/download-artifact@v4
         with:
-          name: build-output
-          path: ./build-output
+          name: backend-output
+          path: ./build-output/godotask
+
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-output
+          path: ./build-output/fronter
 
       - name: Check downloaded files
         run: |
