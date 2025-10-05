@@ -270,18 +270,24 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           source: ./build-output/godotask/main
-          target: /home/ec2-user/betaTasker/backend/
+          target: /home/ec2-user/backend/
 
-      - name: Upload frontend
+      - name: Upload frontend1
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: |
-            ./build-output/fronter/.next
-            ./build-output/fronter/public
-          target: /home/ec2-user/betaTasker/fronter/
+          source: ./build-output/fronter/.next
+          target: /home/ec2-user/fronter/
+      - name: Upload frontend2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: ./build-output/fronter/public
+          target: /home/ec2-user/fronter/
 
       - name: Restart backend service
         uses: appleboy/ssh-action@v0.1.6
