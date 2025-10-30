@@ -71,7 +71,7 @@ func (da *DataAccumulator) GenerateLearningData() error {
 	if err != nil {
 		return err
 	}
-	
+
 	newPatterns := []model.KnowledgePattern{}
 	for _, pattern := range patterns {
 		// バリエーション生成ロジック

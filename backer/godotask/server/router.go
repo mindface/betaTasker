@@ -12,8 +12,9 @@ import (
 	"github.com/godotask/controller/knowledge_pattern"
 	"github.com/godotask/controller/language_optimization"
 	"github.com/godotask/controller/teaching_free_control"
-	"github.com/godotask/repository"
+	"github.com/godotask/controller/phenomenological_framework"
 	"github.com/godotask/service"
+	"github.com/godotask/repository"
 	"github.com/godotask/model"
 	// "github.com/godotask/middleware" // 一時的にコメントアウト
 
@@ -44,7 +45,7 @@ func GetRouter() *gin.Engine {
 	// CORSミドルウェアのみ適用（他のミドルウェアは一旦コメントアウト）
 	// r.Use(middleware.LoggingMiddleware())
 	// r.Use(middleware.ErrorHandlerMiddleware())
-	r.Use(CORSMiddlewareSimple())
+	// r.Use(CORSMiddlewareSimple())
 	// r.Use(middleware.RequestValidationMiddleware())
 	// r.Use(middleware.RateLimitMiddleware())
 	
@@ -95,6 +96,10 @@ func GetRouter() *gin.Engine {
 	TeachingFreeControlService := &service.TeachingFreeControlService{Repo: TeachingFreeControlRepo}
 	TeachingFreeControlController := teaching_free_control.TeachingFreeControlController{Service: TeachingFreeControlService}
 
+	phenomenologicalFrameworkRepo := &repository.PhenomenologicalFrameworkRepositoryImpl{DB: model.DB}
+	phenomenologicalFrameworkService := &service.PhenomenologicalFrameworkService{Repo: phenomenologicalFrameworkRepo}
+	phenomenologicalFrameworkController := phenomenological_framework.PhenomenologicalFrameworkController{Service: phenomenologicalFrameworkService}
+
 	// 認証不要のエンドポイント
 	r.POST("/api/login", user.Login)
 	r.POST("/api/register", user.Register)
@@ -143,6 +148,13 @@ func GetRouter() *gin.Engine {
 	r.GET("/api/heuristics/insights/:id", heuristicsController.GetInsight)
 	r.GET("/api/heuristics/patterns", heuristicsController.DetectPatterns)
 	r.POST("/api/heuristics/patterns/train", heuristicsController.TrainModel)
+
+	// phenomenological framework API (CRUD)
+	r.POST("/api/phenomenological_framework", phenomenologicalFrameworkController.AddPhenomenologicalFramework)
+	r.GET("/api/phenomenological_framework", phenomenologicalFrameworkController.ListPhenomenologicalFrameworks)
+	r.GET("/api/phenomenological_framework/:id", phenomenologicalFrameworkController.GetPhenomenologicalFramework)
+	r.PUT("/api/phenomenological_framework/:id", phenomenologicalFrameworkController.EditPhenomenologicalFramework)
+	r.DELETE("/api/phenomenological_framework/:id", phenomenologicalFrameworkController.DeletePhenomenologicalFramework)
 
 	// Process Optimization API (CRUD)
 	r.POST("/api/process_optimization", processOptimizationController.AddProcessOptimization)

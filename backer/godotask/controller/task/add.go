@@ -2,9 +2,11 @@ package task
 
 import (
 	"strings"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/errors"
 	"github.com/godotask/model"
+	"github.com/google/uuid"
 )
 
 // AddTask: POST /api/task
@@ -23,7 +25,7 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 		})
 		return
 	}
-	
+
 	// 必須フィールドのバリデーション
 	if task.Title == "" {
 		appErr := errors.NewAppError(
@@ -41,7 +43,7 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 
 	if err := ctl.Service.CreateTask(&task); err != nil {
 		var appErr *errors.AppError
-		
+
 		// エラー内容に応じた適切なエラーコードを設定
 		errMsg := err.Error()
 		if strings.Contains(errMsg, "duplicate") || strings.Contains(errMsg, "UNIQUE constraint") {
@@ -71,6 +73,30 @@ func (ctl *TaskController) AddTask(c *gin.Context) {
 		})
 		return
 	}
+
+  ke := &model.KnowledgeEntity{
+    ID:            uuid.NewString(),
+    TaskID:        uint(task.ID),
+    EntityType:    "Task",
+    ReferenceID:   fmt.Sprintf("task-%d", task.ID),
+    Domain:        "task Domain",
+    AbstractLevel: "contextual",
+    Source:        "auto",
+  }
+  if err := ctl.KnowledgeEntityService.CreateKnowledgeEntity(ke); err != nil {
+		appErr := errors.NewAppError(
+			errors.VAL_INVALID_INPUT,
+			errors.GetErrorMessage(errors.VAL_INVALID_INPUT),
+			err.Error(),
+		)
+		c.JSON(appErr.HTTPStatus, gin.H{
+			"code":    appErr.Code,
+			"message": appErr.Message,
+			"detail":  appErr.Detail,
+		})
+    return
+  }
+
 	c.JSON(200, gin.H{
 		"success": true,
 		"message": "Task added",

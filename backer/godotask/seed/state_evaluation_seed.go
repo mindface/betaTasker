@@ -527,7 +527,7 @@ func readLearningPatternsFromCSV() ([]model.LearningPattern, error) {
 			Domain:         record[2],
 			TacitKnowledge: record[3],
 			ExplicitForm:   record[4],
-			SECIStage:      record[5],
+			SECIStage:      "",
 			Method:         record[6],
 			Accuracy:       accuracy,
 			Coverage:       coverage,

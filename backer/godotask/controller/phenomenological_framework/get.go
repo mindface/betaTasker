@@ -2,6 +2,7 @@ package phenomenological_framework
 
 import (
 	"net/http"
+	"github.com/godotask/errors"
 	"github.com/gin-gonic/gin"
 )
 

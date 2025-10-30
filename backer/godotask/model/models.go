@@ -22,5 +22,6 @@ func Models() []interface{} {
 		&QualitativeLabel{},
 		&QuantificationLabel{},
 		&TeachingFreeControl{},
+		&KnowledgeEntity{},
 	}
 }
