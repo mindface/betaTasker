@@ -20,6 +20,7 @@ type Task struct {
 	QualitativeLabels []QualitativeLabel `json:"qualitative_labels" gorm:"foreignKey:TaskID"`
 	QuantificationLabels []QuantificationLabel `json:"quantification_labels" gorm:"foreignKey:TaskID"`
 	MultimodalData   []MultimodalData   `json:"multimodal_data" gorm:"foreignKey:TaskID"`
+	KnowledgeEntities []KnowledgeEntity `json:"knowledge_entities" gorm:"foreignKey:TaskID"`
 }
 
 func (Task) TableName() string {

@@ -7,7 +7,6 @@ import (
 	"time"
 	"strings" 
 
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -217,22 +216,14 @@ func generateInformationAmount(scoreClass string) string {
 }
 
 
-func SeedBooksAndTasks() error {
+func SeedBooksAndTasks(db *gorm.DB) error {
 	rand.Seed(time.Now().UnixNano())
 
-	// PostgreSQL DSN
-	dsn := "host=db user=dbgodotask password=dbgodotask dbname=dbgodotask port=5432 sslmode=disable"
-
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatalf("failed to connect database: %v", err)
-	}
-
 	// AutoMigrate
-	err = db.AutoMigrate(&Book{}, &Memory{}, &Task{}, &Assessment{})
-	if err != nil {
-		log.Fatalf("failed to migrate: %v", err)
-	}
+	// err = db.AutoMigrate(&Book{}, &Memory{}, &Task{}, &Assessment{})
+	// if err != nil {
+	// 	log.Fatalf("failed to migrate: %v", err)
+	// }
 
 	fmt.Println("テーブルをクリアしています...")
 	sqlDB, err := db.DB()

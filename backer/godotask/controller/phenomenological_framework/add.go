@@ -12,10 +12,6 @@ import (
 func (ctl *PhenomenologicalFrameworkController) AddPhenomenologicalFramework(c *gin.Context) {
 	var phenomenologicalFramework model.PhenomenologicalFramework
 	if err := c.ShouldBindJSON(&phenomenologicalFramework); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	if err := c.ShouldBindJSON(&phenomenologicalFramework); err != nil {
 		appErr := errors.NewAppError(
 			errors.VAL_INVALID_INPUT,
 			errors.GetErrorMessage(errors.VAL_INVALID_INPUT),

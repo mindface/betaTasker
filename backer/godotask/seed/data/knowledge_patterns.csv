@@ -1,0 +1,21 @@
+id,type,domain,tacit_knowledge,explicit_form,conversion_path,accuracy,coverage,consistency,abstract_level,task_id,created_at,updated_at
+assembly_skill_pattern,tacit,robot_assembly,熟練工の『しっくりくる』感覚,力覚センサ値: Fx<0.5N Fy<0.5N Tz<0.1Nm,"socialization->作業観察,externalization->力覚データ記録,combination->パターン分析,internalization->閾値設定",0.85,0.75,0.90,L1,1,2020-01-01 00:00:00,2020-01-01 00:00:00
+vision_recognition_pattern,explicit,robot_vision,対象物の見分け方,深層学習モデル: ResNet-50 mAP=0.92,"externalization->画像収集|combination->アノテーション→学習→検証",0.92,0.88,0.95,L0,2,2020-01-08 00:00:00,2020-01-08 00:00:00
+quality_inspection_pattern,hybrid,robot_inspection,検査員の違和感察知,異常検知アルゴリズム: Isolation Forest threshold=0.05,"socialization->異常サンプル収集,externalization->特徴量抽出,combination->モデル学習",0.94,0.89,0.96,L1,3,2020-01-15 00:00:00,2020-01-15 00:00:00
+cutting_feel_pattern,tacit,machining,切削時の手応え,切削抵抗: 主分力<200N 背分力<50N,"{""socialization"":""感覚共有"",""externalization"":""センサデータ収集→感覚との対応付け""}",0.78,0.72,0.85,L2,1,2020-01-22 00:00:00,2020-01-22 00:00:00
+vibration_sense_pattern,tacit,machining,振動の違和感,周波数スペクトル: 1-10kHz帯域のピーク検出,"socialization->経験共有,externalization->振動測定→FFT解析,combination->パターン認識",0.82,0.80,0.88,L1,2,2020-01-29 00:00:00,2020-01-29 00:00:00
+tool_wear_pattern,hybrid,machining,工具摩耗の判断,摩耗量: VB<0.3mm 寿命判定基準,"externalization->摩耗進行データ,combination->予測モデル構築,internalization->実践適用",0.88,0.85,0.92,L1,5,2020-02-05 00:00:00,2020-02-05 00:00:00
+surface_quality_pattern,explicit,machining,表面品質の評価,表面粗さ: Ra<1.6μm 光沢度>70,"combination->測定データ→品質基準策定,internalization->基準適用",0.90,0.87,0.93,L0,3,2020-02-12 00:00:00,2020-02-12 00:00:00
+gripper_adjustment_pattern,tacit,robot_gripper,把持力の微調整,圧力センサ: 10-50N範囲で動的調整,"socialization->熟練者観察,externalization->手動調整記録→自動化アルゴリズム",0.83,0.78,0.87,L2,4,2020-02-19 00:00:00,2020-02-19 00:00:00
+path_optimization_pattern,explicit,robot_motion,最適経路の選択,A*アルゴリズム+動的障害物回避,"combination->シミュレーション→実機検証",0.91,0.89,0.94,L0,6,2020-02-26 00:00:00,2020-02-26 00:00:00
+error_recovery_pattern,hybrid,robot_control,エラー復帰手順,状態遷移図: 異常検知→診断→復帰動作,"externalization->障害事例収集→パターン分類,combination->自動化,internalization->運用",0.86,0.82,0.90,L1,7,2020-03-04 00:00:00,2020-03-04 00:00:00
+maintenance_timing_pattern,tacit,robot_maintenance,保守タイミングの判断,振動・温度・電流の複合指標,"socialization->ベテラン経験,externalization->経験則→データ化,combination->予測モデル",0.79,0.75,0.85,L2,8,2020-03-11 00:00:00,2020-03-11 00:00:00
+teaching_skill_pattern,tacit,robot_teaching,ティーチング技能,軌道点選択: 特異点回避+最短経路,"socialization->技能観察,externalization->熟練者動作→軌道最適化",0.81,0.77,0.86,L2,9,2020-03-18 00:00:00,2020-03-18 00:00:00
+calibration_pattern,explicit,robot_calibration,キャリブレーション手法,DH パラメータ同定+誤差補正,"combination->測定データ→パラメータ最適化,internalization->実装",0.93,0.91,0.95,L0,10,2020-03-25 00:00:00,2020-03-25 00:00:00
+force_feedback_pattern,hybrid,robot_control,力覚フィードバック,インピーダンス制御: K=100N/m B=10Ns/m,"externalization->実験データ,combination->制御パラメータ調整",0.87,0.84,0.91,L1,11,2020-04-01 00:00:00,2020-04-01 00:00:00
+speed_optimization_pattern,explicit,robot_performance,速度最適化,台形速度プロファイル+ジャーク制限,"combination->動作解析→パラメータ最適化",0.89,0.86,0.92,L0,12,2020-04-08 00:00:00,2020-04-08 00:00:00
+safety_response_pattern,hybrid,robot_safety,安全動作パターン,ISO10218準拠: 速度制限+力制限,"externalization->規格要求,combination->実装→検証,internalization->運用",0.95,0.93,0.97,L0,13,2020-04-15 00:00:00,2020-04-15 00:00:00
+material_handling_pattern,tacit,robot_handling,材料取扱いノウハウ,材質別把持パラメータセット,"socialization->経験共有,externalization->経験データ→データベース化",0.80,0.76,0.84,L2,14,2020-04-22 00:00:00,2020-04-22 00:00:00
+welding_skill_pattern,hybrid,robot_welding,溶接技能,電流・速度・角度の最適組合せ,"socialization->職人技観察,externalization->パラメータ化,combination->自動化",0.84,0.80,0.88,L1,15,2020-04-29 00:00:00,2020-04-29 00:00:00
+inspection_rhythm_pattern,tacit,robot_inspection,検査リズム,0.5秒/点の一定リズム維持,"socialization->作業観察,externalization->タイミング分析",0.77,0.73,0.82,L2,16,2020-05-06 00:00:00,2020-05-06 00:00:00
+adaptive_control_pattern,explicit,robot_control,適応制御,モデル予測制御: MPC with 予測ホライズン10,"combination->制御理論→実装→調整,internalization->適用",0.90,0.88,0.93,L0,10,2020-05-13 00:00:00,2020-05-13 00:00:00

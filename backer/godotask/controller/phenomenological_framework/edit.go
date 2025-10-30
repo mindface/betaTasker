@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/godotask/model"
+	"github.com/godotask/errors"
 	"github.com/gin-gonic/gin"
 )
 
