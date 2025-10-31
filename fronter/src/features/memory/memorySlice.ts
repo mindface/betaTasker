@@ -39,7 +39,7 @@ export const loadMemories = createAsyncThunk(
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
-    return response.value;
+    return response.value ?? [];
   }
 )
 
@@ -104,6 +104,7 @@ const memorySlice = createSlice({
         state.memoryError = null;
       })
       .addCase(loadMemories.fulfilled, (state, action: PayloadAction<Memory[]>) => {
+        console.log(action.payload)
         state.memoryLoading = false;
         state.memories = action.payload;
       })

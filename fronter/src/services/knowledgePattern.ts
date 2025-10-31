@@ -6,6 +6,7 @@ export const fetchKnowledgePatternsService = async () => {
     endpoint: '/api/knowledgePattern',
     method: 'GET',
     errorMessage: 'error fetchKnowledgePatternsService プロセス最適化一覧取得失敗',
+    getKey: 'knowledge_patterns',
   });
   return data;
 };
@@ -16,6 +17,7 @@ export const addKnowledgePatternService = async (knowledgePattern: AddKnowledgeP
     method: 'POST',
     body: knowledgePattern,
     errorMessage: 'error addKnowledgePatternService アセスメント一覧取得失敗',
+    getKey: 'knowledge_pattern',
   });
   return data;
 };
@@ -26,6 +28,7 @@ export const updateKnowledgePatternService = async (knowledgePattern: KnowledgeP
     method: 'PUT',
     body: knowledgePattern,
     errorMessage: 'error updateKnowledgePatternService プロセス最適化更新失敗',
+    getKey: 'knowledge_pattern',
   });
   return data
 };
@@ -36,6 +39,7 @@ export const deleteKnowledgePatternService = async (id: string) => {
     method: 'DELETE',
     body: { id },
     errorMessage: 'error deleteKnowledgePatternService プロセス最適化削除失敗',
+    getKey: 'knowledge_pattern',
   });
   return data;
 };

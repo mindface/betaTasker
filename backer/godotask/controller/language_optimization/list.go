@@ -26,6 +26,6 @@ func (ctl *LanguageOptimizationController) ListLanguageOptimizations(c *gin.Cont
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Language optimizations retrieved",
-		"LanguageOptimizations": languageOptimizations,
+		"language_optimizations": languageOptimizations,
 	})
 }

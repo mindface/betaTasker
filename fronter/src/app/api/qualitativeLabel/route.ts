@@ -26,7 +26,7 @@ export async function GET() {
 
     const data = await backendRes.json();
 
-    return NextResponse.json({ assessments: data.assessments || [] }, { status: 200 });
+    return NextResponse.json({ qualitative_labels: data.assessments || [] }, { status: 200 });
   } catch (error) {
     console.error('Task API エラー:', error);
     return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
 
     const data = await backendRes.json()
 
-    return NextResponse.json(data, { status: 201 })
+    return NextResponse.json({ qualitative_label: data }, { status: 201 })
   } catch (error) {
     console.error('Task API エラー:', error)
     return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 })
@@ -98,7 +98,7 @@ export async function PUT(request: Request) {
     const data = await backendRes.json()
     console.log('Task API レスポンス:', data)
 
-    return NextResponse.json(data, { status: 201 })
+    return NextResponse.json({ qualitative_label: data }, { status: 201 })
   } catch (error) {
     console.error('Task API エラー:', error)
     return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 })
@@ -137,7 +137,7 @@ export async function DELETE(request: Request) {
     }
 
     const data = await backendRes.json();
-    return NextResponse.json(data, { status: 200 });
+    return NextResponse.json({ qualitative_label: data }, { status: 200 });
   } catch (error) {
     console.error('Task API エラー:', error);
     return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });

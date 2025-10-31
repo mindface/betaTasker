@@ -46,7 +46,7 @@ const MemoryAidList: React.FC<Props> = ({ code }) => {
             <div>該当データなし</div>
           ) : (
             <div className="card-list p-8">
-              {contexts.map(ctx => (
+              {(contexts ?? []).map(ctx => (
                 <div key={ctx.id} className="card-item">
                   <div className="p-b-5 card-title"><b>対象仕事:</b> {ctx.work_target}</div>
                   <div className="p-b-5"><b>機材:</b> {ctx.machine}</div>

@@ -26,6 +26,6 @@ func (ctl *KnowledgePatternController) ListKnowledgePatterns(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Knowledge patterns retrieved",
-		"KnowledgePatterns": knowledgePatterns,
+		"knowledge_patterns": knowledgePatterns,
 	})
 }

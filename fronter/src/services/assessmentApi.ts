@@ -7,6 +7,7 @@ export const fetchAssessmentsService = async () => {
     endpoint: '/api/assessment',
     method: 'GET',
     errorMessage: 'error fetchAssessmentsService アセスメント一覧取得失敗',
+    getKey: 'assessments',
   });
   return data;
 };

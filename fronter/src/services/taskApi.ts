@@ -52,6 +52,7 @@ export const fetchTasksService = async () => {
     endpoint: '/api/task',
     method: 'GET',
     errorMessage: 'error fetchTasksService タスク一覧取得失敗',
+    getKey: 'tasks',
   });
 
   return data;
@@ -63,6 +64,7 @@ export const addTaskService = async (task: AddTask) => {
     method: 'POST',
     body: task,
     errorMessage: 'error addTaskService タスク追加失敗',
+    getKey: 'task',
   });
   return data;
 };
@@ -73,6 +75,7 @@ export const updateTaskService = async (task: Task) => {
     method: 'PUT',
     body: task,
     errorMessage: 'error updateTaskService タスク更新失敗',
+    getKey: 'task',
   });
   return data;
 };
@@ -83,6 +86,7 @@ export const deleteTaskService = async (id: string) => {
     method: 'DELETE',
     body: { id },
     errorMessage: 'error deleteTaskService タスク削除失敗',
+    getKey: 'task',
   });
   
   return data;

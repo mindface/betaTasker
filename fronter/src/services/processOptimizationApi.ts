@@ -6,6 +6,7 @@ export const fetchProcessOptimizationsService = async () => {
     endpoint: '/api/processOptimization',
     method: 'GET',
     errorMessage: 'error fetchProcessOptimizationsService プロセス最適化一覧取得失敗',
+    getKey: 'process_optimizations',
   });
   return data;
 };
@@ -16,6 +17,7 @@ export const addProcessOptimizationService = async (processOptimization: AddProc
     method: 'POST',
     body: processOptimization,
     errorMessage: 'error addProcessOptimizationService プロセス最適化追加失敗',
+    getKey: 'process_optimization',
   });
   return data;
 };
@@ -26,6 +28,7 @@ export const updateProcessOptimizationService = async (processOptimization: Proc
     method: 'PUT',
     body: processOptimization,
     errorMessage: 'error updateProcessOptimizationService プロセス最適化更新失敗',
+    getKey: 'process_optimization',
   });
   return data;
 };
@@ -36,6 +39,7 @@ export const deleteProcessOptimizationService = async (id: string) => {
     method: 'DELETE',
     body: { id },
     errorMessage: 'error deleteProcessOptimizationService プロセス最適化削除失敗',
+    getKey: 'process_optimization',
   });
   return data;
 };

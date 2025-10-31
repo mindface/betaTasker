@@ -15,5 +15,5 @@ export async function GET(req: NextRequest) {
       },
     });
   const data = await res.json();
-  return NextResponse.json({ contexts: data.contexts });
+  return NextResponse.json({ contexts: data.contexts, status: 200 });
 }

@@ -73,7 +73,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
               onChange={handleChange}
               required
             />
-            
           </div>
           <div className="form-group">
             <label htmlFor="description">説明</label>
