@@ -44,7 +44,12 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    return Response.json({
+      success: true,
+      data: {
+        insights: data.insights,
+      }
+    });
     
   } catch (error) {
     console.error('Error fetching insights:', error);

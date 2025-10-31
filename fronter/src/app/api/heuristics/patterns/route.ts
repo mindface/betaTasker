@@ -45,9 +45,12 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-    console.log(data)
-    return NextResponse.json(data);
-    
+    return Response.json({
+      success: true,
+      data: {
+        patterns: data.patterns,
+      }
+    });
   } catch (error) {
     console.error('Error fetching patterns:', error);
     return NextResponse.json(
