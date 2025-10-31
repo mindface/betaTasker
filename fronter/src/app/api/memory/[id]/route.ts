@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { URLs } from '@/constants/url';
+import { memo } from 'react';
 
 export type Params = { params: Promise<{ id: string }>  };
 export async function GET(
@@ -34,7 +35,7 @@ export async function GET(
 
     const data = await backendRes.json();
 
-    return NextResponse.json(data, { status: 200 });
+    return NextResponse.json({ memory: data }, { status: 200 });
   } catch (error) {
     console.error('Memory API エラー:', error);
     return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });

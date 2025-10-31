@@ -78,7 +78,7 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json()
-    console.log(body)
+
     const backendRes = await fetch(`${URLs.memory}/${body.id}`, {
       method: 'PUT',
       headers: {
@@ -137,7 +137,7 @@ export async function DELETE(request: Request) {
     }
 
     const data = await backendRes.json();
-    return NextResponse.json(data, { status: 200 });
+    return NextResponse.json({ memorise: data }, { status: 200 });
   } catch (error) {
     console.error('Memory API エラー:', error);
     return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });

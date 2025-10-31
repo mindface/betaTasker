@@ -26,6 +26,6 @@ func (ctl *TeachingFreeControlController) ListTeachingFreeControls(c *gin.Contex
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Teaching free controls retrieved",
-		"TeachingFreeControls": teachingFreeControls,
+		"teaching_free_controls": teachingFreeControls,
 	})
 }

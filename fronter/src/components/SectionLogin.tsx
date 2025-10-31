@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../store"
 import { loginRequest, loginSuccess, loginFailure } from "../features/user/userSlice"
 import { loginApi, logoutApi, regApi } from "../services/authApi"
-import { fetchMemoriesService } from "../services/memoryApi"
 import { useRouter } from "next/navigation"
 
 export default function SectionLogin() {
@@ -45,10 +44,6 @@ export default function SectionLogin() {
 
   const handleLogout = async () => {
     const result = await logoutApi()
-  }
-
-  const getMemory = async () => {
-    const result = await fetchMemoriesService()
   }
 
   const switchAction = () => {
@@ -94,7 +89,6 @@ export default function SectionLogin() {
             </p>
           </div>
         )}
-        <button onClick={getMemory}>getMemory</button>
       </div>
     </div>
   )

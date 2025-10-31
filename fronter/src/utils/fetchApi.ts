@@ -5,6 +5,7 @@ interface FetchOptions<TBody> {
   method?: HttpMethod;
   body?: TBody;
   errorMessage: string;
+  getKey?: string;
 }
 
 type Result<T> = { ok: true; value: T } | ResponseError;
@@ -15,6 +16,7 @@ export const fetchApiJsonCore = async <TB,TR>({
   method = 'GET',
   body,
   errorMessage,
+  getKey,
 }: FetchOptions<TB>): Promise<Result<TR>> => {
   try {
     const res = await fetch(endpoint, {
@@ -29,7 +31,7 @@ export const fetchApiJsonCore = async <TB,TR>({
     if (!res.ok) {
       return { ok: false, error: new Error(errorMessage) };
     }
-    return { ok: true, value: data as TR };
+    return { ok: true, value: getKey ? data[getKey] as TR : data as TR };
   } catch (err: unknown) {
     return { ok: false, error: err instanceof Error ? err : new Error(String(err)) };
   }

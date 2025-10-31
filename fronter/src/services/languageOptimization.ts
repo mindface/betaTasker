@@ -6,6 +6,7 @@ export const fetchLanguageOptimizationsService = async () => {
     endpoint: '/api/languageOptimization',
     method: 'GET',
     errorMessage: 'error fetchLanguageOptimizationsService 言語最適化データ一覧取得失敗',
+    getKey: 'language_optimizations',
   });
   return data;
 };
@@ -16,6 +17,7 @@ export const addLanguageOptimizationService = async (languageOptimization: AddLa
     method: 'POST',
     body: languageOptimization,
     errorMessage: 'error addLanguageOptimizationService 言語最適化データ追加失敗',
+    getKey: 'language_optimization',
   });
   return data;
 };
@@ -26,6 +28,7 @@ export const updateLanguageOptimizationService = async (languageOptimization: La
     method: 'PUT',
     body: languageOptimization,
     errorMessage: 'error updateLanguageOptimizationService 言語最適化データ更新失敗',
+    getKey: 'language_optimization',
   });
   return data;
 };
@@ -36,6 +39,7 @@ export const deleteLanguageOptimizationService = async (id: string) => {
     method: 'DELETE',
     body: ({ id }),
     errorMessage: 'error deleteLanguageOptimizationService 言語最適化データ削除失敗',
+    getKey: 'language_optimization',
   });
   return data;
 };

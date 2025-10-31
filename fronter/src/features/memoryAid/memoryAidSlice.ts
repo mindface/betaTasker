@@ -38,7 +38,7 @@ const memoryAidSlice = createSlice({
       })
       .addCase(loadMemoryAidsByCode.fulfilled, (state, action: PayloadAction<MemoryContext[]>) => {
         state.loading = false;
-        state.contexts = action.payload;
+        state.contexts = action.payload ?? [];
       })
       .addCase(loadMemoryAidsByCode.rejected, (state, action) => {
         state.loading = false;

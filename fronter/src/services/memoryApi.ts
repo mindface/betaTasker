@@ -6,6 +6,7 @@ export const fetchMemoriesService = async () => {
     endpoint: '/api/memory',
     method: 'GET',
     errorMessage: 'error fetchMemoriesService メモリ一覧取得失敗',
+    getKey: 'memories',
   });
   return data;
 };

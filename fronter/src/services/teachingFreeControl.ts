@@ -6,6 +6,7 @@ export const fetchTeachingFreeControlService = async () => {
     endpoint: '/api/teachingFreeControl',
     method: 'GET',
     errorMessage: 'error fetchTeachingFreeControlService テックコントロールサービス一覧取得失敗',
+    getKey: 'teaching_free_controls',
   });
   return data;
 };
@@ -16,6 +17,7 @@ export const addTeachingFreeControlService = async (teachingFreeControl: AddTeac
     method: 'POST',
     body: teachingFreeControl,
     errorMessage: 'error addTeachingFreeControlService テックコントロールサービス追加失敗',
+    getKey: 'teaching_free_control',
   });
   return data;
 };
@@ -26,6 +28,7 @@ export const updateTeachingFreeControlService = async (teachingFreeControl: Teac
     method: 'PUT',
     body: teachingFreeControl,
     errorMessage: 'error updateTeachingFreeControlService テックコントロールサービス更新失敗',
+    getKey: 'teaching_free_control',
   });
   return data;
 };
@@ -36,6 +39,7 @@ export const deleteTeachingFreeControlService = async (id: string) => {
     method: 'DELETE',
     body: { id },
     errorMessage: 'error deleteTeachingFreeControlService テックコントロールサービス削除失敗',
+    getKey: 'teaching_free_control',
   });
   return data;
 };

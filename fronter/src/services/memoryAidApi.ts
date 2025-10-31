@@ -7,6 +7,7 @@ export const fetchMemoryAidsByCode = async (code: string) => {
     endpoint: `/api/memoryAid?code=${code}`,
     method: 'GET',
     errorMessage: 'error fetchMemoryAidsByCode メモリー支援データ取得失敗',
+    getKey: 'contexts',
   });
   return data
 };
