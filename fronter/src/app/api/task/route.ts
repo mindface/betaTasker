@@ -1,6 +1,9 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { URLs } from '@/constants/url';
+import { errorMessages, ErrorCode } from '@/response/errorCodes';
+import { StatusCodes } from '@/response/statusCodes';
+import { HttpError } from "@/response/httpError";
 
 export async function GET() {
   try {
@@ -8,7 +11,7 @@ export async function GET() {
     const token = cookieStore.get('token')?.value;
 
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
+      throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
     }
     console.log('Task API トークン:', token);
 
@@ -20,16 +23,26 @@ export async function GET() {
       },
     });
 
+    const data = await backendRes.json();
     if (!backendRes.ok) {
-      return NextResponse.json({ error: 'バックエンドからの取得に失敗' }, { status: backendRes.status });
+      throw new HttpError(data.status, data.message, data.code)
     }
 
-    const data = await backendRes.json();
-
-    return NextResponse.json({ tasks: data.tasks || [] }, { status: 200 });
+    return NextResponse.json({
+        tasks: data.tasks || []
+      }, {
+        status: backendRes.status
+      });
   } catch (error) {
     console.error('Task API エラー:', error);
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
+    if(error instanceof HttpError) {
+      return NextResponse.json({
+          code: error.code,
+          error: `Task get | ${error.message}`,
+        }, {
+          status: error.status
+        })
+    }
   }
 }
 
@@ -37,9 +50,9 @@ export async function POST(request: Request) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
-  
+
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 })
+      throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
     }
 
     const body = await request.json()
@@ -52,19 +65,27 @@ export async function POST(request: Request) {
       body: JSON.stringify(body)
     })
 
+    const data = await backendRes.json()
     if (!backendRes.ok) {
-      return NextResponse.json(
-        { error: 'バックエンドへの保存に失敗' }, 
-        { status: backendRes.status }
-      )
+      throw new HttpError(data.status, data.message, data.code)
     }
 
-    const data = await backendRes.json()
-
-    return NextResponse.json({ code: data.code, task: data.task, message: data.message }, { status: 201 })
+    // Todo codeの追加
+    return NextResponse.json({
+        task: data.task,
+      }, {
+        status: backendRes.status
+      })
   } catch (error) {
     console.error('Task API エラー:', error)
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 })
+    if(error instanceof HttpError) {
+      return NextResponse.json({
+          code: error.code,
+          error: `Task post | ${error.message}`,
+        }, {
+          status: error.status
+        })
+    }
   }
 }
 
@@ -74,9 +95,8 @@ export async function PUT(request: Request) {
     const token = cookieStore.get('token')?.value;
 
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 })
+      throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
     }
-
     const body = await request.json()
 
     const backendRes = await fetch(`${URLs.task}/${body.id}`, {
@@ -88,19 +108,25 @@ export async function PUT(request: Request) {
       body: JSON.stringify(body)
     })
 
-    if (!backendRes.ok) {
-      return NextResponse.json(
-        { error: 'バックエンドへの保存に失敗' }, 
-        { status: backendRes.status }
-      )
-    }
-
     const data = await backendRes.json()
-
-    return NextResponse.json({ task: data }, { status: 201 })
+    if (!backendRes.ok) {
+      throw new HttpError(data.status, data.message, data.code)
+    }
+    return NextResponse.json({
+        task: data.task,
+      }, {
+        status: backendRes.status
+      })
   } catch (error) {
     console.error('Task API エラー:', error)
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 })
+    if(error instanceof HttpError) {
+      return NextResponse.json({
+          code: error.code,
+          error: `assessment put | ${error.message}`,
+        }, {
+          status: error.status
+        })
+    }
   }
 }
 
@@ -110,14 +136,14 @@ export async function DELETE(request: Request) {
     const token = cookieStore.get('token')?.value;
 
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
+      throw new HttpError(StatusCodes.Unauthorized,errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
     }
 
     // idはクエリパラメータまたはbodyから取得（ここではbodyから取得する例）
     const body = await request.json();
     const id = body.id;
     if (!id) {
-      return NextResponse.json({ error: 'IDが指定されていません' }, { status: 400 });
+      throw new HttpError(StatusCodes.BadRequest, errorMessages[ErrorCode.PAYLOAD_ID_NOT_FOUND])
     }
 
     const backendRes = await fetch(`${URLs.task}/${id}`, {
@@ -128,17 +154,25 @@ export async function DELETE(request: Request) {
       },
     });
 
+    const data = await backendRes.json()
     if (!backendRes.ok) {
-      return NextResponse.json(
-        { error: 'バックエンドでの削除に失敗' },
-        { status: backendRes.status }
-      );
+      throw new HttpError(data.status, data.message, data.code)
     }
 
-    const data = await backendRes.json();
-    return NextResponse.json({ task: data }, { status: 200 });
+    return NextResponse.json({
+        task: data.task
+      }, {
+        status: backendRes.status
+      });
   } catch (error) {
     console.error('Task API エラー:', error);
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
+    if(error instanceof HttpError) {
+      return NextResponse.json({
+          code: error.code,
+          error: `Task delete | ${error.message}`,
+        }, {
+          status: error.status
+        })
+    }
   }
 }

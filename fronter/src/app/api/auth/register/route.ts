@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { URLs } from '@/constants/url';
+import { errorMessages, ErrorCode } from '@/response/errorCodes';
+import { StatusCodes } from '@/response/statusCodes';
+import { HttpError } from "@/response/httpError";
 
 export async function POST(request: Request) {
   try {
@@ -10,14 +13,25 @@ export async function POST(request: Request) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
-    });
+    })
 
     const data = await backendRes.json()
     if (!backendRes.ok) {
-      return NextResponse.json({ error: data.error || '登録に失敗しました' }, { status: backendRes.status });
+      throw new HttpError(data.status, data.message, data.code)
     }
-    return NextResponse.json(data, { status: 200 });
+    return NextResponse.json({
+      user: data.user,
+      status: backendRes.status
+    })
   } catch (error) {
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        {
+          code: error.code,
+          error: error.message
+        },
+        { status: error.status }
+      )
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { AddTask, Task } from "../model/task";
-import { ApplicationError, ErrorCode, parseErrorResponse } from "../errors/errorCodes";
+import { ApplicationError, ErrorCode, parseErrorResponse } from "../response/errorCodes";
 import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 interface ErrorResponse {

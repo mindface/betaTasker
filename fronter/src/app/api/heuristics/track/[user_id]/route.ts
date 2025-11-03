@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { URLs } from '@/constants/url';
+import { errorMessages, ErrorCode } from '@/response/errorCodes';
+import { StatusCodes } from '@/response/statusCodes';
+import { HttpError } from "@/response/httpError";
 
 export async function GET(
   request: NextRequest,
@@ -14,11 +17,11 @@ export async function GET(
     const token = cookieStore.get('token')?.value;
 
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
+      throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
     }
-    
+
     // バックエンドAPIにリクエスト
-    const response = await fetch(
+    const backendRes = await fetch(
       `${URLs.heuristicsTrack}/${user_id}`,
       {
         method: 'GET',
@@ -28,33 +31,29 @@ export async function GET(
         },
         credentials: 'include',
       }
-    );
+    )
 
-    // レスポンスの処理
-    if (!response.ok) {
-      const error = await response.json();
-      return NextResponse.json(
-        { 
-          success: false,
-          error: error.message || 'Failed to fetch tracking data',
-          code: error.code 
-        },
-        { status: response.status }
-      );
+    const data = await backendRes.json();
+
+    if (!backendRes.ok) {
+      throw new HttpError(data.status, data.message, data.code)
     }
 
-    const data = await response.json();
-    return NextResponse.json(data);
-    
+    return NextResponse.json({ 
+        track: data
+      }, {
+        status: backendRes.status
+      });
+
   } catch (error) {
-    console.error('Error fetching tracking data:', error);
-    return NextResponse.json(
-      { 
-        success: false,
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    );
+    console.error('Error fetching tracking data:', error)
+    if(error instanceof HttpError) {
+      return NextResponse.json({
+          code: error.code,
+          error: `tracking get | ${error.message}`,
+        }, {
+          status: error.status
+        })
+    }
   }
 }

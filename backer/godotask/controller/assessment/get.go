@@ -14,7 +14,7 @@ func (ctl *AssessmentController) GetAssessment(c *gin.Context) {
 		appErr := errors.NewAppError(
 			errors.RES_NOT_FOUND,
 			errors.GetErrorMessage(errors.RES_NOT_FOUND),
-			err.Error() + " | Assessment not found",
+			err.Error() + " | Assessments not found",
 		)
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,

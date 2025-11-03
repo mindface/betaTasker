@@ -1,7 +1,9 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { URLs } from '@/constants/url';
-import { memo } from 'react';
+import { errorMessages, ErrorCode } from '@/response/errorCodes';
+import { StatusCodes } from '@/response/statusCodes';
+import { HttpError } from "@/response/httpError";
 
 export type Params = { params: Promise<{ id: string }>  };
 export async function GET(
@@ -13,12 +15,12 @@ export async function GET(
     const token = cookieStore.get('token')?.value;
 
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
+      throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
     }
 
     const { id } = await params;
     if (!id) {
-      return NextResponse.json({ error: 'IDが指定されていません' }, { status: 400 });
+      throw new HttpError(StatusCodes.BadRequest, errorMessages[ErrorCode.PAYLOAD_ID_NOT_FOUND])
     }
 
     const backendRes = await fetch(`${URLs.memory}/${id}`, {
@@ -29,15 +31,25 @@ export async function GET(
       },
     });
 
+    const data = await backendRes.json()
     if (!backendRes.ok) {
-      return NextResponse.json({ error: 'バックエンドからの取得に失敗' }, { status: backendRes.status });
+      throw new HttpError(data.status, data.message, data.code)
     }
 
-    const data = await backendRes.json();
-
-    return NextResponse.json({ memory: data }, { status: 200 });
+    return NextResponse.json({
+        memory: data.memory
+      }, {
+        status: backendRes.status
+      })
   } catch (error) {
-    console.error('Memory API エラー:', error);
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
+    console.error('Memory API エラー:', error)
+    if(error instanceof HttpError) {
+      return NextResponse.json({
+          code: error.code,
+          error: `Memory get | ${error.message}`,
+        }, {
+          status: error.status
+        })
+    }
   }
 }

@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { errorMessages, ErrorCode } from '@/response/errorCodes';
+import { StatusCodes } from '@/response/statusCodes';
+import { HttpError } from "@/response/httpError";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
 
@@ -8,17 +11,17 @@ export async function GET(request: NextRequest) {
     // クエリパラメータを取得
     const searchParams = request.nextUrl.searchParams;
     const queryString = searchParams.toString();
-    
+
     // クッキーからトークンを取得
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
+      throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
     }
-    
+
     // バックエンドAPIにリクエスト
-    const response = await fetch(
+    const backendRes = await fetch(
       `${API_BASE_URL}/api/heuristics/insights${queryString ? `?${queryString}` : ''}`,
       {
         method: 'GET',
@@ -28,33 +31,28 @@ export async function GET(request: NextRequest) {
         },
         credentials: 'include',
       }
-    );
+    )
 
+    const data = await backendRes.json();
     // レスポンスの処理
-    if (!response.ok) {
-      const error = await response.json();
-      return NextResponse.json(
-        { 
-          success: false,
-          error: error.message || 'Failed to fetch insights',
-          code: error.code 
-        },
-        { status: response.status }
-      );
+    if (!backendRes.ok) {
+      throw new HttpError(data.status, data.message, data.code)
     }
 
-    const data = await response.json();
-    return NextResponse.json(data);
-    
+    return NextResponse.json({
+        insights: data.insights
+      }, {
+        status: backendRes.status
+      })
   } catch (error) {
-    console.error('Error fetching insights:', error);
-    return NextResponse.json(
-      { 
-        success: false,
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    );
+    console.error('Error fetching insights:', error)
+    if(error instanceof HttpError) {
+      return NextResponse.json({
+          code: error.code,
+          error: `assessment get | ${error.message}`,
+        }, {
+          status: error.status
+        })
+    }
   }
 }

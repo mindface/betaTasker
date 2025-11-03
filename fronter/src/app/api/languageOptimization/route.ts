@@ -1,6 +1,9 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { URLs } from '@/constants/url';
+import { errorMessages, ErrorCode } from '@/response/errorCodes';
+import { StatusCodes } from '@/response/statusCodes';
+import { HttpError } from "@/response/httpError";
 
 export async function GET() {
   try {
@@ -8,9 +11,9 @@ export async function GET() {
     const token = cookieStore.get('token')?.value;
 
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
+      throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
     }
-    console.log('LanguageOptimization API トークン:', token);
+    console.log('language optimization API トークン:', token);
 
     const backendRes = await fetch(URLs.languageOptimization, {
       method: 'GET',
@@ -20,16 +23,26 @@ export async function GET() {
       },
     });
 
+    const data = await backendRes.json()
     if (!backendRes.ok) {
-      return NextResponse.json({ error: 'バックエンドからの取得に失敗' }, { status: backendRes.status });
+      throw new HttpError(data.status, data.message, data.code)
     }
 
-    const data = await backendRes.json();
-
-    return NextResponse.json({ assessments: data.assessments || [] }, { status: 200 });
+    return NextResponse.json({
+        language_optimizations: data
+      }, {
+        status: backendRes.status
+      });
   } catch (error) {
-    console.error('Task API エラー:', error);
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
+    console.error('language optimization API エラー:', error);
+    if(error instanceof HttpError) {
+      return NextResponse.json({
+          code: error.code,
+          error: `language optimization put | ${error.message}`,
+        }, {
+          status: error.status
+        })
+    }
   }
 }
 
@@ -39,7 +52,11 @@ export async function POST(request: Request) {
     const token = cookieStore.get('token')?.value;
   
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 })
+      return NextResponse.json({
+        error: errorMessages[ErrorCode.AUTH_UNAUTHORIZED],
+      }, {
+        status: StatusCodes.Unauthorized
+      })
     }
 
     const body = await request.json()
@@ -53,18 +70,27 @@ export async function POST(request: Request) {
     })
 
     if (!backendRes.ok) {
-      return NextResponse.json(
-        { error: 'バックエンドへの保存に失敗' }, 
-        { status: backendRes.status }
-      )
+      return NextResponse.json({
+          error: errorMessages[ErrorCode.DB_QUERY_FAILED],
+        }, {
+          status: backendRes.status
+        })
     }
 
     const data = await backendRes.json()
 
-    return NextResponse.json(data, { status: 201 })
+    return NextResponse.json({
+        language_optimization: data
+      }, {
+        status: backendRes.status
+      })
   } catch (error) {
-    console.error('Task API エラー:', error)
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 })
+    console.error('Language optimization API エラー:', error)
+    return NextResponse.json({
+        error: `language optimization API エラー | ${errorMessages[ErrorCode.DB_QUERY_SAVE_FAILED]}`,
+      }, {
+        status: StatusCodes.InternalServerError
+      })
   }
 }
 
@@ -74,7 +100,7 @@ export async function PUT(request: Request) {
     const token = cookieStore.get('token')?.value;
   
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 })
+      throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
     }
 
     const body = await request.json()
@@ -88,20 +114,28 @@ export async function PUT(request: Request) {
       body: JSON.stringify(body)
     })
 
+    const data = await backendRes.json()
     if (!backendRes.ok) {
-      return NextResponse.json(
-        { error: 'バックエンドへの保存に失敗' }, 
-        { status: backendRes.status }
-      )
+      throw new HttpError(data.status, data.message, data.code)
     }
 
-    const data = await backendRes.json()
-    console.log('Task API レスポンス:', data)
+    console.log('language optimization API レスポンス:', data)
 
-    return NextResponse.json(data, { status: 201 })
+    return NextResponse.json({
+        language_optimization: data.language_optimization
+      }, {
+        status: backendRes.status
+      })
   } catch (error) {
-    console.error('Task API エラー:', error)
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 })
+    console.error('language optimization API エラー:', error)
+    if(error instanceof HttpError) {
+      return NextResponse.json({
+          code: error.code,
+          error: `language optimization  put | ${error.message}`,
+        }, {
+          status: error.status
+        })
+    }
   }
 }
 
@@ -111,14 +145,18 @@ export async function DELETE(request: Request) {
     const token = cookieStore.get('token')?.value;
 
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
+      return NextResponse.json({
+        error: errorMessages[ErrorCode.AUTH_UNAUTHORIZED],
+      }, {
+        status: StatusCodes.Unauthorized
+      })
     }
 
     // idはクエリパラメータまたはbodyから取得（ここではbodyから取得する例）
     const body = await request.json();
     const id = body.id;
     if (!id) {
-      return NextResponse.json({ error: 'IDが指定されていません' }, { status: 400 });
+      throw new HttpError(StatusCodes.BadRequest, errorMessages[ErrorCode.PAYLOAD_ID_NOT_FOUND])
     }
 
     const backendRes = await fetch(`${URLs.languageOptimization}/${id}`, {
@@ -129,17 +167,25 @@ export async function DELETE(request: Request) {
       },
     });
 
+    const data = await backendRes.json()
     if (!backendRes.ok) {
-      return NextResponse.json(
-        { error: 'バックエンドでの削除に失敗' },
-        { status: backendRes.status }
-      );
+      throw new HttpError(data.status, data.message, data.code)
     }
 
-    const data = await backendRes.json();
-    return NextResponse.json(data, { status: 200 });
+    return NextResponse.json({
+        language_optimization: data.language_optimization,
+      }, {
+        status: backendRes.status
+      })
   } catch (error) {
-    console.error('Task API エラー:', error);
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
+    console.error('language optimization API エラー:', error);
+    if(error instanceof HttpError) {
+      return NextResponse.json({
+          code: error.code,
+          error: `language optimization get | ${error.message}`,
+        }, {
+          status: error.status
+        })
+    }
   }
 }

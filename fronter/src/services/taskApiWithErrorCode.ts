@@ -1,5 +1,5 @@
 import { Task, AddTask } from '../model/task';
-import { ApplicationError, ErrorCode, parseErrorResponse } from '../errors/errorCodes';
+import { ApplicationError, ErrorCode, parseErrorResponse } from '../response/errorCodes';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8081';
 

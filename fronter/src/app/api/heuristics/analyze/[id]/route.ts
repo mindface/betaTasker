@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { URLs } from '@/constants/url';
+import { errorMessages, ErrorCode } from '@/response/errorCodes';
+import { StatusCodes } from '@/response/statusCodes';
+import { HttpError } from "@/response/httpError";
 
 export async function GET(
   request: NextRequest,
@@ -8,15 +11,15 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    
+
     // クッキーからトークンを取得
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
     if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
+      throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
     }
-  
+
     // バックエンドAPIにリクエスト
     const response = await fetch(
       `${URLs.heuristicsAnalyze}/${id}`,
@@ -28,33 +31,28 @@ export async function GET(
         },
         credentials: 'include',
       }
-    );
-
-    // レスポンスの処理
-    if (!response.ok) {
-      const error = await response.json();
-      return NextResponse.json(
-        { 
-          success: false,
-          error: error.message || 'Failed to fetch analysis',
-          code: error.code 
-        },
-        { status: response.status }
-      );
-    }
+    )
 
     const data = await response.json();
-    return NextResponse.json(data);
-    
+    // レスポンスの処理
+    if (!response.ok) {
+      throw new HttpError(data.status, data.message, data.code)
+    }
+
+    return NextResponse.json({
+        analysis: data.data.analysis,
+      }, {
+        status: StatusCodes.OK
+      })
   } catch (error) {
-    console.error('Error fetching analysis:', error);
-    return NextResponse.json(
-      { 
-        success: false,
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    );
+    console.error('Error fetching analysis:', error)
+    if(error instanceof HttpError) {
+      return NextResponse.json({
+          code: error.code,
+          error: `analyze get | ${error.message}`,
+        }, {
+          status: error.status
+        })
+    }
   }
 }
