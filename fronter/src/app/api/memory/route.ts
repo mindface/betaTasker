@@ -5,44 +5,16 @@ import { errorMessages, ErrorCode } from '@/response/errorCodes';
 import { StatusCodes } from '@/response/statusCodes';
 import { HttpError } from "@/response/httpError";
 
+import { handleBaseRequest, handleError } from "../utlts/handleRequest"
+
+const END_POINT_MEMOERY = 'memory';
+
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-
-    if (!token) {
-      throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
-    }
-    console.log('Memory API トークン:', token);
-
-    const backendRes = await fetch(URLs.memory, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-
-    const data = await backendRes.json();
-    if (!backendRes.ok) {
-      throw new HttpError(data.status, data.message, data.code)
-    }
-
-    return NextResponse.json({
-        memories: data.memories || []
-      }, {
-        status: backendRes.status
-      })
+    const { data, status } = await handleBaseRequest('GET',END_POINT_MEMOERY);
+    return NextResponse.json({ memories: data.memories }, { status });
   } catch (error) {
-    console.error('memories API エラー:', error);
-    if(error instanceof HttpError) {
-      return NextResponse.json({
-          code: error.code,
-          error: `memories get | ${error.message}`,
-        }, {
-          status: error.status
-        })
-    }
+    return handleError(error,END_POINT_MEMOERY);
   }
 }
 

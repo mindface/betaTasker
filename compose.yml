@@ -21,7 +21,7 @@ services:
   fronter:
     build:
       context: ./fronter
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: fronter
     volumes:
       - ./fronter:/app

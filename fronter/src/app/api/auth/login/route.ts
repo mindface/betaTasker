@@ -4,6 +4,7 @@ import { StatusCodes } from '@/response/statusCodes';
 import { errorMessages, ErrorCode } from '@/response/errorCodes';
 import { SuccessCode, successMessages } from "@/response/resposeMessage";
 import { HttpError } from "@/response/httpError";
+import { handleError } from "../../utlts/handleRequest"
 
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
@@ -47,20 +48,9 @@ export async function POST(req: NextRequest) {
 
       return response;
     }
-
     throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_INVALID_CREDENTIALS])
-
   } catch (error) {
     console.error('Login error:', error);
-    if (error instanceof HttpError) {
-      return NextResponse.json(
-        {
-          code: error.code,
-          message: error.message
-        },
-        { status: error.status }
-      )
-    }
+    return handleError(error,'Login');
   }
-
 }

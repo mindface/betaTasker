@@ -19,7 +19,7 @@ const URLs = {
   test: `${domainAndHost}/api/test`,
   heuristics_track: `${domainAndHost}/api/heuristics/track`,
   learning: `${domainAndHost}/api/learning`,
-  memoryAid: `${domainAndHost}/api/memory_aid`,
+  memoryAid: `${domainAndHost}/api/memory/aid`,
   knowledgePattern: `${domainAndHost}/api/knowledge_pattern`,
   teachingFreeControl: `${domainAndHost}/api/teaching_free_control`,
   qualitativeLabel: `${domainAndHost}/api/qualitative_label`,
