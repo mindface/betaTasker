@@ -43,8 +43,13 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
-    console.log(data)
-    return NextResponse.json(data);
+    return Response.json({
+      success: true,
+      data: {
+        trackId: data.trackId,
+        status: data.status,
+      }
+    });
     
   } catch (error) {
     console.error('Error tracking behavior:', error);

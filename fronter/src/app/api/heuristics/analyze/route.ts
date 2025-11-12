@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     if (!token) {
       return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
     }
-    
+
     // バックエンドAPIにリクエスト
     const response = await fetch(
       URLs.heuristicsAnalyze,
@@ -42,7 +42,13 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    return Response.json({
+      success: true,
+      data: {
+        analysis: data.analysis,
+        score: data.score,
+      }
+    });
     
   } catch (error) {
     console.error('Error analyzing data:', error);
@@ -50,6 +56,7 @@ export async function POST(request: NextRequest) {
       { 
         success: false,
         error: 'Internal server error',
+        data: null,
         message: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
