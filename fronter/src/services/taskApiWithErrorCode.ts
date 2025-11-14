@@ -37,7 +37,7 @@ class TaskApiClient {
 
     if (errorData?.code) {
       throw new ApplicationError(
-        errorData.code as ErrorCode,
+        errorData.code as keyof typeof ErrorCode,
         errorData.message,
         errorData.detail
       );

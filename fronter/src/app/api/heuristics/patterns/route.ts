@@ -4,6 +4,9 @@ import { URLs } from '@/constants/url';
 import { errorMessages, ErrorCode } from '@/response/errorCodes';
 import { StatusCodes } from '@/response/statusCodes';
 import { HttpError } from "@/response/httpError";
+import { handleBaseRequest, handleError } from "../../utlts/handleRequest"
+
+const END_POINT_HEURISTICS_PATTERNS = 'heuristicsPatterns';
 
 export async function GET(request: NextRequest) {
   try {
@@ -50,14 +53,6 @@ export async function GET(request: NextRequest) {
       });
     
   } catch (error) {
-    console.error('Error fetching patterns:', error);
-    if(error instanceof HttpError) {
-      return NextResponse.json({
-          code: error.code,
-          error: `patterns get | ${error.message}`,
-        }, {
-          status: error.status
-        })
-    }
+    return handleError(error,END_POINT_HEURISTICS_PATTERNS);
   }
 }

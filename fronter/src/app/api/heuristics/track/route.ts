@@ -1,60 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { URLs } from '@/constants/url';
-import { errorMessages, ErrorCode } from '@/response/errorCodes';
-import { StatusCodes } from '@/response/statusCodes';
-import { HttpError } from '@/response/httpError';
+import { handleBaseRequest, handleError } from "../../utlts/handleRequest"
+
+const END_POINT_HEURISTICS_TRACK = 'heuristicsTrack';
 
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-
-    // クッキーからトークンを取得
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-
-    if (!token) {
-      return NextResponse.json({
-        error: errorMessages[ErrorCode.AUTH_UNAUTHORIZED],
-      }, {
-        status: StatusCodes.Unauthorized
-      })
+    try {
+      const { data, status } = await handleBaseRequest('POST',END_POINT_HEURISTICS_TRACK, request);
+      return NextResponse.json({ tracking_id: data.data.tracking_id }, { status });
+    } catch (error) {
+      return handleError(error,END_POINT_HEURISTICS_TRACK);
     }
-
-    // バックエンドAPIにリクエスト
-    const backendRes = await fetch(
-      URLs.heuristicsTrack,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(body),
-        credentials: 'include',
-      }
-    )
-
-    const data = await backendRes.json();
-    if (!backendRes.ok) {
-      throw new HttpError(data.status, data.message, data.code)
-    }
-
-    return NextResponse.json(
-      {
-        track: data.track || [],
-      },
-      { status: backendRes.status }
-    );
-  } catch (error) {
-    console.error('Error tracking behavior:', error);
-    if(error instanceof HttpError) {
-      return NextResponse.json({
-          code: error.code,
-          error: `tracking behavior post | ${error.message}`,
-        }, {
-          status: error.status
-        })
-    }
-  }
 }

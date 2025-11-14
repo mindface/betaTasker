@@ -3,7 +3,7 @@ import { ApplicationError, ErrorCode, parseErrorResponse } from "../response/err
 import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 interface ErrorResponse {
-  code: ErrorCode;
+  code: keyof typeof ErrorCode;
   message: string;
   detail?: string;
 }

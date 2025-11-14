@@ -1,37 +1,13 @@
 import { NextResponse } from 'next/server';
-import { URLs } from '@/constants/url';
-import { errorMessages, ErrorCode } from '@/response/errorCodes';
-import { StatusCodes } from '@/response/statusCodes';
-import { HttpError } from "@/response/httpError";
+import { handleBaseRequest, handleError } from "../../utlts/handleRequest"
+
+const END_POINT_REGISTER = 'register';
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const backendRes = await fetch(URLs.register, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    })
-
-    const data = await backendRes.json()
-    if (!backendRes.ok) {
-      throw new HttpError(data.status, data.message, data.code)
-    }
-    return NextResponse.json({
-      user: data.user,
-      status: backendRes.status
-    })
+    const { data, status } = await handleBaseRequest('POST',END_POINT_REGISTER,request);
+    return NextResponse.json({ knowledge_patterns: data.knowledge_patterns }, { status });
   } catch (error) {
-    if (error instanceof HttpError) {
-      return NextResponse.json(
-        {
-          code: error.code,
-          error: error.message
-        },
-        { status: error.status }
-      )
-    }
+    return handleError(error,END_POINT_REGISTER);
   }
 }

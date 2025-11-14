@@ -4,55 +4,19 @@ import { URLs } from '@/constants/url';
 import { errorMessages, ErrorCode } from '@/response/errorCodes';
 import { StatusCodes } from '@/response/statusCodes';
 import { HttpError } from "@/response/httpError";
+import { handleBaseRequest, handleError } from "../../../utlts/handleRequest"
+
+const END_POINT_HEURISTICS_ANALYZE = 'heuristicsAnalyze'
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  try {
     const { id } = await params;
-
-    // クッキーからトークンを取得
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-
-    if (!token) {
-      throw new HttpError(StatusCodes.Unauthorized, errorMessages[ErrorCode.AUTH_UNAUTHORIZED])
+    try {
+      const { data, status } = await handleBaseRequest('GET',END_POINT_HEURISTICS_ANALYZE, undefined, { id });
+      return NextResponse.json({ knowledge_patterns: data.knowledge_patterns }, { status });
+    } catch (error) {
+      return handleError(error,END_POINT_HEURISTICS_ANALYZE);
     }
-
-    // バックエンドAPIにリクエスト
-    const response = await fetch(
-      `${URLs.heuristicsAnalyze}/${id}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        credentials: 'include',
-      }
-    )
-
-    const data = await response.json();
-    // レスポンスの処理
-    if (!response.ok) {
-      throw new HttpError(data.status, data.message, data.code)
-    }
-
-    return NextResponse.json({
-        analysis: data.data.analysis,
-      }, {
-        status: StatusCodes.OK
-      })
-  } catch (error) {
-    console.error('Error fetching analysis:', error)
-    if(error instanceof HttpError) {
-      return NextResponse.json({
-          code: error.code,
-          error: `analyze get | ${error.message}`,
-        }, {
-          status: error.status
-        })
-    }
-  }
 }
