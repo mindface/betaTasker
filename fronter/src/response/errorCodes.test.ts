@@ -67,7 +67,7 @@ describe('getErrorMessage', () => {
   });
 
   it('未知のエラーコードに対してデフォルトメッセージを返す', () => {
-    const unknownCode = 'UNKNOWN_CODE' as ErrorCode;
+    const unknownCode = 'UNKNOWN_CODE' as keyof typeof ErrorCode;
     expect(getErrorMessage(unknownCode)).toBe('エラーが発生しました');
   });
 });
