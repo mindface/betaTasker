@@ -1,43 +1,19 @@
-import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { URLs } from '@/constants/url';
-import { memo } from 'react';
+import { handleBaseRequest, handleError } from "../../utlts/handleRequest"
+import { memoryUsage } from 'process';
+
+const END_POINT_MEMOERY = 'memory';
 
 export type Params = { params: Promise<{ id: string }>  };
 export async function GET(
-  req: NextRequest,
+  reqest: NextRequest,
   { params }: Params
 ) {
+  const { id } = await params;
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-
-    if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
-    }
-
-    const { id } = await params;
-    if (!id) {
-      return NextResponse.json({ error: 'IDが指定されていません' }, { status: 400 });
-    }
-
-    const backendRes = await fetch(`${URLs.memory}/${id}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!backendRes.ok) {
-      return NextResponse.json({ error: 'バックエンドからの取得に失敗' }, { status: backendRes.status });
-    }
-
-    const data = await backendRes.json();
-
-    return NextResponse.json({ memory: data }, { status: 200 });
+    const { data, status } = await handleBaseRequest('GET',END_POINT_MEMOERY,reqest, { id });
+    return NextResponse.json({ memory: data.memory }, { status });
   } catch (error) {
-    console.error('Memory API エラー:', error);
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
+    return handleError(error,END_POINT_MEMOERY);
   }
 }

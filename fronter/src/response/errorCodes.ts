@@ -1,50 +1,68 @@
-export enum ErrorCode {
+import { LOADIPHLPAPI } from "dns";
+
+export const ErrorCode: Record<string, string> = {
+
+  // ログイン・認証エラー (LOGIN_xxx)
+  // LOGIN: 'LOGIN_001',
+
+  // ユーザー登録エラー (REGISTER_xxx)
+  REGISTER_ADD_FIELDS: 'REGISTER_001',
+
   // 認証・認可エラー (AUTH_xxx)
-  AUTH_INVALID_CREDENTIALS = 'AUTH_001',
-  AUTH_TOKEN_EXPIRED = 'AUTH_002',
-  AUTH_TOKEN_INVALID = 'AUTH_003',
-  AUTH_UNAUTHORIZED = 'AUTH_004',
-  AUTH_ACCOUNT_DISABLED = 'AUTH_005',
+  AUTH_INVALID_CREDENTIALS: 'AUTH_001',
+  AUTH_TOKEN_EXPIRED: 'AUTH_002',
+  AUTH_TOKEN_INVALID: 'AUTH_003',
+  AUTH_UNAUTHORIZED: 'AUTH_004',
+  AUTH_ACCOUNT_DISABLED: 'AUTH_005',
+  AUTH_TOKEN_NOT_FOUND: 'AUTH_006',
 
   // バリデーションエラー (VAL_xxx)
-  VAL_INVALID_INPUT = 'VAL_001',
-  VAL_MISSING_FIELD = 'VAL_002',
-  VAL_INVALID_FORMAT = 'VAL_003',
-  VAL_DUPLICATE_ENTRY = 'VAL_004',
-  VAL_CONSTRAINT_FAILED = 'VAL_005',
+  VAL_INVALID_INPUT: 'VAL_001',
+  VAL_MISSING_FIELD: 'VAL_002',
+  VAL_INVALID_FORMAT: 'VAL_003',
+  VAL_DUPLICATE_ENTRY: 'VAL_004',
+  VAL_CONSTRAINT_FAILED: 'VAL_005',
 
   // リソースエラー (RES_xxx)
-  RES_NOT_FOUND = 'RES_001',
-  RES_ALREADY_EXISTS = 'RES_002',
-  RES_ACCESS_DENIED = 'RES_003',
-  RES_LOCKED = 'RES_004',
+  RES_NOT_FOUND: 'RES_001',
+  RES_ALREADY_EXISTS: 'RES_002',
+  RES_ACCESS_DENIED: 'RES_003',
+  RES_LOCKED: 'RES_004',
 
   // データベースエラー (DB_xxx)
-  DB_CONNECTION_FAILED = 'DB_001',
-  DB_QUERY_FAILED = 'DB_002',
-  DB_TRANSACTION_FAILED = 'DB_003',
-  DB_TIMEOUT = 'DB_004',
+  DB_CONNECTION_FAILED: 'DB_001',
+  DB_QUERY_FAILED: 'DB_002',
+  DB_QUERY_SAVE_FAILED: 'DB_003',
+  DB_TRANSACTION_FAILED: 'DB_004',
+  DB_TIMEOUT: 'DB_005',
+  DB_SEED_FAILED: 'DB_006',
 
   // ビジネスロジックエラー (BIZ_xxx)
-  BIZ_OPERATION_NOT_ALLOWED = 'BIZ_001',
-  BIZ_LIMIT_EXCEEDED = 'BIZ_002',
-  BIZ_INVALID_STATE = 'BIZ_003',
-  BIZ_DEPENDENCY_ERROR = 'BIZ_004',
+  BIZ_OPERATION_NOT_ALLOWED: 'BIZ_001',
+  BIZ_LIMIT_EXCEEDED: 'BIZ_002',
+  BIZ_INVALID_STATE: 'BIZ_003',
+  BIZ_DEPENDENCY_ERROR: 'BIZ_004',
 
   // システムエラー (SYS_xxx)
-  SYS_INTERNAL_ERROR = 'SYS_001',
-  SYS_SERVICE_UNAVAILABLE = 'SYS_002',
-  SYS_TIMEOUT = 'SYS_003',
-  SYS_RATE_LIMIT_EXCEEDED = 'SYS_004',
+  SYS_INTERNAL_ERROR: 'SYS_001',
+  SYS_SERVICE_UNAVAILABLE: 'SYS_002',
+  SYS_TIMEOUT: 'SYS_003',
+  SYS_RATE_LIMIT_EXCEEDED: 'SYS_004',
 
   // ネットワークエラー (NET_xxx)
-  NET_CONNECTION_FAILED = 'NET_001',
-  NET_REQUEST_TIMEOUT = 'NET_002',
-  NET_REQUEST_ABORTED = 'NET_003',
+  NET_CONNECTION_FAILED: 'NET_001',
+  NET_REQUEST_TIMEOUT: 'NET_002',
+  NET_REQUEST_ABORTED: 'NET_003',
+
+  // 送信データエラー
+  PAYLOAD_TOO_LARGE: 'PAYLOAD_001',
+  PAYLOAD_ID_NOT_FOUND: 'PAYLOAD_002',
+  PAYLOAD_EMAIL_AND_PASSWORD_NOT_FOUND: 'PAYLOAD_003',
+
 }
 
 export interface AppError {
-  code: ErrorCode;
+  code: keyof typeof ErrorCode;
   message: string;
   detail?: string;
   timestamp?: string;
@@ -52,12 +70,12 @@ export interface AppError {
 }
 
 export class ApplicationError extends Error {
-  public code: ErrorCode;
+  public code: keyof typeof ErrorCode;
   public detail?: string;
   public timestamp: string;
   public path?: string;
 
-  constructor(code: ErrorCode, message?: string, detail?: string) {
+  constructor(code: keyof typeof ErrorCode, message?: string, detail?: string) {
     const errorMessage = message || getErrorMessage(code);
     super(errorMessage);
     this.name = 'ApplicationError';
@@ -78,10 +96,12 @@ export class ApplicationError extends Error {
   }
 }
 
-const errorMessages: Record<ErrorCode, string> = {
+export const errorMessages: Record<keyof typeof ErrorCode, string> = {
+  [ErrorCode.REGISTER_ADD_FIELDS]: '登録に失敗しました。',
   [ErrorCode.AUTH_INVALID_CREDENTIALS]: '認証情報が無効です',
   [ErrorCode.AUTH_TOKEN_EXPIRED]: 'トークンの有効期限が切れています',
   [ErrorCode.AUTH_TOKEN_INVALID]: '無効なトークンです',
+  [ErrorCode.AUTH_TOKEN_NOT_FOUND]: 'トークンがありません',
   [ErrorCode.AUTH_UNAUTHORIZED]: '権限がありません',
   [ErrorCode.AUTH_ACCOUNT_DISABLED]: 'アカウントが無効化されています',
   [ErrorCode.VAL_INVALID_INPUT]: '入力値が無効です',
@@ -93,8 +113,9 @@ const errorMessages: Record<ErrorCode, string> = {
   [ErrorCode.RES_ALREADY_EXISTS]: 'リソースが既に存在します',
   [ErrorCode.RES_ACCESS_DENIED]: 'アクセスが拒否されました',
   [ErrorCode.RES_LOCKED]: 'リソースがロックされています',
-  [ErrorCode.DB_CONNECTION_FAILED]: 'データベース接続に失敗しました',
-  [ErrorCode.DB_QUERY_FAILED]: 'クエリの実行に失敗しました',
+  [ErrorCode.DB_GET_FAILED]: 'データの取得に失敗しました',
+  [ErrorCode.DB_QUERY_FAILED]: 'データ保存の実行に失敗しました',
+  [ErrorCode.DB_QUERY_SAVE_FAILED]: 'データの保存に失敗しました',
   [ErrorCode.DB_TRANSACTION_FAILED]: 'トランザクションに失敗しました',
   [ErrorCode.DB_TIMEOUT]: 'データベースタイムアウト',
   [ErrorCode.BIZ_OPERATION_NOT_ALLOWED]: 'この操作は許可されていません',
@@ -108,9 +129,12 @@ const errorMessages: Record<ErrorCode, string> = {
   [ErrorCode.NET_CONNECTION_FAILED]: 'ネットワーク接続に失敗しました',
   [ErrorCode.NET_REQUEST_TIMEOUT]: 'リクエストがタイムアウトしました',
   [ErrorCode.NET_REQUEST_ABORTED]: 'リクエストが中断されました',
+  [ErrorCode.PAYLOAD_TOO_LARGE]: '送信データが大きすぎます',
+  [ErrorCode.PAYLOAD_ID_NOT_FOUND]: '送信データが見つかりません',
+  [ErrorCode.PAYLOAD_EMAIL_AND_PASSWORD_NOT_FOUND]: 'メールアドレスまたはパスワードが見つかりません',
 };
 
-export function getErrorMessage(code: ErrorCode): string {
+export function getErrorMessage(code:keyof typeof ErrorCode): string {
   return errorMessages[code] || 'エラーが発生しました';
 }
 

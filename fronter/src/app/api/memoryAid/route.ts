@@ -1,19 +1,17 @@
-import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+import { handleBaseRequest, handleError } from "../utlts/handleRequest"
 
-export async function GET(req: NextRequest) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('token')?.value;
-  const { searchParams } = new URL(req.url);
-  const code = searchParams.get('code') || '';
+const END_POINT_MEMORY_AID = 'memoryAid';
 
-  const res = await fetch(`http://localhost:8080/api/memory/aid/${code}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-  const data = await res.json();
-  return NextResponse.json({ contexts: data.contexts, status: 200 });
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const code: Record<string, string> = { code: searchParams.get('code') || '' };
+
+  try {
+    const { data, status } = await handleBaseRequest('GET',END_POINT_MEMORY_AID, undefined, undefined, code);
+    return NextResponse.json({ 
+      contexts: data.contexts }, { status });
+  } catch (error) {
+    return handleError(error,END_POINT_MEMORY_AID);
+  }
 }

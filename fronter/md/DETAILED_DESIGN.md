@@ -1234,7 +1234,7 @@ const verifyToken = (token: string): TokenPayload => {
     throw new ApplicationError(
       ErrorCode.AUTH_INVALID_CREDENTIALS,
       'Invalid token'
-    );
+    )
   }
 };
 

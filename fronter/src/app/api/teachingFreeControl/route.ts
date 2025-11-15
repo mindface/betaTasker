@@ -1,145 +1,65 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { URLs } from '@/constants/url';
+import { errorMessages, ErrorCode } from '@/response/errorCodes';
+import { StatusCodes } from '@/response/statusCodes';
+import { HttpError } from "@/response/httpError";
+import { handleBaseRequest, handleError } from "../utlts/handleRequest"
+
+const END_POINT_TEACHING_FREE_CONTROL = 'teachingFreeControl';
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-
-    if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
-    }
-    console.log('Task API トークン:', token);
-
-    const backendRes = await fetch(URLs.teachingFreeControl, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!backendRes.ok) {
-      return NextResponse.json({ error: 'バックエンドからの取得に失敗' }, { status: backendRes.status });
-    }
-
-    const data = await backendRes.json();
-
-    return NextResponse.json({ assessments: data.assessments || [] }, { status: 200 });
+    const { data, status } = await handleBaseRequest('GET',END_POINT_TEACHING_FREE_CONTROL);
+    return NextResponse.json({ 
+      teaching_free_controls: data.teaching_free_controls }, { status });
   } catch (error) {
-    console.error('Task API エラー:', error);
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
+    return handleError(error,END_POINT_TEACHING_FREE_CONTROL);
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-  
-    if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 })
-    }
-
-    const body = await request.json()
-    const backendRes = await fetch(URLs.teachingFreeControl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body)
-    });
-
-    if (!backendRes.ok) {
-      return NextResponse.json(
-        { error: 'バックエンドへの保存に失敗' }, 
-        { status: backendRes.status }
-      )
-    }
-
-    const data = await backendRes.json()
-
-    return NextResponse.json(data, { status: 201 })
+    const { data, status } = await handleBaseRequest('POST',END_POINT_TEACHING_FREE_CONTROL,request);
+    return NextResponse.json({ 
+      teaching_free_control: data.teaching_free_control }, { status });
   } catch (error) {
-    console.error('Task API エラー:', error)
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 })
+    return handleError(error,END_POINT_TEACHING_FREE_CONTROL);
   }
 }
 
 export async function PUT(request: Request) {
-  try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-  
-    if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 })
-    }
-
-    const body = await request.json()
-
-    const backendRes = await fetch(`${URLs.teachingFreeControl}/${body.id}`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body)
+  const body = await request.json();
+  const id = body.id;
+  if (!id) {
+    return NextResponse.json({
+      error: errorMessages[ErrorCode.PAYLOAD_ID_NOT_FOUND],
+      status: StatusCodes.BadRequest
     })
-
-    if (!backendRes.ok) {
-      return NextResponse.json(
-        { error: 'バックエンドへの保存に失敗' }, 
-        { status: backendRes.status }
-      )
-    }
-
-    const data = await backendRes.json()
-    console.log('Task API レスポンス:', data)
-
-    return NextResponse.json(data, { status: 201 })
+  }
+  try {
+    const { data, status } = await handleBaseRequest('PUT',END_POINT_TEACHING_FREE_CONTROL,request,{ id });
+    return NextResponse.json({ 
+      teaching_free_control: data.teaching_free_control }, { status });
   } catch (error) {
-    console.error('Task API エラー:', error)
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 })
+    return handleError(error,END_POINT_TEACHING_FREE_CONTROL);
   }
 }
 
 export async function DELETE(request: Request) {
+  const body = await request.json();
+  const id = body.id;
+  if (!id) {
+    return NextResponse.json({
+      error: errorMessages[ErrorCode.PAYLOAD_ID_NOT_FOUND],
+      status: StatusCodes.BadRequest
+    })
+  }
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-
-    if (!token) {
-      return NextResponse.json({ error: '認証トークンが見つかりません' }, { status: 401 });
-    }
-
-    // idはクエリパラメータまたはbodyから取得（ここではbodyから取得する例）
-    const body = await request.json();
-    const id = body.id;
-    if (!id) {
-      return NextResponse.json({ error: 'IDが指定されていません' }, { status: 400 });
-    }
-
-    const backendRes = await fetch(`${URLs.teachingFreeControl}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!backendRes.ok) {
-      return NextResponse.json(
-        { error: 'バックエンドでの削除に失敗' },
-        { status: backendRes.status }
-      );
-    }
-
-    const data = await backendRes.json();
-    return NextResponse.json(data, { status: 200 });
+    const { data, status } = await handleBaseRequest('DELETE',END_POINT_TEACHING_FREE_CONTROL,request,{ id });
+    return NextResponse.json({ 
+      teaching_free_control: data.teaching_free_control }, { status });
   } catch (error) {
-    console.error('Task API エラー:', error);
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
+    return handleError(error,END_POINT_TEACHING_FREE_CONTROL);
   }
 }

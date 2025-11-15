@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { fetchTasksService, addTaskService, updateTaskService, deleteTaskService, SuccessResponse } from '../../services/taskApi';
 import { AddTask, Task } from '../../model/task';
-import { ErrorCode } from '../../errors/errorCodes';
+import { ErrorCode } from '../../response/errorCodes';
 
 interface TaskState {
   tasks: Task[];

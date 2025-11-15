@@ -1,23 +1,13 @@
 import { NextResponse } from 'next/server';
-import { URLs } from '@/constants/url';
+import { handleBaseRequest, handleError } from "../../utlts/handleRequest"
+
+const END_POINT_REGISTER = 'register';
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const backendRes = await fetch(URLs.register, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-
-    const data = await backendRes.json()
-    if (!backendRes.ok) {
-      return NextResponse.json({ error: data.error || '登録に失敗しました' }, { status: backendRes.status });
-    }
-    return NextResponse.json(data, { status: 200 });
+    const { data, status } = await handleBaseRequest('POST',END_POINT_REGISTER,request);
+    return NextResponse.json({ knowledge_patterns: data.knowledge_patterns }, { status });
   } catch (error) {
-    return NextResponse.json({ error: 'サーバーエラー' }, { status: 500 });
+    return handleError(error,END_POINT_REGISTER);
   }
 }
