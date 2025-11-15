@@ -9,7 +9,7 @@ type HeuristicsService struct {
 	Repo repository.HeuristicsRepositoryInterface
 }
 
-func (s *HeuristicsService) AnalyzeData(request *model.HeuristicsAnalysisRequest) (*model.HeuristicsAnalysis, error) {
+func (s *HeuristicsService) CreateAnalyzeData(request *model.HeuristicsAnalysisRequest) (*model.HeuristicsAnalysis, error) {
 	analysis := &model.HeuristicsAnalysis{
 		UserID:       request.UserID,
 		TaskID:       request.TaskID,
@@ -22,12 +22,24 @@ func (s *HeuristicsService) AnalyzeData(request *model.HeuristicsAnalysisRequest
 	if err := s.Repo.CreateAnalysis(analysis); err != nil {
 		return nil, err
 	}
-	
+
 	return analysis, nil
 }
 
 func (s *HeuristicsService) GetAnalysisById(id string) (*model.HeuristicsAnalysis, error) {
-	return s.Repo.GetAnalysisById(id)
+  return s.Repo.GetAnalysisById(id)
+}
+
+func (s *HeuristicsService) ListAnalyses() ([]model.HeuristicsAnalysis, error) {
+  return s.Repo.FindAllAnalyses()
+}
+
+func (s *HeuristicsService) UpdateAnalyzeData(id string, analyze *model.HeuristicsAnalysis) error {
+	return s.Repo.UpdateAnalysis(id, analyze)
+}
+
+func (s *HeuristicsService) DeleteAnalyzeData(id string) error {
+	return s.Repo.DeleteAnalysis(id)
 }
 
 func (s *HeuristicsService) TrackUserBehavior(trackData *model.HeuristicsTrackingData) error {

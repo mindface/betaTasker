@@ -7,6 +7,7 @@ import (
 	"github.com/godotask/controller/task"
 	"github.com/godotask/controller/assessment"
 	"github.com/godotask/controller/heuristics"
+	"github.com/godotask/controller/heuristics/analyze"
 	"github.com/godotask/controller/process_optimization"
 	"github.com/godotask/controller/qualitative_label"
 	"github.com/godotask/controller/knowledge_pattern"
@@ -76,6 +77,8 @@ func GetRouter() *gin.Engine {
 	heuristicsService := &service.HeuristicsService{Repo: heuristicsRepo}
 	heuristicsController := heuristics.HeuristicsController{Service: heuristicsService}
 
+	AnalyzeController := analyze.AnalyzeController{Service: heuristicsService}
+
 	processOptimizationRepo := &repository.ProcessOptimizationRepositoryImpl{DB: model.DB}
 	processOptimizationService := &service.ProcessOptimizationService{Repo: processOptimizationRepo}
 	processOptimizationController := process_optimization.ProcessOptimizationController{Service: processOptimizationService}
@@ -140,8 +143,11 @@ func GetRouter() *gin.Engine {
 	r.DELETE("/api/assessment/:id", assessmentController.DeleteAssessment)	
 
 	// Heuristics API (ML Pipeline & Analytics)
-	r.POST("/api/heuristics/analyze", heuristicsController.Analyze)
-	r.GET("/api/heuristics/analyze/:id", heuristicsController.GetAnalysis)
+	r.POST("/api/heuristics/analyze", AnalyzeController.AddAnalyzeData)
+	r.GET("/api/heuristics/analyze/:id", AnalyzeController.GetAnalyzeData)
+	r.PUT("/api/heuristics/analyze/:id", AnalyzeController.EditAnalyzeData)
+	r.DELETE("/api/heuristics/analyze/:id", AnalyzeController.DeleteAnalyzeData)
+
 	r.POST("/api/heuristics/track", heuristicsController.TrackBehavior)
 	r.GET("/api/heuristics/track/:user_id", heuristicsController.GetTrackingData)
 	r.GET("/api/heuristics/insights", heuristicsController.ListInsights)

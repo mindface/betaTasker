@@ -2,7 +2,6 @@ package repository
 
 import "github.com/godotask/model"
 
-// BookRepository インターフェース
 type BookRepositoryInterface interface {
 	Create(book *model.Book) error
 	FindByID(id string) (*model.Book, error)
@@ -11,7 +10,6 @@ type BookRepositoryInterface interface {
 	Delete(id string) error
 }
 
-// AssessmentRepository インターフェース
 type AssessmentRepositoryInterface interface {
 	Create(assessment *model.Assessment) error
 	FindByID(id string) (*model.Assessment, error)
@@ -45,6 +43,11 @@ type TaskRepositoryInterface interface {
 type HeuristicsRepositoryInterface interface {
 	CreateAnalysis(analysis *model.HeuristicsAnalysis) error
 	GetAnalysisById(id string) (*model.HeuristicsAnalysis, error)
+	ListAnalyses() ([]model.HeuristicsAnalysis, error)
+	UpdateAnalysis(id string, analysis *model.HeuristicsAnalysis) error
+	DeleteAnalysis(id string) error
+	FindAllAnalyses() ([]model.HeuristicsAnalysis, error)
+
 	CreateTracking(tracking *model.HeuristicsTracking) error
 	GetTrackingByUserID(userID string) ([]model.HeuristicsTracking, error)
 	GetInsights(userID string, limit, offset int) ([]model.HeuristicsInsight, int, error)

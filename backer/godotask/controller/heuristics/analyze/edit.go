@@ -1,18 +1,20 @@
-package knowledge_pattern
+package analyze
 
 import (
 	"net/http"
 
-	"github.com/godotask/model"
 	"github.com/gin-gonic/gin"
+	"github.com/godotask/model"
 	"github.com/godotask/errors"
 )
 
-// EditKnowledgePattern: PUT /api/knowledge_pattern/:id
-func (ctl *KnowledgePatternController) EditKnowledgePattern(c *gin.Context) {
-	id := c.Param("id")
-	var knowledgePattern model.KnowledgePattern
-	if err := c.ShouldBindJSON(&knowledgePattern); err != nil {
+// EditAnalyzeData: PUT /api/heuristics/analyze/:id
+func (ctl *AnalyzeController) EditAnalyzeData(c *gin.Context) {
+	id := c.Param("id") // URLパラメータからIDを取得
+
+	var analyze model.HeuristicsAnalysis
+	// リクエストボディをバインド
+	if err := c.ShouldBindJSON(&analyze); err != nil {
 		appErr := errors.NewAppError(
 			errors.VAL_INVALID_INPUT,
 			errors.GetErrorMessage(errors.VAL_INVALID_INPUT),
@@ -25,11 +27,13 @@ func (ctl *KnowledgePatternController) EditKnowledgePattern(c *gin.Context) {
 		})
 		return
 	}
-	if err := ctl.Service.UpdateKnowledgePattern(id, &knowledgePattern); err != nil {
+
+	// 分析データを更新
+	if err := ctl.Service.UpdateAnalyzeData(id, &analyze); err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,
 			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
-			err.Error() + " | Failed to edit process optimization",
+			err.Error()+" | Failed to update analyze data",
 		)
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,
@@ -38,9 +42,10 @@ func (ctl *KnowledgePatternController) EditKnowledgePattern(c *gin.Context) {
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Knowledge pattern edited",
-		"knowledge_pattern": knowledgePattern,
+		"analyze": analyze,
 	})
 }
