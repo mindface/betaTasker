@@ -58,14 +58,6 @@ func (s *HeuristicsService) GetTrackingDataByUserID(userID string) ([]model.Heur
 	return s.Repo.GetTrackingByUserID(userID)
 }
 
-func (s *HeuristicsService) GetInsights(userID string, limit, offset int) ([]model.HeuristicsInsight, int, error) {
-	return s.Repo.GetInsights(userID, limit, offset)
-}
-
-func (s *HeuristicsService) GetInsightById(id string) (*model.HeuristicsInsight, error) {
-	return s.Repo.GetInsightById(id)
-}
-
 func (s *HeuristicsService) DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error) {
 	return s.Repo.DetectPatterns(userID, dataType, period)
 }

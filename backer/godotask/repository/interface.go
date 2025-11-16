@@ -50,10 +50,18 @@ type HeuristicsRepositoryInterface interface {
 
 	CreateTracking(tracking *model.HeuristicsTracking) error
 	GetTrackingByUserID(userID string) ([]model.HeuristicsTracking, error)
-	GetInsights(userID string, limit, offset int) ([]model.HeuristicsInsight, int, error)
-	GetInsightById(id string) (*model.HeuristicsInsight, error)
 	DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error)
 	CreateModel(model *model.HeuristicsModel) error
+}
+
+type HeuristicsInsightRepositoryInterface interface {
+	CreateInsight(insight *model.HeuristicsInsight) error
+	GetInsightById(id string) (*model.HeuristicsInsight, error)
+	ListInsight() ([]model.HeuristicsInsight, error)
+	GetInsights(userID string, limit, offset int) ([]model.HeuristicsInsight, int, error)
+	UpdateInsight(id string, insight *model.HeuristicsInsight) error
+	DeleteInsight(id string) error
+
 }
 
 type ProcessOptimizationRepositoryInterface interface {

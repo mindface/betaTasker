@@ -60,35 +60,6 @@ func (r *HeuristicsRepositoryImpl) GetTrackingByUserID(userID string) ([]model.H
 	return trackings, nil
 }
 
-func (r *HeuristicsRepositoryImpl) GetInsights(userID string, limit, offset int) ([]model.HeuristicsInsight, int, error) {
-	var insights []model.HeuristicsInsight
-	var total int64
-	
-	query := r.DB.Model(&model.HeuristicsInsight{})
-	if userID != "" {
-		uid, _ := strconv.Atoi(userID)
-		query = query.Where("user_id = ?", uid)
-	}
-	
-	if err := query.Count(&total).Error; err != nil {
-		return nil, 0, err
-	}
-	
-	if err := query.Limit(limit).Offset(offset).Find(&insights).Error; err != nil {
-		return nil, 0, err
-	}
-	
-	return insights, int(total), nil
-}
-
-func (r *HeuristicsRepositoryImpl) GetInsightById(id string) (*model.HeuristicsInsight, error) {
-	var insight model.HeuristicsInsight
-	if err := r.DB.First(&insight, id).Error; err != nil {
-		return nil, err
-	}
-	return &insight, nil
-}
-
 func (r *HeuristicsRepositoryImpl) DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error) {
 	var patterns []model.HeuristicsPattern
 	query := r.DB.Model(&model.HeuristicsPattern{})
