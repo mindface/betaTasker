@@ -84,6 +84,8 @@ func GetRouter() *gin.Engine {
 	heuristicsInsightService := &service.HeuristicsInsightService{Repo: heuristicsInsightRepo}
 	heuristicsInsightController := insight.HeuristicsInsightController{Service: heuristicsInsightService}
 
+
+
 	processOptimizationRepo := &repository.ProcessOptimizationRepositoryImpl{DB: model.DB}
 	processOptimizationService := &service.ProcessOptimizationService{Repo: processOptimizationRepo}
 	processOptimizationController := process_optimization.ProcessOptimizationController{Service: processOptimizationService}
