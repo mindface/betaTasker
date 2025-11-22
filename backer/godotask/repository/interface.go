@@ -66,7 +66,7 @@ type HeuristicsInsightRepositoryInterface interface {
 type HeuristicsPatternRepositoryInterface interface {
 	CreatePattern(pattern *model.HeuristicsPattern) error
 	GetPatternById(id string) (*model.HeuristicsPattern, error)
-	ListInsight() ([]model.HeuristicsPattern, error)
+	ListPattern() ([]model.HeuristicsPattern, error)
 	GetPatterns(userID string, limit, offset int) ([]model.HeuristicsPattern, int, error)
 	UpdatePattern(id string, insight *model.HeuristicsPattern) error
 	DeletePattern(id string) error
