@@ -2,7 +2,6 @@ package repository
 
 import "github.com/godotask/model"
 
-// BookRepository インターフェース
 type BookRepositoryInterface interface {
 	Create(book *model.Book) error
 	FindByID(id string) (*model.Book, error)
@@ -11,7 +10,6 @@ type BookRepositoryInterface interface {
 	Delete(id string) error
 }
 
-// AssessmentRepository インターフェース
 type AssessmentRepositoryInterface interface {
 	Create(assessment *model.Assessment) error
 	FindByID(id string) (*model.Assessment, error)
@@ -45,13 +43,35 @@ type TaskRepositoryInterface interface {
 type HeuristicsRepositoryInterface interface {
 	CreateAnalysis(analysis *model.HeuristicsAnalysis) error
 	GetAnalysisById(id string) (*model.HeuristicsAnalysis, error)
+	ListAnalyses() ([]model.HeuristicsAnalysis, error)
+	UpdateAnalysis(id string, analysis *model.HeuristicsAnalysis) error
+	DeleteAnalysis(id string) error
+	FindAllAnalyses() ([]model.HeuristicsAnalysis, error)
+
 	CreateTracking(tracking *model.HeuristicsTracking) error
 	GetTrackingByUserID(userID string) ([]model.HeuristicsTracking, error)
-	GetInsights(userID string, limit, offset int) ([]model.HeuristicsInsight, int, error)
-	GetInsightById(id string) (*model.HeuristicsInsight, error)
 	DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error)
 	CreateModel(model *model.HeuristicsModel) error
 }
+
+type HeuristicsInsightRepositoryInterface interface {
+	CreateInsight(insight *model.HeuristicsInsight) error
+	GetInsightById(id string) (*model.HeuristicsInsight, error)
+	ListInsight() ([]model.HeuristicsInsight, error)
+	GetInsights(userID string, limit, offset int) ([]model.HeuristicsInsight, int, error)
+	UpdateInsight(id string, insight *model.HeuristicsInsight) error
+	DeleteInsight(id string) error
+}
+
+type HeuristicsPatternRepositoryInterface interface {
+	CreatePattern(pattern *model.HeuristicsPattern) error
+	GetPatternById(id string) (*model.HeuristicsPattern, error)
+	ListPattern() ([]model.HeuristicsPattern, error)
+	GetPatterns(userID string, limit, offset int) ([]model.HeuristicsPattern, int, error)
+	UpdatePattern(id string, insight *model.HeuristicsPattern) error
+	DeletePattern(id string) error
+}
+
 
 type ProcessOptimizationRepositoryInterface interface {
 	Create(processOptimization *model.ProcessOptimization) error

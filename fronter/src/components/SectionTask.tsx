@@ -10,25 +10,28 @@ import TaskModal from "./parts/TaskModal"
 import AssessmentListModal from "./parts/AssessmentListModal"
 import { AddTask, Task } from "../model/task";
 import { loadMemories } from '../features/memory/memorySlice';
+import { loadTasks } from '../features/task/taskSlice';
 
 export default function SectionTask() {
   const dispatch = useDispatch()
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const { memories } = useSelector((state: RootState) => state.memory)
+  const { tasks } = useSelector((state: RootState) => state.task)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<AddTask|Task|undefined>()
   const [TaskId,setTaskId] = useState<number>(-1);
 
-  const { execute: loadTasks, loading, data: tasks } = useApiCall(
-    taskApiClient.getTasks,
-    {
-      onSuccess: (data) => console.log('タスク取得成功'),
-      onError: (error) => console.error('エラー:', error)
-    }
-  );
+  // const { execute: loadTasks, loading, data: tasks } = useApiCall(
+  //   taskApiClient.getTasks,
+  //   {
+  //     onSuccess: (data) => console.log('タスク取得成功'),
+  //     onError: (error) => console.error('エラー:', error)
+  //   }
+  // );
 
   useEffect(() => {
     dispatch(loadMemories())
+    dispatch(loadTasks())
   }, [dispatch, isAuthenticated])
 
   const handleAddTask = () => {
@@ -53,8 +56,6 @@ export default function SectionTask() {
   const handleDeleteTask = async (id: number) => {
     await dispatch(removeTask(id))
   }
-
-  if (loading) return <div className="loading">読み込み中...</div>;
 
   return (
     <div className="section__inner section--task">

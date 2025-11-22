@@ -7,6 +7,8 @@ import (
 	"github.com/godotask/controller/task"
 	"github.com/godotask/controller/assessment"
 	"github.com/godotask/controller/heuristics"
+	"github.com/godotask/controller/heuristics/analyze"
+	"github.com/godotask/controller/heuristics/insight"
 	"github.com/godotask/controller/process_optimization"
 	"github.com/godotask/controller/qualitative_label"
 	"github.com/godotask/controller/knowledge_pattern"
@@ -76,6 +78,14 @@ func GetRouter() *gin.Engine {
 	heuristicsService := &service.HeuristicsService{Repo: heuristicsRepo}
 	heuristicsController := heuristics.HeuristicsController{Service: heuristicsService}
 
+	AnalyzeController := analyze.AnalyzeController{Service: heuristicsService}
+
+	heuristicsInsightRepo := &repository.HeuristicsInsightRepositoryImpl{DB: model.DB}
+	heuristicsInsightService := &service.HeuristicsInsightService{Repo: heuristicsInsightRepo}
+	heuristicsInsightController := insight.HeuristicsInsightController{Service: heuristicsInsightService}
+
+
+
 	processOptimizationRepo := &repository.ProcessOptimizationRepositoryImpl{DB: model.DB}
 	processOptimizationService := &service.ProcessOptimizationService{Repo: processOptimizationRepo}
 	processOptimizationController := process_optimization.ProcessOptimizationController{Service: processOptimizationService}
@@ -140,12 +150,19 @@ func GetRouter() *gin.Engine {
 	r.DELETE("/api/assessment/:id", assessmentController.DeleteAssessment)	
 
 	// Heuristics API (ML Pipeline & Analytics)
-	r.POST("/api/heuristics/analyze", heuristicsController.Analyze)
-	r.GET("/api/heuristics/analyze/:id", heuristicsController.GetAnalysis)
+	r.POST("/api/heuristics/analyze", AnalyzeController.AddAnalyzeData)
+	r.GET("/api/heuristics/analyze/:id", AnalyzeController.GetAnalyzeData)
+	r.PUT("/api/heuristics/analyze/:id", AnalyzeController.EditAnalyzeData)
+	r.DELETE("/api/heuristics/analyze/:id", AnalyzeController.DeleteAnalyzeData)
+
+	// Heuristics API (ML Pipeline & Analytics)
+	r.POST("/api/heuristics/insight", heuristicsInsightController.AddInsightData)
+	r.GET("/api/heuristics/insight/:id", heuristicsInsightController.GetInsightData)
+	r.PUT("/api/heuristics/insight/:id", heuristicsInsightController.EditInsightsData)
+	r.DELETE("/api/heuristics/insight/:id", heuristicsInsightController.DeleteInsightData)
+
 	r.POST("/api/heuristics/track", heuristicsController.TrackBehavior)
 	r.GET("/api/heuristics/track/:user_id", heuristicsController.GetTrackingData)
-	r.GET("/api/heuristics/insights", heuristicsController.ListInsights)
-	r.GET("/api/heuristics/insights/:id", heuristicsController.GetInsight)
 	r.GET("/api/heuristics/patterns", heuristicsController.DetectPatterns)
 	r.POST("/api/heuristics/patterns/train", heuristicsController.TrainModel)
 
