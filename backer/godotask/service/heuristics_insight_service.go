@@ -10,15 +10,18 @@ type HeuristicsInsightService struct {
 }
 
 func (s *HeuristicsInsightService) CreateInsightData(insight *model.HeuristicsInsight) (*model.HeuristicsInsight, error) {
-	return s.Repo.CreateInsight(insight)
+	if err := s.Repo.CreateInsight(insight); err != nil {
+		return nil, err
+	}
+	return insight, nil
 }
 
-func (s *HeuristicsInsightService) GetInsighById(id string) (*model.HeuristicsInsight, error) {
+func (s *HeuristicsInsightService) GetInsightById(id string) (*model.HeuristicsInsight, error) {
   return s.Repo.GetInsightById(id)
 }
 
 func (s *HeuristicsInsightService) ListInsight() ([]model.HeuristicsInsight, error) {
-  return s.Repo.ListInsights()
+  return s.Repo.ListInsight()
 }
 
 func (s *HeuristicsInsightService) UpdateInsightData(id string, insight *model.HeuristicsInsight) error {

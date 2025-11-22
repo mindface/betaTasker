@@ -36,7 +36,7 @@ export async function handleBaseRequest(
     if(
       method === 'DELETE' ||
       method === 'PUT' ||
-      ( method === 'GET' && body.id )
+      ( method === 'GET' && body?.id )
     ) {
       url = `${URLs[endpoint]}}/${body.id}`;
     } else {
