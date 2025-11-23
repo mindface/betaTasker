@@ -27,7 +27,7 @@ func (r *TaskRepositoryImpl) FindAll() ([]model.Task, error) {
 		return nil, err
 	}
 	err := r.DB.Preload("QualitativeLabels").
-		Preload("QuantificationLabels").
+		// Preload("QuantificationLabels").
 		// Preload("MultimodalData").
 		Preload("KnowledgeEntities").
 		Find(&tasks).Error
