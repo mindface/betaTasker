@@ -25,7 +25,7 @@ import (
 )
 
 // シンプルなCORSミドルウェア（デバッグ用）
-func CORSMiddlewareSimple() gin.HandlerFunc {
+func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "http://localhost:3000")
 		c.Header("Access-Control-Allow-Credentials", "true")
@@ -47,10 +47,10 @@ func GetRouter() *gin.Engine {
 	// CORSミドルウェアのみ適用（他のミドルウェアは一旦コメントアウト）
 	// r.Use(middleware.LoggingMiddleware())
 	// r.Use(middleware.ErrorHandlerMiddleware())
-	// r.Use(CORSMiddlewareSimple())
+	// r.Use(CORSMiddleware())
 	// r.Use(middleware.RequestValidationMiddleware())
 	// r.Use(middleware.RateLimitMiddleware())
-	
+
 	r.Use(static.Serve("/usr/local/go/godotask/static", static.LocalFile("./images", true)))
 	// r.LoadHTMLGlob("view/*.html")
 

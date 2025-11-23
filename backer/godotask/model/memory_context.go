@@ -18,32 +18,6 @@ type MemoryContext struct {
 	KnowledgeTransformations []KnowledgeTransformation `gorm:"foreignKey:ContextID" json:"knowledge_transformations"`
 }
 
-type TechnicalFactor struct {
-	ID         int       `gorm:"primaryKey" json:"id"`
-	ContextID  int       `json:"context_id"`
-	ToolSpec   string    `json:"tool_spec"`
-	EvalFactors string   `json:"eval_factors"`
-	MeasurementMethod string   `gorm:"column:measurement_method" json:"measurement_method"`
-	Concern    string    `json:"concern"`
-	CreatedAt  time.Time `json:"created_at"`
-}
-
-type KnowledgeTransformation struct {
-	ID         int       `gorm:"primaryKey" json:"id"`
-	ContextID  int       `json:"context_id"`
-	Transformation string `json:"transformation"`
-	Countermeasure  string `json:"countermeasure"`
-	ModelFeedback   string `json:"model_feedback"`
-	LearnedKnowledge string `json:"learned_knowledge"`
-	CreatedAt  time.Time `json:"created_at"`
-}
-
 func (MemoryContext) TableName() string {
 	return "memory_contexts"
-}
-func (TechnicalFactor) TableName() string {
-	return "technical_factors"
-}
-func (KnowledgeTransformation) TableName() string {
-	return "knowledge_transformations"
 }

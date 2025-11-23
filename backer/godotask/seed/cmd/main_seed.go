@@ -103,13 +103,6 @@ func main() {
 	}
 	log.Println("✓ Learning patterns seeded successfully")
 
-	// 定量化ラベルのシード
-	log.Println("Seeding quantification labels...")
-	if err := seed.SeedQuantificationLabels(db); err != nil {
-		fmt.Errorf("failed to seed quantification labels: %v", err)
-	}
-	log.Println("✓ Quantification labels seeded successfully")
-
 	// 知識エンティティのシード
 	log.Println("Seeding knowledge entities...")
 	if err := seed.SeedKnowledgeEntities(db); err != nil {
