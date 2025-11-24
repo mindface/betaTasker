@@ -20,11 +20,6 @@ import (
 func SeedFromCSVFiles(db *gorm.DB) error {
 	log.Println("Loading data from CSV files...")
 
-	// Seed robot specifications
-	// if err := seedRobotSpecificationsFromCSV(db); err != nil {
-	// 	log.Printf("Warning: Failed to seed robot specifications: %v", err)
-	// }
-
 	// Seed optimization models
 	if err := seedOptimizationModelsFromCSV(db); err != nil {
 		log.Printf("Warning: Failed to seed optimization models: %v", err)

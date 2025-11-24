@@ -19,4 +19,5 @@ type KnowledgeEntity struct {
   UpdatedAt       time.Time `json:"updated_at"`
 
   Task Task `json:"task" gorm:"foreignKey:TaskID"`
+  Entity interface{} `gorm:"-" json:"entity"`
 }
