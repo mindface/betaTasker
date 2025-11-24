@@ -20,11 +20,6 @@ import (
 func SeedFromCSVFiles(db *gorm.DB) error {
 	log.Println("Loading data from CSV files...")
 
-	// Seed robot specifications
-	// if err := seedRobotSpecificationsFromCSV(db); err != nil {
-	// 	log.Printf("Warning: Failed to seed robot specifications: %v", err)
-	// }
-
 	// Seed optimization models
 	if err := seedOptimizationModelsFromCSV(db); err != nil {
 		log.Printf("Warning: Failed to seed optimization models: %v", err)
@@ -35,12 +30,6 @@ func SeedFromCSVFiles(db *gorm.DB) error {
 	if err := seedPhenomenologicalFrameworksFromCSV(db); err != nil {
 		log.Printf("Warning: Failed to seed phenomenological frameworks: %v", err)
 		return fmt.Errorf("failed to seed phenomenological frameworks: %w", err)
-	}
-
-	// Seed quantification labels
-	if err := seedQuantificationLabelsFromCSV(db); err != nil {
-		log.Printf("Warning: Failed to seed quantification labels: %v", err)
-		return fmt.Errorf("failed to seed quantification labels: %w", err)
 	}
 
 	log.Println("✓ CSV data seeding completed")
@@ -297,108 +286,5 @@ func seedPhenomenologicalFrameworksFromCSV(db *gorm.DB) error {
 	}
 
 	log.Printf("✓ Successfully seeded %d phenomenological frameworks", count)
-	return nil
-}
-
-func seedQuantificationLabelsFromCSV(db *gorm.DB) error {
-	file, err := os.Open("seed/data/quantification_labels.csv")
-	if err != nil {
-		return fmt.Errorf("could not open quantification_labels.csv: %v", err)
-	}
-	defer file.Close()
-
-	reader := csv.NewReader(file)
-	records, err := reader.ReadAll()
-	if err != nil {
-		return fmt.Errorf("could not read CSV: %v", err)
-	}
-
-	tx := db.Begin()
-	if tx.Error != nil {
-		return fmt.Errorf("failed to start transaction: %v", tx.Error)
-	}
-
-	var count int
-
-	for i, record := range records {
-		if i == 0 { // skip header
-			continue
-		}
-
-		if len(record) < 10 {
-			log.Printf("Skipping incomplete record at line %d", i+1)
-			continue
-		}
-
-		// Parse numerical fields
-		value, _ := strconv.ParseFloat(record[5], 64)
-		minRange, _ := strconv.ParseFloat(record[6], 64)
-		maxRange, _ := strconv.ParseFloat(record[7], 64)
-
-		// Related concepts and tags
-		concepts := map[string]interface{}{
-			"concepts": strings.Split(record[8], "|"),
-		}
-		tags := map[string]interface{}{
-			"tags": strings.Split(record[9], "|"),
-		}
-
-		label := model.QuantificationLabel{
-			ID:              uuid.New().String(),
-			UserID:          1, // ✅ 固定
-			TaskID:          1, // ✅ 固定
-			OriginalText:    record[1],
-			NormalizedText:  strings.ToLower(strings.TrimSpace(record[1])),
-			Category:        record[2],
-			Context:         record[3],
-			Domain:          record[4],
-			Value:           value,
-			Unit:            record[4], // domainをunitとして使用
-			MinRange:        minRange,
-			MaxRange:        maxRange,
-			TypicalValue:    value,
-			Precision:       2,
-			Confidence:      0.8,
-			AbstractLevel:   "concrete",
-			RelatedConcepts: model.JSON(concepts),
-			SemanticTags:    model.JSON(tags),
-			Accuracy:        0.85,
-			Consistency:     0.80,
-			Reproducibility: 0.75,
-			Usability:       0.90,
-			Source:          "csv_import",
-			Validated:       true,
-			Version:         1,
-			CreatedBy:       "system",
-			UpdatedBy:       "system",
-			CreatedAt:       time.Now(),
-			UpdatedAt:       time.Now(),
-		}
-
-		// 既存チェック
-		var existing model.QuantificationLabel
-		result := tx.Where("id = ?", label.ID).First(&existing)
-
-		// 存在しない場合のみ作成
-		if result.RowsAffected == 0 {
-			if err := tx.Create(&label).Error; err != nil {
-				tx.Rollback()
-				return fmt.Errorf("failed to insert quantification label %s: %w", label.ID, err)
-			}
-			count++
-		} else if result.Error != nil {
-			tx.Rollback()
-			return fmt.Errorf("failed to query quantification label %s: %w", label.ID, result.Error)
-		} else {
-			log.Printf("Quantification label '%s' already exists, skipping", label.ID)
-		}
-	}
-
-	// コミット
-	if err := tx.Commit().Error; err != nil {
-		return fmt.Errorf("failed to commit transaction: %w", err)
-	}
-
-	log.Printf("✓ Successfully seeded %d quantification labels", count)
 	return nil
 }

@@ -38,7 +38,7 @@ export async function handleBaseRequest(
       method === 'PUT' ||
       ( method === 'GET' && body?.id )
     ) {
-      url = `${URLs[endpoint]}}/${body.id}`;
+      url = `${URLs[endpoint]}/${body.id}`;
     } else {
       url = URLs[endpoint];
     }
@@ -50,24 +50,32 @@ export async function handleBaseRequest(
           url + `/${dynamicParams[key]}`
       }
     }
-    console.log("body|||||||||||",body)
 
-    const sendData = body ? {
-        method: method,
-        headers,
-        body: JSON.stringify(body)
-      } : {
-        method,
-        headers,
-      };
-    console.log("url|||||||||||body",sendData)
+    const sendData =
+      method === 'GET'
+        ? { method, headers }
+        : body
+        ? { method, headers, body: JSON.stringify(body) }
+        : { method, headers };
+    // const sendData = body ? {
+    //     method: method,
+    //     headers,
+    //     body: JSON.stringify(body)
+    //   } : {
+    //     method,
+    //     headers,
+    //   };
+    console.log("sendData111|||||||||||",sendData)
 
     const backendRes = await fetch(url, sendData);
 
     const data = await backendRes.json();
-    if (!backendRes.ok) {
-      throw new HttpError(data.status, data.message, data.code);
-    }
+    // console.log(data)
+    // if (!backendRes.ok) {
+    // console.log("backendRes-----------")
+    // console.log(backendRes)
+    //   throw new HttpError(data.status, data.message ?? "meseege none", data?.code);
+    // }
 
     return { data, status: backendRes.status };
   } catch (error) {

@@ -7,6 +7,7 @@ import (
 
 // ListTasks: GET /api/task
 func (ctl *TaskController) ListTasks(c *gin.Context) {
+
 	tasks, err := ctl.Service.ListTasks()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to list tasks"})

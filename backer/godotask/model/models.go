@@ -1,5 +1,11 @@
 package model
 
+import (
+	"github.com/godotask/lib"
+)
+
+type JSON = lib.JSON
+
 func Models() []interface{} {
 	return []interface{}{
 		&User{},
@@ -15,7 +21,6 @@ func Models() []interface{} {
 		&HeuristicsInsight{},
 		&HeuristicsPattern{},
 		&HeuristicsModel{},
-		&MultimodalData{},
 		&KnowledgePattern{},
 		&LanguageOptimization{},
 		&ProcessOptimization{},

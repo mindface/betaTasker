@@ -48,7 +48,7 @@ func seedOptimizationModelsFixed(db *gorm.DB) error {
 		metrics, _ := json.Marshal(map[string]interface{}{})
 
 		models := []model.OptimizationModel{
-		    {
+		{
         ID:                "energy_optimization",
         Name:              "エネルギー最適化",
         Type:              "ml_based",

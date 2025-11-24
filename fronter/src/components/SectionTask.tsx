@@ -34,6 +34,10 @@ export default function SectionTask() {
     dispatch(loadTasks())
   }, [dispatch, isAuthenticated])
 
+  useEffect(() => {
+    console.log(tasks)
+  }, [tasks])
+
   const handleAddTask = () => {
     setEditingTask(undefined)
     setIsModalOpen(true)

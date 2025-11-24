@@ -1,9 +1,4 @@
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { URLs } from '@/constants/url';
-import { errorMessages, ErrorCode } from '@/response/errorCodes';
-import { StatusCodes } from '@/response/statusCodes';
-import { HttpError } from "@/response/httpError";
 import { handleBaseRequest, handleError } from "../utlts/handleRequest"
 
 const END_POINT_LANGUAGE_OPTIMIZATION = 'languageOptimization';

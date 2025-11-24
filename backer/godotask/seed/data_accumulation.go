@@ -220,7 +220,7 @@ func (da *DataAccumulator) MigrateData(fromVersion, toVersion string) error {
 	if migration, exists := migrations[key]; exists {
 		return migration()
 	}
-	
+
 	return fmt.Errorf("no migration path from %s to %s", fromVersion, toVersion)
 }
 
