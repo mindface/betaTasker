@@ -2,8 +2,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store'
-import { useApiCall } from '../hooks/useApiCall';
- import { taskApiClient } from '../services/taskApiRefactored';
 import { createTask, updateTask, removeTask } from '../features/task/taskSlice'
 import ItemTask from "./parts/ItemTask"
 import TaskModal from "./parts/TaskModal"
@@ -33,6 +31,10 @@ export default function SectionTask() {
     dispatch(loadMemories())
     dispatch(loadTasks())
   }, [dispatch, isAuthenticated])
+
+  useEffect(() => {
+    console.log(tasks)
+  }, [tasks])
 
   const handleAddTask = () => {
     setEditingTask(undefined)

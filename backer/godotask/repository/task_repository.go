@@ -23,13 +23,14 @@ func (r *TaskRepositoryImpl) FindByID(id string) (*model.Task, error) {
 
 func (r *TaskRepositoryImpl) FindAll() ([]model.Task, error) {
 	var tasks []model.Task
-	if err := r.DB.Find(&tasks).Error; err != nil {
-		return nil, err
-	}
+	// if err := r.DB.Find(&tasks).Error; err != nil {
+	// 	return nil, err
+	// }
 	err := r.DB.Preload("QualitativeLabels").
 		Preload("QuantificationLabels").
 		Preload("MultimodalData").
-		Preload("KnowledgeEntities").
+		Preload("HeuristicsAnalysis").
+		Preload("KnowledgePatterns").
 		Find(&tasks).Error
 	if err != nil {
 		return nil, err

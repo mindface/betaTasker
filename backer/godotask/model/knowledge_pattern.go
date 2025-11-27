@@ -8,6 +8,7 @@ import (
 // KnowledgePattern - 知識パターン（暗黙知→形式知）
 type KnowledgePattern struct {
 	ID              string    `gorm:"type:varchar(255);primaryKey" json:"id"`
+  TaskID          uint      `json:"task_id" gorm:"index"`
 	Type            string    `json:"type" gorm:"type:varchar(50)"` // tacit, explicit, hybrid
 	Domain          string    `json:"domain" gorm:"type:varchar(100)"`
 	TacitKnowledge  string    `json:"tacit_knowledge" gorm:"type:text"`

@@ -264,7 +264,7 @@ func (da *DataAccumulator) getLastBackupTime() time.Time {
 	if err != nil {
 		return time.Now().AddDate(0, -1, 0) // デフォルト1ヶ月前
 	}
-	
+
 	for _, entry := range entries {
 		if entry.IsDir() {
 			// ディレクトリ名から時刻を解析
@@ -301,12 +301,12 @@ func (da *DataAccumulator) csvToQuantificationLabel(data map[string]interface{})
 func (da *DataAccumulator) csvToKnowledgePattern(data map[string]interface{}) model.KnowledgePattern {
 	// CSV データを KnowledgePattern モデルに変換
 	pattern := model.KnowledgePattern{}
-	
+
 	if id, ok := data["id"].(string); ok {
 		pattern.ID = id
 	}
 	// ... 他のフィールドも同様に変換
-	
+
 	return pattern
 }
 
@@ -320,17 +320,17 @@ func (da *DataAccumulator) improveLabel(label model.QuantificationLabel) map[str
 	if len(similarLabels) == 0 {
 		return nil
 	}
-	
+
 	// 改善案の生成
 	improvements := map[string]interface{}{}
-	
+
 	// 信頼度の平均値で更新
 	var avgConfidence float64
 	for _, sl := range similarLabels {
 		avgConfidence += sl.Confidence
 	}
 	improvements["confidence"] = avgConfidence / float64(len(similarLabels))
-	
+
 	return improvements
 }
 

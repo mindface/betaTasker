@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// APIが増えた時に、統合ツールとして利用する
 // KnowledgeEntity - 分析知識エンティティを繋ぐモデル
 type KnowledgeEntity struct {
   ID              string    `gorm:"type:varchar(255);primaryKey" json:"id"`
