@@ -47,3 +47,5 @@ coverage/
 !front/
 !backer/
 backer/bin/
+
+**/backup/

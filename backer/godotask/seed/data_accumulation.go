@@ -47,18 +47,18 @@ type AccumulationStrategy struct {
 // 1. 実運用データの収集と蓄積
 func (da *DataAccumulator) CollectProductionData() error {
 	log.Println("Collecting production data...")
-	
+
 	// 実運用で生成された優良データの抽出
 	var labels []model.QuantificationLabel
 	err := da.db.Where("confidence > ? AND validated = ?", 0.8, true).
 		Order("created_at DESC").
 		Limit(100).
 		Find(&labels).Error
-	
+
 	if err != nil {
 		return err
 	}
-	
+
 	// 高品質データをseedデータとして保存
 	return da.SaveAsHighQualitySeed(labels)
 }
@@ -164,7 +164,7 @@ func (da *DataAccumulator) ImportFromCSV(filename string, modelType string) erro
 		if err != nil {
 			return err
 		}
-		
+
 		// CSVデータをモデルに変換
 		data := make(map[string]interface{})
 		for i, header := range headers {
@@ -172,7 +172,7 @@ func (da *DataAccumulator) ImportFromCSV(filename string, modelType string) erro
 				data[header] = record[i]
 			}
 		}
-		
+
 		// モデルタイプに応じて保存
 		switch modelType {
 		case "quantification_label":
@@ -348,7 +348,7 @@ func (da *DataAccumulator) migrateV100ToV110() error {
 func (da *DataAccumulator) migrateV110ToV120() error {
 	// v1.1.0 から v1.2.0 へのマイグレーション
 	log.Println("Migrating from v1.1.0 to v1.2.0...")
-	
+
 	return nil
 }
 

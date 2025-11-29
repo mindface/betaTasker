@@ -16,6 +16,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 	labels := []model.QuantificationLabel{
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 1,
 			OriginalText:    "高精度加工",
 			NormalizedText:  "high precision machining",
 			Category:        "manufacturing_quality",
@@ -49,6 +51,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 		},
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 1,
 			OriginalText:    "切削条件最適化",
 			NormalizedText:  "cutting condition optimization",
 			Category:        "process_optimization",
@@ -82,6 +86,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 		},
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 2,
 			OriginalText:    "ロボット協働作業",
 			NormalizedText:  "robot collaborative work",
 			Category:        "human_robot_collaboration",
@@ -115,6 +121,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 		},
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 3,
 			OriginalText:    "品質検査自動化",
 			NormalizedText:  "quality inspection automation",
 			Category:        "quality_assurance",
@@ -148,6 +156,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 		},
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 3,
 			OriginalText:    "エネルギー効率最適化",
 			NormalizedText:  "energy efficiency optimization",
 			Category:        "energy_management",
@@ -181,6 +191,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 		},
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 4,
 			OriginalText:    "技能伝承システム",
 			NormalizedText:  "skill transfer system",
 			Category:        "knowledge_management",
@@ -214,6 +226,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 		},
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 5,
 			OriginalText:    "プロセス監視・制御",
 			NormalizedText:  "process monitoring control",
 			Category:        "process_control",
@@ -247,6 +261,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 		},
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 6,
 			OriginalText:    "AI駆動最適化",
 			NormalizedText:  "ai driven optimization",
 			Category:        "artificial_intelligence",
@@ -280,6 +296,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 		},
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 7,
 			OriginalText:    "デジタルツイン",
 			NormalizedText:  "digital twin",
 			Category:        "digital_transformation",
@@ -313,6 +331,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 		},
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 8,
 			OriginalText:    "予知保全システム",
 			NormalizedText:  "predictive maintenance system",
 			Category:        "maintenance_management",
@@ -346,6 +366,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 		},
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 9,
 			OriginalText:    "セーフティ機能統合",
 			NormalizedText:  "safety function integration",
 			Category:        "safety_systems",
@@ -379,6 +401,8 @@ func SeedQuantificationLabels(db *gorm.DB) error {
 		},
 		{
 			ID:              uuid.New().String(),
+			UserID:       	 1,
+			TaskID:       	 10,
 			OriginalText:    "生産性向上指標",
 			NormalizedText:  "productivity improvement index",
 			Category:        "performance_metrics",
