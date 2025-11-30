@@ -47,91 +47,23 @@ func SeedFromCSVFiles(db *gorm.DB) error {
 	return nil
 }
 
-// func seedRobotSpecificationsFromCSV(db *gorm.DB) error {
-// 	file, err := os.Open("seed/data/robot_specifications.csv")
-// 	if err != nil {
-// 		return fmt.Errorf("could not open robot_specifications.csv: %v", err)
-// 	}
-// 	defer file.Close()
-
-// 	reader := csv.NewReader(file)
-// 	records, err := reader.ReadAll()
-// 	if err != nil {
-// 		return fmt.Errorf("could not read CSV: %v", err)
-// 	}
-
-// 	var robots []model.RobotSpecification
-// 	for i, record := range records {
-// 		if i == 0 { // Skip header
-// 			continue
-// 		}
-
-// 		if len(record) < 15 {
-// 			continue
-// 		}
-
-// 		dof, _ := strconv.Atoi(record[2])
-// 		reach, _ := strconv.ParseFloat(record[3], 64)
-// 		payload, _ := strconv.ParseFloat(record[4], 64)
-// 		accuracy, _ := strconv.ParseFloat(record[5], 64)
-// 		maxSpeed, _ := strconv.ParseFloat(record[6], 64)
-// 		maintenanceInterval, _ := strconv.Atoi(record[14])
-
-// 		robot := model.RobotSpecification{
-// 			ID:                      record[0],
-// 			ModelName:              record[1],
-// 			DOF:                    dof,
-// 			ReachMm:                reach,
-// 			PayloadKg:              payload,
-// 			RepeatAccuracyMm:       accuracy,
-// 			MaxSpeedMmS:            maxSpeed,
-// 			WorkEnvelopeShape:      record[7],
-// 			TeachingMethod:         record[8],
-// 			ControlType:            record[9],
-// 			MaintenanceIntervalHours: maintenanceInterval,
-// 		}
-
-// 		// Handle nullable fields - set to nil for now to avoid encoding errors
-// 		robot.VisionSystem = nil
-// 		robot.ForceSensor = nil
-// 		robot.AICapability = nil
-// 		robot.SafetyFeatures = nil
-
-// 		robots = append(robots, robot)
-// 	}
-
-// 	// Insert data with duplicate handling
-// 	for _, robot := range robots {
-// 		var existingRobot model.RobotSpecification
-// 		if err := db.Where("id = ?", robot.ID).First(&existingRobot).Error; err != nil {
-// 			if err == gorm.ErrRecordNotFound {
-// 				if err := db.Create(&robot).Error; err != nil {
-// 					log.Printf("Error inserting robot %s: %v", robot.ID, err)
-// 				}
-// 			} else {
-// 				log.Printf("Error checking robot %s: %v", robot.ID, err)
-// 			}
-// 		} else {
-// 			log.Printf("Robot %s already exists, skipping", robot.ID)
-// 		}
-// 	}
-
-// 	log.Printf("✓ Successfully seeded %d robot specifications", len(robots))
-// 	return nil
-// }
 
 func seedOptimizationModelsFromCSV(db *gorm.DB) error {
 	file, err := os.Open("seed/data/optimization_models.csv")
 	if err != nil {
 		return fmt.Errorf("could not open optimization_models.csv: %v", err)
 	}
-	defer file.Close()
 
 	reader := csv.NewReader(file)
 	// records, err := reader.ReadAll()
 	// if err != nil {
 	// 	return fmt.Errorf("could not read CSV: %v", err)
 	// }
+	defer file.Close()
+	_, err = reader.Read()
+	if err != nil {
+			return fmt.Errorf("failed to read CSV header: %w", err)
+	}
 
 	var models []model.OptimizationModel
 	for {
@@ -188,7 +120,6 @@ func seedPhenomenologicalFrameworksFromCSV(db *gorm.DB) error {
 	if err != nil {
 		return fmt.Errorf("could not open phenomenological_frameworks.csv: %v", err)
 	}
-	defer file.Close()
 
 	reader := csv.NewReader(file)
 	
@@ -196,6 +127,7 @@ func seedPhenomenologicalFrameworksFromCSV(db *gorm.DB) error {
 	if _, err := reader.Read(); err != nil {
 		return fmt.Errorf("failed to read CSV header: %w", err)
 	}
+	defer file.Close()
 
 	tx := db.Begin()
 	defer func() {
@@ -305,13 +237,13 @@ func seedQuantificationLabelsFromCSV(db *gorm.DB) error {
 	if err != nil {
 		return fmt.Errorf("could not open quantification_labels.csv: %v", err)
 	}
-	defer file.Close()
 
 	reader := csv.NewReader(file)
 	records, err := reader.ReadAll()
 	if err != nil {
 		return fmt.Errorf("could not read CSV: %v", err)
 	}
+	defer file.Close()
 
 	tx := db.Begin()
 	if tx.Error != nil {
@@ -335,6 +267,9 @@ func seedQuantificationLabelsFromCSV(db *gorm.DB) error {
 		minRange, _ := strconv.ParseFloat(record[6], 64)
 		maxRange, _ := strconv.ParseFloat(record[7], 64)
 
+		// userID, _ := strconv.Atoi(record[1])
+		userID, _ := strconv.Atoi(record[1])
+		taskID, _ := strconv.Atoi(record[2])
 		// Related concepts and tags
 		concepts := map[string]interface{}{
 			"concepts": strings.Split(record[8], "|"),
@@ -345,8 +280,8 @@ func seedQuantificationLabelsFromCSV(db *gorm.DB) error {
 
 		label := model.QuantificationLabel{
 			ID:              uuid.New().String(),
-			UserID:          1, // ✅ 固定
-			TaskID:          1, // ✅ 固定
+			UserID:          userID, // ✅ 固定
+			TaskID:          taskID, // ✅ 固定
 			OriginalText:    record[1],
 			NormalizedText:  strings.ToLower(strings.TrimSpace(record[1])),
 			Category:        record[2],

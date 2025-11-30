@@ -14,22 +14,18 @@ func SeedHeuristics(db *gorm.DB) error {
 	if err := seedHeuristicsAnalysis(db); err != nil {
 		return fmt.Errorf("failed to seed heuristics analysis: %v", err)
 	}
-
 	// トラッキングデータのシード
 	if err := seedHeuristicsTracking(db); err != nil {
 		return fmt.Errorf("failed to seed heuristics tracking: %v", err)
 	}
-
 	// インサイトデータのシード
 	if err := seedHeuristicsInsights(db); err != nil {
 		return fmt.Errorf("failed to seed heuristics insights: %v", err)
 	}
-
 	// パターンデータのシード
 	if err := seedHeuristicsPatterns(db); err != nil {
 		return fmt.Errorf("failed to seed heuristics patterns: %v", err)
 	}
-
 	// モデルデータのシード
 	if err := seedHeuristicsModels(db); err != nil {
 		return fmt.Errorf("failed to seed heuristics models: %v", err)
@@ -44,11 +40,27 @@ func seedHeuristicsAnalysis(db *gorm.DB) error {
 			UserID:       1,
 			TaskID:       1,
 			AnalysisType: "performance",
-			Result:       toJSON(map[string]interface{}{
+			Result: toJSON(map[string]interface{}{
 				"completion_rate": 0.85,
-				"accuracy": 0.92,
-				"speed": "fast",
-				"errors": []string{},
+				"accuracy":        0.92,
+				"speed":           "fast",
+				"errors":          []string{},
+				"implicit_knowledge": "工具摩耗の変化を微調整しながら加工している",
+			}),
+			Score:     87.5,
+			Status:    "completed",
+			CreatedAt: time.Now().AddDate(0, 0, -7),
+		},
+		{
+			UserID:       1,
+			TaskID:       1,
+			AnalysisType: "performance",
+			Result: toJSON(map[string]interface{}{
+				"completion_rate": 0.85,
+				"accuracy":        0.92,
+				"speed":           "fast",
+				"errors":          []string{},
+				"implicit_knowledge": "工具摩耗の変化を微調整しながら加工している",
 			}),
 			Score:     87.5,
 			Status:    "completed",
@@ -58,11 +70,12 @@ func seedHeuristicsAnalysis(db *gorm.DB) error {
 			UserID:       1,
 			TaskID:       2,
 			AnalysisType: "behavioral",
-			Result:       toJSON(map[string]interface{}{
-				"pattern": "consistent",
-				"focus_time": 45,
-				"break_frequency": 3,
-				"productivity_peak": "morning",
+			Result: toJSON(map[string]interface{}{
+				"pattern":            "consistent",
+				"focus_time":         45,
+				"break_frequency":    3,
+				"productivity_peak":  "morning",
+				"implicit_signal":    "ミスを避けるため作業前に数秒間の準備ルーティン",
 			}),
 			Score:     92.3,
 			Status:    "completed",
@@ -95,7 +108,22 @@ func seedHeuristicsAnalysis(db *gorm.DB) error {
 func seedHeuristicsTracking(db *gorm.DB) error {
 	trackings := []model.HeuristicsTracking{
 		{
+			UserID: 1,
+			TaskID: 1,
+			Action: "tool_adjust",
+			Context: toJSON(map[string]interface{}{
+				"tool":     "cutting_insert",
+				"adjust":   "微調整 0.02mm",
+				"reason":   "音の変化を感知したため",
+				"tacit":    "経験的感覚で摩耗を推定",
+			}),
+			SessionID: "sess_001",
+			Timestamp: time.Now().Add(-8 * time.Hour),
+			Duration:  20000,
+		},
+		{
 			UserID:    1,
+			TaskID:    2,
 			Action:    "task_started",
 			Context:   toJSON(map[string]interface{}{
 				"task_id": 1,
@@ -108,6 +136,7 @@ func seedHeuristicsTracking(db *gorm.DB) error {
 		},
 		{
 			UserID:    1,
+			TaskID:    2,
 			Action:    "code_written",
 			Context:   toJSON(map[string]interface{}{
 				"lines": 45,
@@ -120,6 +149,7 @@ func seedHeuristicsTracking(db *gorm.DB) error {
 		},
 		{
 			UserID:    1,
+			TaskID:    2,
 			Action:    "test_run",
 			Context:   toJSON(map[string]interface{}{
 				"test_count": 12,
@@ -132,6 +162,7 @@ func seedHeuristicsTracking(db *gorm.DB) error {
 		},
 		{
 			UserID:    2,
+			TaskID:    2,
 			Action:    "document_read",
 			Context:   toJSON(map[string]interface{}{
 				"document": "API_GUIDE.md",
@@ -156,6 +187,21 @@ func seedHeuristicsInsights(db *gorm.DB) error {
 	insights := []model.HeuristicsInsight{
 		{
 			UserID:      1,
+			TaskID:      1,
+			Type:        "craftsmanship",
+			Title:       "加工音の変化に敏感",
+			Description: "切削音で刃先摩耗を判断する傾向があり、これは熟練者特有の暗黙知です。",
+			Confidence:  0.93,
+			Data: toJSON(map[string]interface{}{
+				"sound_patterns": []string{"高周波 → 摩耗上昇", "低音化 → 送り過大"},
+				"tacit_skill":    "工具状態の聴覚検知",
+			}),
+			IsActive:  true,
+			CreatedAt: time.Now().AddDate(0, 0, -1),
+		},
+		{
+			UserID:      1,
+			TaskID:      1,
 			Type:        "productivity",
 			Title:       "朝の生産性が高い",
 			Description: "過去30日間のデータ分析により、午前9時から11時の間に最も高い生産性を示しています",
@@ -170,6 +216,7 @@ func seedHeuristicsInsights(db *gorm.DB) error {
 		},
 		{
 			UserID:      1,
+			TaskID:      2,
 			Type:        "learning",
 			Title:       "Go言語スキルが向上中",
 			Description: "コード品質とテスト成功率が継続的に改善されています",
@@ -184,6 +231,7 @@ func seedHeuristicsInsights(db *gorm.DB) error {
 		},
 		{
 			UserID:      2,
+			TaskID:      3,
 			Type:        "workflow",
 			Title:       "頻繁な休憩が効果的",
 			Description: "25分の作業後に5分の休憩を取ることで、全体的な生産性が向上しています",
@@ -209,43 +257,20 @@ func seedHeuristicsInsights(db *gorm.DB) error {
 func seedHeuristicsPatterns(db *gorm.DB) error {
 	patterns := []model.HeuristicsPattern{
 		{
-			Name:     "Morning Productivity Peak",
-			Category: "time_management",
-			Pattern:  toJSON(map[string]interface{}{
-				"time_range": "09:00-11:00",
-				"days": []string{"Mon", "Tue", "Wed", "Thu", "Fri"},
-				"task_types": []string{"coding", "design", "analysis"},
+			UserID:      1,
+			TaskID:      1,
+			Name:     "音で検知する工具摩耗",
+			Category: "tacit_knowledge",
+			Pattern: toJSON(map[string]interface{}{
+				"trigger": "切削音の高周波が上昇",
+				"action":  "送り速度を2-5%下げる",
+				"reason":  "摩耗率が増加した可能性",
+				"note":    "熟練者特有の聴覚ベースの判断",
 			}),
-			Frequency: 85,
-			Accuracy:  0.91,
-			LastSeen:  time.Now().AddDate(0, 0, -1),
-			CreatedAt: time.Now().AddDate(0, -1, 0),
-		},
-		{
-			Name:     "Test-Driven Development",
-			Category: "development",
-			Pattern:  toJSON(map[string]interface{}{
-				"sequence": []string{"write_test", "write_code", "refactor"},
-				"average_cycle_time": 45,
-				"success_rate": 0.88,
-			}),
-			Frequency: 72,
-			Accuracy:  0.85,
-			LastSeen:  time.Now().AddDate(0, 0, -2),
-			CreatedAt: time.Now().AddDate(0, -1, -15),
-		},
-		{
-			Name:     "Documentation After Implementation",
-			Category: "workflow",
-			Pattern:  toJSON(map[string]interface{}{
-				"trigger": "feature_complete",
-				"action": "write_documentation",
-				"delay_minutes": 30,
-			}),
-			Frequency: 63,
-			Accuracy:  0.79,
+			Frequency: 65,
+			Accuracy:  0.88,
 			LastSeen:  time.Now().AddDate(0, 0, -3),
-			CreatedAt: time.Now().AddDate(0, -2, 0),
+			CreatedAt: time.Now().AddDate(0, -1, 0),
 		},
 	}
 
@@ -260,6 +285,26 @@ func seedHeuristicsPatterns(db *gorm.DB) error {
 func seedHeuristicsModels(db *gorm.DB) error {
 	models := []model.HeuristicsModel{
 		{
+			UserID:    1,
+			TaskID:    1,
+			ModelType: "tacit_pattern_detector",
+			Version:   "1.0.0",
+			Parameters: toJSON(map[string]interface{}{
+				"algorithm":        "lstm",
+				"signal_channels":  []string{"audio", "vibration"},
+				"sequence_length":  30,
+			}),
+			Performance: toJSON(map[string]interface{}{
+				"accuracy": 0.82,
+				"recall":   0.78,
+			}),
+			Status:    "training",
+			TrainedAt: time.Now().Add(-24 * time.Hour),
+			CreatedAt: time.Now().Add(-48 * time.Hour),
+		},
+		{
+			UserID:    1,
+			TaskID:    2,
 			ModelType: "productivity_predictor",
 			Version:   "1.2.0",
 			Parameters: toJSON(map[string]interface{}{
@@ -279,6 +324,8 @@ func seedHeuristicsModels(db *gorm.DB) error {
 			CreatedAt: time.Now().AddDate(0, 0, -14),
 		},
 		{
+			UserID:    1,
+			TaskID:    3,
 			ModelType: "pattern_detector",
 			Version:   "2.0.1",
 			Parameters: toJSON(map[string]interface{}{
@@ -297,6 +344,8 @@ func seedHeuristicsModels(db *gorm.DB) error {
 			CreatedAt: time.Now().AddDate(0, 0, -7),
 		},
 		{
+			UserID:    1,
+			TaskID:    4,
 			ModelType: "cognitive_load_estimator",
 			Version:   "1.0.0",
 			Parameters: toJSON(map[string]interface{}{

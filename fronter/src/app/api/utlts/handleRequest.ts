@@ -50,7 +50,6 @@ export async function handleBaseRequest(
           url + `/${dynamicParams[key]}`
       }
     }
-    console.log("body|||||||||||",body)
 
     const sendData = body ? {
         method: method,
@@ -60,7 +59,6 @@ export async function handleBaseRequest(
         method,
         headers,
       };
-    console.log("url|||||||||||body",sendData)
 
     const backendRes = await fetch(url, sendData);
 

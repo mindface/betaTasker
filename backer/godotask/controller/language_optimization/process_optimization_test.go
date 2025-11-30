@@ -40,6 +40,7 @@ func (m *MockProcessOptimizationRepository) FindAll() ([]model.ProcessOptimizati
   return []model.ProcessOptimization{
     {
       ID:               "1",
+      TaskID:           1,
       ProcessID:        "proc_001",
       OptimizationType: "speed",
       InitialState:     model.JSON{"step": 1},

@@ -236,6 +236,7 @@ func (dmm *DataMigrationManager) migrateAssessmentToOptimization() error {
 	for _, assessment := range assessments {
 		optimization := model.ProcessOptimization{
 			ID:              uuid.New().String(),
+			TaskID:          1,
 			ProcessID:       fmt.Sprintf("task_%d", assessment.TaskID),
 			OptimizationType: "quality",
 			InitialState: model.JSON(map[string]interface{}{

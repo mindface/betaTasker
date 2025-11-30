@@ -13,7 +13,7 @@ type JSON = lib.JSON
 type QuantificationLabel struct {
 	ID string `gorm:"type:varchar(255);primaryKey" json:"id"`
 
-	UserID uint `json:"user_id" gorm:"index"`
+	UserID int `json:"user_id" gorm:"index"`
 	TaskID int  `json:"task_id" gorm:"index"`
 
 	// 言語情報
