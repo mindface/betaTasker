@@ -13,7 +13,7 @@ export default function IndexLayout ({
   children,
   title = 'Task Link',
   header_category = 'Task Link',
-}:Props) {
+}: Props) {
   return (
       <>
         <Head>

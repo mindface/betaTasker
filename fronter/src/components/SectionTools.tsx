@@ -1,8 +1,7 @@
 "use client"
-import React, { useEffect } from 'react'
 
 export default function SectionHome() {
-  
+
   const pageInfo = [
     {
       title: "情報をリンクさせるプロセスについて",

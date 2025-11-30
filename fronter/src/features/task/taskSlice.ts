@@ -45,7 +45,7 @@ export const updateTask = createAsyncThunk(
       return rejectWithValue(response.error);
     }
     return response.value;
-}
+  }
 )
 
 export const removeTask = createAsyncThunk(

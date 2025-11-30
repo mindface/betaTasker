@@ -1,13 +1,9 @@
 "use clinet"
-import React, {} from 'react'
 
 type Props = {
   controlAction: (caseAction:string) => void
 }
 
-interface titleType{
-  title: string
-}
 export default function ContentControl( props: Props )  {
 
   const topAction = () => {
