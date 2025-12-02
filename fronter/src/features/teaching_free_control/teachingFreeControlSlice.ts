@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchTeachingFreeControlService, addTeachingFreeControlService, updateTeachingFreeControlService, deleteTeachingFreeControlService } from '../../services/teachingFreeControl';
+import { fetchTeachingFreeControlService, addTeachingFreeControlService, updateTeachingFreeControlService, deleteTeachingFreeControlService } from '../../client/teachingFreeControl';
 import { TeachingFreeControl, AddTeachingFreeControl } from '../../model/teachingFreeControl';
 
 interface teachingFreeControlState {

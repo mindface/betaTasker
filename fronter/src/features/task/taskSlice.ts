@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchTasksService, addTaskService, updateTaskService, deleteTaskService, SuccessResponse } from '../../services/taskApi';
+import { fetchTasksService, addTaskService, updateTaskService, deleteTaskService, SuccessResponse } from '../../client/taskApi';
 import { AddTask, Task } from '../../model/task';
-import { ErrorCode } from '../../response/errorCodes';
 
 interface TaskState {
   tasks: Task[];
@@ -51,7 +50,7 @@ export const updateTask = createAsyncThunk(
 export const removeTask = createAsyncThunk(
   'task/removeTask',
   async (id: number, { rejectWithValue }) => {
-    const response = await deleteTaskService(String(id));
+    const response = await deleteTaskService(id);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }

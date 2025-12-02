@@ -19,14 +19,6 @@ export default function SectionTask() {
   const [editingTask, setEditingTask] = useState<AddTask|Task|undefined>()
   const [TaskId,setTaskId] = useState<number>(-1);
 
-  // const { execute: loadTasks, loading, data: tasks } = useApiCall(
-  //   taskApiClient.getTasks,
-  //   {
-  //     onSuccess: (data) => console.log('タスク取得成功'),
-  //     onError: (error) => console.error('エラー:', error)
-  //   }
-  // );
-
   useEffect(() => {
     dispatch(loadMemories())
     dispatch(loadTasks())

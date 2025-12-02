@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useCallback, useRef } from 'react';
-import { heuristicsDiscovery } from '../services/heuristicsDiscovery';
+import { heuristicsDiscovery } from '../client/heuristicsDiscovery';
 
 interface TrackingOptions {
   trackClicks?: boolean;

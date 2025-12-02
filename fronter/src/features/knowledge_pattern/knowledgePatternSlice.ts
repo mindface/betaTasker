@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchKnowledgePatternsService, addKnowledgePatternService, updateKnowledgePatternService, deleteKnowledgePatternService } from '../../services/knowledgePattern';
+import { fetchKnowledgePatternsService, addKnowledgePatternService, updateKnowledgePatternService, deleteKnowledgePatternService } from '../../client/knowledgePattern';
 import { KnowledgePattern, AddKnowledgePattern } from '../../model/knowledgePattern';
 
 interface knowledgePatternState {

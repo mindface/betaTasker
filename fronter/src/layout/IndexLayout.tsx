@@ -12,7 +12,7 @@ type Props = {
 export default function IndexLayout ({
   children,
   title = 'Task Link',
-  header_category = 'Task Link',
+  header_category = 'Task Flow',
 }: Props) {
   return (
       <>

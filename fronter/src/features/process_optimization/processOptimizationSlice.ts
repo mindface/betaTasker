@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchProcessOptimizationsService, addProcessOptimizationService, updateProcessOptimizationService, deleteProcessOptimizationService } from '../../services/processOptimizationApi';
+import { fetchProcessOptimizationsService, addProcessOptimizationService, updateProcessOptimizationService, deleteProcessOptimizationService } from '../../client/processOptimizationApi';
 import { ProcessOptimization, AddProcessOptimization } from '../../model/processOptimization';
 
 interface processOptimizationState {

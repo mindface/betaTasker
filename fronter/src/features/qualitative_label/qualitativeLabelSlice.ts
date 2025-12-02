@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchQualitativeLabelsService, addQualitativeLabelService, updateQualitativeLabelService, deleteQualitativeLabelService } from '../../services/qualitativeLabel';
+import { fetchQualitativeLabelsService, addQualitativeLabelService, updateQualitativeLabelService, deleteQualitativeLabelService } from '../../client/qualitativeLabel';
 import { QualitativeLabel, AddQualitativeLabel } from '../../model/qualitativeLabel';
 
 interface qualitativeLabelState {

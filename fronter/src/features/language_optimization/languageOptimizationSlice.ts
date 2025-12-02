@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchLanguageOptimizationsService, addLanguageOptimizationService, updateLanguageOptimizationService, deleteLanguageOptimizationService } from '../../services/languageOptimization';
+import { fetchLanguageOptimizationsService, addLanguageOptimizationService, updateLanguageOptimizationService, deleteLanguageOptimizationService } from '../../client/languageOptimization';
 import { LanguageOptimization, AddLanguageOptimization } from '../../model/languageOptimization';
 
 interface languageOptimizationState {

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useApiCall } from './useApiCall';
-import { apiStrategies, EntityType, ApiStrategy } from '../services/apiStrategy';
+import { apiFacade, EntityType, ApiFacade } from '../facade/apiFacade';
 import { Task, AddTask } from '../model/task';
 import { Memory, AddMemory } from '../model/memory';
 import { Assessment, AddAssessment } from '../model/assessment';
@@ -25,8 +25,8 @@ export function useItemOperations<T extends EntityType>(
   type ItemType = EntityTypeMap[T]['item'];
   type CreateType = EntityTypeMap[T]['create'];
   
-  const strategy = apiStrategies[itemType] as ApiStrategy<ItemType, CreateType>;
-  
+  const strategy = apiFacade[itemType] as ApiFacade<ItemType, CreateType>;
+
   const { execute: deleteItem, loading: deleteLoading } = useApiCall(
     (id: number) => strategy.delete(id),
     {
