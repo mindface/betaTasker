@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchQualitativeLabelsService, addQualitativeLabelService, updateQualitativeLabelService, deleteQualitativeLabelService } from '../../client/qualitativeLabel';
+import { fetchQualitativeLabelsClient, addQualitativeLabelClient, updateQualitativeLabelClient, deleteQualitativeLabelClient } from '../../client/qualitativeLabel';
 import { QualitativeLabel, AddQualitativeLabel } from '../../model/qualitativeLabel';
 
 interface qualitativeLabelState {
@@ -17,7 +17,7 @@ const initialState: qualitativeLabelState = {
 export const loadQualitativeLabels = createAsyncThunk(
   'qualitativeLabel/loadQualitativeLabels',
   async (_, { rejectWithValue }) => {
-    const response = await fetchQualitativeLabelsService();
+    const response = await fetchQualitativeLabelsClient();
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -28,7 +28,7 @@ export const loadQualitativeLabels = createAsyncThunk(
 export const createQualitativeLabel = createAsyncThunk(
   'qualitativeLabel/createQualitativeLabel',
   async (qualitativeLabelData: AddQualitativeLabel, { rejectWithValue }) => {
-    const response = await addQualitativeLabelService(qualitativeLabelData);
+    const response = await addQualitativeLabelClient(qualitativeLabelData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -39,7 +39,7 @@ export const createQualitativeLabel = createAsyncThunk(
 export const updateQualitativeLabel = createAsyncThunk(
   'qualitativeLabel/updateQualitativeLabel',
   async (qualitativeLabelData: QualitativeLabel, { rejectWithValue }) => {
-    const response = await updateQualitativeLabelService(qualitativeLabelData);
+    const response = await updateQualitativeLabelClient(qualitativeLabelData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -50,7 +50,7 @@ export const updateQualitativeLabel = createAsyncThunk(
 export const removeQualitativeLabel = createAsyncThunk(
   'qualitativeLabel/removeQualitativeLabel',
   async (id: string, { rejectWithValue }) => {
-    const response = await deleteQualitativeLabelService(String(id));
+    const response = await deleteQualitativeLabelClient(String(id));
     if ('error' in response) {
       return rejectWithValue(response.error);
     }

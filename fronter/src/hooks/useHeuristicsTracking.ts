@@ -1,6 +1,7 @@
 /**
  * ヒューリスティクストラッキングフック
  * コンポーネントでユーザー行動を自動記録
+ * 利用用途がなれば削除する
  */
 
 import { useEffect, useCallback, useRef } from 'react';
@@ -27,6 +28,7 @@ export function useHeuristicsTracking(
     trackInput = true,
     debounceMs = 100
   } = options;
+  console.warn("AAA HeuristicsTracking component is deprecated and may be removed in future versions.");
 
   const elementRef = useRef<HTMLElement | null>(null);
   const lastActionTime = useRef<number>(0);
@@ -47,7 +49,7 @@ export function useHeuristicsTracking(
   // クリックトラッキング
   const handleClick = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement;
-    
+
     heuristicsDiscovery.recordAction({
       timestamp: Date.now(),
       actionType: 'click',

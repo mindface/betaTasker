@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image";
 
 export default function SectionHome() {
 
@@ -38,7 +39,7 @@ export default function SectionHome() {
                     <p className="text">{item.text}</p>
                   </div>
                   <div className="image-box">
-                    <img className='img' src={item.path} alt="" />
+                    <Image className='img' src={item.path} alt="" width={100} height={200} />
                   </div>
                 </div>
               </div>

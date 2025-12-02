@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchTeachingFreeControlService, addTeachingFreeControlService, updateTeachingFreeControlService, deleteTeachingFreeControlService } from '../../client/teachingFreeControl';
+import { fetchTeachingFreeControlClient, addTeachingFreeControlClient, updateTeachingFreeControlClient, deleteTeachingFreeControlClient } from '../../client/teachingFreeControl';
 import { TeachingFreeControl, AddTeachingFreeControl } from '../../model/teachingFreeControl';
 
 interface teachingFreeControlState {
@@ -17,7 +17,7 @@ const initialState: teachingFreeControlState = {
 export const loadTeachingFreeControl = createAsyncThunk(
   'teachingFreeControl/loadTeachingFreeControl',
   async (_, { rejectWithValue }) => {
-    const response = await fetchTeachingFreeControlService();
+    const response = await fetchTeachingFreeControlClient();
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -28,7 +28,7 @@ export const loadTeachingFreeControl = createAsyncThunk(
 export const createTeachingFreeControl = createAsyncThunk(
   'teachingFreeControl/createTeachingFreeControl',
   async (teachingFreeControlData: AddTeachingFreeControl, { rejectWithValue }) => {
-    const response = await addTeachingFreeControlService(teachingFreeControlData);
+    const response = await addTeachingFreeControlClient(teachingFreeControlData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -39,7 +39,7 @@ export const createTeachingFreeControl = createAsyncThunk(
 export const updateTeachingFreeControl = createAsyncThunk(
   'teachingFreeControl/updateTeachingFreeControl',
   async (teachingFreeControlData: TeachingFreeControl, { rejectWithValue }) => {
-    const response = await updateTeachingFreeControlService(teachingFreeControlData);
+    const response = await updateTeachingFreeControlClient(teachingFreeControlData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -50,7 +50,7 @@ export const updateTeachingFreeControl = createAsyncThunk(
 export const removeTeachingFreeControl = createAsyncThunk(
   'teachingFreeControl/removeTeachingFreeControl',
   async (id: string, { rejectWithValue }) => {
-    const response = await deleteTeachingFreeControlService(String(id));
+    const response = await deleteTeachingFreeControlClient(String(id));
     if ('error' in response) {
       return rejectWithValue(response.error);
     }

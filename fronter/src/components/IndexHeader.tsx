@@ -12,16 +12,16 @@ function IndexHeader( props : Props) {
   return (
     <header className="index-header">
       <div className="header--body _flex_s_b_">
-        <Link href="/tools" >
-          <h1 className="header__title">
+        <h1 className="header__title">
+          <Link href="/tools">
             { title }
-          </h1>
-        </Link>
+          </Link>
+        </h1>
         <nav className="g-nav">
           <ul className="list _flex_">
             {menu.map((item: { title: string; path: string }, idx: number) => (
               <li className="item" key={`indexmenu${idx}`}>
-                <Link href={item.path} className="link" passHref>
+                <Link href={item.path} className="link">
                   {item.title}
                 </Link>
               </li>

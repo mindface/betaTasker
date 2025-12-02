@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchProcessOptimizationsService, addProcessOptimizationService, updateProcessOptimizationService, deleteProcessOptimizationService } from '../../client/processOptimizationApi';
+import { fetchProcessOptimizationsClient, addProcessOptimizationClient, updateProcessOptimizationClient, deleteProcessOptimizationClient } from '../../client/processOptimizationApi';
 import { ProcessOptimization, AddProcessOptimization } from '../../model/processOptimization';
 
 interface processOptimizationState {
@@ -17,7 +17,7 @@ const initialState: processOptimizationState = {
 export const loadProcessOptimization = createAsyncThunk(
   'processOptimization/loadProcessOptimization',
   async (_, { rejectWithValue }) => {
-    const response = await fetchProcessOptimizationsService();
+    const response = await fetchProcessOptimizationsClient();
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -28,7 +28,7 @@ export const loadProcessOptimization = createAsyncThunk(
 export const createProcessOptimization = createAsyncThunk(
   'processOptimization/createProcessOptimization',
   async (processOptimizationData: AddProcessOptimization, { rejectWithValue }) => {
-    const response = await addProcessOptimizationService(processOptimizationData);
+    const response = await addProcessOptimizationClient(processOptimizationData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -39,7 +39,7 @@ export const createProcessOptimization = createAsyncThunk(
 export const updateProcessOptimization = createAsyncThunk(
   'processOptimization/updateProcessOptimization',
   async (processOptimizationData: ProcessOptimization, { rejectWithValue }) => {
-    const response = await updateProcessOptimizationService(processOptimizationData);
+    const response = await updateProcessOptimizationClient(processOptimizationData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -50,7 +50,7 @@ export const updateProcessOptimization = createAsyncThunk(
 export const removeProcessOptimization = createAsyncThunk(
   'processOptimization/removeProcessOptimization',
   async (id: string, { rejectWithValue }) => {
-    const response = await deleteProcessOptimizationService(String(id));
+    const response = await deleteProcessOptimizationClient(String(id));
     if ('error' in response) {
       return rejectWithValue(response.error);
     }

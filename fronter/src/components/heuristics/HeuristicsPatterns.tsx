@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useHeuristicsPatterns } from '../../hooks/useHeuristics';
 import { useHeuristics } from '../../hooks/useHeuristics';
 import { HeuristicsTrainRequest } from '../../model/heuristics';
@@ -21,11 +21,7 @@ export default function HeuristicsPatterns() {
     training_data: [],
   });
 
-  useEffect(() => {
-    loadPatterns();
-  }, []);
-
-  const loadPatterns = () => {
+  const loadPatterns = useCallback(() => {
     const params = {
       ...(filters.user_id && { user_id: filters.user_id }),
       ...(filters.data_type !== 'all' && { data_type: filters.data_type }),
@@ -33,7 +29,7 @@ export default function HeuristicsPatterns() {
     };
     console.log("Loading patterns with params:", params);
     getPatterns(params);
-  };
+  },[filters.user_id, filters.data_type, filters.period, getPatterns]);
 
   const handleFilterChange = (field: string, value: string) => {
     setFilters(prev => ({
@@ -64,6 +60,11 @@ export default function HeuristicsPatterns() {
       [field]: value,
     }));
   };
+
+  useEffect(() => {
+    loadPatterns();
+  }, [loadPatterns]);
+
 
   const dataTypes = [
     { value: 'all', label: 'すべて' },

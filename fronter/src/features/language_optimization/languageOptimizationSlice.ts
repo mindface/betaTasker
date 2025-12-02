@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchLanguageOptimizationsService, addLanguageOptimizationService, updateLanguageOptimizationService, deleteLanguageOptimizationService } from '../../client/languageOptimization';
+import { fetchLanguageOptimizationsClient, addLanguageOptimizationClient, updateLanguageOptimizationClient, deleteLanguageOptimizationClient } from '../../client/languageOptimization';
 import { LanguageOptimization, AddLanguageOptimization } from '../../model/languageOptimization';
 
 interface languageOptimizationState {
@@ -17,7 +17,7 @@ const initialState: languageOptimizationState = {
 export const loadLanguageOptimization = createAsyncThunk(
   'languageOptimization/loadLanguageOptimization',
   async (_, { rejectWithValue }) => {
-    const response = await fetchLanguageOptimizationsService();
+    const response = await fetchLanguageOptimizationsClient();
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -28,7 +28,7 @@ export const loadLanguageOptimization = createAsyncThunk(
 export const createLanguageOptimization = createAsyncThunk(
   'languageOptimization/createLanguageOptimization',
   async (languageOptimizationData: AddLanguageOptimization, { rejectWithValue }) => {
-    const response = await addLanguageOptimizationService(languageOptimizationData);
+    const response = await addLanguageOptimizationClient(languageOptimizationData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -39,7 +39,7 @@ export const createLanguageOptimization = createAsyncThunk(
 export const updateLanguageOptimization = createAsyncThunk(
   'languageOptimization/updateLanguageOptimization',
   async (languageOptimizationData: LanguageOptimization, { rejectWithValue }) => {
-    const response = await updateLanguageOptimizationService(languageOptimizationData);
+    const response = await updateLanguageOptimizationClient(languageOptimizationData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -50,7 +50,7 @@ export const updateLanguageOptimization = createAsyncThunk(
 export const removeLanguageOptimization = createAsyncThunk(
   'languageOptimization/removeLanguageOptimization',
   async (id: string, { rejectWithValue }) => {
-    const response = await deleteLanguageOptimizationService(String(id));
+    const response = await deleteLanguageOptimizationClient(String(id));
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
