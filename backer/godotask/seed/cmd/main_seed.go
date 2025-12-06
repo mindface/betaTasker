@@ -33,13 +33,6 @@ func main() {
 	// }
 	// log.Println("✓ Users seeded successfully")
 
-	// Tasks のシード
-	// log.Println("Seeding tasks...")
-	// if err := seed.SeedTasks(db); err != nil {
-	// 	fmt.Errorf("failed to seed tasks: %v", err)
-	// }
-	// log.Println("✓ Tasks seeded successfully")
-
 	// Memory Contextsのシード（シンプル版）
 	log.Println("Seeding memory contexts...")
 	if err := seed.SeedMemoryContexts(db); err != nil {
@@ -48,11 +41,41 @@ func main() {
 	log.Println("✓ Memory contexts seeded successfully")
 
 	// Books and Tasksのシード（seedModel.goの関数を使用）
-	log.Println("Seeding books and tasks...")
-	if err := seed.SeedBooksAndTasks(db); err != nil {
-		fmt.Errorf("failed to seed books and tasks: %v", err)
+	// log.Println("Seeding books and tasks...")
+	// if err := seed.SeedBooksAndTasks(db); err != nil {
+	// 	fmt.Errorf("failed to seed books and tasks: %v", err)
+	// }
+	// log.Println("✓ Books and tasks seeded successfully")
+
+	// Tasks のシード
+	log.Println("Seeding tasks...")
+	if err := seed.SeedTaskModelsFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed tasks: %v", err)
 	}
-	log.Println("✓ Books and tasks seeded successfully")
+	log.Println("✓ Tasks seeded successfully")
+
+	// Memories のシード
+	log.Println("Seeding memories...")
+	if err := seed.SeedMemoriesModelsFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed memories: %v", err)
+	}
+	log.Println("✓ memories seeded successfully")
+
+	// Assessments のシード
+	log.Println("Seeding assessment...")
+	if err := seed.SeedAssessmentsModelsFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed assessments: %v", err)
+	}
+	log.Println("✓ assessments seeded successfully")
+
+	// Books のシード
+	log.Println("Seeding book...")
+	if err := seed.SeedBookModelsFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed books: %v", err)
+	}
+	log.Println("✓ books seeded successfully")
+
+
 
 	// ヒューリスティクスデータのシード
 	log.Println("Seeding heuristics data...")
@@ -111,11 +134,11 @@ func main() {
 	log.Println("✓ Quantification labels seeded successfully")
 
 	// 知識エンティティのシード
-	log.Println("Seeding knowledge entities...")
-	if err := seed.SeedKnowledgeEntities(db); err != nil {
-		fmt.Errorf("failed to seed knowledge entities: %v", err)
-	}
-	log.Println("✓ Knowledge entities seeded successfully")
+	// log.Println("Seeding knowledge entities...")
+	// if err := seed.SeedKnowledgeEntities(db); err != nil {
+	// 	fmt.Errorf("failed to seed knowledge entities: %v", err)
+	// }
+	// log.Println("✓ Knowledge entities seeded successfully")
 
 	log.Println("Database seeding completed successfully!")
 }
@@ -196,6 +219,9 @@ func CleanDatabase() {
 		"heuristics_analyses",
 		"memory_contexts",
 		"tasks",
+		"memories",
+		"assessments",
+		"book",
 	}
 
 	for _, tableName := range tables {
