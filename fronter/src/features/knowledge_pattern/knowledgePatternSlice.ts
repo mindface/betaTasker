@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchKnowledgePatternsService, addKnowledgePatternService, updateKnowledgePatternService, deleteKnowledgePatternService } from '../../services/knowledgePattern';
+import { fetchKnowledgePatternsClient, addKnowledgePatternClient, updateKnowledgePatternClient, deleteKnowledgePatternClient } from '../../client/knowledgePattern';
 import { KnowledgePattern, AddKnowledgePattern } from '../../model/knowledgePattern';
 
 interface knowledgePatternState {
@@ -17,7 +17,7 @@ const initialState: knowledgePatternState = {
 export const loadKnowledgePatterns = createAsyncThunk(
   'knowledgePatterns/loadKnowledgePatterns',
   async (_, { rejectWithValue }) => {
-    const response = await fetchKnowledgePatternsService();
+    const response = await fetchKnowledgePatternsClient();
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -28,7 +28,7 @@ export const loadKnowledgePatterns = createAsyncThunk(
 export const createKnowledgePattern = createAsyncThunk(
   'knowledgePatterns/createKnowledgePattern',
   async (knowledgePatternData: AddKnowledgePattern, { rejectWithValue }) => {
-    const response = await addKnowledgePatternService(knowledgePatternData);
+    const response = await addKnowledgePatternClient(knowledgePatternData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -39,7 +39,7 @@ export const createKnowledgePattern = createAsyncThunk(
 export const updateKnowledgePattern = createAsyncThunk(
   'knowledgePatterns/updateKnowledgePattern',
   async (knowledgePatternData: KnowledgePattern, { rejectWithValue }) => {
-    const response = await updateKnowledgePatternService(knowledgePatternData);
+    const response = await updateKnowledgePatternClient(knowledgePatternData);
     if (response && 'error' in response) {
       return rejectWithValue(response.error);
     }
@@ -51,7 +51,7 @@ export const removeKnowledgePattern = createAsyncThunk(
   'knowledgePatterns/removeKnowledgePattern',
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await deleteKnowledgePatternService(String(id));
+      const response = await deleteKnowledgePatternClient(String(id));
       if ('error' in response) {
         return rejectWithValue(response.error);
       }

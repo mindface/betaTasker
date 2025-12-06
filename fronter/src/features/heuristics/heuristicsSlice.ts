@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import * as heuristicsApi from '../../services/heuristicsApi';
+import * as heuristicsApi from '../../client/heuristicsApi';
 import {
   HeuristicsAnalysis,
   HeuristicsAnalysisRequest,

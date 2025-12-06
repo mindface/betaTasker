@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store'
 import { loadAssessments, createAssessment, updateAssessment, removeAssessment } from '../features/assessment/assessmentSlice'
-import { loadKnowledgePatterns, createKnowledgePattern  } from '../features/knowledge_pattern/knowledgePatternSlice'
+import { loadKnowledgePatterns  } from '../features/knowledge_pattern/knowledgePatternSlice'
 import { loadLearningData } from '../features/learning_data/learningDataSlice'
 import ItemAssessment from "./parts/ItemAssessment"
 import AssessmentModal from "./parts/AssessmentModal"

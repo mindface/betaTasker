@@ -10,3 +10,66 @@
   &--limit
     max-width: 768px
     width: 100%
+
+.index
+  &-header
+    position: fixed
+    z-index: 1
+    top: 0
+    left: 0
+    width: 100%
+    padding: 8px 16px
+    background-color: $base_color
+    box-shadow: 0 3px 10px 0 $gray_color
+    .header
+      &__title
+        font-size: 2rem
+        font-family: 'Press Start 2P', cursive
+        color: $white-color
+
+  &-footer
+    position: fixed
+    left: 0
+    bottom: 0
+    width: 100%
+    padding: 8px 16px
+    justify-content: center
+    background-color: $base_color
+    .footer
+      &--body
+        gap: 8px
+    .box
+      &--task-info
+        display: inline-block
+        padding: 8px
+        font-size: 1.2rem
+      &--task-info
+        color: $white-color
+    .footer__box
+      padding: 8px
+      flex: 1
+      &.bg-white
+        color: $base-color
+    
+    .box
+      &--task-btn
+        position: relative
+        margin-top: 8px
+        max-width: 60px
+        height: 60px
+        transform: rotate(45deg)
+        transition: transform 0.3s ease
+        &:hover
+          transform: rotate(-45deg)
+        .line
+          position: absolute
+          top: 50%
+          left: 5px
+          display: inline-block
+          height: 1px
+          width: 50px
+          background-color: $base-color
+          &:nth-child(1)
+            transform: rotate(45deg)
+          &:nth-child(2)
+            transform: rotate(-45deg)

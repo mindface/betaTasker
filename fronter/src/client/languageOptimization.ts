@@ -1,44 +1,44 @@
 import { fetchApiJsonCore } from "@/utils/fetchApi";
 import { AddLanguageOptimization, LanguageOptimization } from "../model/languageOptimization";
 
-export const fetchLanguageOptimizationsService = async () => {
+export const fetchLanguageOptimizationsClient = async () => {
   const data = await fetchApiJsonCore<undefined,LanguageOptimization[]>({
     endpoint: '/api/languageOptimization',
     method: 'GET',
-    errorMessage: 'error fetchLanguageOptimizationsService 言語最適化データ一覧取得失敗',
+    errorMessage: 'error fetchLanguageOptimizationsClient 言語最適化データ一覧取得失敗',
     getKey: 'language_optimizations',
   });
   return data;
 };
 
-export const addLanguageOptimizationService = async (languageOptimization: AddLanguageOptimization) => {
+export const addLanguageOptimizationClient = async (languageOptimization: AddLanguageOptimization) => {
   const data = await fetchApiJsonCore<AddLanguageOptimization,LanguageOptimization>({
     endpoint: '/api/languageOptimization',
     method: 'POST',
     body: languageOptimization,
-    errorMessage: 'error addLanguageOptimizationService 言語最適化データ追加失敗',
+    errorMessage: 'error addLanguageOptimizationClient 言語最適化データ追加失敗',
     getKey: 'language_optimization',
   });
   return data;
 };
 
-export const updateLanguageOptimizationService = async (languageOptimization: LanguageOptimization) => {
+export const updateLanguageOptimizationClient = async (languageOptimization: LanguageOptimization) => {
   const data = await fetchApiJsonCore<LanguageOptimization,LanguageOptimization>({
     endpoint: '/api/languageOptimization',
     method: 'PUT',
     body: languageOptimization,
-    errorMessage: 'error updateLanguageOptimizationService 言語最適化データ更新失敗',
+    errorMessage: 'error updateLanguageOptimizationClient 言語最適化データ更新失敗',
     getKey: 'language_optimization',
   });
   return data;
 };
 
-export const deleteLanguageOptimizationService = async (id: string) => {
+export const deleteLanguageOptimizationClient = async (id: string) => {
   const data = await fetchApiJsonCore<{id:string},undefined>({
     endpoint: `/api/languageOptimization`,
     method: 'DELETE',
     body: ({ id }),
-    errorMessage: 'error deleteLanguageOptimizationService 言語最適化データ削除失敗',
+    errorMessage: 'error deleteLanguageOptimizationClient 言語最適化データ削除失敗',
     getKey: 'language_optimization',
   });
   return data;

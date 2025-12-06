@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../store"
 import { loginRequest, loginSuccess, loginFailure } from "../features/user/userSlice"
-import { loginApi, logoutApi, regApi } from "../services/authApi"
+import { loginApi, logoutApi, regApi } from "../client/authApi"
 import { useRouter } from "next/navigation"
 
 export default function SectionLogin() {

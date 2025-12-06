@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useApiCall } from '../../hooks/useApiCall';
-import { taskApiClient } from '../../services/taskApiRefactored';
+import { addTaskClient } from '../../client/taskApi';
 import { AddTask, Task } from "../../model/task";
 import { Memory } from "../../model/memory";
 import CommonModal from './CommonModal';
@@ -17,7 +17,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
   const [formData, setFormData] = useState<AddTask | Task | undefined>();
 
   const { execute: saveTask } = useApiCall(
-    taskApiClient.addTask,
+    addTaskClient,
     {
       onSuccess: () => {
         onClose();

@@ -1,44 +1,44 @@
 import { AddProcessOptimization, ProcessOptimization } from "../model/processOptimization";
 import { fetchApiJsonCore } from "@/utils/fetchApi";
 
-export const fetchProcessOptimizationsService = async () => {
+export const fetchProcessOptimizationsClient = async () => {
   const data = await fetchApiJsonCore<undefined,ProcessOptimization[]>({
     endpoint: '/api/processOptimization',
     method: 'GET',
-    errorMessage: 'error fetchProcessOptimizationsService プロセス最適化一覧取得失敗',
+    errorMessage: 'error fetchProcessOptimizationsClient プロセス最適化一覧取得失敗',
     getKey: 'process_optimizations',
   });
   return data;
 };
 
-export const addProcessOptimizationService = async (processOptimization: AddProcessOptimization) => {
+export const addProcessOptimizationClient = async (processOptimization: AddProcessOptimization) => {
   const data = await fetchApiJsonCore<AddProcessOptimization,ProcessOptimization>({
     endpoint: '/api/processOptimization',
     method: 'POST',
     body: processOptimization,
-    errorMessage: 'error addProcessOptimizationService プロセス最適化追加失敗',
+    errorMessage: 'error addProcessOptimizationClient プロセス最適化追加失敗',
     getKey: 'process_optimization',
   });
   return data;
 };
 
-export const updateProcessOptimizationService = async (processOptimization: ProcessOptimization) => {
+export const updateProcessOptimizationClient = async (processOptimization: ProcessOptimization) => {
   const data = await fetchApiJsonCore<ProcessOptimization,ProcessOptimization>({
     endpoint: '/api/processOptimization',
     method: 'PUT',
     body: processOptimization,
-    errorMessage: 'error updateProcessOptimizationService プロセス最適化更新失敗',
+    errorMessage: 'error updateProcessOptimizationClient プロセス最適化更新失敗',
     getKey: 'process_optimization',
   });
   return data;
 };
 
-export const deleteProcessOptimizationService = async (id: string) => {
+export const deleteProcessOptimizationClient = async (id: string) => {
   const data = await fetchApiJsonCore<{id: string},ProcessOptimization>({
     endpoint: `/api/processOptimization`,
     method: 'DELETE',
     body: { id },
-    errorMessage: 'error deleteProcessOptimizationService プロセス最適化削除失敗',
+    errorMessage: 'error deleteProcessOptimizationClient プロセス最適化削除失敗',
     getKey: 'process_optimization',
   });
   return data;

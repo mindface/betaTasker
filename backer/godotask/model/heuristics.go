@@ -7,9 +7,9 @@ import (
 
 // HeuristicsAnalysis - 分析結果を保存
 type HeuristicsAnalysis struct {
-	ID          uint           `gorm:"primaryKey" json:"id"`
-	UserID      uint           `json:"user_id"`
-	TaskID      uint           `json:"task_id"`
+	ID          int           `gorm:"primaryKey" json:"id"`
+	UserID      int           `json:"user_id"`
+	TaskID      int           `json:"task_id"`
 	AnalysisType string        `json:"analysis_type"`
 	Result      string         `json:"result" gorm:"type:jsonb"`
 
@@ -29,9 +29,9 @@ type HeuristicsAnalysis struct {
 
 // HeuristicsTracking - ユーザー行動追跡データ
 type HeuristicsTracking struct {
-	ID          uint           `gorm:"primaryKey" json:"id"`
-	UserID      uint           `json:"user_id"`
-	TaskID      uint           `json:"task_id"`
+	ID          int           `gorm:"primaryKey" json:"id"`
+	UserID      int           `json:"user_id"`
+	TaskID      int           `json:"task_id"`
 
 	Action      string         `json:"action"`
 	Context     string         `json:"context" gorm:"type:jsonb"`
@@ -50,9 +50,9 @@ type HeuristicsTracking struct {
 
 // HeuristicsInsight - 生成されたインサイト
 type HeuristicsInsight struct {
-	ID          uint           `gorm:"primaryKey" json:"id"`
-	UserID      uint           `json:"user_id"`
-	TaskID      uint           `json:"task_id"`
+	ID          int           `gorm:"primaryKey" json:"id"`
+	UserID      int           `json:"user_id"`
+	TaskID      int           `json:"task_id"`
 
 	Type        string         `json:"type"`
 	Title       string         `json:"title"`
@@ -61,7 +61,7 @@ type HeuristicsInsight struct {
 	Data        string         `json:"data" gorm:"type:jsonb"`
 
 	// 追加：どの分析から生成されたか
-	SourceAnalysisID *uint      `json:"source_analysis_id"`
+	SourceAnalysisID *int      `json:"source_analysis_id"`
 	// 追加：AI からの具体的改善アクション
 	Recommendation string        `json:"recommendation"`
 	// 追加：改善した場合の期待値 (0〜1)
@@ -76,11 +76,11 @@ type HeuristicsInsight struct {
 
 // HeuristicsPattern - 検出されたパターン
 type HeuristicsPattern struct {
-	ID          uint           `gorm:"primaryKey" json:"id"`
+	ID          int           `gorm:"primaryKey" json:"id"`
 	Name        string         `json:"name"`
 
-	UserID    uint           `json:"user_id"`    // 個人ごとのパターン分析も可能に
-	TaskID    uint          `json:"task_id"`
+	UserID    int           `json:"user_id"`    // 個人ごとのパターン分析も可能に
+	TaskID    int          `json:"task_id"`
 	// タスク分類
 	TaskType  string         `json:"task_type"`  // coding, planning, machining など
 	// 追加：パターンの重要度（0〜1）
@@ -98,9 +98,9 @@ type HeuristicsPattern struct {
 
 // HeuristicsModel - 学習モデル情報
 type HeuristicsModel struct {
-	ID          uint           `gorm:"primaryKey" json:"id"`
-	UserID    	uint           `json:"user_id"`
-	TaskID    	uint           `json:"task_id"`
+	ID          int           `gorm:"primaryKey" json:"id"`
+	UserID    	int           `json:"user_id"`
+	TaskID    	int           `json:"task_id"`
 	ModelType   string         `json:"model_type"`
 	Version     string         `json:"version"`
 	Parameters  string         `json:"parameters" gorm:"type:jsonb"`
@@ -114,15 +114,15 @@ type HeuristicsModel struct {
 
 // リクエスト/レスポンス用の構造体
 type HeuristicsAnalysisRequest struct {
-	UserID       uint                   `json:"user_id"`
-	TaskID       uint                   `json:"task_id"`
+	UserID       int                   `json:"user_id"`
+	TaskID       int                   `json:"task_id"`
 	AnalysisType string                 `json:"analysis_type"`
 	Data         map[string]interface{} `json:"data"`
 }
 
 type HeuristicsTrackingData struct {
-	ID        uint                   `json:"id"`
-	UserID    uint                   `json:"user_id"`
+	ID        int                   `json:"id"`
+	UserID    int                   `json:"user_id"`
 	Action    string                 `json:"action"`
 	Context   map[string]interface{} `json:"context"`
 	SessionID string                 `json:"session_id"`

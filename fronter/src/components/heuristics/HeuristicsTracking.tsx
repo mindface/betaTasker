@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHeuristicsTracking } from '../../hooks/useHeuristics';
 import { HeuristicsTrackingData } from '../../model/heuristics';
 import styles from './HeuristicsTracking.module.scss';
@@ -16,17 +16,11 @@ export default function HeuristicsTracking() {
     duration: 0,
   });
 
-  useEffect(() => {
-    if (userId) {
-      handleLoadTracking();
-    }
-  }, [userId]);
-
-  const handleLoadTracking = () => {
+  const handleLoadTracking = useCallback(() => {
     if (userId) {
       getTracking(userId);
     }
-  };
+  },[getTracking, userId]);
 
   const handleTrack = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,6 +46,12 @@ export default function HeuristicsTracking() {
       [field]: value,
     }));
   };
+
+  useEffect(() => {
+    if (userId) {
+      handleLoadTracking();
+    }
+  }, [handleLoadTracking, userId]);
 
   if (loading) {
     return (

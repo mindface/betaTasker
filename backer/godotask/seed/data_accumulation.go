@@ -185,7 +185,7 @@ func (da *DataAccumulator) ImportFromCSV(filename string, modelType string) erro
 			count++
 		}
 	}
-	
+
 	log.Printf("Imported %d records from %s", count, filename)
 	return nil
 }

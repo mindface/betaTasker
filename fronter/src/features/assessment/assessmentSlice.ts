@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchAssessmentsService, getAssessmentsForTaskUserService,  addAssessmentService, updateAssessmentService, deleteAssessmentService } from '../../services/assessmentApi';
+import { fetchAssessmentsClient, getAssessmentsForTaskUserClient,  addAssessmentClient, updateAssessmentClient, deleteAssessmentClient } from '../../client/assessmentApi';
 import { AddAssessment, Assessment } from '../../model/assessment';
 
 interface AssessmentState {
@@ -17,7 +17,7 @@ const initialState: AssessmentState = {
 export const loadAssessments = createAsyncThunk(
   'assessment/loadAssessments',
   async (_, { rejectWithValue }) => {
-    const response = await fetchAssessmentsService();
+    const response = await fetchAssessmentsClient();
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -28,7 +28,7 @@ export const loadAssessments = createAsyncThunk(
 export const createAssessment = createAsyncThunk(
   'assessment/createAssessment',
   async (assessmentData: AddAssessment, { rejectWithValue }) => {
-    const response = await addAssessmentService(assessmentData);
+    const response = await addAssessmentClient(assessmentData);
     if ("error" in response) {
       return rejectWithValue({
         message: response.error.message,
@@ -42,7 +42,7 @@ export const createAssessment = createAsyncThunk(
 export const getAssessmentsForTaskUser = createAsyncThunk(
   'assessment/getAssessmentsForTaskUser',
   async (payload: { userId: number,taskId: number }, { rejectWithValue }) => {
-    const response = await getAssessmentsForTaskUserService(payload.userId, payload.taskId);
+    const response = await getAssessmentsForTaskUserClient(payload.userId, payload.taskId);
     if ("error" in response) {
       return rejectWithValue({
         message: response.error.message,
@@ -56,7 +56,7 @@ export const getAssessmentsForTaskUser = createAsyncThunk(
 export const updateAssessment = createAsyncThunk(
   'assessment/updateAssessment',
   async (assessmentData: Assessment, { rejectWithValue }) => {
-    const response = await updateAssessmentService(assessmentData);
+    const response = await updateAssessmentClient(assessmentData);
     if ("error" in response) {
       return rejectWithValue({
         message: response.error.message,
@@ -70,7 +70,7 @@ export const updateAssessment = createAsyncThunk(
 export const removeAssessment = createAsyncThunk(
   'assessment/removeAssessment',
   async (id: number, { rejectWithValue }) => {
-    const response = await deleteAssessmentService(String(id));
+    const response = await deleteAssessmentClient(String(id));
     if ("error" in response) {
       return rejectWithValue({
         message: response.error.message,

@@ -1,24 +1,23 @@
-import { error } from "console";
 import { AddAssessment, Assessment } from "../model/assessment";
 import { fetchApiJsonCore } from "@/utils/fetchApi";
 
-export const fetchAssessmentsService = async () => {
+export const fetchAssessmentsClient = async () => {
   const data = await fetchApiJsonCore<undefined,Assessment[]>({
     endpoint: '/api/assessment',
     method: 'GET',
-    errorMessage: 'error fetchAssessmentsService アセスメント一覧取得失敗',
+    errorMessage: 'error fetchAssessmentsClient アセスメント一覧取得失敗',
     getKey: 'assessments',
   });
   return data;
 };
 
 // Todoデータ内容を確認
-export const getAssessmentsForTaskUserService = async (userId: number,taskId:number) => {
+export const getAssessmentsForTaskUserClient = async (userId: number,taskId:number) => {
   const data = await fetchApiJsonCore<{userId: number, taskId: number},Assessment[]>({
     endpoint: '/api/assessmentsForTaskUser',
     method: 'POST',
     body: ({ userId, taskId }),
-    errorMessage: 'error getAssessmentsForTaskUserService アセスメントIdでの情報取得失敗',
+    errorMessage: 'error getAssessmentsForTaskUserClient アセスメントIdでの情報取得失敗',
   });
   if ('error' in data) {
     return data;
@@ -26,12 +25,12 @@ export const getAssessmentsForTaskUserService = async (userId: number,taskId:num
   return data.value;
 };
 
-export const addAssessmentService = async (assessment: AddAssessment) => {
+export const addAssessmentClient = async (assessment: AddAssessment) => {
   const data = await fetchApiJsonCore<AddAssessment,Assessment>({
     endpoint: '/api/assessment',
     method: 'POST',
     body: assessment,
-    errorMessage: 'error addAssessmentService アセスメント追加失敗',
+    errorMessage: 'error addAssessmentClient アセスメント追加失敗',
   });
   if ('error' in data) {
     return data;
@@ -39,12 +38,12 @@ export const addAssessmentService = async (assessment: AddAssessment) => {
   return data.value;
 };
 
-export const updateAssessmentService = async (assessment: Assessment) => {
+export const updateAssessmentClient = async (assessment: Assessment) => {
   const data = await fetchApiJsonCore<Assessment,Assessment>({
     endpoint: '/api/assessment',
     method: 'PUT',
     body: assessment,
-    errorMessage: 'error updateAssessmentService アセスメント更新失敗',
+    errorMessage: 'error updateAssessmentClient アセスメント更新失敗',
   });
   if ('error' in data) {
     return data;
@@ -52,12 +51,12 @@ export const updateAssessmentService = async (assessment: Assessment) => {
   return data.value;
 };
 
-export const deleteAssessmentService = async (id: string) => {
+export const deleteAssessmentClient = async (id: string) => {
   const data = await fetchApiJsonCore<{id: string},{ id: string }>({
     endpoint: '/api/assessment',
     method: 'PUT',
     body: { id },
-    errorMessage: 'error updateAssessmentService アセスメント更新失敗',
+    errorMessage: 'error updateAssessmentClient アセスメント更新失敗',
   });
   if ('error' in data) {
     return data;

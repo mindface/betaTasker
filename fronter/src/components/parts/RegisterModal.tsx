@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CommonModal from './CommonModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { regApi } from '../../services/authApi';
+import { regApi } from '../../client/authApi';
 import { RootState } from '../../store';
 
 interface RegisterModalProps {

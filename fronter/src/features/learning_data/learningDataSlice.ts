@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { LearningData } from '../../model/learning';
-import { fetchLearningData } from '../../services/learnApi';
+import { fetchLearningData } from '../../client/learnApi';
 
 interface LearningDataState {
   learningData: LearningData | null;
