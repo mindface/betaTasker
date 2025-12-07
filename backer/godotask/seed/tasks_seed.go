@@ -58,9 +58,10 @@ func SeedTaskModelsFromCSV(db *gorm.DB) error {
 		models = append(models, model.Task{
 			ID:        id,
 			UserID:    userID,
-			Title:     record[2],
+			Title:     record[3],
+			Description:   record[4],
 			Date:      datePtr,
-			Status:    record[4],
+			Status:    record[6],
 			Priority:  priority,
 			CreatedAt: createdAt,
 			UpdatedAt: updatedAt,

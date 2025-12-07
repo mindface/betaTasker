@@ -74,7 +74,6 @@ export default function SectionTask() {
             />
           ))}
         </div>
-        {TaskId}
         <AssessmentListModal
           taskId={TaskId}
           isOpen={TaskId !== -1}
