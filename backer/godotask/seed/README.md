@@ -56,13 +56,13 @@ go run main.go
 - **PhenomenologicalFramework**: 21種類のG-A-Pa構造フレームワーク
 - **QuantificationLabel**: 定量化ラベルデータ
 
+
 ## 🔄 データの依存関係
 
 1. **基礎データ**: RobotSpecification, OptimizationModel, PhenomenologicalFramework
 2. **評価データ**: StateEvaluation（基礎データを参照）
 3. **結果データ**: ToolMatchingResult, ProcessMonitoring（評価データを参照）
 4. **学習データ**: LearningPattern（独立）
-
 
 
 ## 🎯 特徴
