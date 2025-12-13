@@ -34,8 +34,6 @@ const AssessmentListModal: React.FC<AssessmentListModalProps> = ({ isOpen, onClo
     //   });
     // }
 
-    console.log("assessmentId", taskId)
-    console.log("user", user)
     if(taskId !== -1) {
       dispatch(getAssessmentsForTaskUser({ userId: 1, taskId: taskId || 0 }))
     }

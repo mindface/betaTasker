@@ -26,6 +26,7 @@ type Task struct {
 	HeuristicsInsight []HeuristicsInsight `json:"heuristics_insights" gorm:"foreignKey:TaskID"`
 	HeuristicsPattern []HeuristicsPattern `json:"heuristics_patterns" gorm:"foreignKey:TaskID"`
   KnowledgePatterns    []KnowledgePattern    `json:"knowledge_patterns" gorm:"foreignKey:TaskID"`
+  LanguageOptimization   []LanguageOptimization    `json:"language_optimizations" gorm:"foreignKey:TaskID"`
 }
 
 func (Task) TableName() string {

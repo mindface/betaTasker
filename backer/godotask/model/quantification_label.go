@@ -11,7 +11,7 @@ type JSON = lib.JSON
 
 // QuantificationLabel - 定量化ラベルのメインモデル
 type QuantificationLabel struct {
-	ID string `gorm:"type:varchar(255);primaryKey" json:"id"`
+	ID  string    `gorm:"type:varchar(255);primaryKey" json:"id"`
 
 	UserID int `json:"user_id" gorm:"index"`
 	TaskID int  `json:"task_id" gorm:"index"`
@@ -20,60 +20,60 @@ type QuantificationLabel struct {
 	OriginalText    string `json:"original_text" gorm:"type:text"`
 	NormalizedText  string `json:"normalized_text" gorm:"type:text"`
 	Category        string `json:"category" gorm:"index"`
-	Context         string `json:"context" gorm:"type:text"`
+	// Context         *string `json:"context" gorm:"type:text"`
 	Domain          string `json:"domain" gorm:"index"`
 
 	// 画像情報
-	ImageURL         string `json:"image_url" gorm:"type:text"`
-	ThumbnailURL     string `json:"thumbnail_url" gorm:"type:text"`
-	ImageDescription string `json:"image_description" gorm:"type:text"`
-	ImageMetadata    JSON   `json:"image_metadata" gorm:"type:jsonb"`
+	// ImageURL         *string `json:"image_url" gorm:"type:text"`
+	// ThumbnailURL     *string `json:"thumbnail_url" gorm:"type:text"`
+	// ImageDescription *string `json:"image_description" gorm:"type:text"`
+	// ImageMetadata    *JSON   `json:"image_metadata" gorm:"type:jsonb"`
 
 	// 定量化情報
-	Value       float64 `json:"value"`
-	Unit        string  `json:"unit" gorm:"index"`
-	MinRange    float64 `json:"min_range"`
-	MaxRange    float64 `json:"max_range"`
-	TypicalValue float64 `json:"typical_value"`
-	Precision   int     `json:"precision"`
-	Confidence  float64 `json:"confidence"`
+	// Value       *float64 `json:"value"`
+	// Unit        *string  `json:"unit" gorm:"index"`
+	// MinRange    *float64 `json:"min_range"`
+	// MaxRange    *float64 `json:"max_range"`
+	// TypicalValue *float64 `json:"typical_value"`
+	// Precision   *int     `json:"precision"`
+	// Confidence  *float64 `json:"confidence"`
 
 	// 概念情報
-	AbstractLevel     string `json:"abstract_level" gorm:"index"` // concrete, semi-abstract, abstract
-	CulturalContext   string `json:"cultural_context"`
-	TemporalContext   string `json:"temporal_context"`
-	SpatialContext    string `json:"spatial_context"`
-	RelatedConcepts   JSON   `json:"related_concepts" gorm:"type:jsonb"`
-	SemanticTags      JSON   `json:"semantic_tags" gorm:"type:jsonb"`
+	// AbstractLevel     *string `json:"abstract_level" gorm:"index"` // concrete, semi-abstract, abstract
+	// CulturalContext   *string `json:"cultural_context"`
+	// TemporalContext   *string `json:"temporal_context"`
+	// SpatialContext    *string `json:"spatial_context"`
+	// RelatedConcepts   *JSON   `json:"related_concepts" gorm:"type:jsonb"`
+	// SemanticTags      *JSON   `json:"semantic_tags" gorm:"type:jsonb"`
 
 	// 評価情報
-	Accuracy       float64 `json:"accuracy"`
-	Consistency    float64 `json:"consistency"`
-	Reproducibility float64 `json:"reproducibility"`
-	Usability      float64 `json:"usability"`
-	VerificationCount int  `json:"verification_count"`
-	LastVerified   *time.Time `json:"last_verified"`
+	// Accuracy       *float64 `json:"accuracy"`
+	// Consistency    *float64 `json:"consistency"`
+	// Reproducibility *float64 `json:"reproducibility"`
+	// Usability      *float64 `json:"usability"`
+	// VerificationCount *int  `json:"verification_count"`
+	// LastVerified   *time.Time `json:"last_verified"`
 
 	// メタデータ
-	Source           string `json:"source" gorm:"index"` // manual, automatic, hybrid
-	Validated        bool   `json:"validated" gorm:"index;default:false"`
-	PublicVisibility bool   `json:"public_visibility" gorm:"default:true"`
-	Tags             JSON   `json:"tags" gorm:"type:jsonb"`
-	Notes            string `json:"notes" gorm:"type:text"`
+	// Source           *string `json:"source" gorm:"index"` // manual, automatic, hybrid
+	// Validated        *bool   `json:"validated" gorm:"index;default:false"`
+	// PublicVisibility *bool   `json:"public_visibility" gorm:"default:true"`
+	// Tags             *JSON   `json:"tags" gorm:"type:jsonb"`
+	// Notes            *string `json:"notes" gorm:"type:text"`
 
 	// 履歴管理
-	Version   int    `json:"version" gorm:"default:1"`
-	CreatedBy string `json:"created_by"`
-	UpdatedBy string `json:"updated_by"`
+	// Version   *int    `json:"version" gorm:"default:1"`
+	// CreatedBy *string `json:"created_by"`
+	// UpdatedBy *string `json:"updated_by"`
 
 	// タイムスタンプ
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
+	// DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 
 	// リレーション
-	Annotations []ImageAnnotation `json:"annotations" gorm:"foreignKey:LabelID"`
-	Revisions   []LabelRevision   `json:"revisions" gorm:"foreignKey:LabelID"`
+	// Annotations []ImageAnnotation `json:"annotations" gorm:"foreignKey:LabelID"`
+	// Revisions   []LabelRevision   `json:"revisions" gorm:"foreignKey:LabelID"`
 }
 
 // ImageAnnotation - 画像アノテーション

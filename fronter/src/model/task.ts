@@ -1,3 +1,14 @@
+import {
+  HeuristicsModel,
+  HeuristicsAnalysis,
+  HeuristicsPattern,
+  HeuristicsTracking,
+  HeuristicsInsight
+} from "./heuristics";
+import {
+  LanguageOptimization
+} from "./languageOptimization";
+
 export interface Task {
   id: number;
   user_id: number;
@@ -9,6 +20,14 @@ export interface Task {
   priority: number;
   created_at: string;
   updated_at: string;
+
+  // リレーション
+  heuristics_model?: HeuristicsModel;
+  heuristics_analysis?: HeuristicsAnalysis[];
+  heuristics_patterns?: HeuristicsPattern[];
+  heuristics_tracking?: HeuristicsTracking[];
+  heuristics_insight?: HeuristicsInsight
+  language_optimizations?: LanguageOptimization[]
 }
 
 export interface AddTask {
