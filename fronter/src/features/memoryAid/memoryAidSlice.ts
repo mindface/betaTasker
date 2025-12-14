@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchMemoryAidsByCode } from '../../services/memoryAidApi';
+import { fetchMemoryAidsByCode } from '../../client/memoryAidApi';
 import { MemoryContext } from '../../model/memoryAid';
 
 interface MemoryAidState {

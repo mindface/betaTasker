@@ -31,8 +31,11 @@ func (r *TaskRepositoryImpl) FindAll() ([]model.Task, error) {
 		Preload("MultimodalData").
 		Preload("HeuristicsModel").
 		Preload("HeuristicsTracking").
+		Preload("HeuristicsAnalysis").
+		Preload("HeuristicsPattern").
 		Preload("HeuristicsInsight").
 		Preload("KnowledgePatterns").
+		Preload("LanguageOptimization").
 		Find(&tasks).Error
 	if err != nil {
 		return nil, err

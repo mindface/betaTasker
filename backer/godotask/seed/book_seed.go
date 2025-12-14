@@ -14,10 +14,10 @@ import (
 )
 
 
-func SeedTaskModelsFromCSV(db *gorm.DB) error {
-	file, err := os.Open("seed/data/task.csv")
+func SeedBookModelsFromCSV(db *gorm.DB) error {
+	file, err := os.Open("seed/data/book.csv")
 	if err != nil {
-		return fmt.Errorf("could not open task_models.csv: %v", err)
+		return fmt.Errorf("could not open memories_models.csv: %v", err)
 	}
 
 	reader := csv.NewReader(file)
@@ -31,7 +31,7 @@ func SeedTaskModelsFromCSV(db *gorm.DB) error {
 		return fmt.Errorf("failed to read CSV header: %w", err)
 	}
 
-	var models []model.Task
+	var models []model.Book
 	for {
 		record, err := reader.Read()
 		if err == io.EOF {
@@ -42,27 +42,20 @@ func SeedTaskModelsFromCSV(db *gorm.DB) error {
 		}
 
     id, _ := strconv.Atoi(record[0])
-    userID, _ := strconv.Atoi(record[1])
-    priority, _ := strconv.Atoi(record[5])
+    taskID, _ := strconv.Atoi(record[1])
 
-    // Date（NULL もありうるのでポインタ）
-    var datePtr *time.Time
-    if record[3] != "" {
-        t, _ := time.Parse("2006-01-02", record[3])
-        datePtr = &t
-    }
+    createdAt, _ := time.Parse("2006-01-02", record[8])
+    updatedAt, _ := time.Parse("2006-01-02", record[9])
 
-    createdAt, _ := time.Parse("2006-01-02", record[6])
-    updatedAt, _ := time.Parse("2006-01-02", record[7])
-
-		models = append(models, model.Task{
+		models = append(models, model.Book{
 			ID:        id,
-			UserID:    userID,
-			Title:     record[3],
-			Description:   record[4],
-			Date:      datePtr,
-			Status:    record[6],
-			Priority:  priority,
+			TaskID:    taskID,
+			Title:     record[2],
+			Name:      record[3],
+			Text:      record[4],
+			Disc:      record[5],
+			ImgPath:   record[6],
+			Status:    record[7],
 			CreatedAt: createdAt,
 			UpdatedAt: updatedAt,
 		})

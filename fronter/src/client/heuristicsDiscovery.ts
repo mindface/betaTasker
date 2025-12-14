@@ -27,7 +27,7 @@ interface HeuristicModel {
   lastUpdated: Date;
 }
 
-export class HeuristicsDiscoveryService {
+export class HeuristicsDiscoveryClient {
   private actionBuffer: UserAction[] = [];
   private patterns: Map<string, Pattern> = new Map();
   private modelVersion: number = 0;
@@ -519,4 +519,4 @@ export class HeuristicsDiscoveryService {
 }
 
 // シングルトンインスタンス
-export const heuristicsDiscovery = new HeuristicsDiscoveryService();
+export const heuristicsDiscovery = new HeuristicsDiscoveryClient();

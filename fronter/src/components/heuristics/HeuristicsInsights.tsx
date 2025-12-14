@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useHeuristicsInsights } from '../../hooks/useHeuristics';
 import styles from './HeuristicsInsights.module.scss';
 
@@ -9,18 +9,14 @@ export default function HeuristicsInsights() {
   const [userId, setUserId] = useState<string>('');
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    loadInsights();
-  }, [currentPage, userId]);
-
-  const loadInsights = () => {
+  const loadInsights = useCallback(() => {
     const params = {
       limit: itemsPerPage,
       offset: (currentPage - 1) * itemsPerPage,
       ...(userId && { user_id: userId }),
     };
     getInsights(params);
-  };
+  },[itemsPerPage, currentPage, userId, getInsights]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -30,6 +26,10 @@ export default function HeuristicsInsights() {
     setUserId(e.target.value);
     setCurrentPage(1);
   };
+
+  useEffect(() => {
+    loadInsights();
+  }, [currentPage, userId, loadInsights]);
 
   const totalPages = Math.ceil(total / itemsPerPage);
 

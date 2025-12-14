@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchTasksService, addTaskService, updateTaskService, deleteTaskService, SuccessResponse } from '../../services/taskApi';
+import { fetchTasksClient, addTaskClient, updateTaskClient, deleteTaskClient, SuccessResponse } from '../../client/taskApi';
 import { AddTask, Task } from '../../model/task';
-import { ErrorCode } from '../../response/errorCodes';
 
 interface TaskState {
   tasks: Task[];
@@ -18,7 +17,7 @@ const initialState: TaskState = {
 export const loadTasks = createAsyncThunk(
   'task/loadTasks',
   async (_, { rejectWithValue }) => {
-    const response = await fetchTasksService();
+    const response = await fetchTasksClient();
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -29,7 +28,7 @@ export const loadTasks = createAsyncThunk(
 export const createTask = createAsyncThunk(
   'task/createTask',
   async (taskData: AddTask, { rejectWithValue }) => {
-    const response = await addTaskService(taskData);
+    const response = await addTaskClient(taskData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -40,18 +39,18 @@ export const createTask = createAsyncThunk(
 export const updateTask = createAsyncThunk(
   'task/updateTask',
   async (taskData: Task, { rejectWithValue }) => {
-    const response = await updateTaskService(taskData);
+    const response = await updateTaskClient(taskData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-}
+  }
 )
 
 export const removeTask = createAsyncThunk(
   'task/removeTask',
   async (id: number, { rejectWithValue }) => {
-    const response = await deleteTaskService(String(id));
+    const response = await deleteTaskClient(id);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }

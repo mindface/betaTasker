@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useCallback } from 'react'
 import { VRMSchema, VRMSpringBoneColliderMesh, VRMSpringBoneColliderGroup } from '../model/VRMSchema'
 import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import ContentControl from './ContentControl'
@@ -15,7 +15,7 @@ export default function SectionViewer() {
   const botton = useRef(0)
   const sendModel = useRef<any>(null)
   let mixer = useRef<any>()
-  const v3A = new THREE.Vector3()
+  const v3A = useRef(new THREE.Vector3());
 
   function createColliderMesh(radius:number, offset: THREE.Vector3): VRMSpringBoneColliderMesh {
     const colliderMesh = new THREE.Mesh(new THREE.SphereBufferGeometry(radius,8,4),new THREE.MeshBasicMaterial({ visible: false }))
@@ -23,42 +23,6 @@ export default function SectionViewer() {
     colliderMesh.name = 'vrmColliderSphere'
     colliderMesh.geometry.computeBoundingSphere()
     return colliderMesh;
-  }
-
-  function importColliderMeshGroups(gltf:GLTF,smAnimation:VRMSchema.SecondaryAnimation): VRMSpringBoneColliderGroup[] {
-    const vrmColliderGruops = smAnimation.colliderGroups
-    if(vrmColliderGruops === undefined) return [];
-
-    const colliderGroups: VRMSpringBoneColliderGroup[] = [];
-    vrmColliderGruops.forEach(async (colliderGroup) => {
-      if( colliderGroup.node === undefined || colliderGroup.colliders === undefined ) return;
-      const bone = await gltf.parser.getDependency('node',colliderGroup.node)
-      const colliders: VRMSpringBoneColliderMesh[] = []
-      colliderGroup.colliders.forEach((collider) => {
-        if(
-          collider.offset === undefined ||
-          collider.offset.x === undefined ||
-          collider.offset.y === undefined ||
-          collider.offset.z === undefined ||
-          collider.radius === undefined
-        ) return;
-
-        const offset = v3A.set(
-          collider.offset.x,
-          collider.offset.y,
-          -collider.offset.z,
-        )
-        const colliderMesh = createColliderMesh(collider.radius, offset)
-        bone.add(colliderMesh)
-        colliders.push(colliderMesh)
-      })
-      const colliderMeshGroup = {
-        node: colliderGroup.node,
-        colliders
-      }
-      colliderGroups.push(colliderMeshGroup)
-    })
-    return colliderGroups;
   }
 
   function switcher (switcherNumber:number, switcherTriger:string) {
@@ -90,22 +54,46 @@ export default function SectionViewer() {
     },100)
   }
 
-  const onThree = () => {
+  const onThree = useCallback(() => {
+
+    function importColliderMeshGroups(gltf:GLTF,smAnimation:VRMSchema.SecondaryAnimation): VRMSpringBoneColliderGroup[] {
+      const vrmColliderGruops = smAnimation.colliderGroups
+      if(vrmColliderGruops === undefined) return [];
+
+      const colliderGroups: VRMSpringBoneColliderGroup[] = [];
+      vrmColliderGruops.forEach(async (colliderGroup) => {
+        if( colliderGroup.node === undefined || colliderGroup.colliders === undefined ) return;
+        const bone = await gltf.parser.getDependency('node',colliderGroup.node)
+        const colliders: VRMSpringBoneColliderMesh[] = []
+        colliderGroup.colliders.forEach((collider) => {
+          if(
+            collider.offset === undefined ||
+            collider.offset.x === undefined ||
+            collider.offset.y === undefined ||
+            collider.offset.z === undefined ||
+            collider.radius === undefined
+          ) return;
+
+          const offset = v3A.current.set(
+            collider.offset.x,
+            collider.offset.y,
+            -collider.offset.z,
+          )
+          const colliderMesh = createColliderMesh(collider.radius, offset)
+          bone.add(colliderMesh)
+          colliders.push(colliderMesh)
+        })
+        const colliderMeshGroup = {
+          node: colliderGroup.node,
+          colliders
+        }
+        colliderGroups.push(colliderMeshGroup)
+      })
+      return colliderGroups;
+    }
+
     const width = window.innerWidth
     const height = window.innerHeight
-
-    const baseActions = {
-      idle: { weight: 1 },
-      walk: { weight: 0 },
-      run: { weight: 0 }
-    };
-    const additiveActions = {
-      sneak_pose: { weight: 0 },
-      sad_pose: { weight: 0 },
-      agree: { weight: 0 },
-      headShake: { weight: 0 }
-    };
-    const allActions = [];
 
     const scene = new THREE.Scene()
     // scene.fog = new THREE.Fog( 0xa0a0a0, 10, 50 )
@@ -211,7 +199,7 @@ export default function SectionViewer() {
       requestAnimationFrame(tick)
     }
 
-  }
+  },[]);
 
   function setWeight( action:any, weight:number ) {
     action.enabled = true;
@@ -258,7 +246,7 @@ export default function SectionViewer() {
     window.addEventListener('load',() => {
       onThree()
     })
-  },[])
+  },[onThree])
 
   return(
     <div className="canvas-box">

@@ -8,7 +8,6 @@ import {
   HeuristicsPattern,
   HeuristicsModel
 } from '../model/heuristics';
-import { ApplicationError, ErrorCode, parseErrorResponse } from '../response/errorCodes';
 import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 const API_BASE = '/api/heuristics';

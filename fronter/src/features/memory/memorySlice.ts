@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchMemoriesService, fetchMemoryService, addMemoryService, updateMemoryService, deleteMemoryService } from '../../services/memoryApi';
+import { fetchMemoriesClient, fetchMemoryClient, addMemoryClient, updateMemoryClient, deleteMemoryClient } from '../../client/memoryApi';
 import { AddMemory, Memory } from '../../model/memory';
 
 interface MemoryState {
@@ -35,7 +35,7 @@ const initialState: MemoryState = {
 export const loadMemories = createAsyncThunk(
   'memory/loadMemories',
   async (_, { rejectWithValue }) => {
-    const response = await fetchMemoriesService();
+    const response = await fetchMemoriesClient();
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -47,7 +47,7 @@ export const loadMemories = createAsyncThunk(
 export const getMemory = createAsyncThunk(
   'memory/getMemory',
   async (memoryId: number, { rejectWithValue }) => {
-    const response = await fetchMemoryService(memoryId);
+    const response = await fetchMemoryClient(memoryId);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -59,7 +59,7 @@ export const getMemory = createAsyncThunk(
 export const createMemory = createAsyncThunk(
   'memory/createMemory',
   async (memoryData: AddMemory, { rejectWithValue }) => {
-    const response = await addMemoryService(memoryData);
+    const response = await addMemoryClient(memoryData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -70,7 +70,7 @@ export const createMemory = createAsyncThunk(
 export const updateMemory = createAsyncThunk(
   'memory/updateMemory',
   async (memoryData: Memory, { rejectWithValue }) => {
-    const response = await updateMemoryService(memoryData);
+    const response = await updateMemoryClient(memoryData);
     if ('error' in response) {
       return rejectWithValue(response.error);
     }
@@ -81,7 +81,7 @@ export const updateMemory = createAsyncThunk(
 export const removeMemory = createAsyncThunk(
   'memory/removeMemory',
   async (id: number, { rejectWithValue }) => {
-    const response = await deleteMemoryService(id.toString());
+    const response = await deleteMemoryClient(id.toString());
     if ('error' in response) {
       return rejectWithValue(response.error);
     }

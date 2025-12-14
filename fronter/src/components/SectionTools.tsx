@@ -1,8 +1,8 @@
 "use client"
-import React, { useEffect } from 'react'
+import Image from "next/image";
 
 export default function SectionHome() {
-  
+
   const pageInfo = [
     {
       title: "情報をリンクさせるプロセスについて",
@@ -24,13 +24,6 @@ export default function SectionHome() {
     }
   ]
 
-  // useEffect(() => {
-    // const scroll = new LocomotiveScroll({
-    //   el: document.querySelector('[data-scroll-container]'),
-    //   smooth: true
-    // });
-  // },[])
-
   return(
     <div className="section__inner section--tools">
       <div className="section-continer">
@@ -46,7 +39,7 @@ export default function SectionHome() {
                     <p className="text">{item.text}</p>
                   </div>
                   <div className="image-box">
-                    <img className='img' src={item.path} alt="" />
+                    <Image className='img' src={item.path} alt="" width={100} height={200} />
                   </div>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import { ResponseError } from "@/model/fetchTypes";
-import { UserInfo, User, LoginUserInfo } from "../model/user";
+import { User, LoginUserInfo } from "../model/user";
 import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 export const loginApi = async (email: string, password: string): Promise<ResponseError | { token: string; user: User }>  => {

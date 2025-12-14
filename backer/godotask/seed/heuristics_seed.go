@@ -4,6 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
+	"io"
+	"encoding/csv"
+	"strconv"
+	"os"
+
 	"github.com/godotask/model"
 	"gorm.io/gorm"
 )
@@ -35,73 +40,61 @@ func SeedHeuristics(db *gorm.DB) error {
 }
 
 func seedHeuristicsAnalysis(db *gorm.DB) error {
-	analyses := []model.HeuristicsAnalysis{
-		{
-			UserID:       1,
-			TaskID:       1,
-			AnalysisType: "performance",
-			Result: toJSON(map[string]interface{}{
-				"completion_rate": 0.85,
-				"accuracy":        0.92,
-				"speed":           "fast",
-				"errors":          []string{},
-				"implicit_knowledge": "工具摩耗の変化を微調整しながら加工している",
-			}),
-			Score:     87.5,
-			Status:    "completed",
-			CreatedAt: time.Now().AddDate(0, 0, -7),
-		},
-		{
-			UserID:       1,
-			TaskID:       1,
-			AnalysisType: "performance",
-			Result: toJSON(map[string]interface{}{
-				"completion_rate": 0.85,
-				"accuracy":        0.92,
-				"speed":           "fast",
-				"errors":          []string{},
-				"implicit_knowledge": "工具摩耗の変化を微調整しながら加工している",
-			}),
-			Score:     87.5,
-			Status:    "completed",
-			CreatedAt: time.Now().AddDate(0, 0, -7),
-		},
-		{
-			UserID:       1,
-			TaskID:       2,
-			AnalysisType: "behavioral",
-			Result: toJSON(map[string]interface{}{
-				"pattern":            "consistent",
-				"focus_time":         45,
-				"break_frequency":    3,
-				"productivity_peak":  "morning",
-				"implicit_signal":    "ミスを避けるため作業前に数秒間の準備ルーティン",
-			}),
-			Score:     92.3,
-			Status:    "completed",
-			CreatedAt: time.Now().AddDate(0, 0, -5),
-		},
-		{
-			UserID:       2,
-			TaskID:       3,
-			AnalysisType: "cognitive_load",
-			Result:       toJSON(map[string]interface{}{
-				"complexity": "high",
-				"stress_level": 0.6,
-				"attention_span": 35,
-				"multitasking": false,
-			}),
-			Score:     78.9,
-			Status:    "completed",
-			CreatedAt: time.Now().AddDate(0, 0, -3),
-		},
+	file, err := os.Open("seed/data/heuristics_analysis.csv")
+	if err != nil {
+		return fmt.Errorf("could not open heuristics_analysis.csv: %v", err)
 	}
 
-	for _, analysis := range analyses {
-		if err := db.Create(&analysis).Error; err != nil {
-			return err
-		}
+	reader := csv.NewReader(file)
+	// records, err := reader.ReadAll()
+	// if err != nil {
+	// 	return fmt.Errorf("could not read CSV: %v", err)
+	// }
+	defer file.Close()
+	_, err = reader.Read()
+	if err != nil {
+		return fmt.Errorf("failed to read CSV header: %w", err)
 	}
+
+	var models []model.HeuristicsAnalysis
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return fmt.Errorf("failed to read CSV record: %w", err)
+		}
+
+    id, _ := strconv.Atoi(record[0])
+    userID, _ := strconv.Atoi(record[1])
+    taskID, _ := strconv.Atoi(record[2])
+    score, _ := strconv.Atoi(record[5])
+
+    createdAt, _ := time.Parse("2006-01-02", record[7])
+    updatedAt, _ := time.Parse("2006-01-02", record[8])
+
+		models = append(models, model.HeuristicsAnalysis{
+			ID:        id,
+			UserID:    userID,
+			TaskID:    taskID,
+			AnalysisType: record[3],
+			Result: record[4],
+			Score:     float64(score),
+			Status:    record[6],
+			CreatedAt:  createdAt,
+			UpdatedAt:  updatedAt,
+		})
+	}
+
+	// バッチインサート
+	if len(models) > 0 {
+		if err := db.Create(&models).Error; err != nil {
+			return fmt.Errorf("failed to insert optimization models: %w", err)
+		}
+		fmt.Printf("Successfully seeded %d optimization models\n", len(models))
+	}
+
 	return nil
 }
 

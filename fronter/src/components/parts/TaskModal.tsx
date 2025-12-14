@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useApiCall } from '../../hooks/useApiCall';
-import { taskApiClient } from '../../services/taskApiRefactored';
+import { addTaskClient } from '../../client/taskApi';
 import { AddTask, Task } from "../../model/task";
 import { Memory } from "../../model/memory";
 import CommonModal from './CommonModal';
+import { formatDateTime } from "../../utils/dayApi";
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -17,7 +18,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
   const [formData, setFormData] = useState<AddTask | Task | undefined>();
 
   const { execute: saveTask } = useApiCall(
-    taskApiClient.addTask,
+    addTaskClient,
     {
       onSuccess: () => {
         onClose();
@@ -52,6 +53,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
     await saveTask(formData);
   };
 
+  const isTask = (data: AddTask | Task | undefined): data is Task => {
+    console.log("isTask check", data);
+    return data !== undefined && "id" in data; 
+  };
+
   // 選択中のmemory_idに該当するMemoryを取得
   const selectedMemory = memories.find(m => m.id === Number(formData?.memory_id));
 
@@ -61,7 +67,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
       onClose={onClose}
       title={initialData ? 'タスクを編集' : '新規タスク'}
     >
-      <div className="modal-content">
+      <div className="modal-wrapper">
         <form onSubmit={handleSubmit} className="task-form">
           <div className="form-group">
             <label htmlFor="title">タイトル</label>
@@ -126,9 +132,66 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
               ))}
             </select>
           </div>
+          <div className="form-group p-16">
+            {isTask(formData) && formData.heuristics_analysis && formData.heuristics_analysis.length > 0 && (
+              <div className="heuristics-analysis-section">
+                <h4>ヒューリスティクス分析</h4>
+                <ul>
+                  {formData.heuristics_analysis.map(analysis => (
+                    <li key={analysis.id}>
+                      <p>analysis_type: {analysis.analysis_type}</p> 
+                      <div className="result p-16">
+                        <p className="p-b-8">confidence: {analysis.result.confidence}</p>
+                        <p className="p-b-8">energy_saving: {analysis.result.energy_saving}</p>
+                        <p>created_at: {formatDateTime(analysis.created_at,"YYYY/MM/DD HH:mm:ss")}</p> 
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+          <div className="form-group p-16">
+            {isTask(formData) && formData.heuristics_patterns && formData.heuristics_patterns.length > 0 && (
+              <div className="heuristics-analysis-section">
+                <h4>ヒューリスティクス HeuristicsPattern</h4>
+                <ul>
+                  {formData.heuristics_patterns.map(analysis => (
+                    <li key={analysis.id}>
+                      <p>category: {analysis.category}</p> 
+                      <div className="result p-16">
+                        <p className="p-b-8">pattern: {analysis.pattern}</p>
+                        <p className="p-b-8">frequency: {analysis.frequency}</p>
+                        <p>created_at: {formatDateTime(analysis.created_at,"YYYY/MM/DD HH:mm:ss")}</p> 
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+          <div className="form-group p-16">
+            {isTask(formData) && formData.language_optimizations && formData.language_optimizations.length > 0 && (
+              <div className="heuristics-analysis-section">
+                <h4>LanguageOptimization</h4>
+                <ul>
+                  {formData.language_optimizations.map(analysis => (
+                    <li key={analysis.id}>
+                      <div className="result p-16">
+                        <p className="p-b-8">domain: {analysis.domain}</p>
+                        <p className="p-b-8">optimized_text: {analysis.optimized_text}</p>
+                        <p className="p-b-8">original_text: {analysis.original_text}</p> 
+                        <p>created_at: {formatDateTime(analysis.created_at,"YYYY/MM/DD HH:mm:ss")}</p> 
+                      </div>
+                    </li>
+                  ))}
+                </ul> 
+              </div>
+            )}
+          </div>
           {/* 選択中のメモ内容を表示 */}
           {selectedMemory && (
-            <div className="selected-memory-info" style={{margin: '1em 0', padding: '0.5em', background: '#f6f8fa', borderRadius: 6}}>
+            <div className="selected-memory-info p-8" style={{margin: '1em 0', padding: '0.5em', background: '#f6f8fa', borderRadius: 6}}>
               <div><b>タイトル:</b> {selectedMemory.title}</div>
               <div><b>内容:</b> {selectedMemory.notes}</div>
               <div><b>タグ:</b> {selectedMemory.tags}</div>

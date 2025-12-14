@@ -7,7 +7,7 @@ type Props = {
 function ContainersHome (props:Props) {
 
   return (
-    <div className="container l-container">
+    <div className="container l-container m-b-for-footer">
       <main className="base-l">
         { props.children }
       </main>

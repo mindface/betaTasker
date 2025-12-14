@@ -6,15 +6,6 @@ import (
 	"github.com/godotask/model"
 	"github.com/godotask/seed"
 	// "github.com/seed2/memory_context_seed"
-	// "github.com/godotask/seed2/task_seed"
-	// "github.com/godotask/seed2/book_task_seed"
-	// "github.com/godotask/seed2/heuristics_seed"
-	// "github.com/godotask/seed2/phenomenological_framework_seed"
-	// "github.com/godotask/seed2/state_evaluation_seed"
-	// "github.com/godotask/seed2/tool_matching_result_seed"
-	// "github.com/godotask/seed2/process_monitoring_seed"
-	// "github.com/godotask/seed2/learning_pattern_seed"
-	// "github.com/godotask/seed2/quantification_label_seed"
 )
 
 // RunAllSeeds - 全てのシードデータを実行
@@ -33,13 +24,6 @@ func main() {
 	// }
 	// log.Println("✓ Users seeded successfully")
 
-	// Tasks のシード
-	// log.Println("Seeding tasks...")
-	// if err := seed.SeedTasks(db); err != nil {
-	// 	fmt.Errorf("failed to seed tasks: %v", err)
-	// }
-	// log.Println("✓ Tasks seeded successfully")
-
 	// Memory Contextsのシード（シンプル版）
 	log.Println("Seeding memory contexts...")
 	if err := seed.SeedMemoryContexts(db); err != nil {
@@ -48,11 +32,68 @@ func main() {
 	log.Println("✓ Memory contexts seeded successfully")
 
 	// Books and Tasksのシード（seedModel.goの関数を使用）
-	log.Println("Seeding books and tasks...")
-	if err := seed.SeedBooksAndTasks(db); err != nil {
-		fmt.Errorf("failed to seed books and tasks: %v", err)
+	// log.Println("Seeding books and tasks...")
+	// if err := seed.SeedBooksAndTasks(db); err != nil {
+	// 	fmt.Errorf("failed to seed books and tasks: %v", err)
+	// }
+	// log.Println("✓ Books and tasks seeded successfully")
+
+	// Tasks のシード
+	log.Println("Seeding tasks...")
+	if err := seed.SeedTaskModelsFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed tasks: %v", err)
 	}
-	log.Println("✓ Books and tasks seeded successfully")
+	log.Println("✓ Tasks seeded successfully")
+
+	// Memories のシード
+	log.Println("Seeding memories...")
+	if err := seed.SeedMemoriesModelsFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed memories: %v", err)
+	}
+	log.Println("✓ memories seeded successfully")
+
+	// Assessments のシード
+	log.Println("Seeding assessment...")
+	if err := seed.SeedAssessmentsModelsFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed assessments: %v", err)
+	}
+	log.Println("✓ assessments seeded successfully")
+
+	// Books のシード
+	log.Println("Seeding book...")
+	if err := seed.SeedBookModelsFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed books: %v", err)
+	}
+	log.Println("✓ books seeded successfully")
+
+	// OptimizationModels のシード
+	log.Println("Seeding OptimizationModels...")
+	if err := seed.SeedOptimizationModelsFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed OptimizationModels: %v", err)
+	}
+	log.Println("✓ OptimizationModels seeded successfully")
+
+	// QualitativeLabels のシード
+	log.Println("Seeding Qualitative Labels ...")
+	if err := seed.SeedQualitativeLabelsFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed Qualitative Labels: %v", err)
+	}
+	log.Println("✓ Qualitative Labels seeded successfully")
+
+
+	// PhenomenologicalFrameworks のシード
+	log.Println("Seeding PhenomenologicalFrameworks...")
+	if err := seed.SeedPhenomenologicalFrameworksFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed OptimizationModels: %v", err)
+	}
+	log.Println("✓ PhenomenologicalFrameworks seeded successfully")
+
+	// QuantificationLabelsFromCSV のシード
+	log.Println("Seeding QuantificationLabelsFromCSV...")
+	if err := seed.SeedQuantificationLabelsFromCSV(db); err != nil {
+		log.Printf("failed to seed QuantificationLabelsFromCSV: %v", err)
+	}
+	log.Println("✓ QuantificationLabels seeded successfully")
 
 	// ヒューリスティクスデータのシード
 	log.Println("Seeding heuristics data...")
@@ -67,13 +108,6 @@ func main() {
 		fmt.Errorf("failed to seed phenomenological data: %v", err)
 	}
 	log.Println("✓ Phenomenological framework data seeded successfully")
-
-	// CSVファイルからのデータシード
-	log.Println("Seeding data from CSV files...")
-	if err := seed.SeedFromCSVFiles(db); err != nil {
-		fmt.Errorf("failed to seed CSV data: %v", err)
-	}
-	log.Println("✓ CSV data seeded successfully")
 
 	// 状態評価システムのシード
 	log.Println("Seeding state evaluation data...")
@@ -103,19 +137,27 @@ func main() {
 	}
 	log.Println("✓ Learning patterns seeded successfully")
 
-	// 定量化ラベルのシード
-	log.Println("Seeding quantification labels...")
-	if err := seed.SeedQuantificationLabels(db); err != nil {
-		fmt.Errorf("failed to seed quantification labels: %v", err)
+	// 学習パターンのシード
+	log.Println("Seeding language optimization...")
+	if err := seed.SeedLanguageOptimizationFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed learning patterns: %v", err)
 	}
-	log.Println("✓ Quantification labels seeded successfully")
+	log.Println("✓ language optimization seeded successfully")
+
+
+	// 定量化ラベルのシード
+	// log.Println("Seeding quantification labels...")
+	// if err := seed.SeedQuantificationLabels(db); err != nil {
+	// 	fmt.Errorf("failed to seed quantification labels: %v", err)
+	// }
+	// log.Println("✓ Quantification labels seeded successfully")
 
 	// 知識エンティティのシード
-	log.Println("Seeding knowledge entities...")
-	if err := seed.SeedKnowledgeEntities(db); err != nil {
-		fmt.Errorf("failed to seed knowledge entities: %v", err)
-	}
-	log.Println("✓ Knowledge entities seeded successfully")
+	// log.Println("Seeding knowledge entities...")
+	// if err := seed.SeedKnowledgeEntities(db); err != nil {
+	// 	fmt.Errorf("failed to seed knowledge entities: %v", err)
+	// }
+	// log.Println("✓ Knowledge entities seeded successfully")
 
 	log.Println("Database seeding completed successfully!")
 }
@@ -196,6 +238,9 @@ func CleanDatabase() {
 		"heuristics_analyses",
 		"memory_contexts",
 		"tasks",
+		"memories",
+		"assessments",
+		"book",
 	}
 
 	for _, tableName := range tables {

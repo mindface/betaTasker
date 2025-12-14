@@ -8,7 +8,7 @@ interface Props {
   isOpen?: boolean;
 }
 
-const MemoryAidList: React.FC<Props> = ({ code }) => {
+const MemoryAidList = ({ code }: Props) => {
   const dispatch = useAppDispatch();
   const { contexts, loading, error } = useAppSelector(state => state.memoryAid);
   const [isModalOpen, setIsModalOpen] = useState(false)

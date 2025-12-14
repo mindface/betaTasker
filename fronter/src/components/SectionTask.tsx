@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store'
 import { createTask, updateTask, removeTask } from '../features/task/taskSlice'
@@ -18,14 +18,6 @@ export default function SectionTask() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<AddTask|Task|undefined>()
   const [TaskId,setTaskId] = useState<number>(-1);
-
-  // const { execute: loadTasks, loading, data: tasks } = useApiCall(
-  //   taskApiClient.getTasks,
-  //   {
-  //     onSuccess: (data) => console.log('タスク取得成功'),
-  //     onError: (error) => console.error('エラー:', error)
-  //   }
-  // );
 
   useEffect(() => {
     dispatch(loadMemories())
@@ -82,7 +74,6 @@ export default function SectionTask() {
             />
           ))}
         </div>
-        {TaskId}
         <AssessmentListModal
           taskId={TaskId}
           isOpen={TaskId !== -1}

@@ -2,6 +2,7 @@
 
 このディレクトリには、betaTaskerアプリケーションのデータベースを初期化するためのseedデータが含まれています。
 
+
 ## 📁 構成
 
 ### Seed ファイル
@@ -12,6 +13,7 @@
 - `heuristics_seed.go` - ヒューリスティクス分析データ
 - `phenomenological_seed.go` - 現象学的フレームワークデータ
 
+
 ### CSVデータファイル (`data/`)
 - `robot_specifications.csv` - ロボット仕様データ（21種類）
 - `optimization_models.csv` - 最適化モデルデータ（21種類）
@@ -19,6 +21,7 @@
 - `memory_contexts.csv` - メモリコンテキスト（製造技能L1-L5）
 - `knowledge_patterns.csv` - 知識パターン（21種類）
 - `quantification_labels.csv` - 定量化ラベル
+
 
 ## 🚀 使用方法
 
@@ -53,12 +56,14 @@ go run main.go
 - **PhenomenologicalFramework**: 21種類のG-A-Pa構造フレームワーク
 - **QuantificationLabel**: 定量化ラベルデータ
 
+
 ## 🔄 データの依存関係
 
 1. **基礎データ**: RobotSpecification, OptimizationModel, PhenomenologicalFramework
 2. **評価データ**: StateEvaluation（基礎データを参照）
 3. **結果データ**: ToolMatchingResult, ProcessMonitoring（評価データを参照）
 4. **学習データ**: LearningPattern（独立）
+
 
 ## 🎯 特徴
 
@@ -87,6 +92,7 @@ go run main.go
 ### 既存データの修正
 - CSVファイルを直接編集
 - または各seedファイル内のデフォルトデータを修正
+
 
 ## 🔧 トラブルシューティング
 
