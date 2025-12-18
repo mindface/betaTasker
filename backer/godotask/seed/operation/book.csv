@@ -1,0 +1,2 @@
+id,task_id,title,name,text,disc,imgPath,status,created_at,updated_at
+1,1,NC加工の基礎,山田健一,NC加工の基礎構造を理解できた。工具径補正の考え方が今後の実務に役立つ。,NC加工の仕組み、工具経路、補正方法を初心者向けに整理した入門書。,images/books/book_1.jpg,end,2024-01-01T00:00:00Z,2024-01-01T00:00:00Z

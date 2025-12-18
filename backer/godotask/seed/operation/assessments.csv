@@ -1,0 +1,2 @@
+id,user_id,task_id,effectiveness_score,effort_score,impact_score,qualitative_feedback,created_at,updated_at
+1,1,1,85,52,88,加工結果は全体的に安定しており、工程条件の最適化が適切に機能していた。,2024-02-05T00:00:00Z,2024-02-05T00:00:00Z
