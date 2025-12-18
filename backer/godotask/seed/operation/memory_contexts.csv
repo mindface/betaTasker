@@ -1,0 +1,2 @@
+user_id,task_id,level,work_target,machine,material_spec,change_factor,goal,tool_spec,concern,countermeasure,learned_knowledge
+1,1,1,[職務カテゴリ: 切削・初品確認 / 分類コード: MA-C-01] 対象工程 L1-1: 初品加工・基本寸法確認,NC旋盤（Mazak QT-200）,AISI 4340鋼材,新規ロット材導入（ロット番号: A-123）,初品寸法公差内維持、不良率5%以下,TNMG160408 (汎用) 標準コーティング,初回切削でのバリ発生（要因: 切削条件未調整）,メーカー推奨値での標準切削開始、目視での品質確認,基本的な切削条件とバリ発生の関係を理解。目視確認の重要性を認識。

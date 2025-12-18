@@ -1,0 +1,2 @@
+id,user_id,task_id,analysis_type,result,score,status,created_at,updated_at
+1,1,1,skill_pattern_analysis,"{""pattern"":""assembly_skill"",""detected_skills"":[""force_sensing"",""tactile_feedback""],""confidence"":0.85,""skill_level"":""intermediate""}",0.85,completed,2020-01-01 00:00:00,2020-01-01 00:00:00

@@ -1,0 +1,2 @@
+id,type,domain,tacit_knowledge,explicit_form,conversion_path,accuracy,coverage,consistency,abstract_level,task_id,created_at,updated_at
+assembly_skill_pattern,tacit,robot_assembly,熟練工の『しっくりくる』感覚,力覚センサ値: Fx<0.5N Fy<0.5N Tz<0.1Nm,"socialization->作業観察,externalization->力覚データ記録,combination->パターン分析,internalization->閾値設定",0.85,0.75,0.90,L1,1,2020-01-01 00:00:00,2020-01-01 00:00:00
