@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Head from 'next/head'
-import IndexHeader from '../components/IndexHeader'
-import IndexFooter from '../components/IndexFooter'
+import IndexHeader from '../../components/IndexHeader'
+import IndexFooter from '../../components/IndexFooter'
 
 type Props = {
   children?: React.ReactNode
@@ -9,10 +9,10 @@ type Props = {
   header_category?: string,
 }
 
-export default function IndexLayout ({
+export default function Layout ({
   children,
-  title = 'Task Link',
-  header_category = 'Task Flow',
+  title = 'Link maker',
+  header_category = 'Link Maker',
 }: Props) {
   return (
       <>
@@ -21,10 +21,8 @@ export default function IndexLayout ({
           <meta charSet="utf=8" />
         </Head>
         <div>
-          <div className="page-container">
-            <IndexHeader title={header_category}/>
+          <div className="page-container-for-link">
             {children}
-            <IndexFooter title="&copy; realize" />
           </div>
         </div>
       </>

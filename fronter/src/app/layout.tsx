@@ -2,28 +2,27 @@
 import * as React from 'react'
 import { Provider } from 'react-redux'
 import { setupStore } from '../store'
+import { usePathname } from 'next/navigation'
 
 // const store = setupStore()
-import IndexLayout from '../layout/IndexLayout'
+import CoreLayout from './layouts/CoreLayout'
 
 import '../styles/style.sass'
 
 
-export default function BaseApp ({
+export default function Layout ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const path = usePathname();
+  console.log('layout path:', path);
   return (
     <html lang="ja">
       <body>
-        <Provider store={setupStore}>
-          <IndexLayout>
-          <div>
-            {children}
-          </div>
-          </IndexLayout>
-        </Provider>
+        <CoreLayout>
+          {children}
+        </CoreLayout>
       </body>
     </html>
   )

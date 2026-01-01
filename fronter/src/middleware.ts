@@ -9,6 +9,8 @@ export function middleware(request: NextRequest) {
     '/memory',
     '/assessment',
     '/book',
+    '/relation',
+    '/tools'
   ];
   const { pathname } = request.nextUrl;
 
@@ -41,5 +43,7 @@ export const config = {
     '/memory/:path*',
     '/assessment/:path*',
     '/book/:path*',
+    '/relation/:path*',
+    '/tools/:path*',
   ],
 };
