@@ -20,13 +20,9 @@ export default function RootLayout ({
           <title>{title}</title>
           <meta charSet="utf=8" />
         </Head>
-        <div>
-          <div className="page-container">
-            <IndexHeader title={header_category}/>
-            {children}
-            <IndexFooter title="&copy; realize" />
-          </div>
-        </div>
+        <IndexHeader title={header_category}/>
+        {children}
+        <IndexFooter title="&copy; realize" />
       </>
     )
 }

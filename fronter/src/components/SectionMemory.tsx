@@ -57,15 +57,8 @@ export default function SectionMemory() {
     await dispatch(removeMemory(id))
   }
 
-  const tes = (info:string) => {
-    const _info = info
-    return (test:string) => {
-      return test +_info;
-    }
-  }
-
   return (
-    <div className="section__inner section--memory">
+    <div className="section__inner section--memory p-8">
       <div className="section-container">
         <div className="memory-header">
           <h2>メモ</h2>

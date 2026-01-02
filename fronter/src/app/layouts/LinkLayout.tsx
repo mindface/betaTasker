@@ -1,7 +1,5 @@
 import * as React from 'react'
 import Head from 'next/head'
-import IndexHeader from '../../components/IndexHeader'
-import IndexFooter from '../../components/IndexFooter'
 
 type Props = {
   children?: React.ReactNode
@@ -20,10 +18,8 @@ export default function Layout ({
           <title>{title}</title>
           <meta charSet="utf=8" />
         </Head>
-        <div>
-          <div className="page-container-for-link">
-            {children}
-          </div>
+        <div className="page-container-for-link">
+          {children}
         </div>
       </>
     )
