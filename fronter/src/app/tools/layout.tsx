@@ -1,15 +1,13 @@
 import * as React from 'react'
 import Head from 'next/head'
 
-type Props = {
-  children?: React.ReactNode
-  title?: string,
-}
 
 export default function Layout ({
-  children,
-  title = 'Link maker',
-}: Props) {
+  children
+}: {
+  children?: React.ReactNode
+}) {
+  const title = 'Task Tools';
   return (
       <>
         <Head>

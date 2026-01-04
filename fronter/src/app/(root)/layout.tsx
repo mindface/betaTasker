@@ -3,17 +3,14 @@ import Head from 'next/head'
 import IndexHeader from '../../components/IndexHeader'
 import IndexFooter from '../../components/IndexFooter'
 
-type Props = {
-  children?: React.ReactNode
-  title?: string,
-  header_category?: string,
-}
-
 export default function RootLayout ({
   children,
-  title = 'Task Link',
-  header_category = 'Task Flow',
-}: Props) {
+}: {
+  children: React.ReactNode
+}) {
+  const title = 'Task Link';
+  const header_category = 'Task Flow';
+
   return (
       <>
         <Head>
