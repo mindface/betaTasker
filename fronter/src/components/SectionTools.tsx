@@ -33,7 +33,7 @@ export default function SectionTools() {
                 />
                 <span className='d-inline-block '>{dataAnimation}</span>
               </label>
-              <div className="p-l-16">
+              <div className="p-4 p-l-16">
                 <label
                   htmlFor="data-view-type-1"
                   className="label d-inline-block p-l-8"
