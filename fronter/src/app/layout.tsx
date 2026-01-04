@@ -1,12 +1,10 @@
 "use client"
 import * as React from 'react'
 import { usePathname } from 'next/navigation'
-
-// const store = setupStore()
-import CoreLayout from './layouts/CoreLayout'
+import { Provider } from 'react-redux'
+import { setupStore } from '../store'
 
 import '../styles/style.sass'
-
 
 export default function Layout ({
   children,
@@ -18,9 +16,9 @@ export default function Layout ({
   return (
     <html lang="ja">
       <body>
-        <CoreLayout>
+        <Provider store={setupStore}>
           {children}
-        </CoreLayout>
+        </Provider>
       </body>
     </html>
   )

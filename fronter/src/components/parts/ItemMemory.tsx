@@ -7,9 +7,10 @@ interface ItemMemoryProps {
   memory: Memory;
   onEdit: (memory: Memory) => void;
   onDelete: (id: number) => void;
+  children?: React.ReactNode;
 }
 
-const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete }) => {
+const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete, children }) => {
 
   // const handleOpenMemoryModal = async (memoryId: string) => {
   //   if (memoryCache[memoryId]) {
@@ -46,7 +47,7 @@ const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete }) => 
             <p className="item">{memory.title}</p>
             <p>
               {memory.tags.split(',').map((tag, index) => (
-                <span key={index} className="tag">
+                <span key={index} className="tag mr-4">
                   {tag.trim()}
                 </span>
               ))}
@@ -54,6 +55,9 @@ const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete }) => 
           </div>
         )}
       </div>
+      {children ?? <div className="p-8">
+        {children}
+      </div>}
       <div className="card-item__footer card-item__footer">
         <span className="read-status">{memory.read_status}</span>
         <span className="date">{new Date(memory.created_at).toLocaleDateString()}</span>
