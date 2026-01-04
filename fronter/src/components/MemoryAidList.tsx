@@ -28,8 +28,7 @@ const MemoryAidList = ({ code }: Props) => {
 
   return (
     <>
-      <div className="memory-aid-list-header">
-        <h2>Memory Aids</h2>
+      <div className="memory-aid-list-header pb-2">
         <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">Open Memory Aids</button>
       </div>
       <CommonModal title={`Memory Aids for code: ${code}`} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, use } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store'
 import { loadMemories, createMemory, updateMemory, removeMemory } from '../features/memory/memorySlice'
@@ -7,10 +7,13 @@ import ItemMemory from "./parts/ItemMemory"
 import MemoryModal from "./parts/MemoryModal"
 import { AddMemory, Memory } from "../model/memory";
 import MemoryAidList from './MemoryAidList';
+import { loadTasks } from '../features/task/taskSlice';
+import ItemMemory2 from "./parts/ItemMemory2";
 
-export default function SectionMemory() {
+export default function SectionMemory2() {
   const dispatch = useDispatch()
   const { memories, memoryLoading, memoryError } = useSelector((state: RootState) => state.memory)
+  const { tasks } = useSelector((state: RootState) => state.task)
   const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingMemory, setEditingMemory] = useState<AddMemory|Memory|undefined>()
@@ -18,6 +21,7 @@ export default function SectionMemory() {
 
   useEffect(() => {
     dispatch(loadMemories())
+    dispatch(loadTasks())
   }, [dispatch, isAuthenticated])
 
   const handleAddMemory = () => {
@@ -57,12 +61,13 @@ export default function SectionMemory() {
     await dispatch(removeMemory(id))
   }
 
+
   return (
     <div className="section__inner section--memory p-8">
       <div className="section-container">
         <div className="memory-header">
           <h2>メモ</h2>
-          <button 
+          <button
             onClick={() => handleAddMemory()}
             className="btn btn-primary"
           >
@@ -86,9 +91,10 @@ export default function SectionMemory() {
         ) : (
           <div className="memory-list card-list">
             {memories.map((memory,index) => (
-              <ItemMemory
-                key={`memory-item${index}`}
+              <ItemMemory2
+                key={`memory-item${memory.id}${index}`}
                 memory={memory}
+                tasks={tasks}
                 onEdit={(editMemory) => handleEditMemory(editMemory)}
                 onDelete={() => handleDeleteMemory(memory.id)}
               />

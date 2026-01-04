@@ -1,0 +1,2 @@
+id,task_id,name,description,goal,scope,process,result,feedback,limit_min,limit_max,goal_function,abstract_level,domain,created_at,updated_at
+robot_precision_framework,10,ロボット精度最適化フレームワーク,位置決め精度を目的とした現象学的アプローチ,G: 位置決め精度±0.01mm達成,A: 6軸ロボットアームの動作範囲全体,"{""steps"":[""キャリブレーション"",""測定"",""補正"",""検証""],""iteration"":""continuous""}","{""achieved_accuracy"":0.008,""improvement"":""20%""}","{""type"":""continuous"",""method"":""real-time_correction""}",0.005,0.02,minimize(abs(measured_position - target_position)),L1,robot_calibration,2020-03-04 00:00:00,2020-03-04 00:00:00

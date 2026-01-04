@@ -1,0 +1,2 @@
+id,user_id,type,title,description,confidence,data,is_active,created_at,updated_at
+1,1,efficiency_improvement,組立作業の効率化パターン発見,力覚センサデータから最適な把持力範囲を特定。10-50Nの範囲で95%の成功率を達成。,0.85,"{""pattern"":""force_sensing"",""optimal_range"":[10,50],""success_rate"":0.95,""task_ids"":[1,4]}",true,2020-01-22 12:00:00,2020-01-22 12:00:00

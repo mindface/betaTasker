@@ -32,6 +32,10 @@ body
   position: relative
   line-height: 1
 
+iframe
+  width: 100%
+  border: none
+
 img
   max-width: 100%
   height: auto
@@ -45,6 +49,12 @@ a
     background-color: $gary_thin_color
     color: $white_color
 
+.position-relative
+  position: relative
+
+.position-absolute
+  position: absolute
+
 ._flex_
   display: flex
   flex-wrap: wrap
@@ -57,6 +67,86 @@ a
     flex-wrap: wrap
     justify-content: center
     align-items: center
+
+.bg-black
+  background-color: $base_dark_color
+  color: $white_color
+
+.bg-gray
+  background-color: $gary_thin_gray_color
+  color: $white_color
+
+.large-width
+  width: 100%
+  max-width: $large-px
+  margin-inline: auto
+
+.base-width
+  width: 100%
+  max-width: $base-px
+  margin-inline: auto
+
+.small-width
+  width: 100%
+  max-width: $small-px
+  margin-inline: auto
+
+
+.d-inline-block
+  display: inline-block
+
+.d-block
+  display: block
+
+.limit-s
+  max-width: $small-px
+  width: 100%
+  margin: 0 auto
+
+.limit-m
+  max-width: $middle-px
+  width: 100%
+  margin: 0 auto
+
+.limit-l
+  max-width: $large-px
+  width: 100%
+  margin: 0 auto
+
+.min-w-s
+  min-width: $small-px
+
+.min-w-m
+  min-width: $middle-px
+
+.max-h-s
+  max-height: $small-s-svh
+.max-h-m
+  max-height: $middle-m-svh
+.max-h-h
+  max-height: $high-h-svh
+.min-h-s
+  min-height: $small-s-svh
+.min-h-m
+  min-height: $middle-m-svh
+.min-h-h
+  min-height: $high-h-svh
+
+.bg-white
+  background-color: $white_color
+
+.text-btn
+  display: inline-block
+  padding: 6px 8px
+  font-size: 1.4rem
+  color: $base_dark_color
+  background-color: $white_color
+  border: none
+  box-shadow: 0 0 0 1px $gray_color inset
+  line-height: 1
+  cursor: pointer
+  &:hover
+    background-color: $gary_thin_color
 
 .btn
   padding: 8px
@@ -91,82 +181,37 @@ a
   border: none
   line-height: 1
 
-
-.large-width
-  width: 100%
-  max-width: $large-px
-  margin-inline: auto
-
-.base-width
-  width: 100%
-  max-width: $base-px
-  margin-inline: auto
-
-.small-width
-  width: 100%
-  max-width: $small-px
-  margin-inline: auto
-
-
-.d-iline-block
-  display: inline-block
-
-.d-block
-  display: block
-
-.limit-s
-  max-width: $small-px
-  width: 100%
-  margin: 0 auto
-
-.limit-m
-  max-width: $middle-px
-  width: 100%
-  margin: 0 auto
-
-.limit-l
-  max-width: $large-px
-  width: 100%
-  margin: 0 auto
-
-.min-w-s
-  min-width: $small-px
-
-.min-w-m
-  min-width: $middle-px
-
-.max-h-s
-  max-height: $small-s-svh
-.max-h-m
-  max-height: $middle-m-svh
-.max-h-h
-  max-height: $high-h-svh
-
-.bg-white
-  background-color: $white_color
-
-.text-btn
-  display: inline-block
-  padding: 6px 8px
-  font-size: 1.4rem
-  color: $base_dark_color
-  background-color: $white_color
-  border: none
-  box-shadow: 0 0 0 1px $gray_color inset
-  line-height: 1
-  cursor: pointer
-  &:hover
-    background-color: $gary_thin_color
-
 input
   font-size: 1.4rem
   padding: 6px 8px
   border: none
+  border-radius: 6px
   box-shadow: 0 0 0 1px $gray_color inset
   line-height: 1
   &:focus
     outline: none
     box-shadow: 0 0 0 2px $focus_color inset
+
+.label,
+.input 
+  &:focus
+    border-color: $base_color
+
+  // レンジスライダーのカスタマイズ（つまみの色など）
+  &[type="range"]
+    appearance: none
+    height: 6px
+    background: $base_dark_color
+
+    &::-webkit-slider-thumb
+      appearance: none
+      width: 18px
+      height: 18px
+      background: $white_color
+      border-radius: 50%
+      cursor: pointer
+      border: 2px solid $base_dark_color
+
 
 .overflow-hidden
   overflow: hidden
@@ -196,6 +241,8 @@ input
   padding-top: 5px
 .p-t-10
   padding-top: 10px
+.p-b-4
+  padding-bottom: 4px
 .p-b-5
   padding-bottom: 5px
 .p-b-8
@@ -203,6 +250,13 @@ input
 .p-b-10
   padding-bottom: 10px
 
+.mr-4
+  margin-right: 4px
+.mr-8
+  margin-right: 8px
+
 
 .m-b-for-footer
   margin-bottom: 80px
+
+  

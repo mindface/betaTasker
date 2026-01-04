@@ -1,28 +1,23 @@
 "use client"
 import * as React from 'react'
+import { usePathname } from 'next/navigation'
 import { Provider } from 'react-redux'
 import { setupStore } from '../store'
 
-// const store = setupStore()
-import IndexLayout from '../layout/IndexLayout'
-
 import '../styles/style.sass'
 
-
-export default function BaseApp ({
+export default function Layout ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const path = usePathname();
+  console.log('layout path:', path);
   return (
     <html lang="ja">
       <body>
         <Provider store={setupStore}>
-          <IndexLayout>
-          <div>
-            {children}
-          </div>
-          </IndexLayout>
+          {children}
         </Provider>
       </body>
     </html>

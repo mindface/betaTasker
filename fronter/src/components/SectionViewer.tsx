@@ -15,7 +15,7 @@ export default function SectionViewer() {
   const botton = useRef(0)
   const sendModel = useRef<any>(null)
   let mixer = useRef<any>()
-  const v3A = useRef(new THREE.Vector3());
+  const v3A = useRef(new THREE.Vector3())
 
   function createColliderMesh(radius:number, offset: THREE.Vector3): VRMSpringBoneColliderMesh {
     const colliderMesh = new THREE.Mesh(new THREE.SphereBufferGeometry(radius,8,4),new THREE.MeshBasicMaterial({ visible: false }))
@@ -221,25 +221,16 @@ export default function SectionViewer() {
       if ( startAction ) {
 
         // Crossfade with warping
-
         startAction.crossFadeTo( endAction, duration, true );
-
       } else {
-
         // Fade in
-
         endAction.fadeIn( duration );
-
       }
 
     } else {
-
       // Fade out
-
       startAction.fadeOut( duration );
-
     }
-
   }
 
   useEffect(() => {

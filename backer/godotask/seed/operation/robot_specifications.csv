@@ -1,0 +1,2 @@
+id,model_name,dof,reach_mm,payload_kg,repeat_accuracy_mm,max_speed_mm_s,work_envelope_shape,teaching_method,control_type,vision_system,force_sensor,ai_capability,safety_features,maintenance_interval_hours
+teaching_free_arm_v1,TF-ARM-001,6,850.0,5.0,0.02,1000.0,spherical,vision,hybrid,stereo_camera,6DOF_sensor,reinforcement_learning,collision_detection|force_limiting|speed_monitoring,2000

@@ -25,9 +25,9 @@ export interface Task {
   heuristics_model?: HeuristicsModel;
   heuristics_analysis?: HeuristicsAnalysis[];
   heuristics_patterns?: HeuristicsPattern[];
-  heuristics_tracking?: HeuristicsTracking[];
-  heuristics_insight?: HeuristicsInsight
-  language_optimizations?: LanguageOptimization[]
+  heuristics_trackings?: HeuristicsTracking[];
+  heuristics_insights?: HeuristicsInsight[];
+  language_optimizations?: LanguageOptimization[];
 }
 
 export interface AddTask {

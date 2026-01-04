@@ -5,3 +5,80 @@
     position: fixed
     right: 0
     bottom: 0
+
+[data-view-type="type1"] .card-list
+  display: grid
+  /* 1. 折り返さず、自動的に列（column）として追加していく設定 */
+  grid-auto-flow: column
+  /* 2. 各要素の幅を指定（300px固定、または内容に合わせるなど） */
+  grid-auto-columns: 300px 
+  /* 3. 横方向に溢れた場合にスクロールを出す */
+  overflow-x: auto
+  /* 4. スクロールの挙動を滑らかにする（任意） */
+  scroll-behavior: smooth
+  /* 5. はみ出しを防ぐため親要素の幅を固定または100%に */
+  width: 100%
+  gap: 1.5rem
+  padding-bottom: 1rem
+  /* スクロールバーと重ならないための余白 */
+
+[data-view-type="type2"] .card-list
+  display: flex
+  gap: 1.5rem
+  padding: 2rem 2rem 2rem 200rem
+  perspective: 1000px
+[data-view-type="type2"] .card-item
+  flex: 0 0 200px
+  height: 300px
+  margin-left: -100px
+  transform-origin: left center
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease
+  // --- 初期状態（斜めに傾斜） ---
+  // rotateY(20deg): Y軸を中心に20度回転させて斜めにする
+  // scale(0.95): 少し小さくして奥にある感じを出す
+  transform: rotateY(20deg) scale(0.95)
+  // 影をつけて立体感を強調（右側に影が落ちるイメージ）
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.15)
+  // 傾けたときに背面が見えないようにする（オモテ面だけ表示）
+  backface-visibility: hidden
+  &:hover
+    transform: rotateY(0deg) scale(1.02)
+    // 影を濃く、広くして浮き上がっている感を強調
+    box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.25)
+    // ホバーしたカードが他のカードより手前に見えるようにする
+    z-index: 10
+
+
+[data-view-type="type3"] .card-list
+  display: flex
+  align-items: center
+  padding: 2rem
+  gap: 1.5rem
+  overflow-x: auto
+  perspective: 1200px   // 3D効果のための視点距離を設定
+[data-view-type="type3"] .card-item
+  flex: 0 0 120px         // 伸び縮みせず120pxを維持
+  width: 120px
+  height: 350px
+  background: #fff
+  border-radius: 15px
+  margin-right: -20px    // 少しだけ重ねるとより綺麗です
+  overflow: hidden       // 【重要】はみ出た中身を隠す
+  // 3D傾斜（左端を軸にして回転）
+  transform-origin: left center
+  transform: rotateY(25deg)
+  // 影とアニメーション
+  box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1)
+  &:hover
+    // 幅を本来のサイズに広げる
+    flex: 0 0 300px
+    width: 300px
+    // 回転を戻して正面を向ける
+    transform: rotateY(0deg)
+    // 他のカードより前面に出す
+    z-index: 20
+    // 影を強調
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2)
+    // 重なりを解消するためにマージンを調整（任意）
+    margin-right: 10px
+    margin-left: 10px

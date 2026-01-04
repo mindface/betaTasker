@@ -1,0 +1,2 @@
+id,task_id,original_text,optimized_text,domain,abstraction_level,precision,clarity,completeness,context_json,transformation_json,evaluation_score,created_at,updated_at,deleted_at
+1,1,初品加工時の寸法ばらつきを観測し、原因を特定した。,寸法ばらつきの主因は工具摩耗と熱変位であると判定。補正テーブルと温度補正を導入し再発防止を提案。#1,manufacturing,operational,0.8,0.85,0.75,"{""task_id"": 1, ""sensor_types"": [""force"", ""temp"", ""vibration""], ""instance"": 1}","{""steps"": [""detect"", ""analyze"", ""propose""], ""changes"": [""tool_offset"", ""temp_comp""]}",0.7,2024-01-09T08:00:00Z,2024-01-09T08:00:00Z,
