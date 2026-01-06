@@ -135,6 +135,7 @@ func GetRouter() *gin.Engine {
 	// Memory API (CRUD)
 	r.POST("/api/memory", memoryController.AddMemory)
 	r.GET("/api/memory", memoryController.ListMemories)
+	r.GET("/api/memory/pager", memoryController.ListLimitMemories)
 	r.GET("/api/memory/:id", memoryController.GetMemory)
 	r.GET("/api/memory/context/:code", memoryController.GetMemoryContextByCode)
 	r.GET("/api/memory/aid/:code", memoryController.GetMemoryAidByCode)

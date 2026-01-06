@@ -23,6 +23,7 @@ type MemoryRepositoryInterface interface {
 	Create(memory *model.Memory) error
 	FindByID(id string) (*model.Memory, error)
 	FindAll() ([]model.Memory, error)
+	ListMemories(offset, limit int) ([]model.Memory, int64, error)
 	Update(id string, memory *model.Memory) error
 	Delete(id string) error
 }
