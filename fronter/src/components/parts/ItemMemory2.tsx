@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Memory } from "../../model/memory";
 import { Task } from "../../model/task";
-import CommonModal from "./CommonModal"
+import CommonDialog from "./CommonDialog"
 
 interface ItemMemoryProps {
   memory: Memory;
@@ -28,8 +28,8 @@ const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, tasks, onEdit, onDelete
   //     setModalOpen(true);
   //   }
   // };
+
   const selectTask = (taskId: number) => {
-    console.log("Selected task ID:", taskId);
     const selectedTask = tasks.find(task => task.id === taskId);
     if (!selectedTask) {
       return <div>タスクが見つかりません。</div>;
@@ -84,12 +84,12 @@ const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, tasks, onEdit, onDelete
         )}
       </div>
       <button className="btn" onClick={() => setIsTaskModalOpen(true)}>タスク表示</button>
-      <CommonModal
+      <CommonDialog
         isOpen={isTaskModalOpen}
         title="関連タスク選択"
         onClose={() => setIsTaskModalOpen(false)}
         children={
-          <div className="content">
+          <div className="dialog-content">
             <label className="title">関連タスク選択: </label>
             <div>
               <div>{selectTask(memory.id)}</div>

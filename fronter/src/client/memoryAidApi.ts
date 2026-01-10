@@ -3,6 +3,7 @@ import { MemoryContext } from "../model/memoryAid";
 import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 export const fetchMemoryAidsByCode = async (code: string) => {
+  return [];
   const data = await fetchApiJsonCore<undefined,MemoryContext[]>({
     endpoint: `/api/memoryAid?code=${code}`,
     method: 'GET',

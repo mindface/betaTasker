@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import CommonModal from "./CommonModal";
+import CommonDialog from "./CommonDialog";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { AddMemory, Memory } from "../../model/memory";
-
 
 interface MemoryModalProps {
   isOpen: boolean;
@@ -66,7 +65,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
   }, [initialData]);
 
   return (
-    <CommonModal
+    <CommonDialog
       isOpen={isOpen}
       onClose={onClose}
       title={initialData?.title ? 'メモを編集' : '新規メモ'}
@@ -193,7 +192,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
           }
         </div>
       </form>
-    </CommonModal>
+    </CommonDialog>
   );
 };
 
