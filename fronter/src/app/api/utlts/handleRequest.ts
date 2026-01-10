@@ -38,7 +38,8 @@ export async function handleBaseRequest(
       method === 'PUT' ||
       ( method === 'GET' && body?.id )
     ) {
-      url = `${URLs[endpoint]}}/${body.id}`;
+      url = `${URLs[endpoint]}/${body.id}`;
+      console.log('Generated URL with ID:', url);
     } else {
       url = URLs[endpoint];
     }
@@ -59,6 +60,9 @@ export async function handleBaseRequest(
         method,
         headers,
       };
+    if(method === 'GET') {
+      delete sendData.body;
+    }
 
     const backendRes = await fetch(url, sendData);
 
@@ -76,7 +80,6 @@ export async function handleBaseRequest(
 
 
 export function handleError(error: unknown, endpoint: string) {
-  console.error(`${endpoint} API エラー:`, error)
   if (error instanceof HttpError) {
     return NextResponse.json({
       code: error.code,

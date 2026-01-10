@@ -13,7 +13,7 @@ export default function SectionTools() {
         <section className="l-section">
           <div className="controller controller-top p-8">
             <h2 className="bg-black p-4 d-inline-block">画面調整 (データ構造)</h2>
-            <div className="flex p-4">
+            <div className="flex p-8">
               <label htmlFor="data-type" className="label p-r-5">
                 <input
                   type="text"
@@ -36,7 +36,7 @@ export default function SectionTools() {
               <div className="p-4 p-l-16">
                 <label
                   htmlFor="data-view-type-1"
-                  className="label d-inline-block p-l-8"
+                  className="label d-inline-block p-r-5"
                 >
                   <input
                     id="data-view-type-1"
@@ -50,7 +50,7 @@ export default function SectionTools() {
                 </label>
                 <label
                   htmlFor="data-view-type-2"
-                  className="label d-inline-block p-l-8"
+                  className="label d-inline-block p-r-5"
                 >
                   <input
                     id="data-view-type-2"
@@ -64,7 +64,7 @@ export default function SectionTools() {
                 </label>
                 <label
                   htmlFor="data-view-type-3"
-                  className="label d-inline-block p-l-8"
+                  className="label d-inline-block p-r-5"
                 >
                   <input
                     id="data-view-type-3"
@@ -86,7 +86,7 @@ export default function SectionTools() {
           </div>
           <div className="controller data-controller p-8">
             <h2 className="bg-black p-4 d-inline-block">データ操作(モーション関係と情報構造)</h2>
-            <div className="flex">
+            <div className="flex p-8">
               <label htmlFor="target-data" className="label p-r-5">
                 <input
                   type="text" id="target-data"

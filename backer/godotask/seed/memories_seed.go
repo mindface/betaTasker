@@ -203,7 +203,7 @@ func SeedMemoriesModelsFromCSV(db *gorm.DB) error {
 		scoreClass := classifyScore(effectiveness) // メインの指標に応じて分類
 
 		tags := []string{"3Dプリント", "材料", "Mg合金"}
-		noteText := generateNoteText(scoreClass, tags)
+		// noteText := generateNoteText(scoreClass, tags)
     createdAt, _ := time.Parse("2006-01-02", record[5])
     updatedAt, _ := time.Parse("2006-01-02", record[6])
 		t, err := time.Parse(time.RFC3339, record[4])
@@ -219,9 +219,9 @@ func SeedMemoriesModelsFromCSV(db *gorm.DB) error {
 			ID:        id,
 			UserID:     userID,
 			SourceType: "book",
-			Title:      record[2],
+			Title:      record[4],
 			Author:     "Researcher",
-			Notes:      noteText,
+			Notes:      record[5],
 			Tags:       strings.Join(tags, ","),
 			ReadStatus: "finished",
 			ReadDate:   readDate,

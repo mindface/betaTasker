@@ -69,27 +69,40 @@ func seedHeuristicsAnalysis(db *gorm.DB) error {
     id, _ := strconv.Atoi(record[0])
     userID, _ := strconv.Atoi(record[1])
     taskID, _ := strconv.Atoi(record[2])
-    score, _ := strconv.Atoi(record[5])
+		timeSpent, _ := strconv.Atoi(record[5])
+		difficulty, _ := strconv.ParseFloat(record[6], 64)
+		efficiency, _ := strconv.ParseFloat(record[7], 64)
+		errorCount, _ := strconv.Atoi(record[8])
+		confidence, _ := strconv.ParseFloat(record[9], 64)
+		score, _ := strconv.ParseFloat(record[10], 64)
 
-    createdAt, _ := time.Parse("2006-01-02", record[7])
-    updatedAt, _ := time.Parse("2006-01-02", record[8])
+		createdAt, _ := time.Parse(time.RFC3339, record[12])
+		updatedAt, _ := time.Parse(time.RFC3339, record[13])
 
 		models = append(models, model.HeuristicsAnalysis{
-			ID:        id,
-			UserID:    userID,
-			TaskID:    taskID,
-			AnalysisType: record[3],
-			Result: record[4],
-			Score:     float64(score),
-			Status:    record[6],
-			CreatedAt:  createdAt,
-			UpdatedAt:  updatedAt,
+			ID:                id,
+			UserID:            userID,
+			TaskID:            taskID,
+			AnalysisType:      record[3],
+			Result:            record[4],
+			TimeSpentMinutes:  timeSpent,
+			DifficultyScore:   difficulty,
+			EfficiencyScore:   efficiency,
+			ErrorCount:        errorCount,
+			Confidence:        confidence,
+			Score:             score,
+			Status:            record[11],
+			CreatedAt:         createdAt,
+			UpdatedAt:         updatedAt,
 		})
 	}
+	const maxParams = 65535
+	const columnCount = 15
 
+	batchSize := maxParams / columnCount - 1 
 	// バッチインサート
 	if len(models) > 0 {
-		if err := db.Create(&models).Error; err != nil {
+		if err := db.CreateInBatches(models, batchSize).Error; err != nil {
 			return fmt.Errorf("failed to insert optimization models: %w", err)
 		}
 		fmt.Printf("Successfully seeded %d optimization models\n", len(models))
@@ -99,80 +112,119 @@ func seedHeuristicsAnalysis(db *gorm.DB) error {
 }
 
 func seedHeuristicsTracking(db *gorm.DB) error {
-	trackings := []model.HeuristicsTracking{
-		{
-			UserID: 1,
-			TaskID: 1,
-			Action: "tool_adjust",
-			Context: toJSON(map[string]interface{}{
-				"tool":     "cutting_insert",
-				"adjust":   "微調整 0.02mm",
-				"reason":   "音の変化を感知したため",
-				"tacit":    "経験的感覚で摩耗を推定",
-			}),
-			SessionID: "sess_001",
-			Timestamp: time.Now().Add(-8 * time.Hour),
-			Duration:  20000,
-		},
-		{
-			UserID:    1,
-			TaskID:    2,
-			Action:    "task_started",
-			Context:   toJSON(map[string]interface{}{
-				"task_id": 1,
-				"task_type": "development",
-				"environment": "vscode",
-			}),
-			SessionID: "sess_001",
-			Timestamp: time.Now().AddDate(0, 0, -7),
-			Duration:  0,
-		},
-		{
-			UserID:    1,
-			TaskID:    2,
-			Action:    "code_written",
-			Context:   toJSON(map[string]interface{}{
-				"lines": 45,
-				"language": "go",
-				"file": "controller.go",
-			}),
-			SessionID: "sess_001",
-			Timestamp: time.Now().AddDate(0, 0, -7).Add(15 * time.Minute),
-			Duration:  900000, // 15分
-		},
-		{
-			UserID:    1,
-			TaskID:    2,
-			Action:    "test_run",
-			Context:   toJSON(map[string]interface{}{
-				"test_count": 12,
-				"passed": 10,
-				"failed": 2,
-			}),
-			SessionID: "sess_001",
-			Timestamp: time.Now().AddDate(0, 0, -7).Add(30 * time.Minute),
-			Duration:  120000, // 2分
-		},
-		{
-			UserID:    2,
-			TaskID:    2,
-			Action:    "document_read",
-			Context:   toJSON(map[string]interface{}{
-				"document": "API_GUIDE.md",
-				"section": "authentication",
-				"scroll_depth": 0.75,
-			}),
-			SessionID: "sess_002",
-			Timestamp: time.Now().AddDate(0, 0, -5),
-			Duration:  300000, // 5分
-		},
+	file, err := os.Open("seed/data/heuristics_tracking.csv")
+	if err != nil {
+		return fmt.Errorf("could not open heuristics_tracking.csv: %v", err)
 	}
 
-	for _, tracking := range trackings {
-		if err := db.Create(&tracking).Error; err != nil {
-			return err
-		}
+	reader := csv.NewReader(file)
+	defer file.Close()
+	_, err = reader.Read()
+	if err != nil {
+		return fmt.Errorf("failed to read CSV header: %w", err)
 	}
+
+	var trackings []model.HeuristicsTracking
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return fmt.Errorf("failed to read CSV record: %w", err)
+		}
+
+		userID, _ := strconv.Atoi(record[0])
+		taskID, _ := strconv.Atoi(record[1])
+		duration, _ := strconv.Atoi(record[5])
+		timestamp, _ := time.Parse("2006-01-02 15:04:05", record[4])
+
+		trackings = append(trackings, model.HeuristicsTracking{
+			UserID:    userID,
+			TaskID:    taskID,
+			Action:    record[2],
+			Context:   record[3],
+			SessionID: record[6],
+			Timestamp: timestamp,
+			Duration:  duration,
+		})
+	}
+
+
+	// trackings := []model.HeuristicsTracking{
+	// 	{
+	// 		UserID: 1,
+	// 		TaskID: 1,
+	// 		Action: "tool_adjust",
+	// 		Context: toJSON(map[string]interface{}{
+	// 			"tool":     "cutting_insert",
+	// 			"adjust":   "微調整 0.02mm",
+	// 			"reason":   "音の変化を感知したため",
+	// 			"tacit":    "経験的感覚で摩耗を推定",
+	// 		}),
+	// 		SessionID: "sess_001",
+	// 		Timestamp: time.Now().Add(-8 * time.Hour),
+	// 		Duration:  20000,
+	// 	},
+	// 	{
+	// 		UserID:    1,
+	// 		TaskID:    2,
+	// 		Action:    "task_started",
+	// 		Context:   toJSON(map[string]interface{}{
+	// 			"task_id": 1,
+	// 			"task_type": "development",
+	// 			"environment": "vscode",
+	// 		}),
+	// 		SessionID: "sess_001",
+	// 		Timestamp: time.Now().AddDate(0, 0, -7),
+	// 		Duration:  0,
+	// 	},
+	// 	{
+	// 		UserID:    1,
+	// 		TaskID:    2,
+	// 		Action:    "code_written",
+	// 		Context:   toJSON(map[string]interface{}{
+	// 			"lines": 45,
+	// 			"language": "go",
+	// 			"file": "controller.go",
+	// 		}),
+	// 		SessionID: "sess_001",
+	// 		Timestamp: time.Now().AddDate(0, 0, -7).Add(15 * time.Minute),
+	// 		Duration:  900000, // 15分
+	// 	},
+	// 	{
+	// 		UserID:    1,
+	// 		TaskID:    2,
+	// 		Action:    "test_run",
+	// 		Context:   toJSON(map[string]interface{}{
+	// 			"test_count": 12,
+	// 			"passed": 10,
+	// 			"failed": 2,
+	// 		}),
+	// 		SessionID: "sess_001",
+	// 		Timestamp: time.Now().AddDate(0, 0, -7).Add(30 * time.Minute),
+	// 		Duration:  120000, // 2分
+	// 	},
+	// 	{
+	// 		UserID:    2,
+	// 		TaskID:    2,
+	// 		Action:    "document_read",
+	// 		Context:   toJSON(map[string]interface{}{
+	// 			"document": "API_GUIDE.md",
+	// 			"section": "authentication",
+	// 			"scroll_depth": 0.75,
+	// 		}),
+	// 		SessionID: "sess_002",
+	// 		Timestamp: time.Now().AddDate(0, 0, -5),
+	// 		Duration:  300000, // 5分
+	// 	},
+	// }
+
+	// for _, tracking := range trackings {
+	// 	if err := db.Create(&tracking).Error; err != nil {
+	// 		return err
+	// 	}
+	// }
 	return nil
 }
 

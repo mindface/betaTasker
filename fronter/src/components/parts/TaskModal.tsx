@@ -3,7 +3,7 @@ import { useApiCall } from '../../hooks/useApiCall';
 import { addTaskClient } from '../../client/taskApi';
 import { AddTask, Task } from "../../model/task";
 import { Memory } from "../../model/memory";
-import CommonModal from './CommonModal';
+import CommonDialog from './CommonDialog';
 import { formatDateTime } from "../../utils/dayApi";
 
 interface TaskModalProps {
@@ -54,7 +54,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
   };
 
   const isTask = (data: AddTask | Task | undefined): data is Task => {
-    console.log("isTask check", data);
     return data !== undefined && "id" in data; 
   };
 
@@ -62,7 +61,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
   const selectedMemory = memories.find(m => m.id === Number(formData?.memory_id));
 
   return (
-    <CommonModal
+    <CommonDialog
       isOpen={isOpen}
       onClose={onClose}
       title={initialData ? 'タスクを編集' : '新規タスク'}
@@ -204,7 +203,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialD
           </div>
         </form>
       </div>
-    </CommonModal>
+    </CommonDialog>
   );
 };
 

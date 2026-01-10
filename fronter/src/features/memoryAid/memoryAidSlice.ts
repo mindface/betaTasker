@@ -22,7 +22,7 @@ export const loadMemoryAidsByCode = createAsyncThunk(
       return rejectWithValue(response.error);
     }
     // APIレスポンスが {contexts: MemoryContext[]} 形式の場合
-    return response.value;
+    return [] //response.value;
   }
 );
 

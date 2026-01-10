@@ -43,6 +43,7 @@ func SeedTaskModelsFromCSV(db *gorm.DB) error {
 
     id, _ := strconv.Atoi(record[0])
     userID, _ := strconv.Atoi(record[1])
+    memoryID, _ := strconv.Atoi(record[2])
     priority, _ := strconv.Atoi(record[5])
 
     // Date（NULL もありうるのでポインタ）
@@ -58,6 +59,7 @@ func SeedTaskModelsFromCSV(db *gorm.DB) error {
 		models = append(models, model.Task{
 			ID:        id,
 			UserID:    userID,
+			MemoryID:  memoryID,
 			Title:     record[3],
 			Description:   record[4],
 			Date:      datePtr,
@@ -70,7 +72,7 @@ func SeedTaskModelsFromCSV(db *gorm.DB) error {
 
 	// バッチインサート
 	if len(models) > 0 {
-		if err := db.Create(&models).Error; err != nil {
+		if err := db.CreateInBatches(&models, 1000).Error; err != nil {
 			return fmt.Errorf("failed to insert optimization models: %w", err)
 		}
 		fmt.Printf("Successfully seeded %d optimization models\n", len(models))

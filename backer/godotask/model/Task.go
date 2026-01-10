@@ -7,7 +7,7 @@ import (
 type Task struct {
 	ID          int        `gorm:"primaryKey" json:"id"`
 	UserID      int        `json:"user_id"`
-	MemoryID    *int       `json:"memory_id"`
+	MemoryID    int       `json:"memory_id"`
 	Title       string     `json:"title"`
 	Description string     `json:"description"`
 	Date        *time.Time `json:"date"`

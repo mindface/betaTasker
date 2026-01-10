@@ -18,11 +18,11 @@ func main() {
 	log.Println("Starting database seeding...")
 
 	// Users のシード
-	// log.Println("Seeding users...")
-	// if err := seed.SeedUsers(db); err != nil {
-	// 	return fmt.Errorf("failed to seed users: %v", err)
-	// }
-	// log.Println("✓ Users seeded successfully")
+	log.Println("Seeding users...")
+	if err := seed.SeedAllUsers(db); err != nil {
+	 	fmt.Errorf("failed to seed users: %v", err)
+	}
+	log.Println("✓ Users seeded successfully")
 
 	// Memory Contextsのシード（シンプル版）
 	log.Println("Seeding memory contexts...")
@@ -241,6 +241,7 @@ func CleanDatabase() {
 		"memories",
 		"assessments",
 		"book",
+		"users",
 	}
 
 	for _, tableName := range tables {

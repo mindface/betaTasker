@@ -1,0 +1,31 @@
+id,user_id,task_id,analysis_type,result,score,status,created_at,updated_at
+1,1,1,skill_pattern_analysis,"{""pattern"":""assembly_skill"",""detected_skills"":[""force_sensing"",""tactile_feedback""],""confidence"":0.85,""skill_level"":""intermediate""}",0.85,completed,2020-01-01 00:00:00,2020-01-01 00:00:00
+2,1,2,vision_recognition_analysis,"{""pattern"":""visual_inspection"",""accuracy"":0.92,""objects_detected"":15,""processing_time"":85}",0.92,completed,2020-01-08 00:00:00,2020-01-08 00:00:00
+3,1,3,quality_inspection_analysis,"{""pattern"":""anomaly_detection"",""anomalies_found"":2,""false_positives"":0,""detection_rate"":0.94}",0.94,completed,2020-01-15 00:00:00,2020-01-15 00:00:00
+4,1,4,gripper_force_analysis,"{""pattern"":""adaptive_gripping"",""force_range"":[10,50],""stability"":0.83,""success_rate"":0.95}",0.83,completed,2020-01-22 00:00:00,2020-01-22 00:00:00
+5,1,5,tool_wear_analysis,"{""pattern"":""wear_prediction"",""remaining_life"":45,""wear_rate"":0.02,""accuracy"":0.88}",0.88,completed,2020-01-29 00:00:00,2020-01-29 00:00:00
+6,1,1,path_optimization_analysis,"{""pattern"":""trajectory_efficiency"",""time_reduction"":0.22,""energy_saving"":0.18,""collision_free"":true}",0.91,completed,2020-02-05 00:00:00,2020-02-05 00:00:00
+7,1,1,error_recovery_analysis,"{""pattern"":""fault_diagnosis"",""recovery_time"":3.5,""success_rate"":0.86,""error_types"":[""timeout"",""sensor_failure""]}",0.86,completed,2020-02-12 00:00:00,2020-02-12 00:00:00
+8,1,1,maintenance_timing_analysis,"{""pattern"":""predictive_maintenance"",""days_to_failure"":12,""confidence"":0.79,""sensor_indicators"":[""vibration"",""temperature""]}",0.79,completed,2020-02-19 00:00:00,2020-02-19 00:00:00
+9,1,1,teaching_skill_analysis,"{""pattern"":""trajectory_teaching"",""waypoints_optimized"":25,""smoothness"":0.81,""singularity_avoidance"":true}",0.81,completed,2020-02-26 00:00:00,2020-02-26 00:00:00
+10,1,1,calibration_analysis,"{""pattern"":""kinematic_calibration"",""position_error_before"":0.15,""position_error_after"":0.008,""improvement"":0.95}",0.93,completed,2020-03-04 00:00:00,2020-03-04 00:00:00
+11,1,1,force_feedback_analysis,"{""pattern"":""impedance_control"",""force_tracking_error"":0.02,""stability_margin"":0.30,""response_time"":10}",0.87,completed,2020-03-11 00:00:00,2020-03-11 00:00:00
+12,1,2,speed_optimization_analysis,"{""pattern"":""velocity_profile"",""cycle_time_reduction"":0.25,""jerk_limit_compliance"":true,""energy_efficiency"":0.32}",0.89,completed,2020-03-18 00:00:00,2020-03-18 00:00:00
+13,1,3,safety_response_analysis,"{""pattern"":""safety_compliance"",""iso10218_compliance"":1.0,""reaction_time"":50,""force_limit_test"":""passed""}",0.95,completed,2020-03-25 00:00:00,2020-03-25 00:00:00
+14,1,4,material_handling_analysis,"{""pattern"":""adaptive_handling"",""materials_tested"":8,""success_rate"":0.80,""damage_rate"":0.0}",0.80,completed,2020-04-01 00:00:00,2020-04-01 00:00:00
+15,1,5,welding_skill_analysis,"{""pattern"":""weld_quality"",""strength_improvement"":0.15,""parameter_optimization"":true,""defect_rate"":0.002}",0.84,completed,2020-04-08 00:00:00,2020-04-08 00:00:00
+16,1,1,inspection_rhythm_analysis,"{""pattern"":""timing_consistency"",""cycle_time"":0.5,""variance"":0.05,""rhythm_stability"":0.77}",0.77,completed,2020-04-15 00:00:00,2020-04-15 00:00:00
+17,1,1,cutting_feel_analysis,"{""pattern"":""cutting_force"",""force_threshold_exceeded"":false,""vibration_detected"":false,""surface_quality"":""good""}",0.78,completed,2020-04-22 00:00:00,2020-04-22 00:00:00
+18,1,3,surface_quality_analysis,"{""pattern"":""roughness_measurement"",""ra_value"":1.2,""target"":1.6,""within_tolerance"":true}",0.90,completed,2020-04-29 00:00:00,2020-04-29 00:00:00
+19,1,1,adaptive_control_analysis,"{""pattern"":""model_predictive_control"",""prediction_horizon"":10,""tracking_error"":0.015,""computational_efficiency"":0.90}",0.90,completed,2020-05-06 00:00:00,2020-05-06 00:00:00
+20,1,2,vibration_analysis,"{""pattern"":""frequency_spectrum"",""peak_frequency"":5000,""amplitude"":0.05,""anomaly_detected"":false}",0.82,completed,2020-05-13 00:00:00,2020-05-13 00:00:00
+21,1,1,dimension_variation,"{""pattern"":""tolerance_behavior"",""model"":""ARIMA"",""drift"":0.002,""predictability"":0.91}",0.91,completed,2024-01-07T00:00:00Z,2024-01-07T00:00:00Z
+22,1,1,load_pattern,"{""pattern"":""cutting_load"",""peak"":120,""stable_zone"":[80,95],""anomaly"":false}",0.87,completed,2024-01-07T00:02:00Z,2024-01-07T00:02:00Z
+23,1,1,thermal_shift,"{""pattern"":""thermal_expansion"",""shift"":0.004,""comp_factor"":0.92}",0.88,completed,2024-01-07T00:03:00Z,2024-01-07T00:03:00Z
+24,1,1,tool_wear,"{""pattern"":""wear_progress"",""vb"":0.09,""state"":""early_stage""}",0.89,completed,2024-01-07T00:04:00Z,2024-01-07T00:04:00Z
+25,1,1,cutting_force,"{""pattern"":""force_fluctuation"",""range"":[140,210],""stability"":0.84}",0.86,completed,2024-01-07T00:05:00Z,2024-01-07T00:05:00Z
+26,1,1,spindle_behavior,"{""pattern"":""rpm_pattern"",""target"":12000,""actual"":11980,""variance"":12}",0.90,completed,2024-01-07T00:06:00Z,2024-01-07T00:06:00Z
+27,1,1,roughness_prediction,"{""pattern"":""surface_roughness"",""ra_estimate"":0.65,""quality_zone"":""good""}",0.92,completed,2024-01-07T00:07:00Z,2024-01-07T00:07:00Z
+28,1,1,stability_model,"{""pattern"":""cutting_stability"",""freq_response"":""normal"",""chatter"":false}",0.89,completed,2024-01-07T00:08:00Z,2024-01-07T00:08:00Z
+29,1,1,cycle_time_pattern,"{""pattern"":""cycle_time"",""time"":42.5,""variance"":1.1}",0.85,completed,2024-01-07T00:09:00Z,2024-01-07T00:09:00Z
+30,1,1,system_sync,"{""pattern"":""nc_sensor_sync"",""delay_ms"":4,""sync_level"":0.94}",0.94,completed,2024-01-07T00:10:00Z,2024-01-07T00:10:00Z

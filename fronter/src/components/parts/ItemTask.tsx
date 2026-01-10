@@ -51,6 +51,9 @@ const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete, onSetTaskId
               記録を確認する
             </button> }
           </p>
+          <div className="task-for-memory-view">
+           〈 記録ID: {task.memory_id}〉
+          </div>
           <p className="pb-1">{task.title}</p>
           <p>{task.description}</p>
           {task.status && (
@@ -62,7 +65,7 @@ const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete, onSetTaskId
           <span className="date">{new Date(task.created_at).toLocaleDateString()}</span>
         </div>
       </div>
-      { !memoryLoading && memoryItem &&
+      { memoryLoading && memoryItem &&
         <MemoryModal
           initialData={memoryItem as Memory}
           isOpen={isModalOpen}

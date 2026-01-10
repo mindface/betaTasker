@@ -47,15 +47,11 @@ export default function SectionTask() {
     await dispatch(removeTask(id))
   }
 
-  useEffect(() => {
-    console.log("tasks changed:", tasks);
-  }, [tasks]);
-
   return (
     <div className="section__inner section--task">
       <div className="section-container">
         <div className="task-header">
-          <h2>タスク一覧</h2>
+          <h2 className="task-header-title">タスク一覧</h2>
           <button
             onClick={() => handleAddTask()}
             className="btn btn-primary"
@@ -73,14 +69,6 @@ export default function SectionTask() {
               // onSetTaskId={(id: number) => setTaskId(id)}
             />
           ))}
-        </div>
-        <div className="task-value-list">
-          <h3>タスク値一覧</h3>
-          <div className="list">
-            {(tasks ?? []).map((task: Task, index: number) => (
-                <span key={`task-value-item${index}`}><b>userId:</b> {task.user_id}</span>
-            ))}
-          </div>
         </div>
         <AssessmentListModal
           taskId={TaskId}
