@@ -3,6 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/helper"
 )
 
 type TaskRepositoryImpl struct {
@@ -46,7 +47,7 @@ func (r *TaskRepositoryImpl) FindAll() ([]model.Task, error) {
 // ListTasksByUser: 特定ユーザーのタスク一覧を取得
 func (r *TaskRepositoryImpl) ListTasksByUser(userID uint) ([]model.Task, error) {
     var tasks []model.Task
-    if err := r.DB.Where("user_id = ?", userID).Order("created_at DESC, id DESC").Find(&tasks).Error; err != nil {
+    if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&tasks).Error; err != nil {
         return nil, err
     }
     return tasks, nil

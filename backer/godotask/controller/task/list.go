@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/controller/user" 
 	"github.com/godotask/errors"
-	"fmt"
 )
 
 // ListTasks: GET /api/task

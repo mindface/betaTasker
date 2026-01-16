@@ -5,7 +5,7 @@ import "github.com/godotask/model"
 type BookRepositoryInterface interface {
 	Create(book *model.Book) error
 	FindByID(id string) (*model.Book, error)
-	FindAll() ([]model.Book, error)
+	FindAll(userID uint) ([]model.Book, error)
 	Update(id string, book *model.Book) error
 	Delete(id string) error
 }
@@ -76,7 +76,6 @@ type HeuristicsPatternRepositoryInterface interface {
 	UpdatePattern(id string, insight *model.HeuristicsPattern) error
 	DeletePattern(id string) error
 }
-
 
 type ProcessOptimizationRepositoryInterface interface {
 	Create(processOptimization *model.ProcessOptimization) error

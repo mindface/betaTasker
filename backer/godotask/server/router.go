@@ -16,7 +16,7 @@ import (
 	"github.com/godotask/controller/teaching_free_control"
 	"github.com/godotask/controller/phenomenological_framework"
 	"github.com/godotask/service"
-	"github.com/godotask/repository"
+	"github.com/godotask/infrastructure/repository"
 	"github.com/godotask/model"
 	// "github.com/godotask/middleware" // 一時的にコメントアウト
 

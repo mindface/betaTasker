@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/godotask/model"
-	"github.com/godotask/repository"
+	"github.com/godotask/infrastructure/repository"
 )
 
 type ProcessOptimizationService struct {
