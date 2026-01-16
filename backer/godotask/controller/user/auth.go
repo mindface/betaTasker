@@ -18,6 +18,8 @@ var jwtKey = []byte("your_secret_key")
 type Claims struct {
 	Username string `json:"username"`
 	Role     string `json:"role"`
+	UserID   uint   `json:"user_id"`
+	Email    string `json:"email"`
 	jwt.StandardClaims
 }
 
@@ -47,11 +49,20 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		claims := &Claims{}
-
-		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-			return jwtKey, nil
+		token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+				return jwtKey, nil
 		})
+
+		claims, ok := token.Claims.(*Claims)
+		if !ok {
+				c.JSON(http.StatusUnauthorized, gin.H{
+						"code":    "AUTH_INVALID_CLAIMS",
+						"message": "Invalid token claims",
+						"detail":  "Failed to parse claims",
+				})
+				c.Abort()
+				return
+		}
 
 		if err != nil {
 			if err == jwt.ErrSignatureInvalid {
@@ -71,10 +82,23 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		// トークンが有効であれば、ユーザー情報とロールをコンテキストに設定
-		c.Set("user", claims.Username)
+		c.Set("user_id", claims.UserID)
+		c.Set("username", claims.Username)
+		c.Set("email", claims.Email)
 		c.Set("role", claims.Role)
+
 		c.Next()
 	}
+}
+
+// GetUserIDFromContext: コンテキストから userID を安全に取得
+func GetUserIDFromContext(c *gin.Context) (uint, bool) {
+    userID, exists := c.Get("user_id")
+    if !exists {
+        return 0, false
+    }
+    uid, ok := userID.(uint)
+    return uid, ok
 }
 
 func Register(c *gin.Context) {
@@ -97,7 +121,6 @@ func Register(c *gin.Context) {
 		return
 	}
 
-
 	user := model.User {
 		Username:     input.Username,
 		Email:        input.Email,
@@ -115,6 +138,7 @@ func Register(c *gin.Context) {
 		"email": user.Email,
 		// 必要に応じて他のクレームも
 	})
+
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})

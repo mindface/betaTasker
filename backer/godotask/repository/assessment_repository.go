@@ -40,6 +40,46 @@ func (r *AssessmentRepositoryImpl) FindAll() ([]model.Assessment, error) {
 	return assessments, nil
 }
 
+func (r *AssessmentRepositoryImpl) ListAssessmentsPager(offset, limit int) ([]model.Assessment, int64, error) {
+	var assessments []model.Assessment
+	var total int64
+
+	q := r.DB.Model(&model.Assessment{})
+
+	if err := q.Count(&total).Error; err != nil {
+			return nil, 0, err
+	}
+
+	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&assessments).Error; err != nil {
+			return nil, 0, err
+	}
+	return assessments, total, nil
+}
+
+func (r *AssessmentRepositoryImpl) ListAssessmentsForTaskUserPager(userID, taskID, offset, limit int) ([]model.Assessment, int64, error) {
+	var assessments []model.Assessment
+	var total int64
+
+	q := r.DB.Model(&model.Assessment{})
+
+	// フィルタ条件
+	if userID > 0 {
+			q = q.Where("user_id = ?", userID)
+	}
+	if taskID > 0 {
+			q = q.Where("task_id = ?", taskID)
+	}
+
+	if err := q.Count(&total).Error; err != nil {
+			return nil, 0, err
+	}
+
+	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&assessments).Error; err != nil {
+			return nil, 0, err
+	}
+	return assessments, total, nil
+}
+
 func (r *AssessmentRepositoryImpl) Update(id string, a *model.Assessment) error {
 	return r.DB.Model(&model.Assessment{}).Where("id = ?", id).Updates(a).Error
 }
