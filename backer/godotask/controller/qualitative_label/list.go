@@ -5,11 +5,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/errors"
+	"github.com/godotask/controller/user"
 )
 
 // ListQualitativeLabels: GET /api/qualitative_label
 func (ctl *QualitativeLabelController) ListQualitativeLabels(c *gin.Context) {
-	qualitativeLabels, err := ctl.Service.ListQualitativeLabels()
+  userID, _ := user.GetUserIDFromContext(c)
+	qualitativeLabels, err := ctl.Service.ListQualitativeLabels(userID)
 	if err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,

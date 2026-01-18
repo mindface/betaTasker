@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/godotask/model"
-	"github.com/godotask/repository"
+	"github.com/godotask/infrastructure/repository"
 )
 
 type AssessmentService struct {
@@ -24,6 +24,12 @@ func (s *AssessmentService) ListAssessments() ([]model.Assessment, error) {
 }
 func (s *AssessmentService) ListAssessmentsForTaskUser(userID int, taskID int) ([]model.Assessment, error) {
 	return s.Repo.FindByTaskIDAndUserID(userID,taskID)
+}
+func (s *AssessmentService) ListAssessmentsTOPager(userID uint, page int, perPage int, offset int) ([]model.Assessment, int64, error) {
+  return s.Repo.ListAssessmentsPager(userID, offset, perPage)
+}
+func (s *AssessmentService) ListAssessmentsForTaskUserPager(userID, taskID, page, perPage, offset int) ([]model.Assessment, int64, error) {
+  return s.Repo.ListAssessmentsForTaskUserPager(userID, taskID, offset, perPage)
 }
 func (s *AssessmentService) UpdateAssessment(id string, task *model.Assessment) error {
 	return s.Repo.Update(id, task)

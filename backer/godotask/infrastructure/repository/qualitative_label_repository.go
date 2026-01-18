@@ -3,6 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/helper"
 )
 
 type QualitativeLabelRepositoryImpl struct {
@@ -21,9 +22,9 @@ func (r *QualitativeLabelRepositoryImpl) FindByID(id string) (*model.Qualitative
 	return &qualitativeLabel, nil
 }
 
-func (r *QualitativeLabelRepositoryImpl) FindAll() ([]model.QualitativeLabel, error) {
+func (r *QualitativeLabelRepositoryImpl) FindAll(userID uint) ([]model.QualitativeLabel, error) {
 	var qualitativeLabels []model.QualitativeLabel
-	if err := r.DB.Find(&qualitativeLabels).Error; err != nil {
+	if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&qualitativeLabels).Error; err != nil {
 		return nil, err
 	}
 	return qualitativeLabels, nil

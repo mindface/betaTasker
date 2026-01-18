@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store'
 import { createTask, updateTask, removeTask } from '../features/task/taskSlice'
@@ -64,15 +64,17 @@ export default function SectionTask() {
           </button>
         </div>
         <div className="task-list card-list">
-          {(tasks ?? []).map((task: Task, index: number) => (
-            <ItemTask
-              key={`task-item${index}`}
-              task={task}
-              onEdit={(editTask: Task) => handleEditTask(editTask)}
-              onDelete={() => handleDeleteTask(task.id)}
-              // onSetTaskId={(id: number) => setTaskId(id)}
-            />
-          ))}
+          <Suspense fallback={<p>Waiting...</p>}>
+            {(tasks ?? []).map((task: Task, index: number) => (
+              <ItemTask
+                key={`task-item${index}`}
+                task={task}
+                onEdit={(editTask: Task) => handleEditTask(editTask)}
+                onDelete={() => handleDeleteTask(task.id)}
+                // onSetTaskId={(id: number) => setTaskId(id)}
+              />
+            ))}
+          </Suspense>
         </div>
         <div className="task-value-list">
           <h3>タスク値一覧</h3>

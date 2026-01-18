@@ -4,12 +4,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/godotask/controller/user" 
 	"github.com/godotask/errors"
 )
 
 // ListProcessOptimizations: GET /api/process_optimization
 func (ctl *ProcessOptimizationController) ListProcessOptimizations(c *gin.Context) {
-	processOptimizations, err := ctl.Service.ListProcessOptimizations()
+	userID, _ := user.GetUserIDFromContext(c)
+	processOptimizations, err := ctl.Service.ListProcessOptimizations(userID)
 	if err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,

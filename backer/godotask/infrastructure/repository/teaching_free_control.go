@@ -3,6 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/helper"
 )
 
 type TeachingFreeControlRepositoryImpl struct {
@@ -21,9 +22,9 @@ func (r *TeachingFreeControlRepositoryImpl) FindByID(id string) (*model.Teaching
 	return &teachingFreeControl, nil
 }
 
-func (r *TeachingFreeControlRepositoryImpl) FindAll() ([]model.TeachingFreeControl, error) {
+func (r *TeachingFreeControlRepositoryImpl) FindAll(userID uint) ([]model.TeachingFreeControl, error) {
 	var teachingFreeControls []model.TeachingFreeControl
-	if err := r.DB.Find(&teachingFreeControls).Error; err != nil {
+	if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&teachingFreeControls).Error; err != nil {
 		return nil, err
 	}
 	return teachingFreeControls, nil

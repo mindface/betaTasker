@@ -3,13 +3,15 @@ package memory
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
+	"github.com/godotask/controller/user"
 	"github.com/godotask/errors"
 	"strconv"
 )
 
 // ListMemories: GET /api/memory
 func (ctl *MemoryController) ListMemories(c *gin.Context) {
-	memories, err := ctl.Service.ListMemories()
+	userID, _ := user.GetUserIDFromContext(c)
+	memories, err := ctl.Service.ListMemories(userID)
 	if err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,
@@ -36,11 +38,12 @@ func (ctl *MemoryController) ListLimitMemories(c *gin.Context) {
     page := 1
     perPage := 20
     const maxPerPage = 100
+		userID, _ := user.GetUserIDFromContext(c)
 
     if p := c.Query("page"); p != "" {
-        if v, err := strconv.Atoi(p); err == nil && v > 0 {
-            page = v
-        }
+			if v, err := strconv.Atoi(p); err == nil && v > 0 {
+				page = v
+			}
     }
     if pp := c.Query("per_page"); pp != "" {
         if v, err := strconv.Atoi(pp); err == nil && v > 0 {
@@ -54,7 +57,7 @@ func (ctl *MemoryController) ListLimitMemories(c *gin.Context) {
     offset := (page - 1) * perPage
 
     // Service 側で total も返す想定
-    memories, total, err := ctl.Service.ListMemoriesTOPager(page, perPage, offset)
+    memories, total, err := ctl.Service.ListMemoriesTOPager(userID, page, perPage, offset)
     if err != nil {
         appErr := errors.NewAppError(
             errors.SYS_INTERNAL_ERROR,

@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/godotask/model"
-	"github.com/godotask/repository"
+	"github.com/godotask/infrastructure/repository"
 )
 
 type HeuristicsPatternService struct {
@@ -20,8 +20,8 @@ func (s *HeuristicsPatternService) GetPatternById(id string) (*model.HeuristicsP
   return s.Repo.GetPatternById(id)
 }
 
-func (s *HeuristicsPatternService) ListPattern() ([]model.HeuristicsPattern, error) {
-  return s.Repo.ListPattern()
+func (s *HeuristicsPatternService) ListPattern(userID uint) ([]model.HeuristicsPattern, error) {
+  return s.Repo.ListPattern(userID)
 }
 
 func (s *HeuristicsPatternService) UpdatePatternData(id string, pattern *model.HeuristicsPattern) error {

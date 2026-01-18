@@ -18,7 +18,7 @@ func SeedPhenomenologicalData(db *gorm.DB) error {
 		return err
 	}
 
-	// // 最適化モデルをシード
+	// 最適化モデルをシード
 	// if err := seedOptimizationModelsFixed(db); err != nil {
 	// 	return err
 	// }

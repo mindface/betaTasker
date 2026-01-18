@@ -5,11 +5,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/errors"
+	"github.com/godotask/controller/user"
 )
 
 // ListLanguageOptimizations: GET /api/language_optimization
 func (ctl *LanguageOptimizationController) ListLanguageOptimizations(c *gin.Context) {
-	languageOptimizations, err := ctl.Service.ListLanguageOptimizations()
+  userID, _ := user.GetUserIDFromContext(c)
+	languageOptimizations, err := ctl.Service.ListLanguageOptimizations(userID)
 	if err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,

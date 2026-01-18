@@ -145,7 +145,7 @@ func romanize(name string) string {
 		"健": "ken", "勝": "masaru", "進": "susumu", "隆": "takashi", "弘": "hiroshi",
 		"豊": "yutaka", "学": "manabu", "淳": "atsushi", "剛": "tsuyoshi", "純": "jun",
 	}
-	
+
 	if roman, ok := romanMap[name]; ok {
 		return roman
 	}
@@ -308,7 +308,7 @@ func SeedUsers(db *gorm.DB) error {
 // printUserStatistics - ユーザー統計を表示
 func printUserStatistics(users []model.User) {
 	fmt.Println("\n=== User Statistics ===")
-	
+
 	// ロール別集計
 	roleCount := make(map[string]int)
 	for _, user := range users {

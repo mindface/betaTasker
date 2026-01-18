@@ -3,6 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/helper"
 )
 
 type ProcessOptimizationRepositoryImpl struct {
@@ -21,9 +22,9 @@ func (r *ProcessOptimizationRepositoryImpl) FindByID(id string) (*model.ProcessO
 	return &processOptimization, nil
 }
 
-func (r *ProcessOptimizationRepositoryImpl) FindAll() ([]model.ProcessOptimization, error) {
+func (r *ProcessOptimizationRepositoryImpl) FindAll(userID uint) ([]model.ProcessOptimization, error) {
 	var processOptimizations []model.ProcessOptimization
-	if err := r.DB.Find(&processOptimizations).Error; err != nil {
+	if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&processOptimizations).Error; err != nil {
 		return nil, err
 	}
 	return processOptimizations, nil

@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/godotask/model"
-	"github.com/godotask/repository"
+	"github.com/godotask/infrastructure/repository"
 )
 
 type QualitativeLabelService struct {
@@ -15,8 +15,8 @@ func (s *QualitativeLabelService) CreateQualitativeLabel(qualitativeLabel *model
 func (s *QualitativeLabelService) GetQualitativeLabelByID(id string) (*model.QualitativeLabel, error) {
 	return s.Repo.FindByID(id)
 }
-func (s *QualitativeLabelService) ListQualitativeLabels() ([]model.QualitativeLabel, error) {
-	return s.Repo.FindAll()
+func (s *QualitativeLabelService) ListQualitativeLabels(userID uint) ([]model.QualitativeLabel, error) {
+	return s.Repo.FindAll(userID)
 }
 func (s *QualitativeLabelService) UpdateQualitativeLabel(id string, qualitativeLabel *model.QualitativeLabel) error {
 	return s.Repo.Update(id, qualitativeLabel)

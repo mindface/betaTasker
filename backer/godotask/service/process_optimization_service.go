@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/godotask/model"
-	"github.com/godotask/repository"
+	"github.com/godotask/infrastructure/repository"
 )
 
 type ProcessOptimizationService struct {
@@ -15,8 +15,8 @@ func (s *ProcessOptimizationService) CreateProcessOptimization(processOptimizati
 func (s *ProcessOptimizationService) GetProcessOptimizationByID(id string) (*model.ProcessOptimization, error) {
 	return s.Repo.FindByID(id)
 }
-func (s *ProcessOptimizationService) ListProcessOptimizations() ([]model.ProcessOptimization, error) {
-	return s.Repo.FindAll()
+func (s *ProcessOptimizationService) ListProcessOptimizations(userID uint) ([]model.ProcessOptimization, error) {
+	return s.Repo.FindAll(userID)
 }
 func (s *ProcessOptimizationService) UpdateProcessOptimization(id string, processOptimization *model.ProcessOptimization) error {
 	return s.Repo.Update(id, processOptimization)
