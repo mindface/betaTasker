@@ -15,8 +15,8 @@ func (s *PhenomenologicalFrameworkService) CreatePhenomenologicalFramework(pheno
 func (s *PhenomenologicalFrameworkService) GetPhenomenologicalFrameworkByID(id string) (*model.PhenomenologicalFramework, error) {
 	return s.Repo.FindByID(id)
 }
-func (s *PhenomenologicalFrameworkService) ListPhenomenologicalFrameworks() ([]model.PhenomenologicalFramework, error) {
-	return s.Repo.FindAll()
+func (s *PhenomenologicalFrameworkService) ListPhenomenologicalFrameworks(userID uint) ([]model.PhenomenologicalFramework, error) {
+	return s.Repo.FindAll(userID)
 }
 func (s *PhenomenologicalFrameworkService) UpdatePhenomenologicalFramework(id string, phenomenologicalFramework *model.PhenomenologicalFramework) error {
 	return s.Repo.Update(id, phenomenologicalFramework)

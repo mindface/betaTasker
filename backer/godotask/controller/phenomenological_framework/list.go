@@ -5,11 +5,14 @@ import (
 
 	"github.com/godotask/errors"
 	"github.com/gin-gonic/gin"
+	"github.com/godotask/controller/user"
 )
 
 // ListPhenomenologicalFrameworks: GET /api/phenomenological_framework
 func (ctl *PhenomenologicalFrameworkController) ListPhenomenologicalFrameworks(c *gin.Context) {
-	phenomenologicalFrameworks, err := ctl.Service.ListPhenomenologicalFrameworks()
+  userID, _ := user.GetUserIDFromContext(c)
+
+	phenomenologicalFrameworks, err := ctl.Service.ListPhenomenologicalFrameworks(userID)
 	if err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,

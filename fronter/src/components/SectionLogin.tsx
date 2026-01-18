@@ -24,7 +24,7 @@ export default function SectionLogin() {
         dispatch(loginFailure(result.error.message || 'ログイン失敗'))
       } else if('token' in result) {
         dispatch(loginSuccess({ token: result.token, user: result.user }))
-        router.push("/")
+        // router.push("/")
       }
     } catch (ex) {
       console.error("error")

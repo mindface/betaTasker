@@ -4,6 +4,7 @@ import (
 	"errors"
 	"gorm.io/gorm"
 	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/helper"
 )
 
 type AssessmentRepositoryImpl struct {
@@ -40,11 +41,11 @@ func (r *AssessmentRepositoryImpl) FindAll() ([]model.Assessment, error) {
 	return assessments, nil
 }
 
-func (r *AssessmentRepositoryImpl) ListAssessmentsPager(offset, limit int) ([]model.Assessment, int64, error) {
+func (r *AssessmentRepositoryImpl) ListAssessmentsPager(userID uint, offset int, limit int) ([]model.Assessment, int64, error) {
 	var assessments []model.Assessment
 	var total int64
 
-	q := r.DB.Model(&model.Assessment{})
+	q := r.DB.Model(&model.Assessment{}).Scopes(helper.WithUserFilter(userID))
 
 	if err := q.Count(&total).Error; err != nil {
 			return nil, 0, err

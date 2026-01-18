@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"github.com/gin-gonic/gin"
+	"github.com/godotask/controller/user"
 	"github.com/godotask/errors"
 	"strconv"
 )
@@ -15,6 +16,7 @@ type TaskUserRequest struct {
 
 // ListAssessments: GET /api/assessment
 func (ctl *AssessmentController) ListAssessments(c *gin.Context) {
+
 	assessments, err := ctl.Service.ListAssessments()
 	if err != nil {
 		appErr := errors.NewAppError(
@@ -42,6 +44,7 @@ func (ctl *AssessmentController) ListAssessmentsPager(c *gin.Context) {
     page := 1
     perPage := 20
     const maxPerPage = 100
+		userID, _ := user.GetUserIDFromContext(c)
 
     if p := c.Query("page"); p != "" {
         if v, err := strconv.Atoi(p); err == nil && v > 0 {
@@ -60,7 +63,7 @@ func (ctl *AssessmentController) ListAssessmentsPager(c *gin.Context) {
     offset := (page - 1) * perPage
 
     // Service 側で total も返す想定
-    assessments, total, err := ctl.Service.ListAssessmentsTOPager(page, perPage, offset)
+    assessments, total, err := ctl.Service.ListAssessmentsTOPager(userID, page, perPage, offset)
     if err != nil {
         appErr := errors.NewAppError(
             errors.SYS_INTERNAL_ERROR,

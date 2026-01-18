@@ -4,12 +4,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/godotask/controller/user" 
 	"github.com/godotask/errors"
 )
 
 // ListTeachingFreeControls: GET /api/teaching_free_control
 func (ctl *TeachingFreeControlController) ListTeachingFreeControls(c *gin.Context) {
-	teachingFreeControls, err := ctl.Service.ListTeachingFreeControls()
+  userID, _ := user.GetUserIDFromContext(c)
+	teachingFreeControls, err := ctl.Service.ListTeachingFreeControls(userID)
 	if err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,

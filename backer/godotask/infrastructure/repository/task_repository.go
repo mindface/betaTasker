@@ -22,22 +22,26 @@ func (r *TaskRepositoryImpl) FindByID(id string) (*model.Task, error) {
 	return &task, nil
 }
 
-func (r *TaskRepositoryImpl) FindAll() ([]model.Task, error) {
+func (r *TaskRepositoryImpl) FindAll(userID uint) ([]model.Task, error) {
 	var tasks []model.Task
 	// if err := r.DB.Find(&tasks).Error; err != nil {
 	// 	return nil, err
 	// }
-	err := r.DB.Preload("QualitativeLabels").
-		Preload("QuantificationLabels").
-		Preload("MultimodalData").
-		Preload("HeuristicsModel").
-		Preload("HeuristicsTracking").
-		Preload("HeuristicsAnalysis").
-		Preload("HeuristicsPattern").
-		Preload("HeuristicsInsight").
-		Preload("KnowledgePatterns").
-		Preload("LanguageOptimization").
-		Find(&tasks).Error
+	err := r.DB.
+    Scopes(helper.WithUserFilter(userID)).
+    Preload("QualitativeLabels").
+    Preload("QuantificationLabels").
+    Preload("MultimodalData").
+    Preload("HeuristicsModel").
+    Preload("HeuristicsTracking").
+    Preload("HeuristicsAnalysis").
+    Preload("HeuristicsPattern").
+    Preload("HeuristicsInsight").
+    Preload("KnowledgePatterns").
+    Preload("LanguageOptimization").
+    Order("created_at DESC, id DESC").
+    Find(&tasks).Error
+
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +52,7 @@ func (r *TaskRepositoryImpl) FindAll() ([]model.Task, error) {
 func (r *TaskRepositoryImpl) ListTasksByUser(userID uint) ([]model.Task, error) {
     var tasks []model.Task
     if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&tasks).Error; err != nil {
-        return nil, err
+      return nil, err
     }
     return tasks, nil
 }
@@ -58,14 +62,13 @@ func (r *TaskRepositoryImpl) ListTasksByUserPager(userID uint, offset, limit int
     var tasks []model.Task
     var total int64
 
-    q := r.DB.Model(&model.Task{}).Where("user_id = ?", userID)
-
+    q := r.DB.Model(&model.Task{}).Scopes(helper.WithUserFilter(userID))
     if err := q.Count(&total).Error; err != nil {
-        return nil, 0, err
+      return nil, 0, err
     }
 
     if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
-        return nil, 0, err
+      return nil, 0, err
     }
     return tasks, total, nil
 }

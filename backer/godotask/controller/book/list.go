@@ -26,21 +26,7 @@ func BookListDisplayAction(c *gin.Context) {
 
 // ListBooks: GET /api/book
 func (ctl *BookController) ListBooks(c *gin.Context) {
-	userID, ok := user.GetUserIDFromContext(c)
-	if !ok {
-		appErr := errors.NewAppError(
-			errors.AUTH_UNAUTHORIZED,
-			"Unauthorized",
-			"User ID not found in context",
-		)
-		c.JSON(appErr.HTTPStatus, gin.H{
-			"code":    appErr.Code,
-			"message": appErr.Message,
-			"detail":  appErr.Detail,
-		})
-		return
-	}
-
+	userID, _ := user.GetUserIDFromContext(c)
 	books, err := ctl.Service.ListBooks(userID)
 	if err != nil {
 		appErr := errors.NewAppError(

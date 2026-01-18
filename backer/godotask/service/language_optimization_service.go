@@ -15,8 +15,8 @@ func (s *LanguageOptimizationService) CreateLanguageOptimization(languageOptimiz
 func (s *LanguageOptimizationService) GetLanguageOptimizationByID(id string) (*model.LanguageOptimization, error) {
 	return s.Repo.FindByID(id)
 }
-func (s *LanguageOptimizationService) ListLanguageOptimizations() ([]model.LanguageOptimization, error) {
-	return s.Repo.FindAll()
+func (s *LanguageOptimizationService) ListLanguageOptimizations(userID uint) ([]model.LanguageOptimization, error) {
+	return s.Repo.FindAll(userID)
 }
 func (s *LanguageOptimizationService) UpdateLanguageOptimization(id string, languageOptimization *model.LanguageOptimization) error {
 	return s.Repo.Update(id, languageOptimization)

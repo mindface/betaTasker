@@ -23,11 +23,12 @@ func (r *HeuristicsInsightRepositoryImpl) GetInsightById(id string) (*model.Heur
 }
 
 func (r *HeuristicsInsightRepositoryImpl) ListInsight() ([]model.HeuristicsInsight, error) {
-    var insights []model.HeuristicsInsight
-    if err := r.DB.Find(&insights).Error; err != nil {
-        return nil, err
-    }
-    return insights, nil
+	var insights []model.HeuristicsInsight
+
+	if err := r.DB.Find(&insights).Error; err != nil {
+		return nil, err
+	}
+	return insights, nil
 }
 
 func (r *HeuristicsInsightRepositoryImpl) GetInsights(userID string, limit, offset int) ([]model.HeuristicsInsight, int, error) {

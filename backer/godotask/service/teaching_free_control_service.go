@@ -15,8 +15,8 @@ func (s *TeachingFreeControlService) CreateTeachingFreeControl(teachingFreeContr
 func (s *TeachingFreeControlService) GetTeachingFreeControlByID(id string) (*model.TeachingFreeControl, error) {
 	return s.Repo.FindByID(id)
 }
-func (s *TeachingFreeControlService) ListTeachingFreeControls() ([]model.TeachingFreeControl, error) {
-	return s.Repo.FindAll()
+func (s *TeachingFreeControlService) ListTeachingFreeControls(userID uint) ([]model.TeachingFreeControl, error) {
+	return s.Repo.FindAll(userID)
 }
 func (s *TeachingFreeControlService) UpdateTeachingFreeControl(id string, teachingFreeControl *model.TeachingFreeControl) error {
 	return s.Repo.Update(id, teachingFreeControl)

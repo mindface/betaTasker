@@ -107,7 +107,7 @@ func GetRouter() *gin.Engine {
 	phenomenologicalFrameworkRepo := &repository.PhenomenologicalFrameworkRepositoryImpl{DB: model.DB}
 	phenomenologicalFrameworkService := &service.PhenomenologicalFrameworkService{Repo: phenomenologicalFrameworkRepo}
 	phenomenologicalFrameworkController := phenomenological_framework.PhenomenologicalFrameworkController{Service: phenomenologicalFrameworkService}
-	
+
 	// 認証不要のエンドポイント
 	public := r.Group("/api")
 	{

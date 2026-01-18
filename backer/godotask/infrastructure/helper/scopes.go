@@ -1,13 +1,18 @@
 package helper
 
-import "gorm.io/gorm"
+import (
+  "gorm.io/gorm"
+  "fmt"
+)
 
 func WithUserFilter(userID uint) func(db *gorm.DB) *gorm.DB {
   return func(db *gorm.DB) *gorm.DB {
-    if userID > 0 {
-      return db.Where("user_id = ?", userID)
+    fmt.Printf("llll---------- %d",userID)
+    if userID == 0 {
+      return db
     }
-    return db
+    fmt.Printf("none----------")
+    return db.Where("user_id = ?", userID)
   }
 }
 

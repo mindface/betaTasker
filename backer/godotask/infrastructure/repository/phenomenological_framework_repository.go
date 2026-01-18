@@ -3,6 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/helper"
 )
 
 type PhenomenologicalFrameworkRepositoryImpl struct {
@@ -21,9 +22,9 @@ func (r *PhenomenologicalFrameworkRepositoryImpl) FindByID(id string) (*model.Ph
 	return &phenomenologicalFramework, nil
 }
 
-func (r *PhenomenologicalFrameworkRepositoryImpl) FindAll() ([]model.PhenomenologicalFramework, error) {
+func (r *PhenomenologicalFrameworkRepositoryImpl) FindAll(userID uint) ([]model.PhenomenologicalFramework, error) {
 	var phenomenologicalFrameworks []model.PhenomenologicalFramework
-	if err := r.DB.Find(&phenomenologicalFrameworks).Error; err != nil {
+	if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&phenomenologicalFrameworks).Error; err != nil {
 		return nil, err
 	}
 	return phenomenologicalFrameworks, nil

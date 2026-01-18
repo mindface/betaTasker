@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 	"fmt"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -27,57 +28,11 @@ var tokenBlacklist = make(map[string]struct{})
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is required"})
-			c.Abort()
-			return
-		}
-
-		// Bearerトークン形式のチェック
-		const bearerPrefix = "Bearer "
-		if len(authHeader) <= len(bearerPrefix) || authHeader[:len(bearerPrefix)] != bearerPrefix {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header must start with 'Bearer '"})
-			c.Abort()
-			return
-		}
-		tokenString := authHeader[len(bearerPrefix):]
-
-		if _, blacklisted := tokenBlacklist[authHeader]; blacklisted {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is blacklisted"})
-			c.Abort()
-			return
-		}
-
-		token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-				return jwtKey, nil
-		})
-
-		claims, ok := token.Claims.(*Claims)
-		if !ok {
-				c.JSON(http.StatusUnauthorized, gin.H{
-						"code":    "AUTH_INVALID_CLAIMS",
-						"message": "Invalid token claims",
-						"detail":  "Failed to parse claims",
-				})
-				c.Abort()
-				return
-		}
-
+		claims, err := GetClaimsFromAuthorizationHeader(c)
 		if err != nil {
-			if err == jwt.ErrSignatureInvalid {
-				c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token signature"})
-				c.Abort()
-				return
-			}
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
-			c.Abort()
-			return
-		}
-
-		if !token.Valid {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
-			c.Abort()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": err.Error(),
+			})
 			return
 		}
 
@@ -91,14 +46,61 @@ func AuthMiddleware() gin.HandlerFunc {
 	}
 }
 
+func GetClaimsFromAuthorizationHeader(c *gin.Context) (*Claims, error) {
+	authHeader := c.GetHeader("Authorization")
+	if authHeader == "" {
+		return nil, errors.NewAppError(
+			errors.AUTH_UNAUTHORIZED,
+			"Unauthorized",
+			"Authorization header is required",
+		)
+	}
+
+	const bearerPrefix = "Bearer "
+	if !strings.HasPrefix(authHeader, bearerPrefix) {
+		return nil, errors.NewAppError(
+			errors.AUTH_UNAUTHORIZED,
+			"Unauthorized",
+			"Authorization header must start with 'Bearer '",
+		)
+	}
+
+	tokenString := authHeader[len(bearerPrefix):]
+
+	token, err := jwt.ParseWithClaims(
+		tokenString,
+		&Claims{},
+		func(token *jwt.Token) (interface{}, error) {
+			return jwtKey, nil
+		},
+	)
+	if err != nil || !token.Valid {
+		return nil, errors.NewAppError(
+			errors.AUTH_UNAUTHORIZED,
+			"Unauthorized",
+			"Invalid token",
+		)
+	}
+
+	claims, ok := token.Claims.(*Claims)
+	if !ok {
+		return nil, errors.NewAppError(
+			errors.AUTH_UNAUTHORIZED,
+			"Unauthorized",
+			"Invalid token claims",
+		)
+	}
+
+	return claims, nil
+}
+
 // GetUserIDFromContext: コンテキストから userID を安全に取得
 func GetUserIDFromContext(c *gin.Context) (uint, bool) {
-    userID, exists := c.Get("user_id")
-    if !exists {
-        return 0, false
-    }
-    uid, ok := userID.(uint)
-    return uid, ok
+	claims, err := GetClaimsFromAuthorizationHeader(c)
+	if err != nil {
+		return 0, false
+	}
+	return claims.UserID, true
 }
 
 func Register(c *gin.Context) {
@@ -113,7 +115,6 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -231,6 +232,7 @@ func Login(c *gin.Context) {
 	// expirationTime := time.Now().Add(10 * time.Minute)
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
+		UserID:   user.ID, 
 		Username: user.Username,
 		Role:     user.Role,
 		StandardClaims: jwt.StandardClaims{

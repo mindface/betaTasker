@@ -3,6 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/helper"
 )
 
 type LanguageOptimizationRepositoryImpl struct {
@@ -21,9 +22,9 @@ func (r *LanguageOptimizationRepositoryImpl) FindByID(id string) (*model.Languag
 	return &languageOptimization, nil
 }
 
-func (r *LanguageOptimizationRepositoryImpl) FindAll() ([]model.LanguageOptimization, error) {
+func (r *LanguageOptimizationRepositoryImpl) FindAll(userID uint) ([]model.LanguageOptimization, error) {
 	var languageOptimizations []model.LanguageOptimization
-	if err := r.DB.Find(&languageOptimizations).Error; err != nil {
+	if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&languageOptimizations).Error; err != nil {
 		return nil, err
 	}
 	return languageOptimizations, nil

@@ -18,12 +18,12 @@ func (s *MemoryService) GetMemoryByID(id string) (*model.Memory, error) {
 	return s.Repo.FindByID(id)
 }
 
-func (s *MemoryService) ListMemories() ([]model.Memory, error) {
-	return s.Repo.FindAll()
+func (s *MemoryService) ListMemories(userID uint) ([]model.Memory, error) {
+	return s.Repo.FindAll(userID)
 }
 
-func (s *MemoryService) ListMemoriesTOPager(page, perPage, offset int) ([]model.Memory, int64, error) {
-    return s.Repo.ListMemories(offset, perPage)
+func (s *MemoryService) ListMemoriesTOPager(userID uint, page int, perPage int, offset int) ([]model.Memory, int64, error) {
+    return s.Repo.ListMemories(userID, offset, perPage)
 }
 
 func (s *MemoryService) UpdateMemory(id string, memory *model.Memory) error {

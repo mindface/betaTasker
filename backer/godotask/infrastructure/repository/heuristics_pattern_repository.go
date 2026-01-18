@@ -3,6 +3,7 @@ package repository
 import (
 	"strconv"
 	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/helper"
 	"gorm.io/gorm"
 )
 
@@ -22,9 +23,9 @@ func (r *HeuristicsPatternRepositoryImpl) GetPatternById(id string) (*model.Heur
 	return &pattern, nil
 }
 
-func (r *HeuristicsPatternRepositoryImpl) ListPattern() ([]model.HeuristicsPattern, error) {
+func (r *HeuristicsPatternRepositoryImpl) ListPattern(userID uint) ([]model.HeuristicsPattern, error) {
 	var patterns []model.HeuristicsPattern
-	if err := r.DB.Find(&patterns).Error; err != nil {
+	if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&patterns).Error; err != nil {
 		return nil, err
 	}
 	return patterns, nil

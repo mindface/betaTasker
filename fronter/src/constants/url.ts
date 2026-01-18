@@ -3,6 +3,7 @@ const domainAndHost = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:
 
 const URLs = {
   login: `${domainAndHost}/api/login`,
+  logout: `${domainAndHost}/api/logout`,
   register: `${domainAndHost}/api/register`,
   assessment: `${domainAndHost}/api/assessment`,
   assessmentsForTaskUser: `${domainAndHost}/api/assessmentsForTaskUser`,

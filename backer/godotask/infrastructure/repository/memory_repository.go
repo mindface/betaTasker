@@ -3,6 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/helper"
 )
 
 // MemoryRepositoryImpl
@@ -16,25 +17,25 @@ func (r *MemoryRepositoryImpl) Create(memory *model.Memory) error {
 
 func (r *MemoryRepositoryImpl) FindByID(id string) (*model.Memory, error) {
 	var m model.Memory
+
 	if err := r.DB.Where("id = ?", id).First(&m).Error; err != nil {
 		return nil, err
 	}
 	return &m, nil
 }
 
-func (r *MemoryRepositoryImpl) FindAll() ([]model.Memory, error) {
+func (r *MemoryRepositoryImpl) FindAll(userID uint) ([]model.Memory, error) {
 	var memories []model.Memory
-	if err := r.DB.Find(&memories).Error; err != nil {
+	if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&memories).Error; err != nil {
 		return nil, err
 	}
 	return memories, nil
 }
 
-func (r *MemoryRepositoryImpl) ListMemories(offset, limit int) ([]model.Memory, int64, error) {
+func (r *MemoryRepositoryImpl) ListMemories(userID uint, offset int, limit int) ([]model.Memory, int64, error) {
     var memories []model.Memory
     var total int64
-
-    q := r.DB.Model(&model.Memory{})
+    q := r.DB.Model(&model.Memory{}).Scopes(helper.WithUserFilter(userID))
 
     if err := q.Count(&total).Error; err != nil {
         return nil, 0, err
