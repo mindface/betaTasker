@@ -4,6 +4,7 @@ import (
 	"github.com/godotask/controller/book"
 	"github.com/godotask/controller/memory"
 	"github.com/godotask/controller/user"
+	"github.com/godotask/interface/http/controller"
 	"github.com/godotask/controller/task"
 	"github.com/godotask/controller/assessment"
 	"github.com/godotask/controller/heuristics"
@@ -111,9 +112,9 @@ func GetRouter() *gin.Engine {
 	// 認証不要のエンドポイント
 	public := r.Group("/api")
 	{
-			public.POST("/login", user.Login)
-			public.POST("/register", user.Register)
-			public.POST("/logout", user.Logout)
+		public.POST("/login", controller.Auth.Login)
+		public.POST("/register", controller.Auth.Register)
+		public.POST("/logout", controller.Auth.Logout)
 	}
 	
 	// Book API (CRUD)
