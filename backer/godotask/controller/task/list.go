@@ -3,13 +3,13 @@ package task
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"github.com/godotask/interface/http/context" 
+	"github.com/godotask/interface/http/authcontext" 
 	"github.com/godotask/errors"
 )
 
 // ListTasks: GET /api/task
 func (ctl *TaskController) ListTasks(c *gin.Context) {
-	userID, _ := context.GetUserIDFromContext(c)
+	userID, _ := authcontext.UserID(c)
 	// userID でフィルタしてタスク取得
 	tasks, err := ctl.Service.ListTasksByUser(userID)
 	if err != nil {

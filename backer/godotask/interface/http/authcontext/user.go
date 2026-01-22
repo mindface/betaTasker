@@ -1,8 +1,8 @@
-package context
+package authcontext
 
 import "github.com/gin-gonic/gin"
 
-func GetUserIDFromContext(c *gin.Context) (uint, bool) {
+func UserID(c *gin.Context) (uint, bool) {
 	v, exists := c.Get("user_id")
 	if !exists {
 		return 0, false

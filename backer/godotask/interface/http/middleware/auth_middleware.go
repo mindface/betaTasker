@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/domain/entity"
 	"github.com/godotask/domain/service"
-	"fmt"
 )
 
 func AuthMiddleware(tokenSvc service.TokenService) gin.HandlerFunc {
@@ -46,7 +45,5 @@ func GetClaimsFromAuthorizationHeader(
 	}
 
 	token := strings.TrimPrefix(authHeader, bearer)
-	userId := tokenSvc.Parse(token).UserID
-	fmt.Printf("jjjjj %d", userId)
 	return tokenSvc.Parse(token)
 }
