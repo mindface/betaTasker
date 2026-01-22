@@ -16,8 +16,5 @@ func main() {
 	model.InitDB()
 	server.Init()
 
-	r := server.GetRouter()
-	if err := r.Run(":8080"); err != nil {
-		log.Fatal(err)
-	}
+	server.GetRouter().Run(":8080")
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/usecase"
+	"github.com/godotask/model"
 )
 
 type AuthController struct {
@@ -78,6 +79,33 @@ func (c *AuthController) Register(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{
 		"token": token,
 		"user":  user,
+	})
+}
+
+
+func Profile(c *gin.Context) {
+	userName, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	var user model.User
+	if err := model.DB.Where("username = ?", userName).First(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user from database"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"user": gin.H{
+			"id":        user.ID,
+			"username":  user.Username,
+			"email":     user.Email,
+			"createdAt": user.CreatedAt,
+			"updatedAt": user.UpdatedAt,
+			"isActive":  user.IsActive,
+			"role":      user.Role,
+		},
 	})
 }
 

@@ -1,10 +1,9 @@
 package server
 
 import (
+	"github.com/godotask/interface/http/controller"
 	"github.com/godotask/controller/book"
 	"github.com/godotask/controller/memory"
-	"github.com/godotask/controller/user"
-	"github.com/godotask/interface/http/controller"
 	"github.com/godotask/controller/task"
 	"github.com/godotask/controller/assessment"
 	"github.com/godotask/controller/heuristics"
@@ -42,7 +41,7 @@ func CORSMiddlewareSimple() gin.HandlerFunc {
 	}
 }
 
-func GetRouter() *gin.Engine {
+func setupRouter() *gin.Engine {
 	r := gin.Default()
 	
 	// CORSミドルウェアのみ適用（他のミドルウェアは一旦コメントアウト）
@@ -112,9 +111,9 @@ func GetRouter() *gin.Engine {
 	// 認証不要のエンドポイント
 	public := r.Group("/api")
 	{
-		public.POST("/login", controller.Auth.Login)
-		public.POST("/register", controller.Auth.Register)
-		public.POST("/logout", controller.Auth.Logout)
+		public.POST("/login", authController.Login)
+		public.POST("/register", authController.Register)
+		public.POST("/logout", authController.Logout)
 	}
 	
 	// Book API (CRUD)
@@ -127,7 +126,7 @@ func GetRouter() *gin.Engine {
 	// ===== 認証必須のエンドポイント =====
 	// AuthMiddleware をこのグループに一括適用
 	protected := r.Group("/api")
-	protected.Use(user.AuthMiddleware())
+	protected.Use(authMiddleware)
 	{
 		// Task API (CRUD)
 		protected.POST("/task", taskController.AddTask)
@@ -137,7 +136,7 @@ func GetRouter() *gin.Engine {
 		protected.DELETE("/task/:id", taskController.DeleteTask)
 
 		// User profile
-		protected.GET("/user/profile", user.AuthMiddleware(), user.Profile)
+		protected.GET("/user/profile", controller.Profile)
 
 		// Memory API (CRUD)
 		protected.POST("/memory", memoryController.AddMemory)
@@ -223,4 +222,8 @@ func GetRouter() *gin.Engine {
 	// r.NoRoute(middleware.NotFoundMiddleware())
 	
 	return r
+}
+
+func GetRouter() *gin.Engine {
+	return router
 }

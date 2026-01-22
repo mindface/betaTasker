@@ -7,6 +7,7 @@ import (
 	"github.com/godotask/infrastructure/repository"
 	"github.com/godotask/infrastructure/security"
 	"github.com/godotask/model"
+	"github.com/godotask/interface/http/middleware"
 )
 
 // authに対するDI対応をしている
@@ -24,5 +25,9 @@ func Init() {
 		tokenSvc,
 	)
 
-	controller.InitAuthController(authUsecase)
+	authController = controller.NewAuthController(authUsecase)
+
+	authMiddleware = middleware.AuthMiddleware(tokenSvc)
+
+	router = setupRouter()
 }
