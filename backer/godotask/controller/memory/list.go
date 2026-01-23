@@ -3,14 +3,14 @@ package memory
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"github.com/godotask/controller/user"
+	"github.com/godotask/interface/http/authcontext"
 	"github.com/godotask/errors"
 	"strconv"
 )
 
 // ListMemories: GET /api/memory
 func (ctl *MemoryController) ListMemories(c *gin.Context) {
-	userID, _ := user.GetUserIDFromContext(c)
+	userID, _ := authcontext.UserID(c)
 	memories, err := ctl.Service.ListMemories(userID)
 	if err != nil {
 		appErr := errors.NewAppError(
@@ -38,7 +38,7 @@ func (ctl *MemoryController) ListLimitMemories(c *gin.Context) {
     page := 1
     perPage := 20
     const maxPerPage = 100
-		userID, _ := user.GetUserIDFromContext(c)
+		userID, _ := authcontext.UserID(c)
 
     if p := c.Query("page"); p != "" {
 			if v, err := strconv.Atoi(p); err == nil && v > 0 {

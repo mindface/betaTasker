@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"github.com/godotask/controller/user"
+	"github.com/godotask/interface/http/authcontext"
 	"github.com/godotask/errors"
 	"strconv"
 )
@@ -44,7 +44,7 @@ func (ctl *AssessmentController) ListAssessmentsPager(c *gin.Context) {
     page := 1
     perPage := 20
     const maxPerPage = 100
-		userID, _ := user.GetUserIDFromContext(c)
+	userID, _ := authcontext.UserID(c)
 
     if p := c.Query("page"); p != "" {
         if v, err := strconv.Atoi(p); err == nil && v > 0 {

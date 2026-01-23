@@ -5,13 +5,12 @@ import (
 
 	"github.com/godotask/errors"
 	"github.com/gin-gonic/gin"
-	"github.com/godotask/controller/user"
+	"github.com/godotask/interface/http/authcontext"
 )
 
 // ListPhenomenologicalFrameworks: GET /api/phenomenological_framework
 func (ctl *PhenomenologicalFrameworkController) ListPhenomenologicalFrameworks(c *gin.Context) {
-  userID, _ := user.GetUserIDFromContext(c)
-
+	userID, _ := authcontext.UserID(c)
 	phenomenologicalFrameworks, err := ctl.Service.ListPhenomenologicalFrameworks(userID)
 	if err != nil {
 		appErr := errors.NewAppError(

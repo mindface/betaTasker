@@ -4,13 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/godotask/interface/http/authcontext"
 	"github.com/godotask/errors"
-	"github.com/godotask/controller/user"
 )
 
 // ListLanguageOptimizations: GET /api/language_optimization
 func (ctl *LanguageOptimizationController) ListLanguageOptimizations(c *gin.Context) {
-  userID, _ := user.GetUserIDFromContext(c)
+  userID, _ := authcontext.UserID(c)
 	languageOptimizations, err := ctl.Service.ListLanguageOptimizations(userID)
 	if err != nil {
 		appErr := errors.NewAppError(

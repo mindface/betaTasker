@@ -4,13 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/godotask/controller/user" 
+	"github.com/godotask/interface/http/authcontext"
 	"github.com/godotask/errors"
 )
 
 // ListTeachingFreeControls: GET /api/teaching_free_control
 func (ctl *TeachingFreeControlController) ListTeachingFreeControls(c *gin.Context) {
-  userID, _ := user.GetUserIDFromContext(c)
+	userID, _ := authcontext.UserID(c)
 	teachingFreeControls, err := ctl.Service.ListTeachingFreeControls(userID)
 	if err != nil {
 		appErr := errors.NewAppError(

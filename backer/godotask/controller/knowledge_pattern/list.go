@@ -4,13 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/godotask/controller/user" 
+	"github.com/godotask/interface/http/authcontext"
 	"github.com/godotask/errors"
 )
 
 // ListKnowledgePatterns: GET /api/knowledge_patterns
 func (ctl *KnowledgePatternController) ListKnowledgePatterns(c *gin.Context) {
-	userID, _ := user.GetUserIDFromContext(c)
+  userID, _ := authcontext.UserID(c)
 	knowledgePatterns, err := ctl.Service.ListKnowledgePatterns(userID)
 	if err != nil {
 		appErr := errors.NewAppError(
