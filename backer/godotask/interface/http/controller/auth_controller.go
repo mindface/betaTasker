@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/usecase"
-	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/db/model"
 )
 
 type AuthController struct {

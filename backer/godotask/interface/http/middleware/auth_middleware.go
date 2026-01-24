@@ -7,10 +7,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/domain/entity"
-	"github.com/godotask/domain/service"
+	"github.com/godotask/domain/auth"
 )
 
-func AuthMiddleware(tokenSvc service.TokenService) gin.HandlerFunc {
+func AuthMiddleware(tokenSvc auth.TokenService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		claims, err := GetClaimsFromAuthorizationHeader(c, tokenSvc)
 		if err != nil {
@@ -31,7 +31,7 @@ func AuthMiddleware(tokenSvc service.TokenService) gin.HandlerFunc {
 
 func GetClaimsFromAuthorizationHeader(
 	c *gin.Context,
-	tokenSvc service.TokenService,
+	tokenSvc auth.TokenService,
 ) (*entity.AuthClaims, error) {
 
 	authHeader := c.GetHeader("Authorization")

@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/db/model"
 	"github.com/joho/godotenv"
 )
 

@@ -3,12 +3,12 @@ package security
 import (
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/godotask/domain/service"
+	"github.com/godotask/domain/auth"
 )
 
 type BcryptPasswordService struct{}
 
-func NewBcryptPasswordService() service.PasswordService {
+func NewBcryptPasswordService() auth.PasswordService {
 	return &BcryptPasswordService{}
 }
 

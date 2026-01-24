@@ -6,7 +6,7 @@ import (
 	"github.com/godotask/domain/entity"
 
 	domainRepo "github.com/godotask/domain/repository"
-	domainService "github.com/godotask/domain/service"
+	domainService "github.com/godotask/domain/auth"
 )
 
 type RegisterUsecase struct {

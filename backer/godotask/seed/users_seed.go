@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/db/model"
 )
 
 // 日本の名字と名前のリスト

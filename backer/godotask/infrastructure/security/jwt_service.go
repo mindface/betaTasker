@@ -7,7 +7,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 
 	"github.com/godotask/domain/entity"
-	"github.com/godotask/domain/service"
+	"github.com/godotask/domain/auth"
 )
 
 type JWTService struct {
@@ -15,7 +15,7 @@ type JWTService struct {
 	expiration time.Duration
 }
 
-func NewJWTService(secret []byte, exp time.Duration) service.TokenService {
+func NewJWTService(secret []byte, exp time.Duration) auth.TokenService {
 	return &JWTService{
 		secret:     secret,
 		expiration: exp,
