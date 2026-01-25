@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/db/model"
 	"github.com/godotask/seed"
 	// "github.com/seed2/memory_context_seed"
 )

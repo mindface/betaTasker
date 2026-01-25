@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/db/model"
 	"gorm.io/gorm"
 )
 

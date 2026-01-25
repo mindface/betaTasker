@@ -10,7 +10,7 @@ import (
 	"encoding/json"
 	// "encoding/json"
 
-	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/db/model"
 	"gorm.io/gorm"
 )
 

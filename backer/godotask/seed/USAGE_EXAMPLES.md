@@ -102,7 +102,7 @@ package main
 
 import (
     "log"
-    "github.com/godotask/model"
+    "github.com/godotask/infrastructure/db/model"
     "github.com/godotask/seed"
 )
 
@@ -355,7 +355,7 @@ ORDER BY occurrence_count DESC;
 package analysis
 
 import (
-    "github.com/godotask/model"
+    "github.com/godotask/infrastructure/db/model"
     "gorm.io/gorm"
 )
 

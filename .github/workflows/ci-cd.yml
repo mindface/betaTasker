@@ -30,7 +30,7 @@ jobs:
         working-directory: backer/godotask
         run: |
           echo "Building Go backend..."
-          CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+          CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/boot/main.go
           echo "=== Build result ==="
           ls -lh .
 
@@ -39,7 +39,6 @@ jobs:
         with:
           name: backend-output
           path: backer/godotask/main
-
 
       # - name: Cache Go modules
       #   uses: actions/cache@v3

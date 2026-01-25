@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/godotask/model"
+	"github.com/godotask/infrastructure/db/model"
 	"github.com/google/uuid"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
