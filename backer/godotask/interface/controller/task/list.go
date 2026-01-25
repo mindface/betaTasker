@@ -11,7 +11,7 @@ import (
 func (ctl *TaskController) ListTasks(c *gin.Context) {
 	userID, _ := authcontext.UserID(c)
 	// userID でフィルタしてタスク取得
-	tasks, err := ctl.Service.ListTasksByUser(userID)
+	tasks, err := ctl.Service.ListTasks(userID)
 	if err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,

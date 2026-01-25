@@ -18,7 +18,9 @@ export default function RootLayout ({
           <meta charSet="utf=8" />
         </Head>
         <IndexHeader title={header_category}/>
-        {children}
+        <div className="l-outer">
+          {children}
+        </div>
         <IndexFooter title="&copy; realize" />
       </>
     )

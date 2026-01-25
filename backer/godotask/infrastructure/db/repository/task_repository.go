@@ -29,6 +29,7 @@ func (r *TaskRepositoryImpl) FindAll(userID uint) ([]model.Task, error) {
 	// }
 	err := r.DB.
     Scopes(helper.WithUserFilter(userID)).
+    Preload("Assessments").
     Preload("QualitativeLabels").
     Preload("QuantificationLabels").
     Preload("MultimodalData").

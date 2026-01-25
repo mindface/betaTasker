@@ -7,11 +7,9 @@ import (
 
 func WithUserFilter(userID uint) func(db *gorm.DB) *gorm.DB {
   return func(db *gorm.DB) *gorm.DB {
-    fmt.Printf("llll---------- %d",userID)
     if userID == 0 {
       return db
     }
-    fmt.Printf("none----------")
     return db.Where("user_id = ?", userID)
   }
 }
