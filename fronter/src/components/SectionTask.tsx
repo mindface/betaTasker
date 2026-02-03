@@ -54,7 +54,7 @@ export default function SectionTask() {
   return (
     <div className="section__inner section--task">
       <div className="section-container">
-        <div className="task-header">
+        <div className="task-header p-b-8">
           <h2>タスク一覧</h2>
           <button
             onClick={() => handleAddTask()}
@@ -75,14 +75,6 @@ export default function SectionTask() {
               />
             ))}
           </Suspense>
-        </div>
-        <div className="task-value-list">
-          <h3>タスク値一覧</h3>
-          <div className="list">
-            {(tasks ?? []).map((task: Task, index: number) => (
-                <span key={`task-value-item${index}`}><b>userId:</b> {task.user_id}</span>
-            ))}
-          </div>
         </div>
         <AssessmentListModal
           taskId={TaskId}

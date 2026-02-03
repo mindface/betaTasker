@@ -60,7 +60,7 @@ export default function SectionMemory() {
   return (
     <div className="section__inner section--memory p-8">
       <div className="section-container">
-        <div className="memory-header">
+        <div className="memory-header p-b-8">
           <h2>メモ</h2>
           <button 
             onClick={() => handleAddMemory()}
@@ -68,11 +68,13 @@ export default function SectionMemory() {
           >
             新規メモ
           </button>
-        </div>
-        {/* aidCode入力欄とMemoryAidList表示を追加 */}
-        <div style={{margin:'16px 0'}}>
-          <label>MemoryAidコード: </label>
-          <input value={aidCode} onChange={e => setAidCode(e.target.value)} style={{marginRight:8}} />
+          <div className='p-b-10'>
+            {/* aidCode入力欄とMemoryAidList表示を追加 */}
+            <div>
+              <label>MemoryAidコード: </label>
+              <input value={aidCode} onChange={e => setAidCode(e.target.value)} style={{marginRight:8}} />
+            </div>
+          </div>
         </div>
         <MemoryAidList code={aidCode} />
         {/* 既存のメモリ表示 */}

@@ -11,7 +11,7 @@ interface ItemMemoryProps {
   onDelete: (id: number) => void;
 }
 
-const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, tasks, onEdit, onDelete }) => {
+const ItemMemory = ({ memory, tasks, onEdit, onDelete }: ItemMemoryProps) => {
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
 
   // const handleOpenMemoryModal = async (memoryId: string) => {

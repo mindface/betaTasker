@@ -16,7 +16,7 @@ interface AssessmentModalProps {
 }
 
 const setCheker = ['user_id', 'task_id', 'effectiveness_score', 'effort_score', 'impact_score'];
-const AssessmentModal: React.FC<AssessmentModalProps> = ({ isOpen, onClose, onSave, initialData, tasks, memories }) => {
+const AssessmentModal = ({ isOpen, onClose, onSave, initialData, tasks, memories }: AssessmentModalProps) => {
   const [formData, setFormData] = useState<AddAssessment | Assessment | undefined>();
   // メモリー詳細表示用のstate
   const [openMemoryId, setOpenMemoryId] = useState<number | null>(null);

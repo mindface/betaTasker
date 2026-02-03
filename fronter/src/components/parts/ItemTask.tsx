@@ -1,9 +1,13 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { Task } from "../../model/task";
+import { HeuristicsAnalysis } from "../../model/heuristics";
 import { useDispatch, useSelector } from 'react-redux'
 import { getMemory } from '../../features/memory/memorySlice'
+
 import MemoryModal from "./MemoryModal";
+import ListDialog from "./ListDialog";
+
 import { Memory } from "../../model/memory";
 import { RootState } from '../../store';
 
@@ -14,7 +18,9 @@ interface ItemTaskProps {
   onSetTaskId?: (id: number) => void;
 }
 
-const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete, onSetTaskId }) => {
+type OptimizationsType = NonNullable<Task['language_optimizations']>[number]
+
+const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
   const dispath = useDispatch()
   const { memoryItem, memoryLoading, memoryError } = useSelector((state: RootState) => state.memory);
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -22,6 +28,10 @@ const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete, onSetTaskId
   const getMemoryAction = (memoryId: number) => {
     dispath(getMemory(memoryId))
     setIsModalOpen(true)
+  }
+
+  const reData = (data: string, intKey: string) => {
+    return JSON.parse(data)[intKey]
   }
 
   return (
@@ -47,7 +57,10 @@ const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete, onSetTaskId
         </div>
         <div className="card-item__content">
           <p className="pb-1">
-            { task.memory_id && <button onClick={() => getMemoryAction(task.memory_id as number)} className="btn btn-edit">
+            { task.memory_id && <button
+                onClick={() => getMemoryAction(task.memory_id as number)}
+                className="btn btn-edit"
+              >
               記録を確認する
             </button> }
           </p>
@@ -64,8 +77,37 @@ const ItemTask: React.FC<ItemTaskProps> = ({ task, onEdit, onDelete, onSetTaskId
           <span className="priority">優先度: {task.priority}</span>
           <span className="date">{new Date(task.created_at).toLocaleDateString()}</span>
         </div>
+        {task.language_optimizations &&
+        <ListDialog<OptimizationsType>
+          viewData={task.language_optimizations}
+          renderItem={(item,index) => 
+            <>
+              <p>index: {index}</p>
+              <p>original_text: {item.original_text}</p>
+              <p>optimized_text: {item.optimized_text}</p>
+              {/* <p>domain: {item.domain}</p>
+              <p>abstraction_level: {item.abstraction_level}</p>
+              <p>precision: {item.precision}</p>
+              <p>clarity: {item.clarity}</p>
+              <p>completeness: {item.completeness}</p>
+              <p>context: {item.context}</p>
+              <p>transformation: {item.transformation}</p> */}
+            </>
+          }
+        />}
+        <div className="heuristics_analysis">
+          {task.heuristics_analysis?.map((item,index) => <div className="item-box" key={`heuristics_analysis${index}`}>
+            <div className="item-header">analysis_type | {item.analysis_type}</div>
+            <div className="item-header">confidence | {item.confidence}</div>
+            <div className="item-header">difficulty_score | {item.difficulty_score}</div>
+            <div className="item-header">efficiency_score | {item.efficiency_score}</div>
+            <p>{reData(item.result,"strengths")}</p>
+            <p>{reData(item.result,"next_steps")}</p>
+            <p>{reData(item.result,"weaknesses")}</p>
+          </div>)}
+        </div>
       </div>
-      { memoryLoading && memoryItem &&
+      { memoryItem &&
         <MemoryModal
           initialData={memoryItem as Memory}
           isOpen={isModalOpen}

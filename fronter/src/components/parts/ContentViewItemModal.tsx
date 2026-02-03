@@ -1,10 +1,10 @@
 import React, {} from 'react'
 
 type Props = {
-  children?: React.ReactNode
+  info:HTMLDivElement
 }
 
-function ContentViewItemModal(info:HTMLDivElement)  {
+function ContentViewItemModal({ info }: Props)  {
   const openBtn = document.createElement('button')
   openBtn.className = 'btn btn--primary open'
   openBtn.innerHTML = 'open'

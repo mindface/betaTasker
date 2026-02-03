@@ -14,7 +14,7 @@ interface TaskModalProps {
   memories: Memory[];
 }
 
-const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, initialData, memories }) => {
+const TaskModal = ({ isOpen, onClose, onSave, initialData, memories }: TaskModalProps) => {
   const [formData, setFormData] = useState<AddTask | Task | undefined>();
 
   const { execute: saveTask } = useApiCall(

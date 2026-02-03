@@ -23,13 +23,13 @@ const initiaSetlData = {
     information_amount: '',
   }
 
-const MemoryModal: React.FC<MemoryModalProps> = ({
+const MemoryModal = ({
   isOpen,
   isViewType,
   onClose,
   onSave,
   initialData,
-}) => {
+}: MemoryModalProps) => {
   const [formData, setFormData] = useState<(AddMemory|Memory|undefined)>(initiaSetlData as AddMemory);
   const { memoryLoading, memoryError } = useSelector((state: RootState) => state.memory);
 

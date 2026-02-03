@@ -7,7 +7,7 @@ interface ItemAssessmentProps {
   onDelete?: (id: number) => void;
 }
 
-const ItemAssessment: React.FC<ItemAssessmentProps> = ({ assessment, onEdit, onDelete }) => {
+const ItemAssessment = ({ assessment, onEdit, onDelete }: ItemAssessmentProps) => {
   return (
     <div className="assessment-item card-item">
       <div className="assessment-item__header car-item__header">

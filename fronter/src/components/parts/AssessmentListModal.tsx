@@ -14,7 +14,7 @@ interface AssessmentListModalProps {
 }
 
 const setCheker = ['user_id', 'task_id', 'effectiveness_score', 'effort_score', 'impact_score'];
-const AssessmentListModal: React.FC<AssessmentListModalProps> = ({ isOpen, onClose, onSave, taskId }) => {
+const AssessmentListModal = ({ isOpen, onClose, onSave, taskId }: AssessmentListModalProps) => {
   const dispatch = useDispatch();
   const { assessments, assessmentLoading, assessmentError } = useSelector((state: RootState) => state.assessment)
   const { user } = useSelector((state: RootState) => state.user)

@@ -14,6 +14,7 @@ yarn-debug.log*
 # Dependency directories
 /.pnp
 .pnp.js
+fronter/.yarn/
 
 # Next.js build output
 .next/
@@ -48,4 +49,8 @@ coverage/
 !backer/
 backer/bin/
 
+# validation file
+backer/*.py
+
 **/backup/
+

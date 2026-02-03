@@ -9,7 +9,7 @@ interface RegisterModalProps {
   onClose: () => void;
 }
 
-const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
+const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state: RootState) => state.user);
   const [formData, setFormData] = useState({

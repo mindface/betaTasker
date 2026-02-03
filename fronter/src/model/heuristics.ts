@@ -5,7 +5,13 @@ export interface HeuristicsAnalysis {
   user_id: number;
   task_id: number;
   analysis_type: string;
-  result: any;
+  original_text: string;
+  optimized_text: string;
+  domain: string;
+  confidence: number;
+  difficulty_score: number;
+  efficiency_score: number;
+  result: any; // 型をどこかでつける
   score: number;
   status: string;
   created_at: string;

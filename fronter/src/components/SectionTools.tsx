@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react'
-import SectionMemory2 from '../components/SectionMemory2'
-import SectionTask2 from '../components/SectionTask2'
+import SectionMemory2 from '../components/SectionMemory'
+import SectionTask2 from '../components/SectionTask'
 
 export default function SectionTools() {
   const [dataViewType, setDataViewType] = useState("")

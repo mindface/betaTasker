@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, {  } from 'react'
 import { Memory } from "../../model/memory";
 
 
@@ -10,7 +10,7 @@ interface ItemMemoryProps {
   children?: React.ReactNode;
 }
 
-const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete, children }) => {
+const ItemMemory = ({ memory, onEdit, onDelete, children }: ItemMemoryProps) => {
 
   // const handleOpenMemoryModal = async (memoryId: string) => {
   //   if (memoryCache[memoryId]) {
