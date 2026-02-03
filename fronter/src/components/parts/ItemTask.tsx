@@ -67,8 +67,8 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
           <div className="task-for-memory-view">
            〈 記録ID: {task.memory_id}〉
           </div>
-          <p className="pb-1">{task.title}</p>
-          <p>{task.description}</p>
+          <p className="p-b-1">{task.title}</p>
+          <p className="p-b-4">{task.description}</p>
           {task.status && (
             <span className="card-status">{task.status}</span>
           )}
@@ -80,11 +80,13 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
         {task.language_optimizations &&
         <ListDialog<OptimizationsType>
           viewData={task.language_optimizations}
+          title="Language Optimizations"
+          btnText="Language Optimizationsを確認"
           renderItem={(item,index) => 
-            <>
-              <p>index: {index}</p>
-              <p>original_text: {item.original_text}</p>
-              <p>optimized_text: {item.optimized_text}</p>
+            <div className="language_optimizations-item p-8 bg-gray m-b-8">
+              <p className="p-b-8"><span className="abstraction-level p-8">abstraction_level:</span> {item.abstraction_level}</p>
+              <p className="p-b-4">original_text: {item.original_text}</p>
+              <p className="p-b-4">optimized_text: {item.optimized_text}</p>
               {/* <p>domain: {item.domain}</p>
               <p>abstraction_level: {item.abstraction_level}</p>
               <p>precision: {item.precision}</p>
@@ -92,20 +94,25 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
               <p>completeness: {item.completeness}</p>
               <p>context: {item.context}</p>
               <p>transformation: {item.transformation}</p> */}
-            </>
+            </div>
           }
         />}
-        <div className="heuristics_analysis">
-          {task.heuristics_analysis?.map((item,index) => <div className="item-box" key={`heuristics_analysis${index}`}>
-            <div className="item-header">analysis_type | {item.analysis_type}</div>
-            <div className="item-header">confidence | {item.confidence}</div>
-            <div className="item-header">difficulty_score | {item.difficulty_score}</div>
-            <div className="item-header">efficiency_score | {item.efficiency_score}</div>
-            <p>{reData(item.result,"strengths")}</p>
-            <p>{reData(item.result,"next_steps")}</p>
-            <p>{reData(item.result,"weaknesses")}</p>
-          </div>)}
-        </div>
+        <ListDialog<HeuristicsAnalysis>
+          viewData={task.heuristics_analysis}
+          title="Heuristics Analysis"
+          btnText="Heuristics Analysisを確認"
+          renderItem={(item,index) => 
+            <div className="language_optimizations-item p-8">
+              <div className="p-b-8">analysis_type | {item.analysis_type}</div>
+              <div className="p-b-8">confidence | {item.confidence}</div>
+              <div className="p-b-8">difficulty_score | {item.difficulty_score}</div>
+              <div className="p-b-8">efficiency_score | {item.efficiency_score}</div>
+              <p>{reData(item.result,"strengths")}</p>
+              <p>{reData(item.result,"next_steps")}</p>
+              <p>{reData(item.result,"weaknesses")}</p>
+            </div>
+          }
+        />
       </div>
       { memoryItem &&
         <MemoryModal

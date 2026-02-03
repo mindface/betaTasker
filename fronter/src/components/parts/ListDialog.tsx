@@ -3,6 +3,8 @@ import CommonDialog from "./CommonDialog";
 
 export interface ListDialogProps<T> {
   onClose?: () => void;
+  title?: string;
+  btnText?: string;
   viewData?:T[];
   indexType?: string;
   renderItem: (item: T, index: number) => React.ReactNode;
@@ -10,6 +12,8 @@ export interface ListDialogProps<T> {
 
 export default function ListDialog<T>({
   viewData,
+  title,
+  btnText = "記録を確認",
   indexType,
   renderItem
 }: ListDialogProps<T>) {
@@ -28,15 +32,16 @@ export default function ListDialog<T>({
     }
     console.log("viewData",viewData);
   }, [viewData]);
+
   return (
     <>
       <button onClick={onDialogHandler} className="btn btn-secondary">
-        記録を確認
+        {btnText}
       </button>
       <CommonDialog
         isOpen={onDialog}
         onClose={onDialogHandler}
-        title={viewData && viewData.length > 0 ? '記録を確認' : '新規メモ'}
+        title={title || (viewData && viewData.length > 0 ? `リストダイアログ ${title}` : "リストの確認")}
       >
         <div className="language_optimizations-dialog">
           {viewDataState && viewDataState.length === 0 && (
