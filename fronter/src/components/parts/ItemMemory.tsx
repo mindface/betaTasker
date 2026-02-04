@@ -1,7 +1,6 @@
-"use client"
-import React, { useState } from 'react'
+"use client";
+import React, {} from "react";
 import { Memory } from "../../model/memory";
-
 
 interface ItemMemoryProps {
   memory: Memory;
@@ -10,8 +9,12 @@ interface ItemMemoryProps {
   children?: React.ReactNode;
 }
 
-const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete, children }) => {
-
+const ItemMemory = ({
+  memory,
+  onEdit,
+  onDelete,
+  children,
+}: ItemMemoryProps) => {
   // const handleOpenMemoryModal = async (memoryId: string) => {
   //   if (memoryCache[memoryId]) {
   //     // キャッシュがあればそれを使う
@@ -35,7 +38,10 @@ const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete, child
           <button onClick={() => onEdit(memory)} className="btn btn-edit">
             編集
           </button>
-          <button onClick={() => onDelete(memory.id)} className="btn btn-delete">
+          <button
+            onClick={() => onDelete(memory.id)}
+            className="btn btn-delete"
+          >
             削除
           </button>
         </div>
@@ -46,7 +52,7 @@ const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete, child
           <div className="card-item__tags card-item__tags">
             <p className="item">{memory.title}</p>
             <p>
-              {memory.tags.split(',').map((tag, index) => (
+              {memory.tags.split(",").map((tag, index) => (
                 <span key={index} className="tag mr-4">
                   {tag.trim()}
                 </span>
@@ -55,15 +61,15 @@ const ItemMemory: React.FC<ItemMemoryProps> = ({ memory, onEdit, onDelete, child
           </div>
         )}
       </div>
-      {children ?? <div className="p-8">
-        {children}
-      </div>}
+      {children ?? <div className="p-8">{children}</div>}
       <div className="card-item__footer card-item__footer">
         <span className="read-status">{memory.read_status}</span>
-        <span className="date">{new Date(memory.created_at).toLocaleDateString()}</span>
+        <span className="date">
+          {new Date(memory.created_at).toLocaleDateString()}
+        </span>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default ItemMemory;

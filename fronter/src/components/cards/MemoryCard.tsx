@@ -1,8 +1,8 @@
-"use client"
-import React from 'react';
-import GenericItemCard from '../parts/GenericItemCard';
-import { Memory } from '../../model/memory';
-import { useItemOperations } from '../../hooks/useItemOperations';
+"use client";
+import React from "react";
+import GenericItemCard from "../parts/GenericItemCard";
+import { Memory } from "../../model/memory";
+import { useItemOperations } from "../../hooks/useItemOperations";
 
 interface MemoryCardProps {
   memory: Memory;
@@ -10,9 +10,9 @@ interface MemoryCardProps {
 }
 
 export default function MemoryCard({ memory, onRefresh }: MemoryCardProps) {
-  const { deleteItem, updateItem } = useItemOperations('memory', {
+  const { deleteItem, updateItem } = useItemOperations("memory", {
     onDeleteSuccess: onRefresh,
-    onUpdateSuccess: onRefresh
+    onUpdateSuccess: onRefresh,
   });
 
   const handleUpdate = async (item: Memory) => {
@@ -28,9 +28,9 @@ export default function MemoryCard({ memory, onRefresh }: MemoryCardProps) {
       <div className="detail-item">
         <span className="label">ステータス:</span>
         <span className={`read-status status-${memory.read_status}`}>
-          {memory.read_status === 'unread' && '未読'}
-          {memory.read_status === 'read' && '既読'}
-          {memory.read_status === 'archived' && 'アーカイブ'}
+          {memory.read_status === "unread" && "未読"}
+          {memory.read_status === "read" && "既読"}
+          {memory.read_status === "archived" && "アーカイブ"}
         </span>
       </div>
       {memory.source_type && (
@@ -42,7 +42,10 @@ export default function MemoryCard({ memory, onRefresh }: MemoryCardProps) {
     </div>
   );
 
-  const renderEditForm = (memory: Memory, onChange: (memory: Memory) => void) => (
+  const renderEditForm = (
+    memory: Memory,
+    onChange: (memory: Memory) => void,
+  ) => (
     <form className="memory-edit-form">
       <div className="form-group">
         <label htmlFor="title">タイトル</label>
@@ -77,7 +80,7 @@ export default function MemoryCard({ memory, onRefresh }: MemoryCardProps) {
         <input
           type="text"
           id="source_type"
-          value={memory.source_type || ''}
+          value={memory.source_type || ""}
           onChange={(e) => onChange({ ...memory, source_type: e.target.value })}
         />
       </div>
@@ -86,7 +89,12 @@ export default function MemoryCard({ memory, onRefresh }: MemoryCardProps) {
         <select
           id="read_status"
           value={memory.read_status}
-          onChange={(e) => onChange({ ...memory, read_status: e.target.value as Memory['read_status'] })}
+          onChange={(e) =>
+            onChange({
+              ...memory,
+              read_status: e.target.value as Memory["read_status"],
+            })
+          }
         >
           <option value="unread">未読</option>
           <option value="read">既読</option>

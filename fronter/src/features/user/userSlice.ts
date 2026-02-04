@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserInfo } from "../../model/user";
 
 interface UserState {
@@ -15,16 +15,19 @@ const initialState: UserState = {
   isAuthenticated: false,
   loading: false,
   error: null,
-}
+};
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     loginRequest: (state) => {
       state.loading = true;
       state.error = null;
     },
-    loginSuccess: (state, action: PayloadAction<{ token: string; user: UserInfo }>) => {
+    loginSuccess: (
+      state,
+      action: PayloadAction<{ token: string; user: UserInfo }>,
+    ) => {
       state.loading = false;
       state.isAuthenticated = true;
       state.user = action.payload.user;

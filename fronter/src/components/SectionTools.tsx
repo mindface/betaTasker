@@ -1,25 +1,23 @@
-"use client"
-import { useState } from 'react'
-import SectionMemory2 from '../components/SectionMemory2'
-import SectionTask2 from '../components/SectionTask2'
+"use client";
+import { useState } from "react";
+import SectionMemory2 from "../components/SectionMemory";
+import SectionTask2 from "../components/SectionTask";
 
 export default function SectionTools() {
-  const [dataViewType, setDataViewType] = useState("")
-  const [dataAnimation, setDataAnimation] = useState(0)
+  const [dataViewType, setDataViewType] = useState("");
+  const [dataAnimation, setDataAnimation] = useState(0);
 
-  return(
+  return (
     <div className="section__inner section--tools">
       <div className="section-continer">
         <section className="l-section">
           <div className="controller controller-top p-8">
-            <h2 className="bg-black p-4 d-inline-block">画面調整 (データ構造)</h2>
+            <h2 className="bg-black p-4 d-inline-block">
+              画面調整 (データ構造)
+            </h2>
             <div className="flex p-8">
               <label htmlFor="data-type" className="label p-r-5">
-                <input
-                  type="text"
-                  id="data-type"
-                  className="input"
-                />
+                <input type="text" id="data-type" className="input" />
               </label>
               <label htmlFor="data-animation" className="label d-inline-block">
                 <input
@@ -29,9 +27,9 @@ export default function SectionTools() {
                   min={0}
                   max={100}
                   value={dataAnimation}
-                  onChange={e => setDataAnimation(Number(e.target.value))}
+                  onChange={(e) => setDataAnimation(Number(e.target.value))}
                 />
-                <span className='d-inline-block '>{dataAnimation}</span>
+                <span className="d-inline-block ">{dataAnimation}</span>
               </label>
               <div className="p-4 p-l-16">
                 <label
@@ -44,7 +42,7 @@ export default function SectionTools() {
                     name="data-view-type"
                     value="type1"
                     checked={dataViewType === "type1"}
-                    onChange={e => setDataViewType(e.target.value)}
+                    onChange={(e) => setDataViewType(e.target.value)}
                   />
                   タイプ1
                 </label>
@@ -58,7 +56,7 @@ export default function SectionTools() {
                     name="data-view-type"
                     value="type2"
                     checked={dataViewType === "type2"}
-                    onChange={e => setDataViewType(e.target.value)}
+                    onChange={(e) => setDataViewType(e.target.value)}
                   />
                   タイプ2
                 </label>
@@ -72,7 +70,7 @@ export default function SectionTools() {
                     name="data-view-type"
                     value="type3"
                     checked={dataViewType === "type3"}
-                    onChange={e => setDataViewType(e.target.value)}
+                    onChange={(e) => setDataViewType(e.target.value)}
                   />
                   タイプ3
                 </label>
@@ -80,16 +78,22 @@ export default function SectionTools() {
               </div>
             </div>
           </div>
-          <div data-view-type={dataViewType} className="controller-target-box position-relative max-h-m overflow-y-auto">
+          <div
+            data-view-type={dataViewType}
+            className="controller-target-box position-relative max-h-m overflow-y-auto"
+          >
             <SectionMemory2 />
             <SectionTask2 />
           </div>
           <div className="controller data-controller p-8">
-            <h2 className="bg-black p-4 d-inline-block">データ操作(モーション関係と情報構造)</h2>
+            <h2 className="bg-black p-4 d-inline-block">
+              データ操作(モーション関係と情報構造)
+            </h2>
             <div className="flex p-8">
               <label htmlFor="target-data" className="label p-r-5">
                 <input
-                  type="text" id="target-data"
+                  type="text"
+                  id="target-data"
                   className="input"
                   min={0}
                   max={100}
@@ -111,6 +115,5 @@ export default function SectionTools() {
         </section>
       </div>
     </div>
-  )
+  );
 }
-

@@ -17,6 +17,8 @@ type Task struct {
 	UpdatedAt   time.Time  `json:"updated_at"`
 
 	User       User        `json:"user" gorm:"foreignKey:UserID"`
+  Memory   Memory `json:"memory" gorm:"foreignKey:MemoryID;references:ID"`
+	Assessments []Assessment `json:"assessments" gorm:"foreignKey:TaskID"`
 	QualitativeLabels []QualitativeLabel `json:"qualitative_labels" gorm:"foreignKey:TaskID"`
 	QuantificationLabels []QuantificationLabel `json:"quantification_labels" gorm:"foreignKey:TaskID"`
 	MultimodalData   []MultimodalData   `json:"multimodal_data" gorm:"foreignKey:TaskID"`

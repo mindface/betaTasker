@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import * as heuristicsApi from '../../client/heuristicsApi';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import * as heuristicsApi from "../../client/heuristicsApi";
 import {
   HeuristicsAnalysis,
   HeuristicsAnalysisRequest,
@@ -8,8 +8,8 @@ import {
   HeuristicsInsight,
   HeuristicsPattern,
   HeuristicsModel,
-  HeuristicsTrainRequest
-} from '../../model/heuristics';
+  HeuristicsTrainRequest,
+} from "../../model/heuristics";
 
 interface HeuristicsState {
   // 分析関連
@@ -17,24 +17,24 @@ interface HeuristicsState {
   currentAnalysis: HeuristicsAnalysis | null;
   analysisLoading: boolean;
   analysisError: string | null;
-  
+
   // トラッキング関連
   trackingData: HeuristicsTracking[];
   trackingLoading: boolean;
   trackingError: string | null;
-  
+
   // インサイト関連
   insights: HeuristicsInsight[];
   currentInsight: HeuristicsInsight | null;
   insightsTotal: number;
   insightsLoading: boolean;
   insightsError: string | null;
-  
+
   // パターン関連
   patterns: HeuristicsPattern[];
   patternsLoading: boolean;
   patternsError: string | null;
-  
+
   // モデル関連
   currentModel: HeuristicsModel | null;
   modelLoading: boolean;
@@ -46,21 +46,21 @@ const initialState: HeuristicsState = {
   currentAnalysis: null,
   analysisLoading: false,
   analysisError: null,
-  
+
   trackingData: [],
   trackingLoading: false,
   trackingError: null,
-  
+
   insights: [],
   currentInsight: null,
   insightsTotal: 0,
   insightsLoading: false,
   insightsError: null,
-  
+
   patterns: [],
   patternsLoading: false,
   patternsError: null,
-  
+
   currentModel: null,
   modelLoading: false,
   modelError: null,
@@ -68,102 +68,113 @@ const initialState: HeuristicsState = {
 
 // 分析関連のThunks
 export const analyzeData = createAsyncThunk(
-  'heuristics/analyze',
+  "heuristics/analyze",
   async (request: HeuristicsAnalysisRequest, { rejectWithValue }) => {
     const response = await heuristicsApi.analyzeData(request);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value as HeuristicsAnalysis[];
-  }
+  },
 );
 
 export const fetchAnalysisById = createAsyncThunk(
-  'heuristics/fetchAnalysisById',
+  "heuristics/fetchAnalysisById",
   async (id: string, { rejectWithValue }) => {
     const response = await heuristicsApi.getAnalysisById(id);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response as HeuristicsAnalysis;
-  }
+  },
 );
 
 // トラッキング関連のThunks
 export const trackUserBehavior = createAsyncThunk(
-  'heuristics/track',
+  "heuristics/track",
   async (trackData: HeuristicsTrackingData, { rejectWithValue }) => {
     const response = await heuristicsApi.trackBehavior(trackData);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
-    if ('data' in response) {
+    if ("data" in response) {
       return response.data;
     }
     return response;
-  }
+  },
 );
 
 export const fetchTrackingData = createAsyncThunk(
-  'heuristics/fetchTrackingData',
+  "heuristics/fetchTrackingData",
   async (userId: string, { rejectWithValue }) => {
     const response = await heuristicsApi.getTrackingData();
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value as HeuristicsTracking[];
-  }
+  },
 );
 
 // インサイト関連のThunks
 export const loadInsights = createAsyncThunk(
-  'heuristics/loadInsights',
-  async (params: { limit?: number; offset?: number; user_id?: string } | undefined, { rejectWithValue }) => {
+  "heuristics/loadInsights",
+  async (
+    params: { limit?: number; offset?: number; user_id?: string } | undefined,
+    { rejectWithValue },
+  ) => {
     const response = await heuristicsApi.fetchInsights(params);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
-    return { insights: response.value, total: response.value.length } as { insights: HeuristicsInsight[]; total: number };
-  }
+    return { insights: response.value, total: response.value.length } as {
+      insights: HeuristicsInsight[];
+      total: number;
+    };
+  },
 );
 
 export const fetchInsightById = createAsyncThunk(
-  'heuristics/fetchInsightById',
+  "heuristics/fetchInsightById",
   async (id: string, { rejectWithValue }) => {
     const response = await heuristicsApi.getInsightById(id);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value as HeuristicsInsight;
-  }
+  },
 );
 
 // パターン検出関連のThunks
 export const loadPatterns = createAsyncThunk(
-  'heuristics/loadPatterns',
-  async (params: { user_id?: string; data_type?: string; period?: string } | undefined, { rejectWithValue }) => {
+  "heuristics/loadPatterns",
+  async (
+    params:
+      | { user_id?: string; data_type?: string; period?: string }
+      | undefined,
+    { rejectWithValue },
+  ) => {
     const response = await heuristicsApi.detectPatterns(params);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
+  },
 );
 
 // モデルトレーニング関連のThunks
 export const trainHeuristicsModel = createAsyncThunk(
-  'heuristics/trainModel',
+  "heuristics/trainModel",
   async (request: HeuristicsTrainRequest, { rejectWithValue }) => {
     const response = await heuristicsApi.trainModel(request);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
+  },
 );
 
 const heuristicsSlice = createSlice({
-  name: 'heuristics',
+  name: "heuristics",
   initialState,
   reducers: {
     clearAnalysisError: (state) => {
@@ -218,7 +229,7 @@ const heuristicsSlice = createSlice({
       .addCase(fetchTrackingData.fulfilled, (state, action) => {
         state.trackingData = action.payload;
       });
-    
+
     // インサイト関連
     builder
       .addCase(loadInsights.pending, (state) => {

@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchMemoryAidsByCode } from '../../client/memoryAidApi';
-import { MemoryContext } from '../../model/memoryAid';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { fetchMemoryAidsByCode } from "../../client/memoryAidApi";
+import { MemoryContext } from "../../model/memoryAid";
 
 interface MemoryAidState {
   contexts: MemoryContext[];
@@ -15,19 +15,19 @@ const initialState: MemoryAidState = {
 };
 
 export const loadMemoryAidsByCode = createAsyncThunk(
-  'memoryAid/loadMemoryAidsByCode',
+  "memoryAid/loadMemoryAidsByCode",
   async (code: string, { rejectWithValue }) => {
     const response = await fetchMemoryAidsByCode(code);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     // APIレスポンスが {contexts: MemoryContext[]} 形式の場合
-    return [] //response.value;
-  }
+    return []; //response.value;
+  },
 );
 
 const memoryAidSlice = createSlice({
-  name: 'memoryAid',
+  name: "memoryAid",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -36,10 +36,13 @@ const memoryAidSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(loadMemoryAidsByCode.fulfilled, (state, action: PayloadAction<MemoryContext[]>) => {
-        state.loading = false;
-        state.contexts = action.payload ?? [];
-      })
+      .addCase(
+        loadMemoryAidsByCode.fulfilled,
+        (state, action: PayloadAction<MemoryContext[]>) => {
+          state.loading = false;
+          state.contexts = action.payload ?? [];
+        },
+      )
       .addCase(loadMemoryAidsByCode.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;

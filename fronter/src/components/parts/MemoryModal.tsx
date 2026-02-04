@@ -1,44 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import CommonDialog from "./CommonDialog";
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 import { AddMemory, Memory } from "../../model/memory";
 
 interface MemoryModalProps {
   isOpen: boolean;
   isViewType: boolean;
   onClose: () => void;
-  onSave: (memoryData: (AddMemory|Memory)) => void;
-  initialData?: (AddMemory|Memory);
+  onSave: (memoryData: AddMemory | Memory) => void;
+  initialData?: AddMemory | Memory;
 }
 
 const initiaSetlData = {
-    title: '',
-    notes: '',
-    tags: '',
-    read_status: 'unread',
-    factor: '',
-    process: '',
-    evaluation_axis: '',
-    information_amount: '',
-  }
+  title: "",
+  notes: "",
+  tags: "",
+  read_status: "unread",
+  factor: "",
+  process: "",
+  evaluation_axis: "",
+  information_amount: "",
+};
 
-const MemoryModal: React.FC<MemoryModalProps> = ({
+const MemoryModal = ({
   isOpen,
   isViewType,
   onClose,
   onSave,
   initialData,
-}) => {
-  const [formData, setFormData] = useState<(AddMemory|Memory|undefined)>(initiaSetlData as AddMemory);
-  const { memoryLoading, memoryError } = useSelector((state: RootState) => state.memory);
+}: MemoryModalProps) => {
+  const [formData, setFormData] = useState<AddMemory | Memory | undefined>(
+    initiaSetlData as AddMemory,
+  );
+  const { memoryLoading, memoryError } = useSelector(
+    (state: RootState) => state.memory,
+  );
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = e.target;
     if (formData) {
-      setFormData(prev =>{
+      setFormData((prev) => {
         if (prev) {
           return {
             ...prev,
@@ -59,7 +65,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
-    }else {
+    } else {
       setFormData(initiaSetlData as AddMemory);
     }
   }, [initialData]);
@@ -68,7 +74,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
     <CommonDialog
       isOpen={isOpen}
       onClose={onClose}
-      title={initialData?.title ? 'メモを編集' : '新規メモ'}
+      title={initialData?.title ? "メモを編集" : "新規メモ"}
     >
       <form onSubmit={handleSubmit} className="memory-form card-form">
         {memoryError && <div className="error-message">{memoryError}</div>}
@@ -79,7 +85,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               type="text"
               id="title"
               name="title"
-              value={formData?.title || ''}
+              value={formData?.title || ""}
               onChange={handleChange}
               disabled={isViewType}
               required
@@ -90,7 +96,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
             <textarea
               id="notes"
               name="notes"
-              value={formData?.notes || ''}
+              value={formData?.notes || ""}
               onChange={handleChange}
               rows={5}
               disabled={isViewType}
@@ -103,7 +109,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               type="text"
               id="tags"
               name="tags"
-              value={formData?.tags || ''}
+              value={formData?.tags || ""}
               onChange={handleChange}
               placeholder="例: 仕事, 重要, 後で"
               disabled={isViewType}
@@ -114,7 +120,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
             <select
               id="read_status"
               name="read_status"
-              value={formData?.read_status || ''}
+              value={formData?.read_status || ""}
               onChange={handleChange}
               disabled={isViewType}
             >
@@ -129,7 +135,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               type="text"
               id="factor"
               name="factor"
-              value={formData?.factor || ''}
+              value={formData?.factor || ""}
               onChange={handleChange}
               placeholder="例: 環境, 動機, 習慣 など"
               disabled={isViewType}
@@ -141,7 +147,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               type="text"
               id="process"
               name="process"
-              value={formData?.process || ''}
+              value={formData?.process || ""}
               onChange={handleChange}
               placeholder="例: どのように学んだか・使ったか"
               disabled={isViewType}
@@ -153,7 +159,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               type="text"
               id="evaluation_axis"
               name="evaluation_axis"
-              value={formData?.evaluation_axis || ''}
+              value={formData?.evaluation_axis || ""}
               onChange={handleChange}
               placeholder="例: 理解度, 応用度, 継続性 など"
               disabled={isViewType}
@@ -165,14 +171,14 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
               type="text"
               id="information_amount"
               name="information_amount"
-              value={formData?.information_amount || ''}
+              value={formData?.information_amount || ""}
               onChange={handleChange}
               placeholder="例: 参考文献数やメモの分量など"
               disabled={isViewType}
             />
           </div>
 
-          { !isViewType &&
+          {!isViewType && (
             <div className="form-actions">
               <button
                 type="button"
@@ -186,10 +192,10 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
                 className="btn btn-primary"
                 disabled={memoryLoading}
               >
-                {memoryLoading ? '保存中...' : '保存'}
+                {memoryLoading ? "保存中..." : "保存"}
               </button>
             </div>
-          }
+          )}
         </div>
       </form>
     </CommonDialog>

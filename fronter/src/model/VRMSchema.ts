@@ -1,6 +1,6 @@
 import { Mesh } from "three";
 
-export type VRMSpringBoneColliderMesh = Mesh
+export type VRMSpringBoneColliderMesh = Mesh;
 
 export interface VRMSpringBoneColliderGroup {
   node: number;
@@ -9,14 +9,14 @@ export interface VRMSpringBoneColliderGroup {
 
 export namespace VRMSchema {
   export interface VRM {
-    blendShapeMaster?:BlendShape;
+    blendShapeMaster?: BlendShape;
     experterVersion?: string;
     firstPerson?: FirstPerson;
     humanoid?: Humanoid;
-    materialProperties?: Material[]
+    materialProperties?: Material[];
     meta?: Meta;
     secondaryAnimation?: SecondaryAnimation;
-    specVersion?: string
+    specVersion?: string;
   }
 
   export interface BlendShape {
@@ -32,9 +32,9 @@ export namespace VRMSchema {
   }
 
   export interface BlendShapeBind {
-   index?: number;
-   mesh?: number;
-   weight?: number;
+    index?: number;
+    mesh?: number;
+    weight?: number;
   }
 
   export interface BlendShapeMaterialbind {
@@ -44,36 +44,36 @@ export namespace VRMSchema {
   }
 
   export enum BlendShapePresetName {
-    A = 'a',
-    Angry = 'angry',
-    Blink = 'blink',
-    BlinkL = 'blink_l',
-    BlinkR = 'blink_r',
-    E = 'e',
-    Fun = 'fun',
-    I = 'i',
-    Joy = 'joy',
-    LookDown = 'lookdown',
-    Lookleft = 'lookleft',
-    Lookright = 'lookright',
-    Lookup = 'lookup',
-    Neutral = 'neutral',
-    O = 'o',
-    Sorrow = 'sorrow',
-    U = 'u',
-    Unknown = 'unknown'
+    A = "a",
+    Angry = "angry",
+    Blink = "blink",
+    BlinkL = "blink_l",
+    BlinkR = "blink_r",
+    E = "e",
+    Fun = "fun",
+    I = "i",
+    Joy = "joy",
+    LookDown = "lookdown",
+    Lookleft = "lookleft",
+    Lookright = "lookright",
+    Lookup = "lookup",
+    Neutral = "neutral",
+    O = "o",
+    Sorrow = "sorrow",
+    U = "u",
+    Unknown = "unknown",
   }
 
   export interface FirstPerson {
-   firstPersonBone?: number;
-   firstPersonBoneOffset?: Vector3;
-   lookAtHorizontalInner?: FirstPersonDegreeMap;
-   lookAtHorizontalOuter?: FirstPersonDegreeMap;
-   lookAtTypeName?: FirstPersonLookAtTypeName;
-   lookAtVerticalDown?: FirstPersonDegreeMap;
-   lookAtVerticalUp?: FirstPersonDegreeMap;
+    firstPersonBone?: number;
+    firstPersonBoneOffset?: Vector3;
+    lookAtHorizontalInner?: FirstPersonDegreeMap;
+    lookAtHorizontalOuter?: FirstPersonDegreeMap;
+    lookAtTypeName?: FirstPersonLookAtTypeName;
+    lookAtVerticalDown?: FirstPersonDegreeMap;
+    lookAtVerticalUp?: FirstPersonDegreeMap;
 
-   meshAnnotations?: FirstPersonMeshannotation[];
+    meshAnnotations?: FirstPersonMeshannotation[];
   }
 
   export interface FirstPersonDegreeMap {
@@ -83,147 +83,147 @@ export namespace VRMSchema {
   }
 
   export enum FirstPersonLookAtTypeName {
-   BlendShape = 'BlendShape',
-   Bone = 'Bone',
+    BlendShape = "BlendShape",
+    Bone = "Bone",
   }
 
   export interface FirstPersonMeshannotation {
-   firstPersonFlag?: string;
-   mesh?: number;
+    firstPersonFlag?: string;
+    mesh?: number;
   }
 
   export interface Humanoid {
-   armStretch?: number;
-   feetSpacing?: number;
-   hasTranslationDof?: boolean;
-   humanBones?: HumanoidBone[];
-   legStretch?: number;
-   lowerArmTwist?: number;
-   lowerLegTwist?: number;
-   upperArmTwist?: number;
-   upperLegTwist?: number;
+    armStretch?: number;
+    feetSpacing?: number;
+    hasTranslationDof?: boolean;
+    humanBones?: HumanoidBone[];
+    legStretch?: number;
+    lowerArmTwist?: number;
+    lowerLegTwist?: number;
+    upperArmTwist?: number;
+    upperLegTwist?: number;
   }
 
   export interface HumanoidBone {
-   axisLegnth?: number;
-   bone?: HumanoidBoneName;
-   center?: Vector3;
-   max?: Vector3;
-   mix?: Vector3;
-   node?: number;
-   useDefaultValues?: boolean
+    axisLegnth?: number;
+    bone?: HumanoidBoneName;
+    center?: Vector3;
+    max?: Vector3;
+    mix?: Vector3;
+    node?: number;
+    useDefaultValues?: boolean;
   }
 
   export enum HumanoidBoneName {
-   Chest = 'chest',
-   Head = 'head',
-   Hips = 'hips',
-   jaw = 'jaw',
-   LeftEye = 'leftEye',
-   LeftFoot = 'leftFoot',
-   LeftHand = 'leftHand',
-   LeftIndexDistal = 'leftIndexDistal',
-   LeftIndexIntermediate = 'leftIndexIntermediate',
-   LeftIndexProximal = 'leftIndexProximal',
-   LeftLittleIntermediate = 'leftLittleIntermediate',
-   LeftLittleProximal = 'leftLittleProximal',
-   LeftLowerArm = 'leftLowerArm',
-   LeftLowerLeg = 'leftLowerLeg',
-   LeftMiddleDistal = 'leftMiddleDistal',
-   LeftMiddleIntermediate = 'leftMiddleIntermediate',
-   LeftMiddleProximal = 'leftMiddleProximal',
-   LeftRingDistal = 'leftRingDistal',
-   LeftRingIntermediate = 'leftRingIntermediate',
-   LeftRingProximal = 'leftRingProximal',
-   LeftShoulder = 'leftShoulder',
-   LeftThumbDistal = 'leftThumbDistal',
-   LeftThumbIntermediate = 'leftThumbIntermediate',
-   LeftThumbProximal = 'leftThumbProximal',
-   LeftToes = 'leftToes',
-   LeftUpperArm = 'leftUpperArm',
-   LeftUpperLeg = 'leftUpperLeg',
-   Neck = 'neck',
-   RightEye = 'rightEye',
-   RightFoot = 'rightFoot',
-   RightHand = 'rightHand',
-   RightIndexDistal = 'rightIndexDistal',
-   RightIndexIntermediate = 'rightIndexIntermediate',
-   RightIndexProximal = 'rightIndexProximal',
-   RightLittleDistal = 'rightLittleDistal',
-   RightLittleIntermediate = 'rightLittleIntermediate',
-   RightLittleProximal = 'rightLittleProximal',
-   RightLowerArm = 'rightLowerArm',
-   RightLowerLeg = 'rightLowerLeg',
-   RightMiddleDistal = 'rightMiddleDistal',
-   RightMiddleIntermediate = 'rightMiddleIntermediate',
-   RightMiddleProximal = 'rightMiddleProximal',
-   RightRingDistal = 'rightRingDistal',
-   RightRingIntermediate = 'rightRingIntermediate',
-   RightRingProximal = 'rightRingProximal',
-   RightShoulder = 'rightShoulder',
-   RightThumbDistal = 'rightThumbDistal',
-   RightThumbIntermediate = 'rightThumbIntermediate',
-   RightThumbProximal = 'rightThumbProximal',
-   RightToes = 'rightToes',
-   RightUpperArm = 'rightUpperArm',
-   RightUpperLeg = 'rightUpperLeg',
-   Spine = 'spine',
-   UpperChest = 'upperChest',
+    Chest = "chest",
+    Head = "head",
+    Hips = "hips",
+    jaw = "jaw",
+    LeftEye = "leftEye",
+    LeftFoot = "leftFoot",
+    LeftHand = "leftHand",
+    LeftIndexDistal = "leftIndexDistal",
+    LeftIndexIntermediate = "leftIndexIntermediate",
+    LeftIndexProximal = "leftIndexProximal",
+    LeftLittleIntermediate = "leftLittleIntermediate",
+    LeftLittleProximal = "leftLittleProximal",
+    LeftLowerArm = "leftLowerArm",
+    LeftLowerLeg = "leftLowerLeg",
+    LeftMiddleDistal = "leftMiddleDistal",
+    LeftMiddleIntermediate = "leftMiddleIntermediate",
+    LeftMiddleProximal = "leftMiddleProximal",
+    LeftRingDistal = "leftRingDistal",
+    LeftRingIntermediate = "leftRingIntermediate",
+    LeftRingProximal = "leftRingProximal",
+    LeftShoulder = "leftShoulder",
+    LeftThumbDistal = "leftThumbDistal",
+    LeftThumbIntermediate = "leftThumbIntermediate",
+    LeftThumbProximal = "leftThumbProximal",
+    LeftToes = "leftToes",
+    LeftUpperArm = "leftUpperArm",
+    LeftUpperLeg = "leftUpperLeg",
+    Neck = "neck",
+    RightEye = "rightEye",
+    RightFoot = "rightFoot",
+    RightHand = "rightHand",
+    RightIndexDistal = "rightIndexDistal",
+    RightIndexIntermediate = "rightIndexIntermediate",
+    RightIndexProximal = "rightIndexProximal",
+    RightLittleDistal = "rightLittleDistal",
+    RightLittleIntermediate = "rightLittleIntermediate",
+    RightLittleProximal = "rightLittleProximal",
+    RightLowerArm = "rightLowerArm",
+    RightLowerLeg = "rightLowerLeg",
+    RightMiddleDistal = "rightMiddleDistal",
+    RightMiddleIntermediate = "rightMiddleIntermediate",
+    RightMiddleProximal = "rightMiddleProximal",
+    RightRingDistal = "rightRingDistal",
+    RightRingIntermediate = "rightRingIntermediate",
+    RightRingProximal = "rightRingProximal",
+    RightShoulder = "rightShoulder",
+    RightThumbDistal = "rightThumbDistal",
+    RightThumbIntermediate = "rightThumbIntermediate",
+    RightThumbProximal = "rightThumbProximal",
+    RightToes = "rightToes",
+    RightUpperArm = "rightUpperArm",
+    RightUpperLeg = "rightUpperLeg",
+    Spine = "spine",
+    UpperChest = "upperChest",
   }
 
   export interface Material {
-   floatProperties?: {[key:string]: any};
-   keywordMap?: {[key:string]:any};
-   name?: string;
-   renderQueue?: number;
-   shander?: string;
-   tagMap?: {[key:string]:any};
-   textureProperties?: {[key:string]:any};
-   vectorProperties?: {[key:string]:any};
+    floatProperties?: { [key: string]: any };
+    keywordMap?: { [key: string]: any };
+    name?: string;
+    renderQueue?: number;
+    shander?: string;
+    tagMap?: { [key: string]: any };
+    textureProperties?: { [key: string]: any };
+    vectorProperties?: { [key: string]: any };
   }
 
   export interface Meta {
-   allowedUserName?: MetaAllowedUserName;
-   author?: string;
-   commercialUssageName?: MetaUssageName;
-   contactInformation?: string;
-   licenseName?: MetaLicenseName;
-   otherLicenseUrl?: string;
-   otherPermissionUrl?: string;
-   reference?: string;
-   sexualUssageName?: MetaUssageName;
-   texture?: number;
-   title?: string;
-   version?: string;
-   violentUssageName?: MetaUssageName;
+    allowedUserName?: MetaAllowedUserName;
+    author?: string;
+    commercialUssageName?: MetaUssageName;
+    contactInformation?: string;
+    licenseName?: MetaLicenseName;
+    otherLicenseUrl?: string;
+    otherPermissionUrl?: string;
+    reference?: string;
+    sexualUssageName?: MetaUssageName;
+    texture?: number;
+    title?: string;
+    version?: string;
+    violentUssageName?: MetaUssageName;
   }
 
   export enum MetaAllowedUserName {
-   Everyone = 'Everyone',
-   ExplicitlyLicensedPerson = 'ExplicitlyLicensedPerson',
-   OnlyAuthor = 'OnlyAuthor'
+    Everyone = "Everyone",
+    ExplicitlyLicensedPerson = "ExplicitlyLicensedPerson",
+    OnlyAuthor = "OnlyAuthor",
   }
 
   export enum MetaUssageName {
-   Allow = 'Allow',
-   Disallow = 'Disallow'
+    Allow = "Allow",
+    Disallow = "Disallow",
   }
 
   export enum MetaLicenseName {
-   Cc0 = 'Cc0',
-   CcBy = 'CC_BY',
-   CcByNc = 'CC_BY_NC',
-   CcByNcNd = 'CC_BY_NC_ND',
-   CcByNcSa = 'CC_BY_NC_SA',
-   CcByNd = 'CC_BY_ND',
-   CcBySa = 'CC_BY_SA',
-   Other = 'other',
-   RedistributionProhibited = 'Redistribution_Prohibited'
+    Cc0 = "Cc0",
+    CcBy = "CC_BY",
+    CcByNc = "CC_BY_NC",
+    CcByNcNd = "CC_BY_NC_ND",
+    CcByNcSa = "CC_BY_NC_SA",
+    CcByNd = "CC_BY_ND",
+    CcBySa = "CC_BY_SA",
+    Other = "other",
+    RedistributionProhibited = "Redistribution_Prohibited",
   }
 
   export interface SecondaryAnimation {
-   boneGroups?: SecondaryAnimationSpring[];
-   colliderGroups?: SecondaryAnimationCollidergroup[];
+    boneGroups?: SecondaryAnimationSpring[];
+    colliderGroups?: SecondaryAnimationCollidergroup[];
   }
 
   export interface SecondaryAnimationSpring {
@@ -231,7 +231,7 @@ export namespace VRMSchema {
     center?: number;
     colliderGroups?: number[];
     comment?: string;
-    dragForce?:number;
+    dragForce?: number;
     gravityDir?: Vector3;
     gravityPower?: number;
     hitRadius?: number;
@@ -239,19 +239,18 @@ export namespace VRMSchema {
   }
 
   export interface SecondaryAnimationCollidergroup {
-   colliders?: SecondaryAnimationCollider[];
-   node?: number;
+    colliders?: SecondaryAnimationCollider[];
+    node?: number;
   }
 
   export interface SecondaryAnimationCollider {
-   offset?: Vector3;
-   radius?: number;
+    offset?: Vector3;
+    radius?: number;
   }
 
   export interface Vector3 {
-   x?: number;
-   y?: number;
-   z?: number;
+    x?: number;
+    y?: number;
+    z?: number;
   }
-
 }

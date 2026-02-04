@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { LearningData } from '../../model/learning';
-import { fetchLearningData } from '../../client/learnApi';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { LearningData } from "../../model/learning";
+import { fetchLearningData } from "../../client/learnApi";
 
 interface LearningDataState {
   learningData: LearningData | null;
@@ -15,18 +15,18 @@ const initialState: LearningDataState = {
 };
 
 export const loadLearningData = createAsyncThunk(
-  'learningData/loadLearningData',
+  "learningData/loadLearningData",
   async (_, { rejectWithValue }) => {
     const response = await fetchLearningData();
-    if ('error' in response) {
-      return rejectWithValue(response.error)
+    if ("error" in response) {
+      return rejectWithValue(response.error);
     }
-    return response.value
-  }
+    return response.value;
+  },
 );
 
 const learningDataSlice = createSlice({
-  name: 'learningData',
+  name: "learningData",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -35,16 +35,19 @@ const learningDataSlice = createSlice({
         state.learningLoading = true;
         state.learningError = null;
       })
-      .addCase(loadLearningData.fulfilled, (state, action: PayloadAction<LearningData | { error: string }>) => {
-        state.learningLoading = false;
-        if ('error' in action.payload) {
-          state.learningError = action.payload.error;
-          state.learningData = null;
-        } else {
-          state.learningData = action.payload;
-          state.learningError = null;
-        }
-      })
+      .addCase(
+        loadLearningData.fulfilled,
+        (state, action: PayloadAction<LearningData | { error: string }>) => {
+          state.learningLoading = false;
+          if ("error" in action.payload) {
+            state.learningError = action.payload.error;
+            state.learningData = null;
+          } else {
+            state.learningData = action.payload;
+            state.learningError = null;
+          }
+        },
+      )
       .addCase(loadLearningData.rejected, (state, action) => {
         state.learningLoading = false;
         state.learningError = action.payload as string;

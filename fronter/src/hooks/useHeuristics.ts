@@ -1,6 +1,6 @@
-import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../store';
+import { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
 import {
   analyzeData,
   fetchAnalysisById,
@@ -15,12 +15,12 @@ import {
   clearInsightsError,
   clearPatternsError,
   clearModelError,
-} from '../features/heuristics/heuristicsSlice';
+} from "../features/heuristics/heuristicsSlice";
 import {
   HeuristicsAnalysisRequest,
   HeuristicsTrackingData,
   HeuristicsTrainRequest,
-} from '../model/heuristics';
+} from "../model/heuristics";
 
 export const useHeuristics = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,14 +31,14 @@ export const useHeuristics = () => {
     (request: HeuristicsAnalysisRequest) => {
       return dispatch(analyzeData(request));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const getAnalysis = useCallback(
     (id: string) => {
       return dispatch(fetchAnalysisById(id));
     },
-    [dispatch]
+    [dispatch],
   );
 
   // トラッキング関連
@@ -46,14 +46,14 @@ export const useHeuristics = () => {
     (data: HeuristicsTrackingData) => {
       return dispatch(trackUserBehavior(data));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const getTracking = useCallback(
     (userId: string) => {
       return dispatch(fetchTrackingData(userId));
     },
-    [dispatch]
+    [dispatch],
   );
 
   // インサイト関連
@@ -61,14 +61,14 @@ export const useHeuristics = () => {
     (params?: { limit?: number; offset?: number; user_id?: string }) => {
       return dispatch(loadInsights(params));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const getInsight = useCallback(
     (id: string) => {
       return dispatch(fetchInsightById(id));
     },
-    [dispatch]
+    [dispatch],
   );
 
   // パターン検出関連
@@ -76,7 +76,7 @@ export const useHeuristics = () => {
     (params?: { user_id?: string; data_type?: string; period?: string }) => {
       return dispatch(loadPatterns(params));
     },
-    [dispatch]
+    [dispatch],
   );
 
   // モデルトレーニング関連
@@ -84,7 +84,7 @@ export const useHeuristics = () => {
     (request: HeuristicsTrainRequest) => {
       return dispatch(trainHeuristicsModel(request));
     },
-    [dispatch]
+    [dispatch],
   );
 
   // エラークリア関連
@@ -99,7 +99,7 @@ export const useHeuristics = () => {
   return {
     // State
     ...heuristicsState,
-    
+
     // Actions
     analyze,
     getAnalysis,
@@ -116,23 +116,22 @@ export const useHeuristics = () => {
 // 個別のフックも提供
 export const useHeuristicsAnalysis = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { analyses, currentAnalysis, analysisLoading, analysisError } = useSelector(
-    (state: RootState) => state.heuristics
-  );
+  const { analyses, currentAnalysis, analysisLoading, analysisError } =
+    useSelector((state: RootState) => state.heuristics);
 
   const analyze = useCallback(
     (request: HeuristicsAnalysisRequest) => dispatch(analyzeData(request)),
-    [dispatch]
+    [dispatch],
   );
 
   const getAnalysis = useCallback(
     (id: string) => dispatch(fetchAnalysisById(id)),
-    [dispatch]
+    [dispatch],
   );
 
   const clearError = useCallback(
     () => dispatch(clearAnalysisError()),
-    [dispatch]
+    [dispatch],
   );
 
   return {
@@ -148,24 +147,28 @@ export const useHeuristicsAnalysis = () => {
 
 export const useHeuristicsInsights = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { insights, currentInsight, insightsTotal, insightsLoading, insightsError } = useSelector(
-    (state: RootState) => state.heuristics
-  );
+  const {
+    insights,
+    currentInsight,
+    insightsTotal,
+    insightsLoading,
+    insightsError,
+  } = useSelector((state: RootState) => state.heuristics);
 
   const getInsights = useCallback(
-    (params?: { limit?: number; offset?: number; user_id?: string }) => 
+    (params?: { limit?: number; offset?: number; user_id?: string }) =>
       dispatch(loadInsights(params)),
-    [dispatch]
+    [dispatch],
   );
 
   const getInsight = useCallback(
     (id: string) => dispatch(fetchInsightById(id)),
-    [dispatch]
+    [dispatch],
   );
 
   const clearError = useCallback(
     () => dispatch(clearInsightsError()),
-    [dispatch]
+    [dispatch],
   );
 
   return {
@@ -183,22 +186,22 @@ export const useHeuristicsInsights = () => {
 export const useHeuristicsTracking = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { trackingData, trackingLoading, trackingError } = useSelector(
-    (state: RootState) => state.heuristics
+    (state: RootState) => state.heuristics,
   );
 
   const track = useCallback(
     (data: HeuristicsTrackingData) => dispatch(trackUserBehavior(data)),
-    [dispatch]
+    [dispatch],
   );
 
   const getTracking = useCallback(
     (userId: string) => dispatch(fetchTrackingData(userId)),
-    [dispatch]
+    [dispatch],
   );
 
   const clearError = useCallback(
     () => dispatch(clearTrackingError()),
-    [dispatch]
+    [dispatch],
   );
 
   return {
@@ -214,18 +217,18 @@ export const useHeuristicsTracking = () => {
 export const useHeuristicsPatterns = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { patterns, patternsLoading, patternsError } = useSelector(
-    (state: RootState) => state.heuristics
+    (state: RootState) => state.heuristics,
   );
 
   const getPatterns = useCallback(
     (params?: { user_id?: string; data_type?: string; period?: string }) =>
       dispatch(loadPatterns(params)),
-    [dispatch]
+    [dispatch],
   );
 
   const clearError = useCallback(
     () => dispatch(clearPatternsError()),
-    [dispatch]
+    [dispatch],
   );
 
   return {

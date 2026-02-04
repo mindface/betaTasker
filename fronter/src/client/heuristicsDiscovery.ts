@@ -43,7 +43,7 @@ export class HeuristicsDiscoveryClient {
    * Web Workerで並列処理
    */
   private initializeWorker() {
-    if (typeof Worker !== 'undefined') {
+    if (typeof Worker !== "undefined") {
       // パターン分析用ワーカー作成
       const workerCode = `
         self.addEventListener('message', (e) => {
@@ -77,7 +77,7 @@ export class HeuristicsDiscoveryClient {
         }
       `;
 
-      const blob = new Blob([workerCode], { type: 'application/javascript' });
+      const blob = new Blob([workerCode], { type: "application/javascript" });
       this.worker = new Worker(URL.createObjectURL(blob));
     }
   }
@@ -88,7 +88,7 @@ export class HeuristicsDiscoveryClient {
   public recordAction(action: UserAction): void {
     // タイムスタンプ追加
     action.timestamp = action.timestamp || Date.now();
-    
+
     // バッファに追加（最大1000件保持）
     this.actionBuffer.push(action);
     if (this.actionBuffer.length > 1000) {
@@ -104,13 +104,13 @@ export class HeuristicsDiscoveryClient {
    */
   private analyzeRecentActions(): void {
     const recentActions = this.actionBuffer.slice(-20);
-    
+
     // 短期記憶パターン検出
     const shortTermPatterns = this.detectShortTermPatterns(recentActions);
-    
+
     // 認知負荷推定
     const cognitiveLoad = this.estimateCognitiveLoad(recentActions);
-    
+
     // ヒューリスティクス適用
     this.applyHeuristics(shortTermPatterns, cognitiveLoad);
   }
@@ -120,16 +120,16 @@ export class HeuristicsDiscoveryClient {
    */
   private detectShortTermPatterns(actions: UserAction[]): Pattern[] {
     const patterns: Pattern[] = [];
-    
+
     // 繰り返しパターン検出
     const repetitions = this.findRepetitions(actions);
-    
+
     // 時間的クラスタリング
     const temporalClusters = this.temporalClustering(actions);
-    
+
     // パターンマージ
     patterns.push(...repetitions, ...temporalClusters);
-    
+
     return patterns;
   }
 
@@ -138,12 +138,12 @@ export class HeuristicsDiscoveryClient {
    */
   private findRepetitions(actions: UserAction[]): Pattern[] {
     const patterns: Pattern[] = [];
-    const actionTypes = actions.map(a => a.actionType);
-    
+    const actionTypes = actions.map((a) => a.actionType);
+
     // 同一アクションの繰り返し
-    let currentType = '';
+    let currentType = "";
     let count = 0;
-    
+
     for (const type of actionTypes) {
       if (type === currentType) {
         count++;
@@ -154,15 +154,15 @@ export class HeuristicsDiscoveryClient {
             name: `Repetitive ${currentType}`,
             frequency: count,
             confidence: count / actions.length,
-            actions: actions.filter(a => a.actionType === currentType),
-            heuristic: 'repetition_bias'
+            actions: actions.filter((a) => a.actionType === currentType),
+            heuristic: "repetition_bias",
           });
         }
         currentType = type;
         count = 1;
       }
     }
-    
+
     return patterns;
   }
 
@@ -172,10 +172,10 @@ export class HeuristicsDiscoveryClient {
   private temporalClustering(actions: UserAction[]): Pattern[] {
     const patterns: Pattern[] = [];
     const timeThreshold = 2000; // 2秒以内のアクションをクラスタ化
-    
+
     let cluster: UserAction[] = [];
     let lastTime = 0;
-    
+
     for (const action of actions) {
       if (action.timestamp - lastTime <= timeThreshold) {
         cluster.push(action);
@@ -183,18 +183,18 @@ export class HeuristicsDiscoveryClient {
         if (cluster.length >= 2) {
           patterns.push({
             id: `cluster-${Date.now()}`,
-            name: 'Temporal Cluster',
+            name: "Temporal Cluster",
             frequency: cluster.length,
             confidence: 0.7,
             actions: cluster,
-            heuristic: 'temporal_proximity'
+            heuristic: "temporal_proximity",
           });
         }
         cluster = [action];
       }
       lastTime = action.timestamp;
     }
-    
+
     return patterns;
   }
 
@@ -203,17 +203,18 @@ export class HeuristicsDiscoveryClient {
    */
   private estimateCognitiveLoad(actions: UserAction[]): number {
     // アクションの多様性
-    const uniqueTypes = new Set(actions.map(a => a.actionType)).size;
+    const uniqueTypes = new Set(actions.map((a) => a.actionType)).size;
     const diversity = uniqueTypes / actions.length;
-    
+
     // アクション頻度
-    const frequency = actions.length / (
-      actions[actions.length - 1]?.timestamp - actions[0]?.timestamp || 1
-    ) * 1000;
-    
+    const frequency =
+      (actions.length /
+        (actions[actions.length - 1]?.timestamp - actions[0]?.timestamp || 1)) *
+      1000;
+
     // 認知負荷スコア（0-1）
-    const load = Math.min(1, (diversity * 0.5 + frequency * 0.5));
-    
+    const load = Math.min(1, diversity * 0.5 + frequency * 0.5);
+
     return load;
   }
 
@@ -225,15 +226,19 @@ export class HeuristicsDiscoveryClient {
     if (cognitiveLoad > 0.7) {
       this.applySatisficingHeuristic();
     }
-    
+
     // 繰り返しパターンがある場合
-    const repetitivePattern = patterns.find(p => p.heuristic === 'repetition_bias');
+    const repetitivePattern = patterns.find(
+      (p) => p.heuristic === "repetition_bias",
+    );
     if (repetitivePattern) {
       this.applyAnchroingHeuristic(repetitivePattern);
     }
-    
+
     // 時間的近接パターン
-    const temporalPattern = patterns.find(p => p.heuristic === 'temporal_proximity');
+    const temporalPattern = patterns.find(
+      (p) => p.heuristic === "temporal_proximity",
+    );
     if (temporalPattern) {
       this.applyAvailabilityHeuristic(temporalPattern);
     }
@@ -244,9 +249,9 @@ export class HeuristicsDiscoveryClient {
    * 完璧な選択より十分な選択を優先
    */
   private applySatisficingHeuristic(): void {
-    console.log('Applying satisficing heuristic - reducing options');
+    console.log("Applying satisficing heuristic - reducing options");
     // UIに選択肢削減を通知
-    this.notifyUI('reduce_options', { maxOptions: 3 });
+    this.notifyUI("reduce_options", { maxOptions: 3 });
   }
 
   /**
@@ -254,9 +259,9 @@ export class HeuristicsDiscoveryClient {
    * 最初の情報に強く影響される
    */
   private applyAnchroingHeuristic(pattern: Pattern): void {
-    console.log('Applying anchoring heuristic', pattern);
+    console.log("Applying anchoring heuristic", pattern);
     // 最初のアクションを重視
-    this.notifyUI('emphasize_first', { pattern });
+    this.notifyUI("emphasize_first", { pattern });
   }
 
   /**
@@ -264,9 +269,9 @@ export class HeuristicsDiscoveryClient {
    * 思い出しやすい情報を重視
    */
   private applyAvailabilityHeuristic(pattern: Pattern): void {
-    console.log('Applying availability heuristic', pattern);
+    console.log("Applying availability heuristic", pattern);
     // 最近使用した機能を前面に
-    this.notifyUI('prioritize_recent', { pattern });
+    this.notifyUI("prioritize_recent", { pattern });
   }
 
   /**
@@ -310,8 +315,8 @@ export class HeuristicsDiscoveryClient {
       context: {
         timeOfDay: new Date().getHours(),
         dayOfWeek: new Date().getDay(),
-        sessionDuration: this.getSessionDuration()
-      }
+        sessionDuration: this.getSessionDuration(),
+      },
     };
   }
 
@@ -326,7 +331,7 @@ export class HeuristicsDiscoveryClient {
         };
         this.worker.postMessage({
           actions: input.actions,
-          threshold: 3
+          threshold: 3,
         });
       } else {
         // フォールバック: メインスレッドで実行
@@ -341,13 +346,13 @@ export class HeuristicsDiscoveryClient {
   private extractPatterns(actions: UserAction[]): Pattern[] {
     const patterns: Pattern[] = [];
     const sequenceMap = new Map<string, number>();
-    
+
     // シーケンシャルパターン
     for (let i = 0; i < actions.length - 1; i++) {
       const seq = `${actions[i].actionType}->${actions[i + 1].actionType}`;
       sequenceMap.set(seq, (sequenceMap.get(seq) || 0) + 1);
     }
-    
+
     // 頻出パターンを抽出
     sequenceMap.forEach((count, sequence) => {
       if (count >= 3) {
@@ -357,11 +362,11 @@ export class HeuristicsDiscoveryClient {
           frequency: count,
           confidence: count / actions.length,
           actions: [],
-          heuristic: this.inferHeuristic(sequence, count)
+          heuristic: this.inferHeuristic(sequence, count),
         });
       }
     });
-    
+
     return patterns;
   }
 
@@ -370,23 +375,23 @@ export class HeuristicsDiscoveryClient {
    */
   private inferHeuristic(sequence: string, frequency: number): string {
     // パターンからヒューリスティクスを推論
-    if (sequence.includes('->')) {
-      const [from, to] = sequence.split('->');
-      
+    if (sequence.includes("->")) {
+      const [from, to] = sequence.split("->");
+
       // 同じアクションの繰り返し
-      if (from === to) return 'confirmation_bias';
-      
+      if (from === to) return "confirmation_bias";
+
       // 戻る動作
-      if (to === 'back' || to === 'cancel') return 'loss_aversion';
-      
+      if (to === "back" || to === "cancel") return "loss_aversion";
+
       // 順次進行
-      if (from === 'next' || to === 'next') return 'progressive_disclosure';
+      if (from === "next" || to === "next") return "progressive_disclosure";
     }
-    
+
     // 高頻度
-    if (frequency > 10) return 'habit_formation';
-    
-    return 'general_pattern';
+    if (frequency > 10) return "habit_formation";
+
+    return "general_pattern";
   }
 
   /**
@@ -394,24 +399,24 @@ export class HeuristicsDiscoveryClient {
    */
   private discoverHeuristics(patterns: Pattern[]): HeuristicModel {
     const heuristicGroups = new Map<string, Pattern[]>();
-    
+
     // ヒューリスティクスごとにグループ化
-    patterns.forEach(p => {
-      const group = heuristicGroups.get(p.heuristic || '') || [];
+    patterns.forEach((p) => {
+      const group = heuristicGroups.get(p.heuristic || "") || [];
       group.push(p);
-      heuristicGroups.set(p.heuristic || '', group);
+      heuristicGroups.set(p.heuristic || "", group);
     });
-    
+
     // 信頼度計算
     let totalConfidence = 0;
-    patterns.forEach(p => {
+    patterns.forEach((p) => {
       totalConfidence += p.confidence;
     });
-    
+
     return {
       patterns,
       accuracy: totalConfidence / patterns.length || 0,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
   }
 
@@ -420,9 +425,9 @@ export class HeuristicsDiscoveryClient {
    */
   private updateModel(heuristics: HeuristicModel): void {
     this.modelVersion++;
-    
+
     // 既存パターンとマージ
-    heuristics.patterns.forEach(p => {
+    heuristics.patterns.forEach((p) => {
       const existing = this.patterns.get(p.id);
       if (existing) {
         // 信頼度を更新
@@ -432,7 +437,7 @@ export class HeuristicsDiscoveryClient {
         this.patterns.set(p.id, p);
       }
     });
-    
+
     // 古いパターンを削除
     this.pruneOldPatterns();
   }
@@ -442,7 +447,7 @@ export class HeuristicsDiscoveryClient {
    */
   private pruneOldPatterns(): void {
     const threshold = 0.1;
-    
+
     this.patterns.forEach((pattern, id) => {
       if (pattern.confidence < threshold) {
         this.patterns.delete(id);
@@ -455,23 +460,23 @@ export class HeuristicsDiscoveryClient {
    */
   private async syncWithBackend(heuristics: HeuristicModel): Promise<void> {
     try {
-      const response = await fetch('/api/heuristics/sync', {
-        method: 'POST',
+      const response = await fetch("/api/heuristics/sync", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           model: heuristics,
           version: this.modelVersion,
-          timestamp: Date.now()
-        })
+          timestamp: Date.now(),
+        }),
       });
-      
+
       if (response.ok) {
-        console.log('Heuristics synced with backend');
+        console.log("Heuristics synced with backend");
       }
     } catch (error) {
-      console.error('Failed to sync heuristics:', error);
+      console.error("Failed to sync heuristics:", error);
     }
   }
 
@@ -479,9 +484,11 @@ export class HeuristicsDiscoveryClient {
    * UIへの通知
    */
   private notifyUI(action: string, data: any): void {
-    window.dispatchEvent(new CustomEvent('heuristic-applied', {
-      detail: { action, data }
-    }));
+    window.dispatchEvent(
+      new CustomEvent("heuristic-applied", {
+        detail: { action, data },
+      }),
+    );
   }
 
   /**

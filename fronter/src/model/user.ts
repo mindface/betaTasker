@@ -1,15 +1,14 @@
-
 export interface UserSys {
- createdAt: Date;
- updatedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface User extends UserSys {
- id: number;
- username: string;
- email: string;
- role: string;
- isacutive: boolean;
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+  isacutive: boolean;
 }
 
 export interface UserInfo {

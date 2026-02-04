@@ -1,6 +1,14 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchQualitativeLabelsClient, addQualitativeLabelClient, updateQualitativeLabelClient, deleteQualitativeLabelClient } from '../../client/qualitativeLabel';
-import { QualitativeLabel, AddQualitativeLabel } from '../../model/qualitativeLabel';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  fetchQualitativeLabelsClient,
+  addQualitativeLabelClient,
+  updateQualitativeLabelClient,
+  deleteQualitativeLabelClient,
+} from "../../client/qualitativeLabel";
+import {
+  QualitativeLabel,
+  AddQualitativeLabel,
+} from "../../model/qualitativeLabel";
 
 interface qualitativeLabelState {
   qualitativeLabels: QualitativeLabel[];
@@ -12,54 +20,54 @@ const initialState: qualitativeLabelState = {
   qualitativeLabels: [],
   qualitativeLabelLoading: false,
   qualitativeLabelError: null,
-}
+};
 
 export const loadQualitativeLabels = createAsyncThunk(
-  'qualitativeLabel/loadQualitativeLabels',
+  "qualitativeLabel/loadQualitativeLabels",
   async (_, { rejectWithValue }) => {
     const response = await fetchQualitativeLabelsClient();
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
+  },
+);
 
 export const createQualitativeLabel = createAsyncThunk(
-  'qualitativeLabel/createQualitativeLabel',
+  "qualitativeLabel/createQualitativeLabel",
   async (qualitativeLabelData: AddQualitativeLabel, { rejectWithValue }) => {
     const response = await addQualitativeLabelClient(qualitativeLabelData);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
+  },
+);
 
 export const updateQualitativeLabel = createAsyncThunk(
-  'qualitativeLabel/updateQualitativeLabel',
+  "qualitativeLabel/updateQualitativeLabel",
   async (qualitativeLabelData: QualitativeLabel, { rejectWithValue }) => {
     const response = await updateQualitativeLabelClient(qualitativeLabelData);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
+  },
+);
 
 export const removeQualitativeLabel = createAsyncThunk(
-  'qualitativeLabel/removeQualitativeLabel',
+  "qualitativeLabel/removeQualitativeLabel",
   async (id: string, { rejectWithValue }) => {
     const response = await deleteQualitativeLabelClient(String(id));
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return { id };
-  }
-)
+  },
+);
 
 const qualitativeLabelSlice = createSlice({
-  name: 'qualitativeLabel',
+  name: "qualitativeLabel",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -68,24 +76,40 @@ const qualitativeLabelSlice = createSlice({
         state.qualitativeLabelLoading = true;
         state.qualitativeLabelError = null;
       })
-      .addCase(loadQualitativeLabels.fulfilled, (state, action: PayloadAction<QualitativeLabel[]>) => {
-        state.qualitativeLabelLoading = false;
-        state.qualitativeLabels = action.payload;
-      })
+      .addCase(
+        loadQualitativeLabels.fulfilled,
+        (state, action: PayloadAction<QualitativeLabel[]>) => {
+          state.qualitativeLabelLoading = false;
+          state.qualitativeLabels = action.payload;
+        },
+      )
       .addCase(loadQualitativeLabels.rejected, (state, action) => {
         state.qualitativeLabelLoading = false;
         state.qualitativeLabelError = action.payload as string;
       })
-      .addCase(createQualitativeLabel.fulfilled, (state, action: PayloadAction<QualitativeLabel>) => {
-        state.qualitativeLabels.push(action.payload);
-      })
-      .addCase(updateQualitativeLabel.fulfilled, (state, action: PayloadAction<QualitativeLabel>) => {
-        const idx = state.qualitativeLabels.findIndex(a => a.id === action.payload.id);
-        if (idx !== -1) state.qualitativeLabels[idx] = action.payload;
-      })
-      .addCase(removeQualitativeLabel.fulfilled, (state, action: PayloadAction<{ id: string }>) => {
-        state.qualitativeLabels = state.qualitativeLabels.filter(a => a.id !== action.payload.id);
-      });
+      .addCase(
+        createQualitativeLabel.fulfilled,
+        (state, action: PayloadAction<QualitativeLabel>) => {
+          state.qualitativeLabels.push(action.payload);
+        },
+      )
+      .addCase(
+        updateQualitativeLabel.fulfilled,
+        (state, action: PayloadAction<QualitativeLabel>) => {
+          const idx = state.qualitativeLabels.findIndex(
+            (a) => a.id === action.payload.id,
+          );
+          if (idx !== -1) state.qualitativeLabels[idx] = action.payload;
+        },
+      )
+      .addCase(
+        removeQualitativeLabel.fulfilled,
+        (state, action: PayloadAction<{ id: string }>) => {
+          state.qualitativeLabels = state.qualitativeLabels.filter(
+            (a) => a.id !== action.payload.id,
+          );
+        },
+      );
   },
 });
 

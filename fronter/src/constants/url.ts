@@ -1,5 +1,5 @@
-
-const domainAndHost = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+const domainAndHost =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
 
 const URLs = {
   login: `${domainAndHost}/api/login`,
@@ -26,6 +26,6 @@ const URLs = {
   qualitativeLabel: `${domainAndHost}/api/qualitative_label`,
   processOptimization: `${domainAndHost}/api/process_optimization`,
   languageOptimization: `${domainAndHost}/api/language_optimization`,
-}
+};
 
 export { URLs };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { Assessment } from "../../model/assessment";
 
 interface ItemAssessmentProps {
@@ -7,17 +7,28 @@ interface ItemAssessmentProps {
   onDelete?: (id: number) => void;
 }
 
-const ItemAssessment: React.FC<ItemAssessmentProps> = ({ assessment, onEdit, onDelete }) => {
+const ItemAssessment = ({
+  assessment,
+  onEdit,
+  onDelete,
+}: ItemAssessmentProps) => {
   return (
     <div className="assessment-item card-item">
       <div className="assessment-item__header car-item__header">
         <div className="assessment-item__actions card-item__actions">
-          {onEdit && <button onClick={() => onEdit(assessment)} className="btn btn-edit">
-            編集
-          </button>}
-          {onDelete && <button onClick={() => onDelete(assessment.id)} className="btn btn-delete">
-            削除
-          </button>}
+          {onEdit && (
+            <button onClick={() => onEdit(assessment)} className="btn btn-edit">
+              編集
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={() => onDelete(assessment.id)}
+              className="btn btn-delete"
+            >
+              削除
+            </button>
+          )}
         </div>
       </div>
       <div className="assessment-item__content card-item__content">
@@ -28,7 +39,11 @@ const ItemAssessment: React.FC<ItemAssessmentProps> = ({ assessment, onEdit, onD
         </div>
       </div>
       <div className="assessment-item__footer card-item__footer">
-        <span className="date">{assessment.created_at ? new Date(assessment.created_at).toLocaleDateString() : ''}</span>
+        <span className="date">
+          {assessment.created_at
+            ? new Date(assessment.created_at).toLocaleDateString()
+            : ""}
+        </span>
       </div>
     </div>
   );

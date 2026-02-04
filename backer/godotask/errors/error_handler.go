@@ -17,7 +17,7 @@ func ErrorHandlerMiddleware() gin.HandlerFunc {
 
 		// ログに記録
 		log.Printf("Panic recovered: %v", err)
-		
+
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,
 			"message": appErr.Message,
@@ -30,13 +30,13 @@ func ErrorHandlerMiddleware() gin.HandlerFunc {
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		origin := c.Request.Header.Get("Origin")
-		
+
 		// 許可されたオリジンのチェック（本番環境では厳密に設定）
 		allowedOrigins := []string{
 			"http://localhost:3000",
 			"http://localhost:8080",
 		}
-		
+
 		isAllowed := false
 		for _, allowed := range allowedOrigins {
 			if origin == allowed {
@@ -44,7 +44,7 @@ func CORSMiddleware() gin.HandlerFunc {
 				break
 			}
 		}
-		
+
 		if !isAllowed && origin != "" {
 			appErr := NewAppError(
 				AUTH_UNAUTHORIZED,

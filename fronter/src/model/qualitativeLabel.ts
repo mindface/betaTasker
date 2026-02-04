@@ -1,4 +1,3 @@
-
 export interface QualitativeLabel {
   id: string;
   task_id: number;

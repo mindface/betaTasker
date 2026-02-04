@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/godotask/infrastructure/db/model"
-	"github.com/godotask/infrastructure/db/model"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

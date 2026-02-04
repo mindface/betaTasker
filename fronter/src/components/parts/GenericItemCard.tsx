@@ -1,11 +1,11 @@
-"use client"
-import React, { useState } from 'react';
-import Image from 'next/image';
-import CommonModal from './CommonModal';
+"use client";
+import React, { useState } from "react";
+import Image from "next/image";
+import CommonModal from "./CommonModal";
 
 export interface GenericItemCardProps<T> {
   item: T;
-  itemType: 'task' | 'assessment' | 'memory';
+  itemType: "task" | "assessment" | "memory";
   onDelete: (id: number) => Promise<void>;
   onUpdate: (item: T) => Promise<void>;
   onView?: (item: T) => void;
@@ -25,7 +25,7 @@ export default function GenericItemCard<T>({
   renderEditForm,
   getTitle,
   getDescription,
-  getId
+  getId,
 }: GenericItemCardProps<T>) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -34,7 +34,7 @@ export default function GenericItemCard<T>({
   const handleDelete = async () => {
     const title = getTitle(item);
     const id = getId(item);
-    
+
     if (confirm(`「${title}」を削除しますか？この操作は取り消せません。`)) {
       await onDelete(id);
     }
@@ -71,12 +71,7 @@ export default function GenericItemCard<T>({
         <div className="card__btns">
           <div className="btns">
             <button className="btn" onClick={handleView} title="表示">
-              <Image
-                src="/image/look.svg"
-                alt="表示"
-                width={20}
-                height={20}
-              />
+              <Image src="/image/look.svg" alt="表示" width={20} height={20} />
             </button>
             {renderEditForm && (
               <button className="btn" onClick={handleEditClick} title="編集">
@@ -110,16 +105,16 @@ export default function GenericItemCard<T>({
           <div className="modal-content">
             {renderEditForm(editingItem, setEditingItem)}
             <div className="form-actions">
-              <button 
-                type="button" 
-                onClick={() => setIsEditModalOpen(false)} 
+              <button
+                type="button"
+                onClick={() => setIsEditModalOpen(false)}
                 className="btn btn-secondary"
               >
                 キャンセル
               </button>
-              <button 
-                type="button" 
-                onClick={handleUpdate} 
+              <button
+                type="button"
+                onClick={handleUpdate}
                 className="btn btn-primary"
               >
                 保存

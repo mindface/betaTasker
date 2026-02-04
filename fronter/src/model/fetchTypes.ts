@@ -1,5 +1,6 @@
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
-
-export interface ResponseError { ok: false; error: Error }
-
+export interface ResponseError {
+  ok: false;
+  error: Error;
+}

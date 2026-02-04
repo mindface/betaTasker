@@ -1,51 +1,51 @@
-"use client"
-import { useState, useEffect, Suspense } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../store'
-import { createTask, updateTask, removeTask } from '../features/task/taskSlice'
-import ItemTask from "./parts/ItemTask"
-import TaskModal from "./parts/TaskModal"
-import AssessmentListModal from "./parts/AssessmentListModal"
+"use client";
+import { useState, useEffect, Suspense } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import { createTask, updateTask, removeTask } from "../features/task/taskSlice";
+import ItemTask from "./parts/ItemTask";
+import TaskModal from "./parts/TaskModal";
+import AssessmentListModal from "./parts/AssessmentListModal";
 import { AddTask, Task } from "../model/task";
-import { loadMemories } from '../features/memory/memorySlice';
-import { loadTasks } from '../features/task/taskSlice';
+import { loadMemories } from "../features/memory/memorySlice";
+import { loadTasks } from "../features/task/taskSlice";
 
 export default function SectionTask() {
-  const dispatch = useDispatch()
-  const { isAuthenticated } = useSelector((state: RootState) => state.user)
-  const { memories } = useSelector((state: RootState) => state.memory)
-  const { tasks } = useSelector((state: RootState) => state.task)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingTask, setEditingTask] = useState<AddTask|Task|undefined>()
-  const [TaskId,setTaskId] = useState<number>(-1);
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state: RootState) => state.user);
+  const { memories } = useSelector((state: RootState) => state.memory);
+  const { tasks } = useSelector((state: RootState) => state.task);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<AddTask | Task | undefined>();
+  const [TaskId, setTaskId] = useState<number>(-1);
 
   useEffect(() => {
-    dispatch(loadMemories())
-    dispatch(loadTasks())
-  }, [dispatch, isAuthenticated])
+    dispatch(loadMemories());
+    dispatch(loadTasks());
+  }, [dispatch, isAuthenticated]);
 
   const handleAddTask = () => {
-    setEditingTask(undefined)
-    setIsModalOpen(true)
-  }
+    setEditingTask(undefined);
+    setIsModalOpen(true);
+  };
 
   const handleEditTask = (task: Task) => {
-    setEditingTask(task)
-    setIsModalOpen(true)
-  }
+    setEditingTask(task);
+    setIsModalOpen(true);
+  };
 
   const handleSaveTask = async (taskData: AddTask | Task) => {
     if (editingTask) {
-      await dispatch(updateTask(taskData as Task))
+      await dispatch(updateTask(taskData as Task));
     } else {
-      await dispatch(createTask(taskData as AddTask))
+      await dispatch(createTask(taskData as AddTask));
     }
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   const handleDeleteTask = async (id: number) => {
-    await dispatch(removeTask(id))
-  }
+    await dispatch(removeTask(id));
+  };
 
   useEffect(() => {
     console.log("tasks changed:", tasks);
@@ -54,12 +54,9 @@ export default function SectionTask() {
   return (
     <div className="section__inner section--task">
       <div className="section-container">
-        <div className="task-header">
+        <div className="task-header p-b-8">
           <h2>タスク一覧</h2>
-          <button
-            onClick={() => handleAddTask()}
-            className="btn btn-primary"
-          >
+          <button onClick={() => handleAddTask()} className="btn btn-primary">
             新規タスク
           </button>
         </div>
@@ -76,19 +73,11 @@ export default function SectionTask() {
             ))}
           </Suspense>
         </div>
-        <div className="task-value-list">
-          <h3>タスク値一覧</h3>
-          <div className="list">
-            {(tasks ?? []).map((task: Task, index: number) => (
-                <span key={`task-value-item${index}`}><b>userId:</b> {task.user_id}</span>
-            ))}
-          </div>
-        </div>
         <AssessmentListModal
           taskId={TaskId}
           isOpen={TaskId !== -1}
           onClose={() => setTaskId(-1)}
-          onSave={() => {}}   
+          onSave={() => {}}
         />
         <TaskModal
           initialData={editingTask}
@@ -99,5 +88,5 @@ export default function SectionTask() {
         />
       </div>
     </div>
-  )
+  );
 }

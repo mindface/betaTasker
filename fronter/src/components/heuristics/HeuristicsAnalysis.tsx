@@ -1,20 +1,28 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import { useHeuristicsAnalysis } from '../../hooks/useHeuristics';
-import { HeuristicsAnalysisRequest } from '../../model/heuristics';
-import styles from './HeuristicsAnalysis.module.scss';
+"use client";
+import React, { useState, useEffect } from "react";
+import { useHeuristicsAnalysis } from "../../hooks/useHeuristics";
+import { HeuristicsAnalysisRequest } from "../../model/heuristics";
+import styles from "./HeuristicsAnalysis.module.scss";
 
 export default function HeuristicsAnalysis() {
-  const { analyses, currentAnalysis, loading, error, analyze, getAnalysis, clearError } = useHeuristicsAnalysis();
+  const {
+    analyses,
+    currentAnalysis,
+    loading,
+    error,
+    analyze,
+    getAnalysis,
+    clearError,
+  } = useHeuristicsAnalysis();
   const [showAnalysisForm, setShowAnalysisForm] = useState(false);
   const [analysisForm, setAnalysisForm] = useState<HeuristicsAnalysisRequest>({
     user_id: 1,
     task_id: undefined,
-    analysis_type: 'performance',
+    analysis_type: "performance",
     data: {},
   });
   const [loadingAnalyses, setLoadingAnalyses] = useState(false);
-  const [analysisIdInput, setAnalysisIdInput] = useState('');
+  const [analysisIdInput, setAnalysisIdInput] = useState("");
   const [showFetchForm, setShowFetchForm] = useState(false);
 
   useEffect(() => {
@@ -26,9 +34,9 @@ export default function HeuristicsAnalysis() {
     try {
       // TODO: 過去の分析結果を取得するAPIエンドポイントを実装後、ここで呼び出す
       // 現時点では個別の分析結果取得のみ実装されている
-      console.log('Loading analyses list...');
+      console.log("Loading analyses list...");
     } catch (err) {
-      console.error('Failed to load analyses:', err);
+      console.error("Failed to load analyses:", err);
     } finally {
       setLoadingAnalyses(false);
     }
@@ -42,16 +50,16 @@ export default function HeuristicsAnalysis() {
       setAnalysisForm({
         user_id: 1,
         task_id: undefined,
-        analysis_type: 'performance',
+        analysis_type: "performance",
         data: {},
       });
     } catch (err) {
-      console.error('Analysis failed:', err);
+      console.error("Analysis failed:", err);
     }
   };
 
   const handleFormChange = (field: string, value: any) => {
-    setAnalysisForm(prev => ({
+    setAnalysisForm((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -65,24 +73,24 @@ export default function HeuristicsAnalysis() {
     e.preventDefault();
     if (analysisIdInput) {
       await getAnalysis(analysisIdInput);
-      setAnalysisIdInput('');
+      setAnalysisIdInput("");
       setShowFetchForm(false);
     }
   };
 
   const analysisTypes = [
-    { value: 'performance', label: 'パフォーマンス分析' },
-    { value: 'behavior', label: '行動分析' },
-    { value: 'pattern', label: 'パターン分析' },
-    { value: 'cognitive', label: '認知分析' },
-    { value: 'efficiency', label: '効率性分析' },
+    { value: "performance", label: "パフォーマンス分析" },
+    { value: "behavior", label: "行動分析" },
+    { value: "pattern", label: "パターン分析" },
+    { value: "cognitive", label: "認知分析" },
+    { value: "efficiency", label: "効率性分析" },
   ];
 
   if (loading || loadingAnalyses) {
     return (
       <div className={styles.container}>
         <div className={styles.loading}>
-          {loadingAnalyses ? '分析結果を読み込み中...' : '分析を実行中...'}
+          {loadingAnalyses ? "分析結果を読み込み中..." : "分析を実行中..."}
         </div>
       </div>
     );
@@ -106,14 +114,14 @@ export default function HeuristicsAnalysis() {
       <div className={styles.header}>
         <h2>ヒューリスティック分析</h2>
         <div className={styles.headerButtons}>
-          <button 
-            onClick={() => setShowAnalysisForm(!showAnalysisForm)} 
+          <button
+            onClick={() => setShowAnalysisForm(!showAnalysisForm)}
             className={styles.analyzeButton}
           >
             新しい分析
           </button>
-          <button 
-            onClick={() => setShowFetchForm(!showFetchForm)} 
+          <button
+            onClick={() => setShowFetchForm(!showFetchForm)}
             className={styles.fetchButton}
           >
             分析結果取得
@@ -139,11 +147,11 @@ export default function HeuristicsAnalysis() {
               <button type="submit" className={styles.submitButton}>
                 取得
               </button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => {
                   setShowFetchForm(false);
-                  setAnalysisIdInput('');
+                  setAnalysisIdInput("");
                 }}
                 className={styles.cancelButton}
               >
@@ -164,7 +172,9 @@ export default function HeuristicsAnalysis() {
                 <input
                   type="number"
                   value={analysisForm.user_id}
-                  onChange={(e) => handleFormChange('user_id', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    handleFormChange("user_id", parseInt(e.target.value))
+                  }
                   required
                 />
               </div>
@@ -172,35 +182,42 @@ export default function HeuristicsAnalysis() {
                 <label>タスクID (オプション):</label>
                 <input
                   type="number"
-                  value={analysisForm.task_id || ''}
-                  onChange={(e) => handleFormChange('task_id', e.target.value ? parseInt(e.target.value) : undefined)}
+                  value={analysisForm.task_id || ""}
+                  onChange={(e) =>
+                    handleFormChange(
+                      "task_id",
+                      e.target.value ? parseInt(e.target.value) : undefined,
+                    )
+                  }
                   placeholder="タスクID"
                 />
               </div>
             </div>
-            
+
             <div className={styles.formGroup}>
               <label>分析タイプ:</label>
               <select
                 value={analysisForm.analysis_type}
-                onChange={(e) => handleFormChange('analysis_type', e.target.value)}
+                onChange={(e) =>
+                  handleFormChange("analysis_type", e.target.value)
+                }
                 required
               >
-                {analysisTypes.map(type => (
+                {analysisTypes.map((type) => (
                   <option key={type.value} value={type.value}>
                     {type.label}
                   </option>
                 ))}
               </select>
             </div>
-            
+
             <div className={styles.formGroup}>
               <label>分析データ (JSON):</label>
               <textarea
                 value={JSON.stringify(analysisForm.data, null, 2)}
                 onChange={(e) => {
                   try {
-                    handleFormChange('data', JSON.parse(e.target.value));
+                    handleFormChange("data", JSON.parse(e.target.value));
                   } catch {
                     // Invalid JSON, keep as string for now
                   }
@@ -209,13 +226,13 @@ export default function HeuristicsAnalysis() {
                 rows={4}
               />
             </div>
-            
+
             <div className={styles.formActions}>
               <button type="submit" className={styles.submitButton}>
                 分析実行
               </button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setShowAnalysisForm(false)}
                 className={styles.cancelButton}
               >
@@ -231,15 +248,24 @@ export default function HeuristicsAnalysis() {
           <h3>現在の分析結果</h3>
           <div className={styles.analysisCard}>
             <div className={styles.analysisHeader}>
-              <span className={styles.analysisType}>{currentAnalysis.analysis_type}</span>
-              <span className={styles.score}>スコア: {currentAnalysis.score}</span>
+              <span className={styles.analysisType}>
+                {currentAnalysis.analysis_type}
+              </span>
+              <span className={styles.score}>
+                スコア: {currentAnalysis.score}
+              </span>
               <span className={styles.status}>{currentAnalysis.status}</span>
             </div>
             <div className={styles.analysisDetails}>
               <div className={styles.metadata}>
                 <div>ユーザーID: {currentAnalysis.user_id}</div>
-                {currentAnalysis.task_id && <div>タスクID: {currentAnalysis.task_id}</div>}
-                <div>作成日: {new Date(currentAnalysis.created_at).toLocaleString('ja-JP')}</div>
+                {currentAnalysis.task_id && (
+                  <div>タスクID: {currentAnalysis.task_id}</div>
+                )}
+                <div>
+                  作成日:{" "}
+                  {new Date(currentAnalysis.created_at).toLocaleString("ja-JP")}
+                </div>
               </div>
               <div className={styles.result}>
                 <strong>結果:</strong>
@@ -259,7 +285,9 @@ export default function HeuristicsAnalysis() {
             {analyses.map((analysis) => (
               <div key={analysis.id} className={styles.analysisCard}>
                 <div className={styles.analysisHeader}>
-                  <span className={styles.analysisType}>{analysis.analysis_type}</span>
+                  <span className={styles.analysisType}>
+                    {analysis.analysis_type}
+                  </span>
                   <span className={styles.score}>スコア: {analysis.score}</span>
                 </div>
                 <div className={styles.analysisInfo}>
@@ -269,10 +297,10 @@ export default function HeuristicsAnalysis() {
                     <div>ステータス: {analysis.status}</div>
                   </div>
                   <div className={styles.date}>
-                    {new Date(analysis.created_at).toLocaleDateString('ja-JP')}
+                    {new Date(analysis.created_at).toLocaleDateString("ja-JP")}
                   </div>
                 </div>
-                <button 
+                <button
                   onClick={() => handleGetAnalysis(analysis.id)}
                   className={styles.viewButton}
                 >
