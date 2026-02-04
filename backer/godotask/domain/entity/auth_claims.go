@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"github.com/dgrijalva/jwt-go"
+	jwt "github.com/golang-jwt/jwt/v5"
 )
 
 type Claims struct {
@@ -9,7 +9,7 @@ type Claims struct {
 	Username string `json:"username"`
 	Role     string `json:"role"`
 	Email    string `json:"email"`
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 type AuthClaims struct {
@@ -17,5 +17,5 @@ type AuthClaims struct {
 	Username string
 	Role     string
 	Email    string `json:"email"`
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }

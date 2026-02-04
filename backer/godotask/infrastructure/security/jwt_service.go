@@ -4,7 +4,7 @@ import (
 	"time"
 	"errors"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	jwt "github.com/golang-jwt/jwt/v5"
 
 	"github.com/godotask/domain/entity"
 	"github.com/godotask/domain/auth"
@@ -27,8 +27,9 @@ func (s *JWTService) Generate(user *entity.User) (string, error) {
 		UserID: user.ID,
 		Email:  user.Email,
 		Role:   user.Role,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(s.expiration).Unix(),
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(s.expiration)),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
 	}
 
@@ -42,8 +43,12 @@ func (s *JWTService) Parse(tokenString string) (*entity.AuthClaims, error) {
 		tokenString,
 		&entity.AuthClaims{},
 		func(token *jwt.Token) (interface{}, error) {
+			if token.Method != jwt.SigningMethodHS256 {
+				return nil, errors.New("unexpected signing method")
+			}
 			return s.secret, nil
 		},
+		jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}),
 	)
 	if err != nil {
 		return nil, err
@@ -56,4 +61,3 @@ func (s *JWTService) Parse(tokenString string) (*entity.AuthClaims, error) {
 
 	return claims, nil
 }
-
