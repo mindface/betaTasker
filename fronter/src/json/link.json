@@ -1,77 +1,77 @@
 [
- {
-  "id": 1,
-  "title": "CiNii Books",
-  "link": "https://kaken.nii.ac.jp/search/?kw="
- },
- {
-  "id": 2,
-  "title": "CiNii Dissertations",
-  "link": "https://ci.nii.ac.jp/d/"
- },
- {
-  "id": 3,
-  "title": "KAKEN",
-  "link": "https://kaken.nii.ac.jp/"
- },
- {
-  "id": 4,
-  "title": "NII-DBR",
-  "link": "https://dbr.nii.ac.jp/"
- },
- {
-  "id": 5,
-  "title": "Webcat Plus",
-  "link": "http://webcatplus.nii.ac.jp/"
- },
- {
-  "id": 6,
-  "title": "IRDB",
-  "link": "https://irdb.nii.ac.jp/"
- },
- {
-  "id": 7,
-  "title": "Google",
-  "link": "https://www.google.com/search?q="
- },
- {
-  "id": 8,
-  "title": "Google scholar",
-  "link": "https://scholar.google.co.jp/scholar?hl=ja&as_sdt=0%2C5&q="
- },
- {
-  "id": 9,
-  "title": "yahoo",
-  "link": "https://search.yahoo.co.jp/search?p="
- },
- {
-  "id": 10,
-  "title": "Bing",
-  "link": "https://www.bing.com/search?q="
- },
- {
-  "id": 11,
-  "title": "国立国会図書館オンライン",
-  "link": "https://ndlonline.ndl.go.jp/#!/search?keyword="
- },
- {
-  "id": 12,
-  "title": "J-STAGE",
-  "link": "https://www.jstage.jst.go.jp/result/global/-char/ja?globalSearchKey="
- },
- {
-  "id": 13,
-  "title": "WorldCat",
-  "link": "https://www.worldcat.org/search?qt=worldcat_org_all&q="
- },
- {
-  "id": 14,
-  "title": "Mendeley",
-  "link": "https://www.mendeley.com/search/?query="
- },
- {
-  "id": 15,
-  "title": "figshare En",
-  "link": "https://figshare.com/search?q="
- }
+  {
+    "id": 1,
+    "title": "CiNii Books",
+    "link": "https://kaken.nii.ac.jp/search/?kw="
+  },
+  {
+    "id": 2,
+    "title": "CiNii Dissertations",
+    "link": "https://ci.nii.ac.jp/d/"
+  },
+  {
+    "id": 3,
+    "title": "KAKEN",
+    "link": "https://kaken.nii.ac.jp/"
+  },
+  {
+    "id": 4,
+    "title": "NII-DBR",
+    "link": "https://dbr.nii.ac.jp/"
+  },
+  {
+    "id": 5,
+    "title": "Webcat Plus",
+    "link": "http://webcatplus.nii.ac.jp/"
+  },
+  {
+    "id": 6,
+    "title": "IRDB",
+    "link": "https://irdb.nii.ac.jp/"
+  },
+  {
+    "id": 7,
+    "title": "Google",
+    "link": "https://www.google.com/search?q="
+  },
+  {
+    "id": 8,
+    "title": "Google scholar",
+    "link": "https://scholar.google.co.jp/scholar?hl=ja&as_sdt=0%2C5&q="
+  },
+  {
+    "id": 9,
+    "title": "yahoo",
+    "link": "https://search.yahoo.co.jp/search?p="
+  },
+  {
+    "id": 10,
+    "title": "Bing",
+    "link": "https://www.bing.com/search?q="
+  },
+  {
+    "id": 11,
+    "title": "国立国会図書館オンライン",
+    "link": "https://ndlonline.ndl.go.jp/#!/search?keyword="
+  },
+  {
+    "id": 12,
+    "title": "J-STAGE",
+    "link": "https://www.jstage.jst.go.jp/result/global/-char/ja?globalSearchKey="
+  },
+  {
+    "id": 13,
+    "title": "WorldCat",
+    "link": "https://www.worldcat.org/search?qt=worldcat_org_all&q="
+  },
+  {
+    "id": 14,
+    "title": "Mendeley",
+    "link": "https://www.mendeley.com/search/?query="
+  },
+  {
+    "id": 15,
+    "title": "figshare En",
+    "link": "https://figshare.com/search?q="
+  }
 ]

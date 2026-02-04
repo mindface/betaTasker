@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import CommonModal from './CommonModal';
-import { useDispatch, useSelector } from 'react-redux';
-import { regApi } from '../../client/authApi';
-import { RootState } from '../../store';
+import React, { useState } from "react";
+import CommonModal from "./CommonModal";
+import { useDispatch, useSelector } from "react-redux";
+import { regApi } from "../../client/authApi";
+import { RootState } from "../../store";
 
 interface RegisterModalProps {
   isOpen: boolean;
@@ -13,18 +13,18 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state: RootState) => state.user);
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    role: 'user',
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "user",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -32,18 +32,20 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      console.error('パスワードが一致しません');
+      console.error("パスワードが一致しません");
       return;
     }
 
-    const result = await dispatch(regApi({
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-      role: formData.role,
-    }));
+    const result = await dispatch(
+      regApi({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+      }),
+    );
 
-    if ('error' in result) {
+    if ("error" in result) {
       onClose();
     }
   };
@@ -110,19 +112,11 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
         </div>
 
         <div className="form-actions">
-          <button
-            type="button"
-            onClick={onClose}
-            className="btn btn-secondary"
-          >
+          <button type="button" onClick={onClose} className="btn btn-secondary">
             キャンセル
           </button>
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading}
-          >
-            {loading ? '登録中...' : '登録'}
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? "登録中..." : "登録"}
           </button>
         </div>
       </form>
@@ -130,4 +124,4 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
   );
 };
 
-export default RegisterModal; 
+export default RegisterModal;

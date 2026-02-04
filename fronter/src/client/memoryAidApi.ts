@@ -4,11 +4,11 @@ import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 export const fetchMemoryAidsByCode = async (code: string) => {
   return [];
-  const data = await fetchApiJsonCore<undefined,MemoryContext[]>({
+  const data = await fetchApiJsonCore<undefined, MemoryContext[]>({
     endpoint: `/api/memoryAid?code=${code}`,
-    method: 'GET',
-    errorMessage: 'error fetchMemoryAidsByCode メモリー支援データ取得失敗',
-    getKey: 'contexts',
+    method: "GET",
+    errorMessage: "error fetchMemoryAidsByCode メモリー支援データ取得失敗",
+    getKey: "contexts",
   });
-  return data
+  return data;
 };

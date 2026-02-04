@@ -1,18 +1,19 @@
-"use client"
-import React, { useCallback, useEffect, useState } from 'react';
-import { useHeuristicsTracking } from '../../hooks/useHeuristics';
-import { HeuristicsTrackingData } from '../../model/heuristics';
-import styles from './HeuristicsTracking.module.scss';
+"use client";
+import React, { useCallback, useEffect, useState } from "react";
+import { useHeuristicsTracking } from "../../hooks/useHeuristics";
+import { HeuristicsTrackingData } from "../../model/heuristics";
+import styles from "./HeuristicsTracking.module.scss";
 
 export default function HeuristicsTracking() {
-  const { trackingData, loading, error, track, getTracking, clearError } = useHeuristicsTracking();
-  const [userId, setUserId] = useState<string>('1');
+  const { trackingData, loading, error, track, getTracking, clearError } =
+    useHeuristicsTracking();
+  const [userId, setUserId] = useState<string>("1");
   const [showTrackForm, setShowTrackForm] = useState(false);
   const [trackForm, setTrackForm] = useState<HeuristicsTrackingData>({
     user_id: 1,
-    action: '',
+    action: "",
     context: {},
-    session_id: '',
+    session_id: "",
     duration: 0,
   });
 
@@ -20,7 +21,7 @@ export default function HeuristicsTracking() {
     if (userId) {
       getTracking(userId);
     }
-  },[getTracking, userId]);
+  }, [getTracking, userId]);
 
   const handleTrack = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,19 +30,19 @@ export default function HeuristicsTracking() {
       setShowTrackForm(false);
       setTrackForm({
         user_id: parseInt(userId) || 1,
-        action: '',
+        action: "",
         context: {},
-        session_id: '',
+        session_id: "",
         duration: 0,
       });
       handleLoadTracking();
     } catch (err) {
-      console.error('Tracking failed:', err);
+      console.error("Tracking failed:", err);
     }
   };
 
   const handleFormChange = (field: string, value: any) => {
-    setTrackForm(prev => ({
+    setTrackForm((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -89,8 +90,8 @@ export default function HeuristicsTracking() {
           <button onClick={handleLoadTracking} className={styles.loadButton}>
             読み込み
           </button>
-          <button 
-            onClick={() => setShowTrackForm(!showTrackForm)} 
+          <button
+            onClick={() => setShowTrackForm(!showTrackForm)}
             className={styles.trackButton}
           >
             新しいトラッキング
@@ -107,7 +108,9 @@ export default function HeuristicsTracking() {
               <input
                 type="number"
                 value={trackForm.user_id}
-                onChange={(e) => handleFormChange('user_id', parseInt(e.target.value))}
+                onChange={(e) =>
+                  handleFormChange("user_id", parseInt(e.target.value))
+                }
                 required
               />
             </div>
@@ -116,7 +119,7 @@ export default function HeuristicsTracking() {
               <input
                 type="text"
                 value={trackForm.action}
-                onChange={(e) => handleFormChange('action', e.target.value)}
+                onChange={(e) => handleFormChange("action", e.target.value)}
                 placeholder="例: task_completed, page_viewed"
                 required
               />
@@ -126,7 +129,7 @@ export default function HeuristicsTracking() {
               <input
                 type="text"
                 value={trackForm.session_id}
-                onChange={(e) => handleFormChange('session_id', e.target.value)}
+                onChange={(e) => handleFormChange("session_id", e.target.value)}
                 placeholder="セッションID（オプション）"
               />
             </div>
@@ -135,7 +138,9 @@ export default function HeuristicsTracking() {
               <input
                 type="number"
                 value={trackForm.duration}
-                onChange={(e) => handleFormChange('duration', parseInt(e.target.value))}
+                onChange={(e) =>
+                  handleFormChange("duration", parseInt(e.target.value))
+                }
                 placeholder="例: 5000"
               />
             </div>
@@ -145,7 +150,7 @@ export default function HeuristicsTracking() {
                 value={JSON.stringify(trackForm.context, null, 2)}
                 onChange={(e) => {
                   try {
-                    handleFormChange('context', JSON.parse(e.target.value));
+                    handleFormChange("context", JSON.parse(e.target.value));
                   } catch {
                     // Invalid JSON, keep as string for now
                   }
@@ -158,8 +163,8 @@ export default function HeuristicsTracking() {
               <button type="submit" className={styles.submitButton}>
                 記録
               </button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setShowTrackForm(false)}
                 className={styles.cancelButton}
               >
@@ -182,46 +187,62 @@ export default function HeuristicsTracking() {
               </div>
               <div className={styles.statCard}>
                 <h4>ユニークアクション</h4>
-                { trackingData.length > 0 ? <span>{new Set((trackingData ?? []).map(t => t.action)).size}</span> : <span>0</span>}
+                {trackingData.length > 0 ? (
+                  <span>
+                    {new Set((trackingData ?? []).map((t) => t.action)).size}
+                  </span>
+                ) : (
+                  <span>0</span>
+                )}
               </div>
               <div className={styles.statCard}>
                 <h4>平均継続時間</h4>
                 <span>
-                  {trackingData.length > 0 
-                    ? Math.round(trackingData.reduce((sum, t) => sum + t.duration, 0) / trackingData.length)
-                    : 0}ms
+                  {trackingData.length > 0
+                    ? Math.round(
+                        trackingData.reduce((sum, t) => sum + t.duration, 0) /
+                          trackingData.length,
+                      )
+                    : 0}
+                  ms
                 </span>
               </div>
             </div>
 
             <div className={styles.trackingItems}>
-              {trackingData.length > 0 ? trackingData.map((item) => (
-                <div key={item.id} className={styles.trackingCard}>
-                  <div className={styles.trackingHeader}>
-                    <h4>{item.action}</h4>
-                    <span className={styles.timestamp}>
-                      {new Date(item.timestamp).toLocaleString('ja-JP')}
-                    </span>
-                  </div>
-                  <div className={styles.trackingDetails}>
-                    <div className={styles.detail}>
-                      <strong>継続時間:</strong> {item.duration}ms
+              {trackingData.length > 0 ? (
+                trackingData.map((item) => (
+                  <div key={item.id} className={styles.trackingCard}>
+                    <div className={styles.trackingHeader}>
+                      <h4>{item.action}</h4>
+                      <span className={styles.timestamp}>
+                        {new Date(item.timestamp).toLocaleString("ja-JP")}
+                      </span>
                     </div>
-                    {item.session_id && (
+                    <div className={styles.trackingDetails}>
                       <div className={styles.detail}>
-                        <strong>セッションID:</strong> {item.session_id}
+                        <strong>継続時間:</strong> {item.duration}ms
                       </div>
-                    )}
-                    {item.context && (
-                      <div className={styles.context}>
-                        <strong>コンテキスト:</strong>
-                        <pre>{JSON.stringify(JSON.parse(item.context), null, 2)}</pre>
-                      </div>
-                    )}
+                      {item.session_id && (
+                        <div className={styles.detail}>
+                          <strong>セッションID:</strong> {item.session_id}
+                        </div>
+                      )}
+                      {item.context && (
+                        <div className={styles.context}>
+                          <strong>コンテキスト:</strong>
+                          <pre>
+                            {JSON.stringify(JSON.parse(item.context), null, 2)}
+                          </pre>
+                        </div>
+                      )}
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className={styles.noData}>
+                  トラッキングデータがありません
                 </div>
-              )) : (
-                <div className={styles.noData}>トラッキングデータがありません</div>
               )}
             </div>
           </>

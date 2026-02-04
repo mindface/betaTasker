@@ -10,10 +10,10 @@ interface FetchOptions<TBody> {
 
 type Result<T> = { ok: true; value: T } | ResponseError;
 
-// TB=TBody | TR=TResponse 
-export const fetchApiJsonCore = async <TB,TR>({
+// TB=TBody | TR=TResponse
+export const fetchApiJsonCore = async <TB, TR>({
   endpoint,
-  method = 'GET',
+  method = "GET",
   body,
   errorMessage,
   getKey,
@@ -21,8 +21,8 @@ export const fetchApiJsonCore = async <TB,TR>({
   try {
     const res = await fetch(endpoint, {
       method,
-      credentials: 'include',
-      headers: body ? { 'Content-Type': 'application/json' } : undefined,
+      credentials: "include",
+      headers: body ? { "Content-Type": "application/json" } : undefined,
       body: body ? JSON.stringify(body) : undefined,
     });
 
@@ -31,8 +31,11 @@ export const fetchApiJsonCore = async <TB,TR>({
     if (!res.ok) {
       return { ok: false, error: new Error(errorMessage) };
     }
-    return { ok: true, value: getKey ? data[getKey] as TR : data as TR };
+    return { ok: true, value: getKey ? (data[getKey] as TR) : (data as TR) };
   } catch (err: unknown) {
-    return { ok: false, error: err instanceof Error ? err : new Error(String(err)) };
+    return {
+      ok: false,
+      error: err instanceof Error ? err : new Error(String(err)),
+    };
   }
 };

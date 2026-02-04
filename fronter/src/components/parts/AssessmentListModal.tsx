@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { AddAssessment, Assessment } from "../../model/assessment";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import CommonModal from "./CommonModal";
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../store'
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
 import { getAssessmentsForTaskUser } from "../../features/assessment/assessmentSlice";
 
 interface AssessmentListModalProps {
@@ -13,12 +13,27 @@ interface AssessmentListModalProps {
   taskId?: number;
 }
 
-const setCheker = ['user_id', 'task_id', 'effectiveness_score', 'effort_score', 'impact_score'];
-const AssessmentListModal = ({ isOpen, onClose, onSave, taskId }: AssessmentListModalProps) => {
+const setCheker = [
+  "user_id",
+  "task_id",
+  "effectiveness_score",
+  "effort_score",
+  "impact_score",
+];
+const AssessmentListModal = ({
+  isOpen,
+  onClose,
+  onSave,
+  taskId,
+}: AssessmentListModalProps) => {
   const dispatch = useDispatch();
-  const { assessments, assessmentLoading, assessmentError } = useSelector((state: RootState) => state.assessment)
-  const { user } = useSelector((state: RootState) => state.user)
-  const [formData, setFormData] = useState<AddAssessment | Assessment | undefined>();
+  const { assessments, assessmentLoading, assessmentError } = useSelector(
+    (state: RootState) => state.assessment,
+  );
+  const { user } = useSelector((state: RootState) => state.user);
+  const [formData, setFormData] = useState<
+    AddAssessment | Assessment | undefined
+  >();
   const [openMemoryId, setOpenMemoryId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -34,26 +49,32 @@ const AssessmentListModal = ({ isOpen, onClose, onSave, taskId }: AssessmentList
     //   });
     // }
 
-    if(taskId !== -1) {
-      dispatch(getAssessmentsForTaskUser({ userId: 1, taskId: taskId || 0 }))
+    if (taskId !== -1) {
+      dispatch(getAssessmentsForTaskUser({ userId: 1, taskId: taskId || 0 }));
     }
   }, [dispatch, user, taskId]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = e.target;
-    setFormData(prev => prev ? {
-      ...prev,
-      [name]: setCheker.includes(name) ? Number(value) : value
-    } : prev);
+    setFormData((prev) =>
+      prev
+        ? {
+            ...prev,
+            [name]: setCheker.includes(name) ? Number(value) : value,
+          }
+        : prev,
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData) return;
     // cookieからuser_id取得
-    const userIdStr = Cookies.get('user_id');
+    const userIdStr = Cookies.get("user_id");
     const user_id = userIdStr ? Number(userIdStr) : 0;
     await onSave({ ...formData, user_id });
   };
@@ -72,15 +93,26 @@ const AssessmentListModal = ({ isOpen, onClose, onSave, taskId }: AssessmentList
           <ul className="assessment-list card-list">
             {assessments.map((assessment) => (
               <li key={assessment.id} className="assessment-item card-item">
-                <div className="assessment-title card-title" onClick={() => setOpenMemoryId(assessment.id)}>
-                  {assessment.qualitative_feedback || 'アセスメント'}
+                <div
+                  className="assessment-title card-title"
+                  onClick={() => setOpenMemoryId(assessment.id)}
+                >
+                  {assessment.qualitative_feedback || "アセスメント"}
                 </div>
                 {openMemoryId === assessment.id && (
                   <div className="assessment-details card-details">
-                    <p><b>効果スコア:</b> {assessment.effectiveness_score}</p>
-                    <p><b>努力スコア:</b> {assessment.effort_score}</p>
-                    <p><b>影響スコア:</b> {assessment.impact_score}</p>
-                    <p><b>フィードバック:</b> {assessment.qualitative_feedback}</p>
+                    <p>
+                      <b>効果スコア:</b> {assessment.effectiveness_score}
+                    </p>
+                    <p>
+                      <b>努力スコア:</b> {assessment.effort_score}
+                    </p>
+                    <p>
+                      <b>影響スコア:</b> {assessment.impact_score}
+                    </p>
+                    <p>
+                      <b>フィードバック:</b> {assessment.qualitative_feedback}
+                    </p>
                   </div>
                 )}
               </li>
@@ -99,7 +131,9 @@ const AssessmentListModal = ({ isOpen, onClose, onSave, taskId }: AssessmentList
           </div>
         )} */}
         <div className="form-actions">
-          <button type="button" onClick={onClose} className="btn">閉じる</button>
+          <button type="button" onClick={onClose} className="btn">
+            閉じる
+          </button>
         </div>
       </div>
     </CommonModal>

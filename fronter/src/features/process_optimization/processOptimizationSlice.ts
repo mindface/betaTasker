@@ -1,6 +1,14 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchProcessOptimizationsClient, addProcessOptimizationClient, updateProcessOptimizationClient, deleteProcessOptimizationClient } from '../../client/processOptimizationApi';
-import { ProcessOptimization, AddProcessOptimization } from '../../model/processOptimization';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  fetchProcessOptimizationsClient,
+  addProcessOptimizationClient,
+  updateProcessOptimizationClient,
+  deleteProcessOptimizationClient,
+} from "../../client/processOptimizationApi";
+import {
+  ProcessOptimization,
+  AddProcessOptimization,
+} from "../../model/processOptimization";
 
 interface processOptimizationState {
   processOptimization: ProcessOptimization[];
@@ -12,54 +20,61 @@ const initialState: processOptimizationState = {
   processOptimization: [],
   processOptimizationLoading: false,
   processOptimizationError: null,
-}
+};
 
 export const loadProcessOptimization = createAsyncThunk(
-  'processOptimization/loadProcessOptimization',
+  "processOptimization/loadProcessOptimization",
   async (_, { rejectWithValue }) => {
     const response = await fetchProcessOptimizationsClient();
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
+  },
+);
 
 export const createProcessOptimization = createAsyncThunk(
-  'processOptimization/createProcessOptimization',
-  async (processOptimizationData: AddProcessOptimization, { rejectWithValue }) => {
-    const response = await addProcessOptimizationClient(processOptimizationData);
-    if ('error' in response) {
+  "processOptimization/createProcessOptimization",
+  async (
+    processOptimizationData: AddProcessOptimization,
+    { rejectWithValue },
+  ) => {
+    const response = await addProcessOptimizationClient(
+      processOptimizationData,
+    );
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
+  },
+);
 
 export const updateProcessOptimization = createAsyncThunk(
-  'processOptimization/updateProcessOptimization',
+  "processOptimization/updateProcessOptimization",
   async (processOptimizationData: ProcessOptimization, { rejectWithValue }) => {
-    const response = await updateProcessOptimizationClient(processOptimizationData);
-    if ('error' in response) {
+    const response = await updateProcessOptimizationClient(
+      processOptimizationData,
+    );
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
+  },
+);
 
 export const removeProcessOptimization = createAsyncThunk(
-  'processOptimization/removeProcessOptimization',
+  "processOptimization/removeProcessOptimization",
   async (id: string, { rejectWithValue }) => {
     const response = await deleteProcessOptimizationClient(String(id));
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return { id };
-  }
-)
+  },
+);
 
 const processOptimizationSlice = createSlice({
-  name: 'processOptimization',
+  name: "processOptimization",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -68,24 +83,40 @@ const processOptimizationSlice = createSlice({
         state.processOptimizationLoading = true;
         state.processOptimizationError = null;
       })
-      .addCase(loadProcessOptimization.fulfilled, (state, action: PayloadAction<ProcessOptimization[]>) => {
-        state.processOptimizationLoading = false;
-        state.processOptimization = action.payload;
-      })
+      .addCase(
+        loadProcessOptimization.fulfilled,
+        (state, action: PayloadAction<ProcessOptimization[]>) => {
+          state.processOptimizationLoading = false;
+          state.processOptimization = action.payload;
+        },
+      )
       .addCase(loadProcessOptimization.rejected, (state, action) => {
         state.processOptimizationLoading = false;
         state.processOptimizationError = action.payload as string;
       })
-      .addCase(createProcessOptimization.fulfilled, (state, action: PayloadAction<ProcessOptimization>) => {
-        state.processOptimization.push(action.payload);
-      })
-      .addCase(updateProcessOptimization.fulfilled, (state, action: PayloadAction<ProcessOptimization>) => {
-        const idx = state.processOptimization.findIndex(a => a.id === action.payload.id);
-        if (idx !== -1) state.processOptimization[idx] = action.payload;
-      })
-      .addCase(removeProcessOptimization.fulfilled, (state, action: PayloadAction<{ id: string }>) => {
-        state.processOptimization = state.processOptimization.filter(a => a.id !== action.payload.id);
-      });
+      .addCase(
+        createProcessOptimization.fulfilled,
+        (state, action: PayloadAction<ProcessOptimization>) => {
+          state.processOptimization.push(action.payload);
+        },
+      )
+      .addCase(
+        updateProcessOptimization.fulfilled,
+        (state, action: PayloadAction<ProcessOptimization>) => {
+          const idx = state.processOptimization.findIndex(
+            (a) => a.id === action.payload.id,
+          );
+          if (idx !== -1) state.processOptimization[idx] = action.payload;
+        },
+      )
+      .addCase(
+        removeProcessOptimization.fulfilled,
+        (state, action: PayloadAction<{ id: string }>) => {
+          state.processOptimization = state.processOptimization.filter(
+            (a) => a.id !== action.payload.id,
+          );
+        },
+      );
   },
 });
 

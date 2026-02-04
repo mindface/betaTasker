@@ -1,32 +1,39 @@
-"use clinet"
+"use clinet";
 
 type Props = {
-  controlAction: (caseAction:string) => void
-}
+  controlAction: (caseAction: string) => void;
+};
 
-export default function ContentControl( props: Props )  {
-
+export default function ContentControl(props: Props) {
   const topAction = () => {
-    props.controlAction('top')
-  }
+    props.controlAction("top");
+  };
   const leftAction = () => {
-    props.controlAction('left')
-  }
+    props.controlAction("left");
+  };
   const rightAction = () => {
-    props.controlAction('right')
-  }
+    props.controlAction("right");
+  };
   const bottomAction = () => {
-    props.controlAction('bottom')
-  }
+    props.controlAction("bottom");
+  };
 
-  return(
+  return (
     <div className="viewer-control-box">
       <div className="control-btn">
-        <button className="btn" onClick={topAction} >top</button>
-        <button className="btn" onClick={leftAction}>left</button>
-        <button className="btn" onClick={rightAction}>right</button>
-        <button className="btn" onClick={bottomAction}>bottom</button>
+        <button className="btn" onClick={topAction}>
+          top
+        </button>
+        <button className="btn" onClick={leftAction}>
+          left
+        </button>
+        <button className="btn" onClick={rightAction}>
+          right
+        </button>
+        <button className="btn" onClick={bottomAction}>
+          bottom
+        </button>
       </div>
     </div>
-  )
+  );
 }

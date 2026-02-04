@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { State, Posts } from '../../model/posts'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { State, Posts } from "../../model/posts";
 
 interface UserState {
   loading: boolean;
@@ -14,18 +14,20 @@ const initialState: UserState = {
   isAuthenticated: false,
   error: null,
   post: null,
-  rePosts: [{
-    id: 1,
-    title: "test01",
-    text: "test01",
-    name: "test01",
-    disc: "test01",
-    imgPath: "test01",
-  }],
+  rePosts: [
+    {
+      id: 1,
+      title: "test01",
+      text: "test01",
+      name: "test01",
+      disc: "test01",
+      imgPath: "test01",
+    },
+  ],
 };
 
 const userSlice = createSlice({
-  name: 'posts',
+  name: "posts",
   initialState,
   reducers: {
     postRequest: (state) => {

@@ -1,42 +1,42 @@
 [
- {
-  "id": 1,
-  "title": "home",
-  "path": "/"
- },
- {
-  "id": 2,
-  "title": "photo",
-  "path": "/photo"
- },
- {
-  "id": 3,
-  "title": "task",
-  "path": "/task"
- },
- {
-  "id": 3,
-  "title": "tools",
-  "path": "/tools"
- },
- {
-  "id": 4,
-  "title": "visualer",
-  "path": "/visualer"
- },
- {
-  "id": 5,
-  "title": "relation",
-  "path": "/relation"
- },
- {
-  "id": 6,
-  "title": "memory",
-  "path": "/memory"
- },
- {
-  "id": 6,
-  "title": "assessment",
-  "path": "/assessment"
- }
+  {
+    "id": 1,
+    "title": "home",
+    "path": "/"
+  },
+  {
+    "id": 2,
+    "title": "photo",
+    "path": "/photo"
+  },
+  {
+    "id": 3,
+    "title": "task",
+    "path": "/task"
+  },
+  {
+    "id": 3,
+    "title": "tools",
+    "path": "/tools"
+  },
+  {
+    "id": 4,
+    "title": "visualer",
+    "path": "/visualer"
+  },
+  {
+    "id": 5,
+    "title": "relation",
+    "path": "/relation"
+  },
+  {
+    "id": 6,
+    "title": "memory",
+    "path": "/memory"
+  },
+  {
+    "id": 6,
+    "title": "assessment",
+    "path": "/assessment"
+  }
 ]

@@ -3,11 +3,9 @@ import {
   HeuristicsAnalysis,
   HeuristicsPattern,
   HeuristicsTracking,
-  HeuristicsInsight
+  HeuristicsInsight,
 } from "./heuristics";
-import {
-  LanguageOptimization
-} from "./languageOptimization";
+import { LanguageOptimization } from "./languageOptimization";
 
 export interface Task {
   id: number;

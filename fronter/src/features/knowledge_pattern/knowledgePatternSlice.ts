@@ -1,6 +1,14 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchKnowledgePatternsClient, addKnowledgePatternClient, updateKnowledgePatternClient, deleteKnowledgePatternClient } from '../../client/knowledgePattern';
-import { KnowledgePattern, AddKnowledgePattern } from '../../model/knowledgePattern';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  fetchKnowledgePatternsClient,
+  addKnowledgePatternClient,
+  updateKnowledgePatternClient,
+  deleteKnowledgePatternClient,
+} from "../../client/knowledgePattern";
+import {
+  KnowledgePattern,
+  AddKnowledgePattern,
+} from "../../model/knowledgePattern";
 
 interface knowledgePatternState {
   knowledgePatterns: KnowledgePattern[];
@@ -12,58 +20,58 @@ const initialState: knowledgePatternState = {
   knowledgePatterns: [],
   knowledgePatternsLoading: false,
   knowledgePatternsError: null,
-}
+};
 
 export const loadKnowledgePatterns = createAsyncThunk(
-  'knowledgePatterns/loadKnowledgePatterns',
+  "knowledgePatterns/loadKnowledgePatterns",
   async (_, { rejectWithValue }) => {
     const response = await fetchKnowledgePatternsClient();
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value || response;
-  }
-)
+  },
+);
 
 export const createKnowledgePattern = createAsyncThunk(
-  'knowledgePatterns/createKnowledgePattern',
+  "knowledgePatterns/createKnowledgePattern",
   async (knowledgePatternData: AddKnowledgePattern, { rejectWithValue }) => {
     const response = await addKnowledgePatternClient(knowledgePatternData);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response;
-  }
-)
+  },
+);
 
 export const updateKnowledgePattern = createAsyncThunk(
-  'knowledgePatterns/updateKnowledgePattern',
+  "knowledgePatterns/updateKnowledgePattern",
   async (knowledgePatternData: KnowledgePattern, { rejectWithValue }) => {
     const response = await updateKnowledgePatternClient(knowledgePatternData);
-    if (response && 'error' in response) {
+    if (response && "error" in response) {
       return rejectWithValue(response.error);
     }
     return response;
-  }
-)
+  },
+);
 
 export const removeKnowledgePattern = createAsyncThunk(
-  'knowledgePatterns/removeKnowledgePattern',
+  "knowledgePatterns/removeKnowledgePattern",
   async (id: string, { rejectWithValue }) => {
     try {
       const response = await deleteKnowledgePatternClient(String(id));
-      if ('error' in response) {
+      if ("error" in response) {
         return rejectWithValue(response.error);
       }
       return { id };
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
-)
+  },
+);
 
 const knowledgePatternSlice = createSlice({
-  name: 'knowledgePatterns',
+  name: "knowledgePatterns",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -72,10 +80,13 @@ const knowledgePatternSlice = createSlice({
         state.knowledgePatternsLoading = true;
         state.knowledgePatternsError = null;
       })
-      .addCase(loadKnowledgePatterns.fulfilled, (state, action: PayloadAction<KnowledgePattern[]>) => {
-        state.knowledgePatternsLoading = false;
-        state.knowledgePatterns = action.payload;
-      })
+      .addCase(
+        loadKnowledgePatterns.fulfilled,
+        (state, action: PayloadAction<KnowledgePattern[]>) => {
+          state.knowledgePatternsLoading = false;
+          state.knowledgePatterns = action.payload;
+        },
+      )
       .addCase(loadKnowledgePatterns.rejected, (state, action) => {
         state.knowledgePatternsLoading = false;
         state.knowledgePatternsError = action.payload as string;
@@ -88,9 +99,14 @@ const knowledgePatternSlice = createSlice({
       //   const idx = state.knowledgePatterns.findIndex(a => a.id === action.payload.id);
       //   if (idx !== -1) state.knowledgePatterns[idx] = action.payload;
       // })
-      .addCase(removeKnowledgePattern.fulfilled, (state, action: PayloadAction<{ id: string }>) => {
-        state.knowledgePatterns = state.knowledgePatterns.filter(a => a.id !== action.payload.id);
-      });
+      .addCase(
+        removeKnowledgePattern.fulfilled,
+        (state, action: PayloadAction<{ id: string }>) => {
+          state.knowledgePatterns = state.knowledgePatterns.filter(
+            (a) => a.id !== action.payload.id,
+          );
+        },
+      );
   },
 });
 

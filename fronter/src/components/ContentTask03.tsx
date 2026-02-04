@@ -1,16 +1,11 @@
-import React, {} from 'react'
+import React, {} from "react";
 
 type Props = {
-  children?: React.ReactNode
+  children?: React.ReactNode;
+};
+
+function ContentTask03(props: Props) {
+  return <div className="content-task01">{props.children}</div>;
 }
 
-function ContentTask03(props:Props)  {
-
-  return(
-    <div className="content-task01">
-       { props.children }
-    </div>
-  )
-}
-
-export default ContentTask03
+export default ContentTask03;

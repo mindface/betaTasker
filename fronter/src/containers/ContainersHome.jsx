@@ -1,24 +1,22 @@
-import React from 'react'
-import SectionHome from '../components/SectionHome'
+import React from "react";
+import SectionHome from "../components/SectionHome";
 
 class ContainersHome extends React.Component {
-
   // static getInitialProps({reduxStore,req}){
   //   const isServer = !!req
   //   if(isServer) reduxStore.dispatch(SetTextAction('Re ss'))
   // return {}
   // }
 
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       title: "Index",
-      modalcontent:[1,2,3,4]
-    }
+      modalcontent: [1, 2, 3, 4],
+    };
   }
 
-  componentDidMount(){
-  }
+  componentDidMount() {}
 
   render() {
     return (
@@ -29,8 +27,8 @@ class ContainersHome extends React.Component {
           </main>
         </div>
       </>
-    )
+    );
   }
 }
 
-export default ContainersHome
+export default ContainersHome;

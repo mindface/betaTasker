@@ -1,4 +1,3 @@
-
 export interface Memory {
   id: number;
   user_id: number;

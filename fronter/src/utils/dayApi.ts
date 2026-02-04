@@ -1,7 +1,12 @@
+type DayApiFormat =
+  | "YYYY/MM/DD HH:mm:ss"
+  | "MM/DD/YYYY"
+  | "DD/MM/YYYY HH:mm:ss";
 
-type DayApiFormat = "YYYY/MM/DD HH:mm:ss" | "MM/DD/YYYY" | "DD/MM/YYYY HH:mm:ss";
-
-export const formatDateTime = (dateString: string, type: DayApiFormat): string => {
+export const formatDateTime = (
+  dateString: string,
+  type: DayApiFormat,
+): string => {
   const date = new Date(dateString);
   const yyyy = date.getFullYear();
   const mm = String(date.getMonth() + 1).padStart(2, "0");
@@ -14,4 +19,4 @@ export const formatDateTime = (dateString: string, type: DayApiFormat): string =
     return `${mm}/${dd}/${yyyy}`;
   }
   return `${yyyy}/${mm}/${dd} ${hh}:${mi}:${ss}`;
-}
+};

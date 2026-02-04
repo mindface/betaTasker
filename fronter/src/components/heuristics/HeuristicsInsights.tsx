@@ -1,12 +1,13 @@
-"use client"
-import React, { useEffect, useState, useCallback } from 'react';
-import { useHeuristicsInsights } from '../../hooks/useHeuristics';
-import styles from './HeuristicsInsights.module.scss';
+"use client";
+import React, { useEffect, useState, useCallback } from "react";
+import { useHeuristicsInsights } from "../../hooks/useHeuristics";
+import styles from "./HeuristicsInsights.module.scss";
 
 export default function HeuristicsInsights() {
-  const { insights, total, loading, error, getInsights, clearError } = useHeuristicsInsights();
+  const { insights, total, loading, error, getInsights, clearError } =
+    useHeuristicsInsights();
   const [currentPage, setCurrentPage] = useState(1);
-  const [userId, setUserId] = useState<string>('');
+  const [userId, setUserId] = useState<string>("");
   const itemsPerPage = 10;
 
   const loadInsights = useCallback(() => {
@@ -16,7 +17,7 @@ export default function HeuristicsInsights() {
       ...(userId && { user_id: userId }),
     };
     getInsights(params);
-  },[itemsPerPage, currentPage, userId, getInsights]);
+  }, [itemsPerPage, currentPage, userId, getInsights]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -88,10 +89,11 @@ export default function HeuristicsInsights() {
                   信頼度: <span>{(insight.confidence * 100).toFixed(1)}%</span>
                 </div>
                 <div className={styles.status}>
-                  ステータス: {insight.is_active ? '有効' : '無効'}
+                  ステータス: {insight.is_active ? "有効" : "無効"}
                 </div>
                 <div className={styles.date}>
-                  作成日: {new Date(insight.created_at).toLocaleDateString('ja-JP')}
+                  作成日:{" "}
+                  {new Date(insight.created_at).toLocaleDateString("ja-JP")}
                 </div>
               </div>
             </div>

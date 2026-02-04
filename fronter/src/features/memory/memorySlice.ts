@@ -1,6 +1,12 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchMemoriesClient, fetchMemoryClient, addMemoryClient, updateMemoryClient, deleteMemoryClient } from '../../client/memoryApi';
-import { AddMemory, Memory } from '../../model/memory';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  fetchMemoriesClient,
+  fetchMemoryClient,
+  addMemoryClient,
+  updateMemoryClient,
+  deleteMemoryClient,
+} from "../../client/memoryApi";
+import { AddMemory, Memory } from "../../model/memory";
 
 interface MemoryState {
   memories: Memory[];
@@ -14,83 +20,81 @@ const initialState: MemoryState = {
   memoryItem: {
     id: 0,
     user_id: 0,
-    title: 'no title',
-    notes: '',
-    created_at: '',
-    updated_at: '',
-    source_type: '',
-    author: '',
-    factor: '',
-    process: '',
-    evaluation_axis: '',
-    information_amount: '',
-    tags: '',
-    read_status: '',
-    read_date: '',
+    title: "no title",
+    notes: "",
+    created_at: "",
+    updated_at: "",
+    source_type: "",
+    author: "",
+    factor: "",
+    process: "",
+    evaluation_axis: "",
+    information_amount: "",
+    tags: "",
+    read_status: "",
+    read_date: "",
   },
   memoryLoading: false,
   memoryError: null,
-}
+};
 
 export const loadMemories = createAsyncThunk(
-  'memory/loadMemories',
+  "memory/loadMemories",
   async (_, { rejectWithValue }) => {
     const response = await fetchMemoriesClient();
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value ?? [];
-  }
-)
-
+  },
+);
 
 export const getMemory = createAsyncThunk(
-  'memory/getMemory',
+  "memory/getMemory",
   async (memoryId: number, { rejectWithValue }) => {
     const response = await fetchMemoryClient(memoryId);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
-
+  },
+);
 
 export const createMemory = createAsyncThunk(
-  'memory/createMemory',
+  "memory/createMemory",
   async (memoryData: AddMemory, { rejectWithValue }) => {
     const response = await addMemoryClient(memoryData);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
+  },
+);
 
 export const updateMemory = createAsyncThunk(
-  'memory/updateMemory',
+  "memory/updateMemory",
   async (memoryData: Memory, { rejectWithValue }) => {
     const response = await updateMemoryClient(memoryData);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
+  },
+);
 
 export const removeMemory = createAsyncThunk(
-  'memory/removeMemory',
+  "memory/removeMemory",
   async (id: number, { rejectWithValue }) => {
     const response = await deleteMemoryClient(id.toString());
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return id;
-  }
+  },
 );
 
 const memorySlice = createSlice({
-  name: 'memory',
+  name: "memory",
   initialState,
   reducers: {
     clearError: (state) => {
@@ -103,11 +107,14 @@ const memorySlice = createSlice({
         state.memoryLoading = true;
         state.memoryError = null;
       })
-      .addCase(loadMemories.fulfilled, (state, action: PayloadAction<Memory[]>) => {
-        console.log(action.payload)
-        state.memoryLoading = false;
-        state.memories = action.payload;
-      })
+      .addCase(
+        loadMemories.fulfilled,
+        (state, action: PayloadAction<Memory[]>) => {
+          console.log(action.payload);
+          state.memoryLoading = false;
+          state.memories = action.payload;
+        },
+      )
       .addCase(loadMemories.rejected, (state, action) => {
         state.memoryLoading = false;
         state.memoryError = action.payload as string;
@@ -128,17 +135,25 @@ const memorySlice = createSlice({
         state.memoryLoading = true;
         state.memoryError = null;
       })
-      .addCase(createMemory.fulfilled, (state, action: PayloadAction<Memory>) => {
-        state.memoryLoading = false;
-        state.memories.push(action.payload);
-      })
+      .addCase(
+        createMemory.fulfilled,
+        (state, action: PayloadAction<Memory>) => {
+          state.memoryLoading = false;
+          state.memories.push(action.payload);
+        },
+      )
       .addCase(createMemory.rejected, (state, action) => {
         state.memoryLoading = false;
         state.memoryError = action.payload as string;
       })
-      .addCase(removeMemory.fulfilled, (state, action: PayloadAction<number>) => {
-        state.memories = state.memories.filter(memory => memory.id !== action.payload);
-      });
+      .addCase(
+        removeMemory.fulfilled,
+        (state, action: PayloadAction<number>) => {
+          state.memories = state.memories.filter(
+            (memory) => memory.id !== action.payload,
+          );
+        },
+      );
   },
 });
 

@@ -1,6 +1,12 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchTasksClient, addTaskClient, updateTaskClient, deleteTaskClient, SuccessResponse } from '../../client/taskApi';
-import { AddTask, Task } from '../../model/task';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  fetchTasksClient,
+  addTaskClient,
+  updateTaskClient,
+  deleteTaskClient,
+  SuccessResponse,
+} from "../../client/taskApi";
+import { AddTask, Task } from "../../model/task";
 
 interface TaskState {
   tasks: Task[];
@@ -12,54 +18,54 @@ const initialState: TaskState = {
   tasks: [],
   taskLoading: false,
   taskError: null,
-}
+};
 
 export const loadTasks = createAsyncThunk(
-  'task/loadTasks',
+  "task/loadTasks",
   async (_, { rejectWithValue }) => {
     const response = await fetchTasksClient();
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
+  },
+);
 
 export const createTask = createAsyncThunk(
-  'task/createTask',
+  "task/createTask",
   async (taskData: AddTask, { rejectWithValue }) => {
     const response = await addTaskClient(taskData);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
+  },
+);
 
 export const updateTask = createAsyncThunk(
-  'task/updateTask',
+  "task/updateTask",
   async (taskData: Task, { rejectWithValue }) => {
     const response = await updateTaskClient(taskData);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
-  }
-)
+  },
+);
 
 export const removeTask = createAsyncThunk(
-  'task/removeTask',
+  "task/removeTask",
   async (id: number, { rejectWithValue }) => {
     const response = await deleteTaskClient(id);
-    if ('error' in response) {
+    if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return { id };
-  }
-)
+  },
+);
 
 const taskSlice = createSlice({
-  name: 'task',
+  name: "task",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -80,12 +86,15 @@ const taskSlice = createSlice({
         state.tasks.push(action.payload);
       })
       .addCase(updateTask.fulfilled, (state, action: PayloadAction<Task>) => {
-        const idx = state.tasks.findIndex(t => t.id === action.payload.id);
+        const idx = state.tasks.findIndex((t) => t.id === action.payload.id);
         if (idx !== -1) state.tasks[idx] = action.payload;
       })
-      .addCase(removeTask.fulfilled, (state, action: PayloadAction<{ id: number }>) => {
-        state.tasks = state.tasks.filter(t => t.id !== action.payload.id);
-      });
+      .addCase(
+        removeTask.fulfilled,
+        (state, action: PayloadAction<{ id: number }>) => {
+          state.tasks = state.tasks.filter((t) => t.id !== action.payload.id);
+        },
+      );
   },
 });
 

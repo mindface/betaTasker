@@ -1,32 +1,32 @@
-"use client"
-import React, { useState } from 'react';
-import HeuristicsInsights from './HeuristicsInsights';
-import HeuristicsTracking from './HeuristicsTracking';
-import HeuristicsAnalysis from './HeuristicsAnalysis';
-import HeuristicsPatterns from './HeuristicsPatterns';
-import styles from './HeuristicsDashboard.module.scss';
+"use client";
+import React, { useState } from "react";
+import HeuristicsInsights from "./HeuristicsInsights";
+import HeuristicsTracking from "./HeuristicsTracking";
+import HeuristicsAnalysis from "./HeuristicsAnalysis";
+import HeuristicsPatterns from "./HeuristicsPatterns";
+import styles from "./HeuristicsDashboard.module.scss";
 
-type TabType = 'insights' | 'tracking' | 'analysis' | 'patterns';
+type TabType = "insights" | "tracking" | "analysis" | "patterns";
 
 export default function HeuristicsDashboard() {
-  const [activeTab, setActiveTab] = useState<TabType>('insights');
+  const [activeTab, setActiveTab] = useState<TabType>("insights");
 
   const tabs = [
-    { id: 'insights', label: 'インサイト', icon: '💡' },
-    { id: 'tracking', label: 'トラッキング', icon: '📊' },
-    { id: 'analysis', label: '分析', icon: '🔍' },
-    { id: 'patterns', label: 'パターン', icon: '🎯' },
+    { id: "insights", label: "インサイト", icon: "💡" },
+    { id: "tracking", label: "トラッキング", icon: "📊" },
+    { id: "analysis", label: "分析", icon: "🔍" },
+    { id: "patterns", label: "パターン", icon: "🎯" },
   ];
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'insights':
+      case "insights":
         return <HeuristicsInsights />;
-      case 'tracking':
+      case "tracking":
         return <HeuristicsTracking />;
-      case 'analysis':
+      case "analysis":
         return <HeuristicsAnalysis />;
-      case 'patterns':
+      case "patterns":
         return <HeuristicsPatterns />;
       default:
         return <HeuristicsInsights />;
@@ -44,7 +44,7 @@ export default function HeuristicsDashboard() {
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            className={`${styles.tab} ${activeTab === tab.id ? styles.active : ''}`}
+            className={`${styles.tab} ${activeTab === tab.id ? styles.active : ""}`}
             onClick={() => setActiveTab(tab.id as TabType)}
           >
             <span className={styles.icon}>{tab.icon}</span>
@@ -53,9 +53,7 @@ export default function HeuristicsDashboard() {
         ))}
       </div>
 
-      <div className={styles.tabContent}>
-        {renderTabContent()}
-      </div>
+      <div className={styles.tabContent}>{renderTabContent()}</div>
     </div>
   );
 }

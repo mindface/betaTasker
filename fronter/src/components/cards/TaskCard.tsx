@@ -1,8 +1,8 @@
-"use client"
-import React from 'react';
-import GenericItemCard from '../parts/GenericItemCard';
-import { Task } from '../../model/task';
-import { useItemOperations } from '../../hooks/useItemOperations';
+"use client";
+import React from "react";
+import GenericItemCard from "../parts/GenericItemCard";
+import { Task } from "../../model/task";
+import { useItemOperations } from "../../hooks/useItemOperations";
 
 interface TaskCardProps {
   task: Task;
@@ -10,9 +10,9 @@ interface TaskCardProps {
 }
 
 export default function TaskCard({ task, onRefresh }: TaskCardProps) {
-  const { deleteItem, updateItem } = useItemOperations('task', {
+  const { deleteItem, updateItem } = useItemOperations("task", {
     onDeleteSuccess: onRefresh,
-    onUpdateSuccess: onRefresh
+    onUpdateSuccess: onRefresh,
   });
 
   const handleUpdate = async (item: Task) => {
@@ -24,9 +24,9 @@ export default function TaskCard({ task, onRefresh }: TaskCardProps) {
       <div className="detail-item">
         <span className="label">ステータス:</span>
         <span className={`status status-${task.status}`}>
-          {task.status === 'todo' && '未着手'}
-          {task.status === 'in_progress' && '進行中'}
-          {task.status === 'completed' && '完了'}
+          {task.status === "todo" && "未着手"}
+          {task.status === "in_progress" && "進行中"}
+          {task.status === "completed" && "完了"}
         </span>
       </div>
       <div className="detail-item">
@@ -36,7 +36,9 @@ export default function TaskCard({ task, onRefresh }: TaskCardProps) {
       {task.date && (
         <div className="detail-item">
           <span className="label">期限:</span>
-          <span className="due-date">{new Date(task.date).toLocaleDateString('ja-JP')}</span>
+          <span className="due-date">
+            {new Date(task.date).toLocaleDateString("ja-JP")}
+          </span>
         </div>
       )}
     </div>
@@ -67,7 +69,9 @@ export default function TaskCard({ task, onRefresh }: TaskCardProps) {
         <select
           id="status"
           value={task.status}
-          onChange={(e) => onChange({ ...task, status: e.target.value as Task['status'] })}
+          onChange={(e) =>
+            onChange({ ...task, status: e.target.value as Task["status"] })
+          }
         >
           <option value="todo">未着手</option>
           <option value="in_progress">進行中</option>
@@ -80,7 +84,9 @@ export default function TaskCard({ task, onRefresh }: TaskCardProps) {
           type="number"
           id="priority"
           value={task.priority}
-          onChange={(e) => onChange({ ...task, priority: Number(e.target.value) })}
+          onChange={(e) =>
+            onChange({ ...task, priority: Number(e.target.value) })
+          }
           min={1}
           max={5}
         />

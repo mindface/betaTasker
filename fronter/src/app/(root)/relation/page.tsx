@@ -1,9 +1,7 @@
-"use client"
-import * as React from 'react'
-import SectionAssessmentRelation from '../../../components/SectionAssessmentRelation'
+"use client";
+import * as React from "react";
+import SectionAssessmentRelation from "../../../components/SectionAssessmentRelation";
 
 export default function AssessmentRelationPage() {
-  return (
-    <SectionAssessmentRelation />
-  )
+  return <SectionAssessmentRelation />;
 }

@@ -1,21 +1,21 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   // 認証が必要なパス一覧
   const protectedPaths = [
-    '/dashboard',
-    '/task',
-    '/memory',
-    '/assessment',
-    '/book',
-    '/relation',
-    '/tools'
+    "/dashboard",
+    "/task",
+    "/memory",
+    "/assessment",
+    "/book",
+    "/relation",
+    "/tools",
   ];
   const { pathname } = request.nextUrl;
 
   // ログインページやAPIは除外
-  if (pathname.startsWith('/login') || pathname.startsWith('/api')) {
+  if (pathname.startsWith("/login") || pathname.startsWith("/api")) {
     return NextResponse.next();
   }
 
@@ -26,9 +26,9 @@ export function middleware(request: NextRequest) {
   }
 
   // cookieからtokenを取得
-  const token = request.cookies.get('token')?.value;
+  const token = request.cookies.get("token")?.value;
   if (!token) {
-    const loginUrl = new URL('/login', request.url);
+    const loginUrl = new URL("/login", request.url);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -38,12 +38,12 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // 保護したいパスを列挙
-    '/dashboard/:path*',
-    '/task/:path*',
-    '/memory/:path*',
-    '/assessment/:path*',
-    '/book/:path*',
-    '/relation/:path*',
-    '/tools/:path*',
+    "/dashboard/:path*",
+    "/task/:path*",
+    "/memory/:path*",
+    "/assessment/:path*",
+    "/book/:path*",
+    "/relation/:path*",
+    "/tools/:path*",
   ],
 };

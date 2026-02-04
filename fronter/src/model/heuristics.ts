@@ -61,7 +61,7 @@ export interface HeuristicsModel {
   version: string;
   parameters: any; // JSONデータ
   performance: any; // JSONデータ
-  status: 'training' | 'ready' | 'deprecated';
+  status: "training" | "ready" | "deprecated";
   trained_at: string;
   created_at: string;
   updated_at: string;
