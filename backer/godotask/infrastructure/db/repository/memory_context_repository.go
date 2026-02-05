@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"fmt"
 	"github.com/godotask/infrastructure/db/model"
 	"gorm.io/gorm"
+	"github.com/rs/zerolog/log"
 )
 
 type MemoryContextRepositoryImpl struct {
@@ -24,7 +24,7 @@ func (r *MemoryContextRepositoryImpl) FindByCode(code string, contexts *[]model.
 // }
 
 func (r *MemoryContextRepositoryImpl) FindWithAidsByCode(code string, contexts *[]model.MemoryContext) error {
-	fmt.Printf("Finding memory contexts with code: %s\n", code)
+	log.Info().Msgf("Finding memory contexts with code: %s", code)
 	return r.DB.
 		Preload("TechnicalFactors").
 		Preload("KnowledgeTransformations").
