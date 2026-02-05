@@ -1,11 +1,10 @@
-version: '3.8'
 
 services:
   backender:
     container_name: backender
     build:
       context: .
-      dockerfile: ./backer/godotask/Dockerfile.local
+      dockerfile: ./backer/godotask/Dockerfile
     stdin_open: true
     tty: true
     command: bash -c "/bin/bash"

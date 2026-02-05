@@ -1,8 +1,6 @@
 module github.com/godotask
 
-go 1.21.0
-
-toolchain go1.21.13
+go 1.25
 
 require (
 	github.com/gin-gonic/contrib v0.0.0-20250113154928-93b827325fec
