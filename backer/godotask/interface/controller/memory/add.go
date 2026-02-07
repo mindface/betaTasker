@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/infrastructure/db/model"
 	"github.com/godotask/errors"
-	"fmt"
+	"github.com/rs/zerolog/log"
 )
 
 // AddMemory: POST /api/memory
@@ -17,7 +17,7 @@ func (ctl *MemoryController) AddMemory(c *gin.Context) {
 			errors.GetErrorMessage(errors.VAL_INVALID_INPUT),
 			err.Error(),
 		)
-		fmt.Printf("AddMemory BindJSON error: %v\n", err)
+		log.Error().Msgf("AddMemory BindJSON error: %v", err)
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,
 			"message": appErr.Message,
@@ -31,7 +31,7 @@ func (ctl *MemoryController) AddMemory(c *gin.Context) {
 			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
 			err.Error(),
 		)
-		fmt.Printf("AddMemory CreateMemory error: %v\n", err)
+		log.Error().Msgf("AddMemory CreateMemory error: %v", err)
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,
 			"message": appErr.Message,
@@ -39,7 +39,7 @@ func (ctl *MemoryController) AddMemory(c *gin.Context) {
 		})
 		return
 	}
-	fmt.Printf("AddMemory success: %+v\n", memory)
+	log.Info().Msgf("AddMemory success: %+v", memory)
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,

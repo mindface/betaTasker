@@ -1,12 +1,12 @@
-FROM golang:1.21
+FROM golang:1.25-bookworm
 
 RUN mkdir -p /usr/local/go/godotask
 WORKDIR /usr/local/go/godotask
 
-COPY go.mod .
-COPY go.sum .
+COPY backer/godotask/go.mod .
+COPY backer/godotask/go.sum .
 
 RUN go mod download
 
 # アプリケーションコードをコピー
-COPY ./ .
+COPY backer/godotask/ .

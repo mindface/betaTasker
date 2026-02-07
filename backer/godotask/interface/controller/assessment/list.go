@@ -1,12 +1,13 @@
 package assessment
 
 import (
-	"fmt"
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/interface/http/authcontext"
 	"github.com/godotask/errors"
 	"strconv"
+    
+	"github.com/rs/zerolog/log"
 )
 
 type TaskUserRequest struct {
@@ -113,7 +114,7 @@ func (ctl *AssessmentController) ListAssessmentsForTaskUser(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("ListAssessmentsForTaskUser called with user_id: %d, task_id: %d\n", req.UserID, req.TaskID)
+    log.Info().Msgf("ListAssessmentsForTaskUser called with user_id: %d, task_id: %d", req.UserID, req.TaskID)
 
 	assessments, err := ctl.Service.ListAssessmentsForTaskUser(req.UserID, req.TaskID)
 	if err != nil {
