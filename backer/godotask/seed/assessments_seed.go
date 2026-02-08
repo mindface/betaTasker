@@ -1,7 +1,6 @@
 package seed
 
 import (
-	"log"
 	"fmt"
 	"strconv"
 	"time"
@@ -10,7 +9,6 @@ import (
 	"os"
 
 	"github.com/godotask/infrastructure/db/model"
-	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
 
@@ -72,9 +70,9 @@ func SeedAssessmentsModelsFromCSV(db *gorm.DB) error {
 		if err := db.Create(&models).Error; err != nil {
 			return fmt.Errorf("failed to insert assessment models: %w", err)
 		}
-		log.Info().Msgf("Successfully seeded %d assessment models", len(models))
+		fmt.Printf("Successfully seeded %d assessment models\n", len(models))
 	}
 
-	log.Info().Msgf("✓ Successfully seeded %d assessment models", len(models))
+	fmt.Printf("✓ Successfully seeded %d assessment models", len(models))
 	return nil
 }

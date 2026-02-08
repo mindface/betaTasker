@@ -103,7 +103,7 @@ export class AssessmentApiFacade
     if ("error" in result) {
       throw result.error;
     }
-    return "value" in result ? result.value : [];
+    return result.assessments;
   }
 
   async create(assessment: AddAssessment): Promise<Assessment> {

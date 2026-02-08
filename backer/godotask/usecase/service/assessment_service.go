@@ -19,13 +19,13 @@ func (s *AssessmentService) CreateAssessment(task *model.Assessment) error {
 func (s *AssessmentService) GetAssessmentByID(id string) (*model.Assessment, error) {
 	return s.Repo.FindByID(id)
 }
-func (s *AssessmentService) ListAssessments() ([]model.Assessment, error) {
-	return s.Repo.FindAll()
+func (s *AssessmentService) ListAssessments(userID uint) ([]model.Assessment, int64, error) {
+	return s.Repo.FindAll(userID)
 }
 func (s *AssessmentService) ListAssessmentsForTaskUser(userID int, taskID int) ([]model.Assessment, error) {
 	return s.Repo.FindByTaskIDAndUserID(userID,taskID)
 }
-func (s *AssessmentService) ListAssessmentsTOPager(userID uint, page int, perPage int, offset int) ([]model.Assessment, int64, error) {
+func (s *AssessmentService) ListAssessmentsTOPager(userID uint,perPage int, offset int) ([]model.Assessment, int64, error) {
   return s.Repo.ListAssessmentsPager(userID, offset, perPage)
 }
 func (s *AssessmentService) ListAssessmentsForTaskUserPager(userID, taskID, page, perPage, offset int) ([]model.Assessment, int64, error) {

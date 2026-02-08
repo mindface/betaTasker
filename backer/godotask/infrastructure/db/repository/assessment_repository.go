@@ -33,12 +33,20 @@ func (r *AssessmentRepositoryImpl) FindByTaskIDAndUserID(userID int, taskID int)
 	return assessments, nil
 }
 
-func (r *AssessmentRepositoryImpl) FindAll() ([]model.Assessment, error) {
+func (r *AssessmentRepositoryImpl) FindAll(userID uint) ([]model.Assessment, int64, error) {
 	var assessments []model.Assessment
-	if err := r.DB.Find(&assessments).Error; err != nil {
-		return nil, err
+	var total int64
+
+	q := r.DB.Model(&model.Assessment{}).Scopes(helper.WithUserFilter(userID))
+
+	if err := q.Count(&total).Error; err != nil {
+			return nil, 0, err
 	}
-	return assessments, nil
+
+	if err := q.Order("created_at DESC, id DESC").Find(&assessments).Error; err != nil {
+			return nil, 0, err
+	}
+	return assessments, total, nil
 }
 
 func (r *AssessmentRepositoryImpl) ListAssessmentsPager(userID uint, offset int, limit int) ([]model.Assessment, int64, error) {

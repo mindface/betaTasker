@@ -32,6 +32,7 @@ const ItemAssessment = ({
         </div>
       </div>
       <div className="assessment-item__content card-item__content">
+        <p>id | {assessment.id}</p>
         <p>effectiveness_score | {assessment.effectiveness_score}</p>
         <p>effort_score | {assessment.effort_score}</p>
         <div className="assessment-item__score card-item__score">

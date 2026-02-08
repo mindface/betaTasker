@@ -51,7 +51,12 @@ export async function handleBaseRequest(
       const key = Object.keys(dynamicParams)[0];
       switch (key) {
         case "code":
-          url + `/${dynamicParams[key]}`;
+          url += `/${dynamicParams[key]}`;
+          break;
+        case "page":
+          const query = new URLSearchParams({ page: dynamicParams[key], limit: dynamicParams["limit"] }).toString();
+          url += `?${query}`;
+          break;
       }
     }
 

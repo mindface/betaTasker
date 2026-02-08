@@ -13,7 +13,7 @@ type BookRepositoryInterface interface {
 type AssessmentRepositoryInterface interface {
 	Create(assessment *model.Assessment) error
 	FindByID(id string) (*model.Assessment, error)
-	FindAll() ([]model.Assessment, error)
+	FindAll(userID uint) ([]model.Assessment, int64, error)
 	ListAssessmentsPager(userID uint, offset int, perPage int) ([]model.Assessment, int64, error)
 	FindByTaskIDAndUserID(userID int, taskID int) ([]model.Assessment, error)
 	ListAssessmentsForTaskUserPager(offset int, perPage int, userID int, taskID int) ([]model.Assessment, int64, error)

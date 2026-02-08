@@ -6,6 +6,7 @@ const URLs = {
   logout: `${domainAndHost}/api/logout`,
   register: `${domainAndHost}/api/register`,
   assessment: `${domainAndHost}/api/assessment`,
+  assessmentPager: `${domainAndHost}/api/assessment/pager`,
   assessmentsForTaskUser: `${domainAndHost}/api/assessmentsForTaskUser`,
   heuristicsAnalyze: `${domainAndHost}/api/heuristics/analyze`,
   heuristicsInsights: `${domainAndHost}/api/heuristics/insights`,
