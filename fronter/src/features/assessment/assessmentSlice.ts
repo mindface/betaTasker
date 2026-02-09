@@ -8,7 +8,7 @@ import {
   deleteAssessmentClient,
 } from "../../client/assessmentApi";
 import { AddAssessment, Assessment } from "../../model/assessment";
-import { ResponseAssessment } from "@/model/respose";
+import { LimitResponse } from "@/model/respose";
 
 interface AssessmentState {
   assessments: Assessment[];
@@ -64,7 +64,7 @@ export const getAssessmentsForTaskUser = createAsyncThunk(
   async (payload: { userId: number; taskId: number }, { rejectWithValue }) => {
     const response = await getAssessmentsForTaskUserClient(
       payload.userId,
-      payload.taskId,
+      payload.taskId
     );
     if ("error" in response) {
       return rejectWithValue({
@@ -133,7 +133,7 @@ const assessmentSlice = createSlice({
       })
       .addCase(
         loadAssessments.fulfilled,
-        (state, action: PayloadAction<ResponseAssessment>) => {
+        (state, action: PayloadAction<LimitResponse<Assessment,"assessments">>) => {
           state.assessmentLoading = false;
           state.assessments = action.payload.assessments;
         },
@@ -148,7 +148,7 @@ const assessmentSlice = createSlice({
       })
       .addCase(
         getAssessmentsLimit.fulfilled,
-        (state, action: PayloadAction<ResponseAssessment>) => {
+        (state, action: PayloadAction<LimitResponse<Assessment,"assessments">>) => {
           state.assessmentLoading = false;
 
           state.assessments = action.payload.assessments;

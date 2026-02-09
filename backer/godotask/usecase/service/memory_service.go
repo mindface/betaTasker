@@ -22,8 +22,8 @@ func (s *MemoryService) ListMemories(userID uint) ([]model.Memory, error) {
 	return s.Repo.FindAll(userID)
 }
 
-func (s *MemoryService) ListMemoriesTOPager(userID uint, page int, perPage int, offset int) ([]model.Memory, int64, error) {
-    return s.Repo.ListMemories(userID, offset, perPage)
+func (s *MemoryService) ListMemoriesPager(userID uint, perPage int, offset int) ([]model.Memory, int64, error) {
+  return s.Repo.ListMemoriesPager(userID, offset, perPage)
 }
 
 func (s *MemoryService) UpdateMemory(id string, memory *model.Memory) error {

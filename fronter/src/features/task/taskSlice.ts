@@ -5,17 +5,31 @@ import {
   updateTaskClient,
   deleteTaskClient,
   SuccessResponse,
+  getTasksLimitClient,
 } from "../../client/taskApi";
 import { AddTask, Task } from "../../model/task";
+import { LimitResponse } from "@/model/respose";
 
 interface TaskState {
   tasks: Task[];
+
+  tasksPage: number;
+  tasksLimit: number;
+  tasksTotal: number;
+  tasksTotalPages: number;
+
   taskLoading: boolean;
   taskError: string | null;
 }
 
 const initialState: TaskState = {
   tasks: [],
+
+  tasksPage: 1,
+  tasksLimit: 1,
+  tasksTotal: 1,
+  tasksTotalPages: 1,
+
   taskLoading: false,
   taskError: null,
 };
@@ -27,7 +41,24 @@ export const loadTasks = createAsyncThunk(
     if ("error" in response) {
       return rejectWithValue(response.error);
     }
-    return response.value;
+    return { tasks: response.tasks, meta: response.meta };
+  },
+);
+
+export const getTasksLimit = createAsyncThunk(
+  "task/getTasksLimit",
+  async (payload: { page: number; limit: number }, { rejectWithValue }) => {
+    const response = await getTasksLimitClient(
+      payload.page,
+      payload.limit,
+    );
+    if ("error" in response) {
+      return rejectWithValue({
+        message: response.error.message,
+        name: response.error.name,
+      });
+    }
+    return { tasks: response.tasks, meta: response.meta };
   },
 );
 
@@ -74,11 +105,26 @@ const taskSlice = createSlice({
         state.taskLoading = true;
         state.taskError = null;
       })
-      .addCase(loadTasks.fulfilled, (state, action: PayloadAction<Task[]>) => {
+      .addCase(loadTasks.fulfilled, (state, action: PayloadAction<LimitResponse<Task,"tasks">>) => {
         state.taskLoading = false;
-        state.tasks = action.payload;
+        state.tasks = action.payload.tasks;
       })
       .addCase(loadTasks.rejected, (state, action) => {
+        state.taskLoading = false;
+        state.taskError = action.payload as string;
+      })
+      .addCase(getTasksLimit.pending, (state) => {
+        state.taskLoading = true;
+        state.taskError = null;
+      })
+      .addCase(getTasksLimit.fulfilled, (state, action: PayloadAction<LimitResponse<Task,"tasks">>) => {
+        state.taskLoading = false;
+        state.tasks = action.payload.tasks;
+        state.tasksLimit = action.payload.meta.limit;
+        state.tasksTotal = action.payload.meta.total;
+        state.tasksTotalPages = action.payload.meta.total_pages;
+      })
+      .addCase(getTasksLimit.rejected, (state, action) => {
         state.taskLoading = false;
         state.taskError = action.payload as string;
       })

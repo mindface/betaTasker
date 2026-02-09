@@ -26,7 +26,7 @@ export default function SectionAssessment() {
   const { assessments, assessmentLoading, assessmentError, assessmentsPage, assessmentsLimit, assessmentsTotal, assessmentsTotalPages } = useSelector(
     (state: RootState) => state.assessment,
   );
-  // TODO　APIの調整後に再実装を考慮
+
   const {
     knowledgePatterns,
     knowledgePatternsError,
@@ -158,26 +158,28 @@ export default function SectionAssessment() {
               <div className="loading">読み込み中...</div>
             ) : (
               <>
-              <div className="assessment-list card-list">
-                {assessments.map((assessment: Assessment, index: number) => (
-                  <ItemAssessment
-                    key={`assessment-item${index}`}
-                    assessment={assessment}
-                    onEdit={(editAssessment: Assessment) =>
-                      handleEditAssessment(editAssessment)
-                    }
-                    onDelete={() => handleDeleteAssessment(assessment.id)}
+                <div className="assessment-list card-list">
+                  {assessments.map((assessment: Assessment, index: number) => (
+                    <ItemAssessment
+                      key={`assessment-item${index}`}
+                      assessment={assessment}
+                      onEdit={(editAssessment: Assessment) =>
+                        handleEditAssessment(editAssessment)
+                      }
+                      onDelete={() => handleDeleteAssessment(assessment.id)}
+                    />
+                  ))}
+                </div>
+                <div className="p-8">
+                  <PageNation
+                    page={assessmentsPage}
+                    limit={assessmentsLimit}
+                    totalPages={assessmentsTotalPages}
+                    onChange={(newPage: number) => {
+                      handlePageChange(newPage);
+                    }}
                   />
-                ))}
-              </div>
-              <PageNation
-                page={assessmentsPage}
-                limit={assessmentsLimit}
-                totalPages={assessmentsTotalPages}
-                onChange={(newPage: number) => {
-                  handlePageChange(newPage);
-                }}
-              />
+                </div>
               </>
             )}
             <AssessmentModal

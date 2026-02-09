@@ -5,23 +5,24 @@ import { RootState } from "../store";
 import { createTask, updateTask, removeTask } from "../features/task/taskSlice";
 import ItemTask from "./parts/ItemTask";
 import TaskModal from "./parts/TaskModal";
+import PageNation from "./parts/PageNation";
 import AssessmentListModal from "./parts/AssessmentListModal";
 import { AddTask, Task } from "../model/task";
 import { loadMemories } from "../features/memory/memorySlice";
-import { loadTasks } from "../features/task/taskSlice";
+import { getTasksLimit } from "../features/task/taskSlice";
 
 export default function SectionTask() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
   const { memories } = useSelector((state: RootState) => state.memory);
-  const { tasks } = useSelector((state: RootState) => state.task);
+  const { tasks, tasksPage, tasksLimit, tasksTotal, tasksTotalPages } = useSelector((state: RootState) => state.task);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<AddTask | Task | undefined>();
   const [TaskId, setTaskId] = useState<number>(-1);
 
   useEffect(() => {
     dispatch(loadMemories());
-    dispatch(loadTasks());
+    dispatch(getTasksLimit({ page: 1, limit: 20 }));
   }, [dispatch, isAuthenticated]);
 
   const handleAddTask = () => {
@@ -34,22 +35,22 @@ export default function SectionTask() {
     setIsModalOpen(true);
   };
 
-  const handleSaveTask = async (taskData: AddTask | Task) => {
-    if (editingTask) {
-      await dispatch(updateTask(taskData as Task));
-    } else {
-      await dispatch(createTask(taskData as AddTask));
-    }
-    setIsModalOpen(false);
-  };
+  // const handleSaveTask = async (taskData: AddTask | Task) => {
+  //   if (editingTask) {
+  //     await dispatch(updateTask(taskData as Task));
+  //   } else {
+  //     await dispatch(createTask(taskData as AddTask));
+  //   }
+  //   setIsModalOpen(false);
+  // };
 
   const handleDeleteTask = async (id: number) => {
     await dispatch(removeTask(id));
   };
 
-  useEffect(() => {
-    console.log("tasks changed:", tasks);
-  }, [tasks]);
+  const handlePageChange = (newPage: number) => {
+    dispatch(getTasksLimit({ page: newPage, limit: tasksLimit }));
+  };
 
   return (
     <div className="section__inner section--task">
@@ -73,6 +74,16 @@ export default function SectionTask() {
             ))}
           </Suspense>
         </div>
+        <div className="task-pagination p-t-8">
+          <PageNation
+            page={tasksPage}
+            limit={tasksLimit}
+            totalPages={tasksTotalPages}
+            onChange={(newPage: number) => {
+              handlePageChange(newPage);
+            }}
+          />
+        </div>
         <AssessmentListModal
           taskId={TaskId}
           isOpen={TaskId !== -1}
@@ -83,7 +94,6 @@ export default function SectionTask() {
           initialData={editingTask}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onSave={handleSaveTask}
           memories={memories}
         />
       </div>

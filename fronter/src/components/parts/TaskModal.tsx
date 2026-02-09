@@ -9,7 +9,6 @@ import { formatDateTime } from "../../utils/dayApi";
 interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (taskData: AddTask | Task) => void;
   initialData?: AddTask | Task;
   memories: Memory[];
 }
@@ -17,7 +16,6 @@ interface TaskModalProps {
 const TaskModal = ({
   isOpen,
   onClose,
-  onSave,
   initialData,
   memories,
 }: TaskModalProps) => {
@@ -61,7 +59,6 @@ const TaskModal = ({
   const isTask = (data: AddTask | Task | undefined): data is Task => {
     return data !== undefined && "id" in data;
   };
-
   // 選択中のmemory_idに該当するMemoryを取得
   const selectedMemory = memories.find(
     (m) => m.id === Number(formData?.memory_id),

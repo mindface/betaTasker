@@ -1,9 +1,9 @@
 import { AddAssessment, Assessment } from "../model/assessment";
 import { fetchApiJsonCore } from "@/utils/fetchApi";
-import { ResponseAssessment } from "@/model/respose";
+import { LimitResponse } from "@/model/respose";
 
 export const fetchAssessmentsClient = async () => {
-  const data = await fetchApiJsonCore<undefined, ResponseAssessment>({
+  const data = await fetchApiJsonCore<undefined, LimitResponse<Assessment,"assessments">>({
     endpoint: "/api/assessment",
     method: "GET",
     errorMessage: "error fetchAssessmentsClient アセスメント一覧取得失敗",
@@ -20,7 +20,7 @@ export const getAssessmentsForTaskUserClient = async (
 ) => {
   const data = await fetchApiJsonCore<
     { userId: number; taskId: number },
-    ResponseAssessment
+    LimitResponse<Assessment,"assessments">
   >({
     endpoint: "/api/assessmentsForTaskUser",
     method: "POST",
@@ -40,7 +40,7 @@ export const getAssessmentsLimitClient = async (
 ) => {
   const data = await fetchApiJsonCore<
     undefined,
-    ResponseAssessment
+     LimitResponse<Assessment,"assessments">
   >({
     endpoint: `/api/assessment/pager?page=${page}&limit=${limit}`,
     method: "GET",

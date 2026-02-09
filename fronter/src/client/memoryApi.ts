@@ -1,21 +1,43 @@
-import { AddMemory, Memory } from "../model/memory";
+import { AddMemory, Memory } from "@/model/memory";
+import { LimitResponse } from "@/model/respose";
 import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 export const fetchMemoriesClient = async () => {
-  const data = await fetchApiJsonCore<undefined, Memory[]>({
+  const data = await fetchApiJsonCore<undefined, LimitResponse<Memory,"memories">>({
     endpoint: "/api/memory",
     method: "GET",
     errorMessage: "error fetchMemoriesClient メモリ一覧取得失敗",
-    getKey: "memories",
   });
-  return data;
+  if ("error" in data) {
+    return data;
+  }
+  return data.value;
 };
 
-export const fetchMemoryClient = async (memoryId: number) => {
+export const getMemoriesLimitClient = async (
+  page: number,
+  limit: number,
+) => {
+  const data = await fetchApiJsonCore<
+    undefined,
+     LimitResponse<Memory,"memories">
+  >({
+    endpoint: `/api/memory/pager?page=${page}&limit=${limit}`,
+    method: "GET",
+    errorMessage:
+      "error getMemoriesLimitClient メモリLimiterでの情報取得失敗",
+  });
+  if ("error" in data) {
+    return data;
+  }
+  return data.value;
+};
+
+export const getMemoryClient = async (memoryId: number) => {
   const data = await fetchApiJsonCore<undefined, Memory>({
     endpoint: `/api/memory/${memoryId}`,
     method: "GET",
-    errorMessage: "error fetchMemoryClient メモリ情報取得失敗",
+    errorMessage: "error getMemoryClient メモリ情報取得失敗",
   });
   return data;
 };

@@ -7,15 +7,17 @@ import {
   createMemory,
   updateMemory,
   removeMemory,
+  getMemoriesLimit,
 } from "../features/memory/memorySlice";
 import ItemMemory from "./parts/ItemMemory";
 import MemoryModal from "./parts/MemoryModal";
 import { AddMemory, Memory } from "../model/memory";
 import MemoryAidList from "./MemoryAidList";
+import PageNation from "./parts/PageNation";
 
 export default function SectionMemory() {
   const dispatch = useDispatch();
-  const { memories, memoryLoading, memoryError } = useSelector(
+  const { memories, memoryLoading, memoryError, memoriesPage, memoriesLimit, memoriesTotal, memoriesTotalPages   } = useSelector(
     (state: RootState) => state.memory,
   );
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
@@ -26,7 +28,8 @@ export default function SectionMemory() {
   const [aidCode, setAidCode] = useState("MA-Q-02"); // デフォルト値は任意
 
   useEffect(() => {
-    dispatch(loadMemories());
+    // dispatch(loadMemories());
+    dispatch(getMemoriesLimit({ page: 1, limit: 20 }));
   }, [dispatch, isAuthenticated]);
 
   const handleAddMemory = () => {
@@ -66,6 +69,10 @@ export default function SectionMemory() {
     await dispatch(removeMemory(id));
   };
 
+  const handlePageChange = (newPage: number) => {
+    dispatch(getMemoriesLimit({ page: newPage, limit: memoriesLimit }));
+  }
+
   return (
     <div className="section__inner section--memory p-8">
       <div className="section-container">
@@ -103,6 +110,16 @@ export default function SectionMemory() {
             ))}
           </div>
         )}
+        <div className="memory-pagination p-t-8">
+          <PageNation
+            page={memoriesPage}
+            limit={memoriesLimit}
+            totalPages={memoriesTotalPages}
+            onChange={(newPage: number) => {
+              handlePageChange(newPage);
+            }}
+          />
+        </div>
         <MemoryModal
           isViewType={false}
           initialData={editingMemory}

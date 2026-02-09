@@ -18,9 +18,8 @@ func (s *TaskService) GetTaskByID(id string) (*model.Task, error) {
 func (s *TaskService) ListTasks(userID uint) ([]model.Task, error) {
 	return s.Repo.FindAll(userID)
 }
-// ListTasksByUser: 特定ユーザーのタスク一覧を取得
-func (s *TaskService) ListTasksByUser(userID uint) ([]model.Task, error) {
-    return s.Repo.ListTasksByUser(userID)
+func (s *TaskService) ListTasksPager(userID uint,perPage int, offset int) ([]model.Task, int64, error) {
+  return s.Repo.ListTasksPager(userID, offset, perPage)
 }
 // ListTasksByUserPager: 特定ユーザーのタスク一覧をページネーション取得
 func (s *TaskService) ListTasksByUserPager(userID uint, page int, perPage int, offset int) ([]model.Task, int64, error) {

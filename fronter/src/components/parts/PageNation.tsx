@@ -14,10 +14,8 @@ export default function PageNation({
   totalPages,
   onChange,
 }: PageNationProps) {
-  // 内部 state
   const [currentPage, setCurrentPage] = useState<number>(page);
 
-  // 親から page が変わったら同期
   useEffect(() => {
     setCurrentPage(page);
   }, [page]);
@@ -42,34 +40,30 @@ export default function PageNation({
   }
 
   const changePage = (p: number) => {
+    if(currentPage === p) return;
     setCurrentPage(p);
     onChange?.(p);
   };
 
   return (
-    <div className="pagination" style={{ display: "flex", gap: "6px" }}>
-      {/* Prev */}
+    <div className="pagenation p-16" style={{ display: "flex", gap: "6px" }}>
       <button
         disabled={!canPrev}
         onClick={() => changePage(currentPage - 1)}
       >
-        Prev
+        &lt; &lt;
       </button>
 
-      {/* First */}
       {startPage > 1 && (
         <>
           <button onClick={() => changePage(1)}>1</button>
           <span>…</span>
         </>
       )}
-      <p>startPage: {startPage}</p>
-      <p>endPage: {endPage}</p>
-
-      {/* Page numbers */}
       {pages.map((p) => (
         <button
           key={p}
+          className={currentPage === p ? "active" : ""}
           onClick={() => changePage(p)}
           style={{
             fontWeight: p === currentPage ? "bold" : "normal",
@@ -80,7 +74,6 @@ export default function PageNation({
         </button>
       ))}
 
-      {/* Last */}
       {endPage < totalPages && (
         <>
           <span>…</span>
@@ -90,12 +83,11 @@ export default function PageNation({
         </>
       )}
 
-      {/* Next */}
       <button
         disabled={!canNext}
         onClick={() => changePage(currentPage + 1)}
       >
-        Next
+        &gt; &gt;
       </button>
     </div>
   );

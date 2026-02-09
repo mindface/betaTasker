@@ -12,7 +12,11 @@ const END_POINT_MEMOERY = "memory";
 export async function GET() {
   try {
     const { data, status } = await handleBaseRequest("GET", END_POINT_MEMOERY);
-    return NextResponse.json({ memories: data.memories }, { status });
+    return NextResponse.json({
+        memories: data.memories
+      }, {
+        status
+      });
   } catch (error) {
     return handleError(error, END_POINT_MEMOERY);
   }
@@ -27,7 +31,7 @@ export async function POST(request: Request) {
     );
     return NextResponse.json(
       {
-        memory: data.memory,
+        memories: data.memories,
       },
       { status },
     );

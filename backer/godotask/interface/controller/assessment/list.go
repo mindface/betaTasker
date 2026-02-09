@@ -8,7 +8,6 @@ import (
 	"strconv"
 
 	// "github.com/rs/zerolog/log"
-    "fmt"
 )
 
 type TaskUserRequest struct {
@@ -65,10 +64,6 @@ func (ctl *AssessmentController) ListAssessmentsPager(c *gin.Context) {
     }
 
     offset := (page - 1) * limit
-    fmt.Printf("RawQuery: %s\n", c.Request.URL.RawQuery)
-    fmt.Printf("page: %d\n", page)
-    fmt.Printf("limit: %d\n", limit)
-    fmt.Printf("offset: %d\n", offset)
 
     // Service 側で total も返す想定
     assessments, total, err := ctl.Service.ListAssessmentsTOPager(userID, limit, offset)
