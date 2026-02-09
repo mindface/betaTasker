@@ -55,7 +55,7 @@ export function useItemOperations<T extends EntityType>(
     execute: fetchItems,
     loading: fetchLoading,
     data: items,
-  } = useApiCall(() => strategy.getAll() as Promise<ItemType[]>, {});
+  } = useApiCall(() => strategy.getAll(), {});
 
   const handleDelete = useCallback(
     async (id: number, itemTitle?: string) => {
