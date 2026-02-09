@@ -1,16 +1,25 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import {
   fetchMemoriesClient,
-  fetchMemoryClient,
+  getMemoryClient,
+
   addMemoryClient,
   updateMemoryClient,
   deleteMemoryClient,
-} from "../../client/memoryApi";
-import { AddMemory, Memory } from "../../model/memory";
+  getMemoriesLimitClient,
+} from "@/client/memoryApi";
+import { AddMemory, Memory } from "@/model/memory";
+import { LimitResponse } from "@/model/respose";
 
 interface MemoryState {
   memories: Memory[];
   memoryItem: Memory;
+
+  memoriesPage: number;
+  memoriesLimit: number;
+  memoriesTotal: number;
+  memoriesTotalPages: number;
+
   memoryLoading: boolean;
   memoryError: string | null;
 }
@@ -34,6 +43,12 @@ const initialState: MemoryState = {
     read_status: "",
     read_date: "",
   },
+
+  memoriesPage: 1,
+  memoriesLimit: 20,
+  memoriesTotal: 0,
+  memoriesTotalPages: 0,
+
   memoryLoading: false,
   memoryError: null,
 };
@@ -45,18 +60,30 @@ export const loadMemories = createAsyncThunk(
     if ("error" in response) {
       return rejectWithValue(response.error);
     }
-    return response.value ?? [];
+    return { memories: response.memories, meta: response.meta };
   },
 );
+
 
 export const getMemory = createAsyncThunk(
   "memory/getMemory",
   async (memoryId: number, { rejectWithValue }) => {
-    const response = await fetchMemoryClient(memoryId);
+    const response = await getMemoryClient(memoryId);
     if ("error" in response) {
       return rejectWithValue(response.error);
     }
     return response.value;
+  },
+);
+
+export const getMemoriesLimit = createAsyncThunk(
+  "memory/getMemoriesLimit",
+  async (payload: { page: number; limit: number }, { rejectWithValue }) => {
+    const response = await getMemoriesLimitClient(payload.page, payload.limit);
+    if ("error" in response) {
+      return rejectWithValue(response.error);
+    }
+    return { memories: response.memories, meta: response.meta };
   },
 );
 
@@ -109,13 +136,30 @@ const memorySlice = createSlice({
       })
       .addCase(
         loadMemories.fulfilled,
-        (state, action: PayloadAction<Memory[]>) => {
-          console.log(action.payload);
+        (state, action: PayloadAction<LimitResponse<Memory, "memories">>) => {
           state.memoryLoading = false;
-          state.memories = action.payload;
+          state.memories = action.payload.memories;
         },
       )
       .addCase(loadMemories.rejected, (state, action) => {
+        state.memoryLoading = false;
+        state.memoryError = action.payload as string;
+      })
+      .addCase(getMemoriesLimit.pending, (state) => {
+        state.memoryLoading = true;
+        state.memoryError = null;
+      })
+      .addCase(
+        getMemoriesLimit.fulfilled,
+        (state, action: PayloadAction<LimitResponse<Memory, "memories">>) => {
+          state.memoryLoading = false;
+          state.memories = action.payload.memories;
+          state.memoriesTotal = action.payload.meta.total;
+          state.memoriesTotalPages = action.payload.meta.total_pages;
+          state.memoriesLimit = action.payload.meta.limit;
+        },
+      )
+      .addCase(getMemoriesLimit.rejected, (state, action) => {
         state.memoryLoading = false;
         state.memoryError = action.payload as string;
       })

@@ -12,7 +12,6 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   const path = usePathname();
-  console.log("layout path:", path);
   return (
     <html lang="ja">
       <body>

@@ -39,7 +39,7 @@ export const StatusCodes: Record<string, number> = {
   UnprocessableEntity: 422, // バリデーションエラー（構文は正しいが処理不可）
   Locked: 423, // リソースがロックされている
   FailedDependency: 424, // 依存する処理が失敗
-  TooEarly: 425, // リクエストが早すぎる
+  // TooEarly: 425, // リクエストが早すぎる
   UpgradeRequired: 426, // プロトコルのアップグレードが必要
   PreconditionRequired: 428, // 前提条件が必要
   TooManyRequests: 429, // レート制限超過

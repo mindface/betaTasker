@@ -50,28 +50,35 @@ func (r *TaskRepositoryImpl) FindAll(userID uint) ([]model.Task, error) {
 }
 
 // ListTasksByUser: 特定ユーザーのタスク一覧を取得
-func (r *TaskRepositoryImpl) ListTasksByUser(userID uint) ([]model.Task, error) {
-    var tasks []model.Task
-    if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&tasks).Error; err != nil {
-      return nil, err
-    }
-    return tasks, nil
+func (r *TaskRepositoryImpl) ListTasksPager(userID uint, offset int, limit int) ([]model.Task, int64, error) {
+	var tasks []model.Task
+	var total int64
+
+	q := r.DB.Model(&model.Task{}).Scopes(helper.WithUserFilter(userID))
+	if err := q.Count(&total).Error; err != nil {
+	  return nil, 0, err
+	}
+
+	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
+		return nil, 0, err
+	}
+  return tasks, total,nil
 }
 
 // ListTasksByUserPager: 特定ユーザーのタスク一覧をページネーション取得
 func (r *TaskRepositoryImpl) ListTasksByUserPager(userID uint, offset, limit int) ([]model.Task, int64, error) {
-    var tasks []model.Task
-    var total int64
+  var tasks []model.Task
+  var total int64
 
-    q := r.DB.Model(&model.Task{}).Scopes(helper.WithUserFilter(userID))
-    if err := q.Count(&total).Error; err != nil {
-      return nil, 0, err
-    }
+  q := r.DB.Model(&model.Task{}).Scopes(helper.WithUserFilter(userID))
+  if err := q.Count(&total).Error; err != nil {
+    return nil, 0, err
+  }
 
-    if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
-      return nil, 0, err
-    }
-    return tasks, total, nil
+  if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
+    return nil, 0, err
+  }
+  return tasks, total, nil
 }
 
 func (r *TaskRepositoryImpl) Update(id string, task *model.Task) error {

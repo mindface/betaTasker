@@ -17,4 +17,8 @@ module.exports = {
     }
     return []
   },
+  webpack: (config) => { 
+    config.cache = { type: 'memory', }
+    return config
+  },
 }

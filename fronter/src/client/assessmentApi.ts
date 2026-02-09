@@ -1,30 +1,51 @@
 import { AddAssessment, Assessment } from "../model/assessment";
 import { fetchApiJsonCore } from "@/utils/fetchApi";
+import { LimitResponse } from "@/model/respose";
 
 export const fetchAssessmentsClient = async () => {
-  const data = await fetchApiJsonCore<undefined, Assessment[]>({
+  const data = await fetchApiJsonCore<undefined, LimitResponse<Assessment,"assessments">>({
     endpoint: "/api/assessment",
     method: "GET",
     errorMessage: "error fetchAssessmentsClient アセスメント一覧取得失敗",
-    getKey: "assessments",
   });
-  return data;
+  if ("error" in data) {
+    return data;
+  }
+  return data.value;
 };
 
-// Todoデータ内容を確認
 export const getAssessmentsForTaskUserClient = async (
   userId: number,
   taskId: number,
 ) => {
   const data = await fetchApiJsonCore<
     { userId: number; taskId: number },
-    Assessment[]
+    LimitResponse<Assessment,"assessments">
   >({
     endpoint: "/api/assessmentsForTaskUser",
     method: "POST",
     body: { userId, taskId },
     errorMessage:
       "error getAssessmentsForTaskUserClient アセスメントIdでの情報取得失敗",
+  });
+  if ("error" in data) {
+    return data;
+  }
+  return data.value;
+};
+
+export const getAssessmentsLimitClient = async (
+  page: number,
+  limit: number,
+) => {
+  const data = await fetchApiJsonCore<
+    undefined,
+     LimitResponse<Assessment,"assessments">
+  >({
+    endpoint: `/api/assessment/pager?page=${page}&limit=${limit}`,
+    method: "GET",
+    errorMessage:
+      "error getAssessmentsLimitClient アセスメントLimiterでの情報取得失敗",
   });
   if ("error" in data) {
     return data;

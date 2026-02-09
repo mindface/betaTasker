@@ -30,7 +30,6 @@ export default function ListDialog<T>({
     } else {
       setViewDataState([]);
     }
-    console.log("viewData", viewData);
   }, [viewData]);
 
   return (

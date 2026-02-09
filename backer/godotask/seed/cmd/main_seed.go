@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"github.com/godotask/cmd/boot/initialize"
 	"github.com/godotask/infrastructure/db/model"
 	"github.com/godotask/seed"
 	// "github.com/seed2/memory_context_seed"
@@ -10,7 +11,7 @@ import (
 
 // RunAllSeeds - 全てのシードデータを実行
 func main() {
-	model.InitDB()
+	initialize.InitDB()
 	db := model.DB
 
 	CleanDatabase()
@@ -38,19 +39,19 @@ func main() {
 	// }
 	// log.Println("✓ Books and tasks seeded successfully")
 
-	// Tasks のシード
-	log.Println("Seeding tasks...")
-	if err := seed.SeedTaskModelsFromCSV(db); err != nil {
-		fmt.Errorf("failed to seed tasks: %v", err)
-	}
-	log.Println("✓ Tasks seeded successfully")
-
 	// Memories のシード
 	log.Println("Seeding memories...")
 	if err := seed.SeedMemoriesModelsFromCSV(db); err != nil {
 		fmt.Errorf("failed to seed memories: %v", err)
 	}
 	log.Println("✓ memories seeded successfully")
+
+	// Tasks のシード
+	log.Println("Seeding tasks...")
+	if err := seed.SeedTaskModelsFromCSV(db); err != nil {
+		fmt.Errorf("failed to seed tasks: %v", err)
+	}
+	log.Println("✓ Tasks seeded successfully")
 
 	// Assessments のシード
 	log.Println("Seeding assessment...")

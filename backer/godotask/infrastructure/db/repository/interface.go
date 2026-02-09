@@ -13,7 +13,7 @@ type BookRepositoryInterface interface {
 type AssessmentRepositoryInterface interface {
 	Create(assessment *model.Assessment) error
 	FindByID(id string) (*model.Assessment, error)
-	FindAll() ([]model.Assessment, error)
+	FindAll(userID uint) ([]model.Assessment, int64, error)
 	ListAssessmentsPager(userID uint, offset int, perPage int) ([]model.Assessment, int64, error)
 	FindByTaskIDAndUserID(userID int, taskID int) ([]model.Assessment, error)
 	ListAssessmentsForTaskUserPager(offset int, perPage int, userID int, taskID int) ([]model.Assessment, int64, error)
@@ -25,7 +25,7 @@ type MemoryRepositoryInterface interface {
 	Create(memory *model.Memory) error
 	FindByID(id string) (*model.Memory, error)
 	FindAll(userID uint) ([]model.Memory, error)
-	ListMemories(userID uint, offset, limit int) ([]model.Memory, int64, error)
+	ListMemoriesPager(userID uint, offset int, limit int) ([]model.Memory, int64, error)
 	Update(id string, memory *model.Memory) error
 	Delete(id string) error
 }
@@ -39,7 +39,7 @@ type TaskRepositoryInterface interface {
 	Create(task *model.Task) error
 	FindByID(id string) (*model.Task, error)
 	FindAll(userID uint) ([]model.Task, error)
-	ListTasksByUser(userID uint) ([]model.Task, error)
+	ListTasksPager(userID uint, offset int, perPage int) ([]model.Task, int64, error)
 	ListTasksByUserPager(userID uint, offset int, perPage int) ([]model.Task, int64, error)
 	Update(id string, task *model.Task) error
 	Delete(id string) error
@@ -52,7 +52,6 @@ type HeuristicsRepositoryInterface interface {
 	UpdateAnalysis(id string, analysis *model.HeuristicsAnalysis) error
 	DeleteAnalysis(id string) error
 	FindAllAnalyses() ([]model.HeuristicsAnalysis, error)
-
 	CreateTracking(tracking *model.HeuristicsTracking) error
 	GetTrackingByUserID(userID string) ([]model.HeuristicsTracking, error)
 	DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error)

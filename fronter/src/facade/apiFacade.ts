@@ -19,21 +19,23 @@ import {
   deleteAssessmentClient,
   fetchAssessmentsClient,
 } from "../client/assessmentApi";
+import { LimitResponse } from "@/model/respose";
 
 export interface ApiFacade<T, CreateT = Omit<T, "id">> {
-  getAll: () => Promise<T[]>;
+  getAll: () => Promise<LimitResponse<T>>;
   create: (item: CreateT) => Promise<T>;
   update: (item: T) => Promise<T>;
   delete: (id: number) => Promise<{ success: boolean }>;
 }
 
+// Code that tested Claude and verified the coding methodology.
 export class TaskApiFacade implements ApiFacade<Task, AddTask> {
-  async getAll(): Promise<Task[]> {
+  async getAll(): Promise<LimitResponse<Task>> {
     const response = await fetchTasksClient();
     if ("error" in response) {
-      throw response.error;
+      throw response;
     }
-    return response.value;
+    return { items: response.tasks, meta: response.meta };
   }
 
   async create(task: AddTask): Promise<Task> {
@@ -62,12 +64,12 @@ export class TaskApiFacade implements ApiFacade<Task, AddTask> {
 }
 
 export class MemoryApiFacade implements ApiFacade<Memory, AddMemory> {
-  async getAll(): Promise<Memory[]> {
+  async getAll(): Promise<LimitResponse<Memory>> {
     const result = await fetchMemoriesClient();
     if ("error" in result) {
       throw result.error;
     }
-    return result.value;
+    return { items: result.memories, meta: result.meta };
   }
 
   async create(memory: AddMemory): Promise<Memory> {
@@ -98,12 +100,12 @@ export class MemoryApiFacade implements ApiFacade<Memory, AddMemory> {
 export class AssessmentApiFacade
   implements ApiFacade<Assessment, AddAssessment>
 {
-  async getAll(): Promise<Assessment[]> {
+  async getAll(): Promise<LimitResponse<Assessment>> {
     const result = await fetchAssessmentsClient();
     if ("error" in result) {
-      throw result.error;
+      throw result;
     }
-    return "value" in result ? result.value : [];
+    return { items: result.assessments, meta: result.meta };
   }
 
   async create(assessment: AddAssessment): Promise<Assessment> {

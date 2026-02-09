@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import {
   loadAssessments,
+  getAssessmentsLimit,
   createAssessment,
   updateAssessment,
   removeAssessment,
@@ -12,6 +13,7 @@ import { loadKnowledgePatterns } from "../features/knowledge_pattern/knowledgePa
 import { loadLearningData } from "../features/learning_data/learningDataSlice";
 import ItemAssessment from "./parts/ItemAssessment";
 import AssessmentModal from "./parts/AssessmentModal";
+import PageNation from "./parts/PageNation";
 import { AddAssessment, Assessment } from "../model/assessment";
 import { loadTasks } from "../features/task/taskSlice";
 import { HeuristicsDashboard } from "./heuristics";
@@ -21,9 +23,10 @@ export default function SectionAssessment() {
   const { tasks, taskLoading, taskError } = useSelector(
     (state: RootState) => state.task,
   );
-  const { assessments, assessmentLoading, assessmentError } = useSelector(
+  const { assessments, assessmentLoading, assessmentError, assessmentsPage, assessmentsLimit, assessmentsTotal, assessmentsTotalPages } = useSelector(
     (state: RootState) => state.assessment,
   );
+
   const {
     knowledgePatterns,
     knowledgePatternsError,
@@ -43,7 +46,8 @@ export default function SectionAssessment() {
   const [showHeuristics, setShowHeuristics] = useState(false);
 
   useEffect(() => {
-    dispatch(loadAssessments());
+    // dispatch(loadAssessments());
+    dispatch(getAssessmentsLimit({ page: 1, limit: 20 }));
     dispatch(loadLearningData());
     dispatch(loadKnowledgePatterns());
   }, [dispatch, isAuthenticated]);
@@ -73,6 +77,10 @@ export default function SectionAssessment() {
     await dispatch(removeAssessment(id));
   };
 
+  const handlePageChange = (newPage: number) => {
+    dispatch(getAssessmentsLimit({ page: newPage, limit: 20 }));
+  };
+
   useEffect(() => {
     dispatch(loadTasks());
     // dispatch(loadMemories())
@@ -84,13 +92,6 @@ export default function SectionAssessment() {
       console.log(learningData.learningStructure);
     }
   }, [learningData]);
-
-  useEffect(() => {
-    if (knowledgePatterns) {
-      console.log("knowledgePatterns");
-      console.log(knowledgePatterns);
-    }
-  }, [knowledgePatterns]);
 
   return (
     <div className="section__inner section--assessment">
@@ -156,18 +157,30 @@ export default function SectionAssessment() {
             {assessmentLoading ? (
               <div className="loading">読み込み中...</div>
             ) : (
-              <div className="assessment-list card-list">
-                {assessments.map((assessment: Assessment, index: number) => (
-                  <ItemAssessment
-                    key={`assessment-item${index}`}
-                    assessment={assessment}
-                    onEdit={(editAssessment: Assessment) =>
-                      handleEditAssessment(editAssessment)
-                    }
-                    onDelete={() => handleDeleteAssessment(assessment.id)}
+              <>
+                <div className="assessment-list card-list">
+                  {assessments.map((assessment: Assessment, index: number) => (
+                    <ItemAssessment
+                      key={`assessment-item${index}`}
+                      assessment={assessment}
+                      onEdit={(editAssessment: Assessment) =>
+                        handleEditAssessment(editAssessment)
+                      }
+                      onDelete={() => handleDeleteAssessment(assessment.id)}
+                    />
+                  ))}
+                </div>
+                <div className="p-8">
+                  <PageNation
+                    page={assessmentsPage}
+                    limit={assessmentsLimit}
+                    totalPages={assessmentsTotalPages}
+                    onChange={(newPage: number) => {
+                      handlePageChange(newPage);
+                    }}
                   />
-                ))}
-              </div>
+                </div>
+              </>
             )}
             <AssessmentModal
               initialData={editingAssessment}

@@ -1,4 +1,5 @@
-import { AddTask, Task } from "../model/task";
+import { AddTask, Task } from "@/model/task";
+import { LimitResponse } from "@/model/respose";
 import { fetchApiJsonCore } from "@/utils/fetchApi";
 
 export type SuccessResponse<T = any, K extends string = "data"> = {
@@ -9,14 +10,37 @@ export type SuccessResponse<T = any, K extends string = "data"> = {
 };
 
 export const fetchTasksClient = async () => {
-  const data = await fetchApiJsonCore<undefined, Task[]>({
+  const data = await fetchApiJsonCore<
+    undefined,
+    LimitResponse<Task,"tasks">
+  >({
     endpoint: "/api/task",
     method: "GET",
     errorMessage: "error fetchTasksClient タスク一覧取得失敗",
-    getKey: "tasks",
   });
+  if ("error" in data) {
+    return data;
+  }
+  return data.value;
+};
 
-  return data;
+export const getTasksLimitClient = async (
+  page: number,
+  limit: number,
+) => {
+  const data = await fetchApiJsonCore<
+    undefined,
+     LimitResponse<Task,"tasks">
+  >({
+    endpoint: `/api/task/pager?page=${page}&limit=${limit}`,
+    method: "GET",
+    errorMessage:
+      "error getTasksLimitClient タスクLimiterでの情報取得失敗",
+  });
+  if ("error" in data) {
+    return data;
+  }
+  return data.value;
 };
 
 export const addTaskClient = async (task: AddTask) => {

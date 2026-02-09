@@ -32,19 +32,19 @@ func (r *MemoryRepositoryImpl) FindAll(userID uint) ([]model.Memory, error) {
 	return memories, nil
 }
 
-func (r *MemoryRepositoryImpl) ListMemories(userID uint, offset int, limit int) ([]model.Memory, int64, error) {
-    var memories []model.Memory
-    var total int64
-    q := r.DB.Model(&model.Memory{}).Scopes(helper.WithUserFilter(userID))
+func (r *MemoryRepositoryImpl) ListMemoriesPager(userID uint, offset int, limit int) ([]model.Memory, int64, error) {
+	var memories []model.Memory
+	var total int64
+	q := r.DB.Model(&model.Memory{}).Scopes(helper.WithUserFilter(userID))
 
-    if err := q.Count(&total).Error; err != nil {
-        return nil, 0, err
-    }
+	if err := q.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
 
-    if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&memories).Error; err != nil {
-        return nil, 0, err
-    }
-    return memories, total, nil
+	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&memories).Error; err != nil {
+		return nil, 0, err
+	}
+	return memories, total, nil
 }
 
 func (r *MemoryRepositoryImpl) Update(id string, memory *model.Memory) error {
