@@ -22,7 +22,7 @@ export function ErrorDialog({
     >
       <p className="p-8">{message}</p>
       <div style={{ marginTop: 16, textAlign: "right" }}>
-        <button onClick={onRetry}>
+        <button className="btn btn-primary border-radius" onClick={onRetry}>
           再読み込み
         </button>
       </div>
