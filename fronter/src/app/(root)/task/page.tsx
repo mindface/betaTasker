@@ -3,7 +3,7 @@ import * as React from "react";
 import ContainersBase from "../../../containers/ContainersBase";
 import SectionTask from "../../../components/SectionTask";
 
-export default function MemoryPage() {
+export default function TaskPage() {
   return (
     <ContainersBase>
       <SectionTask />

@@ -15,7 +15,7 @@ export default function SectionTask() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
   const { memories } = useSelector((state: RootState) => state.memory);
-  const { tasks, tasksPage, tasksLimit, tasksTotal, tasksTotalPages } = useSelector((state: RootState) => state.task);
+  const { tasks, taskError, tasksPage, tasksLimit, tasksTotal, tasksTotalPages } = useSelector((state: RootState) => state.task);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<AddTask | Task | undefined>();
   const [TaskId, setTaskId] = useState<number>(-1);
@@ -51,6 +51,10 @@ export default function SectionTask() {
   const handlePageChange = (newPage: number) => {
     dispatch(getTasksLimit({ page: newPage, limit: tasksLimit }));
   };
+
+  if(taskError !== null) {
+    throw new Error(taskError.name + ": " + taskError.message);
+  }
 
   return (
     <div className="section__inner section--task">

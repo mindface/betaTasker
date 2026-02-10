@@ -19,7 +19,7 @@ interface TaskState {
   tasksTotalPages: number;
 
   taskLoading: boolean;
-  taskError: string | null;
+  taskError: Error | null;
 }
 
 const initialState: TaskState = {
@@ -111,7 +111,7 @@ const taskSlice = createSlice({
       })
       .addCase(loadTasks.rejected, (state, action) => {
         state.taskLoading = false;
-        state.taskError = action.payload as string;
+        state.taskError = action.payload as Error;
       })
       .addCase(getTasksLimit.pending, (state) => {
         state.taskLoading = true;
@@ -125,8 +125,10 @@ const taskSlice = createSlice({
         state.tasksTotalPages = action.payload.meta.total_pages;
       })
       .addCase(getTasksLimit.rejected, (state, action) => {
+        console.error("----------------");
+        console.error("Failed to load tasks:", action.payload);
         state.taskLoading = false;
-        state.taskError = action.payload as string;
+        state.taskError = action.payload as Error;
       })
       .addCase(createTask.fulfilled, (state, action: PayloadAction<Task>) => {
         state.tasks.push(action.payload);
