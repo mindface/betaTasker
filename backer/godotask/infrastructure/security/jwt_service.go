@@ -2,12 +2,13 @@ package security
 
 import (
 	"time"
-	"errors"
+	stderrors "errors"
 
 	jwt "github.com/golang-jwt/jwt/v5"
 
 	"github.com/godotask/domain/entity"
 	"github.com/godotask/domain/auth"
+	"github.com/godotask/errors"
 )
 
 type JWTService struct {
@@ -44,19 +45,26 @@ func (s *JWTService) Parse(tokenString string) (*entity.AuthClaims, error) {
 		&entity.AuthClaims{},
 		func(token *jwt.Token) (interface{}, error) {
 			if token.Method != jwt.SigningMethodHS256 {
-				return nil, errors.New("unexpected signing method")
+				return nil, errors.ErrAuthTokenInvalid
 			}
 			return s.secret, nil
 		},
 		jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}),
 	)
 	if err != nil {
-		return nil, err
+		if stderrors.Is(err, jwt.ErrTokenExpired) {
+			return nil, errors.ErrAuthTokenExpired
+		}
+		return nil, errors.ErrAuthTokenInvalid
 	}
 
 	claims, ok := token.Claims.(*entity.AuthClaims)
 	if !ok || !token.Valid {
-		return nil, errors.New("invalid token")
+		return nil, errors.ErrAuthTokenInvalid
+	}
+
+	if claims.ExpiresAt != nil && claims.ExpiresAt.Time.Before(time.Now()) {
+		return nil, errors.ErrAuthTokenExpired
 	}
 
 	return claims, nil
