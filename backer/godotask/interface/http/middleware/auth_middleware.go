@@ -20,9 +20,9 @@ func AuthMiddleware(tokenSvc auth.TokenService) gin.HandlerFunc {
 				err.Error() + " | Failed to parse auth token",
 			)
 			c.AbortWithStatusJSON(appErr.HTTPStatus, gin.H{
-					"code":    appErr.Code,
-					"message": appErr.Message,
-					"detail":  appErr.Detail,
+				"code":    appErr.Code,
+				"message": appErr.Message,
+				"detail":  appErr.Detail,
 			})
 			return
 		}
