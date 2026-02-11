@@ -1,9 +1,7 @@
 "use client";
 import * as React from "react";
-import { usePathname } from "next/navigation";
 import { Provider } from "react-redux";
 import { setupStore } from "../store";
-
 
 import "../styles/style.sass";
 
