@@ -41,7 +41,7 @@ func (m *MockMemoryRepository) FindByID(id string) (*model.Memory, error) {
     }, nil
 }
 
-func (m *MockMemoryRepository) FindAll() ([]model.Memory, error) {
+func (m *MockMemoryRepository) FindAll(userID uint) ([]model.Memory, error) {
     memory, _ := m.FindByID("1")
     return []model.Memory{*memory}, nil
 }
@@ -52,6 +52,20 @@ func (m *MockMemoryRepository) Update(id string, memory *model.Memory) error {
 
 func (m *MockMemoryRepository) Delete(id string) error {
     return nil
+}
+
+func (m *MockMemoryRepository) ListMemoriesPager(
+    userID uint,
+    limit int,
+    offset int,
+) ([]model.Memory, int64, error) {
+
+    memory, _ := m.FindByID("1")
+    list := []model.Memory{*memory}
+
+    var total int64 = int64(len(list))
+
+    return list, total, nil
 }
 
 func setupRouter() *gin.Engine {
