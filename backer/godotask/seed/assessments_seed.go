@@ -48,8 +48,8 @@ func SeedAssessmentsModelsFromCSV(db *gorm.DB) error {
     impact, _ := strconv.Atoi(record[5])
     noteText := record[6]
 
-    createdAt, _ := time.Parse("2006-01-02", record[3])
-    updatedAt, _ := time.Parse("2006-01-02", record[4])
+    createdAt, _ := time.Parse("2006-01-02", record[7])
+    updatedAt, _ := time.Parse("2006-01-02", record[8])
 
 		models = append(models, model.Assessment{
 			ID:        id,
@@ -67,7 +67,7 @@ func SeedAssessmentsModelsFromCSV(db *gorm.DB) error {
 
 	// バッチインサート
 	if len(models) > 0 {
-		if err := db.Create(&models).Error; err != nil {
+		if err := db.CreateInBatches(&models, 1000).Error; err != nil {
 			return fmt.Errorf("failed to insert assessment models: %w", err)
 		}
 		fmt.Printf("Successfully seeded %d assessment models\n", len(models))

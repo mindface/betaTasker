@@ -167,10 +167,10 @@ func SeedAdminUser(db *gorm.DB) error {
 
 	// 固定パスワード（本番環境では環境変数から読み込むことを推奨）
 	adminPassword := "Admin@123456" // 変更可能
-	
+
 	hashedPassword, err := hashPassword(adminPassword)
 	if err != nil {
-		return fmt.Errorf("failed to hash admin password: %w", err)
+		fmt.Errorf("failed to hash admin password: %w", err)
 	}
 
 	adminUser := model.User{
@@ -194,7 +194,7 @@ func SeedAdminUser(db *gorm.DB) error {
 		if err == gorm.ErrRecordNotFound {
 			// 管理者が存在しない場合は作成
 			if err := db.Create(&adminUser).Error; err != nil {
-				return fmt.Errorf("failed to create admin user: %w", err)
+				fmt.Errorf("failed to create admin user: %w", err)
 			}
 			fmt.Println("✓ Successfully created admin user")
 			fmt.Printf("  Username: %s\n", adminUser.Username)
@@ -202,7 +202,7 @@ func SeedAdminUser(db *gorm.DB) error {
 			fmt.Printf("  Password: %s\n", adminPassword)
 			fmt.Println("  ⚠️  Please change the password after first login!")
 		} else {
-			return fmt.Errorf("failed to check existing admin: %w", err)
+			fmt.Errorf("failed to check existing admin: %w", err)
 		}
 	} else {
 		fmt.Println("⚠️  Admin user already exists, skipping creation")

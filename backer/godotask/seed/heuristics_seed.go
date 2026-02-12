@@ -15,6 +15,7 @@ import (
 
 // SeedHeuristics - ヒューリスティクスデータのシード
 func SeedHeuristics(db *gorm.DB) error {
+
 	// 分析データのシード
 	if err := seedHeuristicsAnalysis(db); err != nil {
 		return fmt.Errorf("failed to seed heuristics analysis: %v", err)
@@ -42,7 +43,7 @@ func SeedHeuristics(db *gorm.DB) error {
 func seedHeuristicsAnalysis(db *gorm.DB) error {
 	file, err := os.Open("seed/data/heuristics_analysis.csv")
 	if err != nil {
-		return fmt.Errorf("could not open heuristics_analysis.csv: %v", err)
+		fmt.Errorf("could not open heuristics_analysis.csv: %v", err)
 	}
 
 	reader := csv.NewReader(file)
@@ -57,6 +58,7 @@ func seedHeuristicsAnalysis(db *gorm.DB) error {
 	}
 
 	var models []model.HeuristicsAnalysis
+	record, err := reader.Read()
 	for {
 		record, err := reader.Read()
 		if err == io.EOF {
@@ -96,16 +98,14 @@ func seedHeuristicsAnalysis(db *gorm.DB) error {
 			UpdatedAt:         updatedAt,
 		})
 	}
-	const maxParams = 65535
-	const columnCount = 15
+	fmt.Printf("Parsed %d ------------heuristics analysis records\n", len(models))
 
-	batchSize := maxParams / columnCount - 1 
 	// バッチインサート
 	if len(models) > 0 {
-		if err := db.CreateInBatches(models, batchSize).Error; err != nil {
-			return fmt.Errorf("failed to insert optimization models: %w", err)
+		if err := db.CreateInBatches(models, 1000).Error; err != nil {
+			return fmt.Errorf("failed to insert heuristics analysis models: %w", err)
 		}
-		fmt.Printf("Successfully seeded %d optimization models\n", len(models))
+		fmt.Printf("Successfully seeded %d heuristics analysis models\n", len(models))
 	}
 
 	return nil

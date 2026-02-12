@@ -81,7 +81,6 @@ func main() {
 	}
 	log.Println("✓ Qualitative Labels seeded successfully")
 
-
 	// PhenomenologicalFrameworks のシード
 	log.Println("Seeding PhenomenologicalFrameworks...")
 	if err := seed.SeedPhenomenologicalFrameworksFromCSV(db); err != nil {
@@ -104,46 +103,46 @@ func main() {
 	log.Println("✓ Heuristics data seeded successfully")
 
 	// 現象学的フレームワークデータのシード
-	log.Println("Seeding phenomenological framework data...")
-	if err := seed.SeedPhenomenologicalData(db); err != nil {
-		fmt.Errorf("failed to seed phenomenological data: %v", err)
-	}
-	log.Println("✓ Phenomenological framework data seeded successfully")
+	// log.Println("Seeding phenomenological framework data...")
+	// if err := seed.SeedPhenomenologicalData(db); err != nil {
+	// 	fmt.Errorf("failed to seed phenomenological data: %v", err)
+	// }
+	// log.Println("✓ Phenomenological framework data seeded successfully")
 
 	// 状態評価システムのシード
-	log.Println("Seeding state evaluation data...")
-	if err := seed.SeedStateEvaluations(db); err != nil {
-		fmt.Errorf("failed to seed state evaluations: %v", err)
-	}
-	log.Println("✓ State evaluation data seeded successfully")
+	// log.Println("Seeding state evaluation data...")
+	// if err := seed.SeedStateEvaluations(db); err != nil {
+	// 	fmt.Errorf("failed to seed state evaluations: %v", err)
+	// }
+	// log.Println("✓ State evaluation data seeded successfully")
 
 	// ツールマッチング結果のシード
-	log.Println("Seeding tool matching results...")
-	if err := seed.SeedToolMatchingResults(db); err != nil {
-		fmt.Errorf("failed to seed tool matching results: %v", err)
-	}
-	log.Println("✓ Tool matching results seeded successfully")
+	// log.Println("Seeding tool matching results...")
+	// if err := seed.SeedToolMatchingResults(db); err != nil {
+	// 	fmt.Errorf("failed to seed tool matching results: %v", err)
+	// }
+	// log.Println("✓ Tool matching results seeded successfully")
 
 	// プロセス監視のシード
-	log.Println("Seeding process monitoring data...")
-	if err := seed.SeedProcessMonitoring(db); err != nil {
-		fmt.Errorf("failed to seed process monitoring: %v", err)
-	}
-	log.Println("✓ Process monitoring data seeded successfully")
+	// log.Println("Seeding process monitoring data...")
+	// if err := seed.SeedProcessMonitoring(db); err != nil {
+	// 	fmt.Errorf("failed to seed process monitoring: %v", err)
+	// }
+	// log.Println("✓ Process monitoring data seeded successfully")
 
 	// 学習パターンのシード
-	log.Println("Seeding learning patterns...")
-	if err := seed.SeedLearningPatterns(db); err != nil {
-		fmt.Errorf("failed to seed learning patterns: %v", err)
-	}
-	log.Println("✓ Learning patterns seeded successfully")
+	// log.Println("Seeding learning patterns...")
+	// if err := seed.SeedLearningPatterns(db); err != nil {
+	// 	fmt.Errorf("failed to seed learning patterns: %v", err)
+	// }
+	// log.Println("✓ Learning patterns seeded successfully")
 
 	// 学習パターンのシード
-	log.Println("Seeding language optimization...")
-	if err := seed.SeedLanguageOptimizationFromCSV(db); err != nil {
-		fmt.Errorf("failed to seed learning patterns: %v", err)
-	}
-	log.Println("✓ language optimization seeded successfully")
+	// log.Println("Seeding language optimization...")
+	// if err := seed.SeedLanguageOptimizationFromCSV(db); err != nil {
+	// 	fmt.Errorf("failed to seed language optimization: %v", err)
+	// }
+	// log.Println("✓ language optimization seeded successfully")
 
 
 	// 定量化ラベルのシード
@@ -163,56 +162,6 @@ func main() {
 	log.Println("Database seeding completed successfully!")
 }
 
-// CleanAndSeed - データベースをクリーンアップしてからシード
-// func CleanAndSeed() {
-// 	db := model.DB
-
-// 	log.Println("Cleaning database tables...")
-
-// 	// テーブルのクリーンアップ（外部キー制約を考慮した逆順で削除）
-// 	tables := []interface{}{
-// 		&model.LearningPattern{},
-// 		&model.ProcessMonitoring{},
-// 		&model.ToolMatchingResult{},
-// 		&model.StateEvaluation{},
-// 		&model.QuantificationLabel{},
-// 		&model.PhenomenologicalFramework{},
-// 		&model.OptimizationModel{},
-// 		// &model.RobotSpecification{},
-// 		&model.HeuristicsModel{},
-// 		&model.HeuristicsPattern{},
-// 		&model.HeuristicsInsight{},
-// 		&model.HeuristicsTracking{},
-// 		&model.HeuristicsAnalysis{},
-// 		&model.MemoryContext{},
-// 		&model.Task{},
-// 		&model.User{},
-// 	}
-
-// 	// for _, table := range tables {
-// 	// 	if err := db.Exec("TRUNCATE TABLE ? RESTART IDENTITY CASCADE", table).Error; err != nil {
-// 	// 		// TRUNCATEが失敗した場合は、DELETEを使用
-// 	// 		if err := db.Delete(table, "1 = 1").Error; err != nil {
-// 	// 			log.Printf("Warning: Failed to clean table: %v", err)
-// 	// 		}
-// 	// 	}
-// 	// }
-
-// 	for _, tableName := range tables {
-//     if err := db.Exec("TRUNCATE TABLE " + tableName + " RESTART IDENTITY CASCADE").Error; err != nil {
-//         log.Printf("TRUNCATE failed for table %s: %v", tableName, err)
-//         if err := db.Delete(tableName, "1 = 1").Error; err != nil {
-//             log.Printf("DELETE failed for table %s: %v", tableName, err)
-//         }
-//     }
-// }
-
-// 	log.Println("✓ Database cleaned")
-
-// 	// シードデータの実行
-// 	// return RunAllSeeds()
-// }
-
 // CleanDatabase - 外部キー制約を考慮し、全テーブルをクリーン
 func CleanDatabase() {
 	db := model.DB
@@ -225,13 +174,13 @@ func CleanDatabase() {
 	// 外部キー依存を考慮して削除順序を逆に設定
 	tables := []string{
 		"learning_patterns",
-		"process_monitorings",
 		"tool_matching_results",
 		"state_evaluations",
 		"quantification_labels",
 		"phenomenological_frameworks",
 		"optimization_models",
-		"robot_specifications",
+		// "process_monitorings",
+		// "robot_specifications",
 		"heuristics_models",
 		"heuristics_patterns",
 		"heuristics_insights",
