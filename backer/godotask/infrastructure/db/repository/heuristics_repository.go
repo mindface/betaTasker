@@ -3,6 +3,7 @@ package repository
 import (
 	"strconv"
 	"github.com/godotask/infrastructure/db/model"
+	"github.com/godotask/infrastructure/helper"
 	"gorm.io/gorm"
 )
 
@@ -11,39 +12,54 @@ type HeuristicsRepositoryImpl struct {
 }
 
 func (r *HeuristicsRepositoryImpl) CreateAnalysis(analysis *model.HeuristicsAnalysis) error {
-    return r.DB.Create(analysis).Error
+  return r.DB.Create(analysis).Error
 }
 
 func (r *HeuristicsRepositoryImpl) GetAnalysisById(id string) (*model.HeuristicsAnalysis, error) {
-    var analysis model.HeuristicsAnalysis
-    if err := r.DB.First(&analysis, id).Error; err != nil {
-        return nil, err
-    }
-    return &analysis, nil
+	var analysis model.HeuristicsAnalysis
+	if err := r.DB.First(&analysis, id).Error; err != nil {
+			return nil, err
+	}
+	return &analysis, nil
 }
 
 func (r *HeuristicsRepositoryImpl) FindAllAnalyses() ([]model.HeuristicsAnalysis, error) {
-    var analyses []model.HeuristicsAnalysis
-    if err := r.DB.Find(&analyses).Error; err != nil {
-        return nil, err
-    }
-    return analyses, nil
+	var analyses []model.HeuristicsAnalysis
+	if err := r.DB.Find(&analyses).Error; err != nil {
+			return nil, err
+	}
+	return analyses, nil
 }
 
 func (r *HeuristicsRepositoryImpl) UpdateAnalysis(id string, analysis *model.HeuristicsAnalysis) error {
-    return r.DB.Model(&model.HeuristicsAnalysis{}).Where("id = ?", id).Updates(analysis).Error
+  return r.DB.Model(&model.HeuristicsAnalysis{}).Where("id = ?", id).Updates(analysis).Error
 }
 
 func (r *HeuristicsRepositoryImpl) DeleteAnalysis(id string) error {
-    return r.DB.Delete(&model.HeuristicsAnalysis{}, id).Error
+  return r.DB.Delete(&model.HeuristicsAnalysis{}, id).Error
 }
 
 func (r *HeuristicsRepositoryImpl) ListAnalyses() ([]model.HeuristicsAnalysis, error) {
-    var analyses []model.HeuristicsAnalysis
-    if err := r.DB.Find(&analyses).Error; err != nil {
-        return nil, err
-    }
-    return analyses, nil
+	var analyses []model.HeuristicsAnalysis
+	if err := r.DB.Find(&analyses).Error; err != nil {
+		return nil, err
+	}
+	return analyses, nil
+}
+
+func (r *HeuristicsRepositoryImpl) ListAnalysesPager(userID uint, offset int, limit int) ([]model.HeuristicsAnalysis, int64, error) {
+	var analyses []model.HeuristicsAnalysis
+	var total int64
+	q := r.DB.Model(&model.HeuristicsAnalysis{}).Scopes(helper.WithUserFilter(userID))
+
+	if err := q.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&analyses).Error; err != nil {
+		return nil, 0, err
+	}
+	return analyses, total, nil
 }
 
 

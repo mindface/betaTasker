@@ -34,6 +34,10 @@ func (s *HeuristicsService) ListAnalyses() ([]model.HeuristicsAnalysis, error) {
   return s.Repo.FindAllAnalyses()
 }
 
+func (s *HeuristicsService) ListAnalysesPager(userID uint, offset int, limit int) ([]model.HeuristicsAnalysis, int64, error) {
+  return s.Repo.ListAnalysesPager(userID, offset, limit)
+}
+
 func (s *HeuristicsService) UpdateAnalyzeData(id string, analyze *model.HeuristicsAnalysis) error {
 	return s.Repo.UpdateAnalysis(id, analyze)
 }

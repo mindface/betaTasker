@@ -161,6 +161,8 @@ func setupRouter() *gin.Engine {
 
 		// Heuristics API (ML Pipeline & Analytics)
 		protected.POST("/heuristics/analyze", AnalyzeController.AddAnalyzeData)
+		protected.GET("/heuristics/analyze", AnalyzeController.ListAnalyzeData)
+		protected.GET("/heuristics/analyze/pager", AnalyzeController.ListAnalyzePager)
 		protected.GET("/heuristics/analyze/:id", AnalyzeController.GetAnalyzeData)
 		protected.PUT("/heuristics/analyze/:id", AnalyzeController.EditAnalyzeData)
 		protected.DELETE("/heuristics/analyze/:id", AnalyzeController.DeleteAnalyzeData)

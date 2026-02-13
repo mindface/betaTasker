@@ -49,6 +49,7 @@ type HeuristicsRepositoryInterface interface {
 	CreateAnalysis(analysis *model.HeuristicsAnalysis) error
 	GetAnalysisById(id string) (*model.HeuristicsAnalysis, error)
 	ListAnalyses() ([]model.HeuristicsAnalysis, error)
+	ListAnalysesPager(userID uint, offset int, limit int) ([]model.HeuristicsAnalysis, int64, error)
 	UpdateAnalysis(id string, analysis *model.HeuristicsAnalysis) error
 	DeleteAnalysis(id string) error
 	FindAllAnalyses() ([]model.HeuristicsAnalysis, error)
