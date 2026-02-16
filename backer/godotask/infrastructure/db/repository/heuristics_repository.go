@@ -3,7 +3,8 @@ package repository
 import (
 	"strconv"
 	"github.com/godotask/infrastructure/db/model"
-	"github.com/godotask/infrastructure/helper"
+	dtoquery "github.com/godotask/dto/query"
+	helperquery "github.com/godotask/infrastructure/helper/query"
 	"gorm.io/gorm"
 )
 
@@ -47,10 +48,13 @@ func (r *HeuristicsRepositoryImpl) ListAnalyses() ([]model.HeuristicsAnalysis, e
 	return analyses, nil
 }
 
-func (r *HeuristicsRepositoryImpl) ListAnalysesPager(userID uint, offset int, limit int) ([]model.HeuristicsAnalysis, int64, error) {
+func (r *HeuristicsRepositoryImpl) ListAnalysesPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.HeuristicsAnalysis, int64, error) {
 	var analyses []model.HeuristicsAnalysis
 	var total int64
-	q := r.DB.Model(&model.HeuristicsAnalysis{}).Scopes(helper.WithUserFilter(userID))
+	q := r.DB.Model(&model.HeuristicsAnalysis{}).Scopes(helperquery.WithDynamicFilters(filter))
+	if err := q.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
 
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, err
@@ -59,6 +63,7 @@ func (r *HeuristicsRepositoryImpl) ListAnalysesPager(userID uint, offset int, li
 	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&analyses).Error; err != nil {
 		return nil, 0, err
 	}
+
 	return analyses, total, nil
 }
 
@@ -92,6 +97,6 @@ func (r *HeuristicsRepositoryImpl) DetectPatterns(userID, dataType, period strin
 	return patterns, nil
 }
 
-func (r *HeuristicsRepositoryImpl) CreateModel(modelData *model.HeuristicsModel) error {
+func (r *HeuristicsRepositoryImpl) CreateModel(modelData *model.HeuristicsModeler) error {
 	return r.DB.Create(modelData).Error
 }

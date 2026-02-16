@@ -3,7 +3,9 @@ package repository
 import (
 	"strconv"
 	"github.com/godotask/infrastructure/db/model"
-	"github.com/godotask/infrastructure/helper"
+	dtoquery "github.com/godotask/dto/query"
+ "github.com/godotask/infrastructure/helper"
+	helperquery "github.com/godotask/infrastructure/helper/query"
 	"gorm.io/gorm"
 )
 
@@ -29,6 +31,22 @@ func (r *HeuristicsPatternRepositoryImpl) ListPattern(userID uint) ([]model.Heur
 		return nil, err
 	}
 	return patterns, nil
+}
+
+func (r *HeuristicsPatternRepositoryImpl) ListPatternPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.HeuristicsPattern, int64, error) {
+	var patterns []model.HeuristicsPattern
+	var total int64
+
+	q := r.DB.Model(&model.HeuristicsPattern{}).Scopes(helperquery.WithDynamicFilters(filter))
+	if err := q.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&patterns).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return patterns, total, nil
 }
 
 func (r *HeuristicsPatternRepositoryImpl) GetPatterns(userID string, limit, offset int) ([]model.HeuristicsPattern, int, error) {

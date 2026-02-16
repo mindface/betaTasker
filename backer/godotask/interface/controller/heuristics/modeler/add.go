@@ -1,20 +1,19 @@
-package insight
+package modeler
 
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/godotask/infrastructure/db/model"
+	"github.com/gin-gonic/gin"
 	"github.com/godotask/errors"
 )
 
-// EditPatternData: PUT /api/heuristics/pattern/:id
-func (ctl *HeuristicsPatternController) EditPatternData(c *gin.Context) {
-	id := c.Param("id") // URLパラメータからIDを取得
+// AddModelerData: POST /api/heuristics/modeler
+func (ctl *HeuristicsModelerController) AddModelerData(c *gin.Context) {
+	var modeler model.HeuristicsModeler
 
-	var pattern model.HeuristicsPattern
-	// リクエストボディをバインド
-	if err := c.ShouldBindJSON(&pattern); err != nil {
+	// リクエストボディをバインド 
+	if err := c.ShouldBindJSON(&modeler); err != nil {
 		appErr := errors.NewAppError(
 			errors.VAL_INVALID_INPUT,
 			errors.GetErrorMessage(errors.VAL_INVALID_INPUT),
@@ -28,12 +27,13 @@ func (ctl *HeuristicsPatternController) EditPatternData(c *gin.Context) {
 		return
 	}
 
-	// 分析データを更新
-	if err := ctl.Service.UpdatePatternData(id, &pattern); err != nil {
+	// モデルデータを追加
+	putModeler, err := ctl.Service.CreateModelerData(&modeler)
+	if err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,
 			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
-			err.Error()+" | Failed to update insight data",
+			err.Error() + " | Failed to add modeler data",
 		)
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,
@@ -43,9 +43,6 @@ func (ctl *HeuristicsPatternController) EditPatternData(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "Knowledge pattern edited",
-		"pattern": pattern,
-	})
+	// 成功レスポンス
+	c.JSON(http.StatusCreated, putModeler)
 }

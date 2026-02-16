@@ -24,7 +24,7 @@ type Task struct {
 	MultimodalData   []MultimodalData   `json:"multimodal_data" gorm:"foreignKey:TaskID"`
 	HeuristicsAnalysis []HeuristicsAnalysis `json:"heuristics_analysis" gorm:"foreignKey:TaskID"`
 	HeuristicsTracking []HeuristicsTracking `json:"heuristics_trackings" gorm:"foreignKey:TaskID"`
-	HeuristicsModel []HeuristicsModel `json:"heuristics_models" gorm:"foreignKey:TaskID"`
+	HeuristicsModeler []HeuristicsModeler `json:"heuristics_modelers" gorm:"foreignKey:TaskID"`
 	HeuristicsInsight []HeuristicsInsight `json:"heuristics_insights" gorm:"foreignKey:TaskID"`
 	HeuristicsPattern []HeuristicsPattern `json:"heuristics_patterns" gorm:"foreignKey:TaskID"`
   KnowledgePatterns    []KnowledgePattern    `json:"knowledge_patterns" gorm:"foreignKey:TaskID"`

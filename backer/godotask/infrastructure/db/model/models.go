@@ -15,7 +15,7 @@ func Models() []interface{} {
 		&HeuristicsTracking{},
 		&HeuristicsInsight{},
 		&HeuristicsPattern{},
-		&HeuristicsModel{},
+		&HeuristicsModeler{},
 		&MultimodalData{},
 		&KnowledgePattern{},
 		&LanguageOptimization{},

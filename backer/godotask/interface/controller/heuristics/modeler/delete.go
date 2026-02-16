@@ -1,4 +1,4 @@
-package insight
+package modeler
 
 import (
 	"net/http"
@@ -7,15 +7,15 @@ import (
 	"github.com/godotask/errors"
 )
 
-// DeletePatternData: DELETE /api/heuristics/pattern/:id
-func (ctl *HeuristicsPatternController) DeletePatternData(c *gin.Context) {
+// DeleteModelerData: DELETE /api/heuristics/modeler/:id
+func (ctl *HeuristicsModelerController) DeleteModelerData(c *gin.Context) {
 	id := c.Param("id")
 
-	if err := ctl.Service.DeletePatternData(id); err != nil {
+	if err := ctl.Service.DeleteModelerData(id); err != nil {
 		appErr := errors.NewAppError(
 			errors.RES_NOT_FOUND,
 			errors.GetErrorMessage(errors.RES_NOT_FOUND),
-			err.Error()+" | Failed to delete Pattern data",
+			err.Error()+" | Failed to delete Modeler data",
 		)
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,
@@ -27,7 +27,7 @@ func (ctl *HeuristicsPatternController) DeletePatternData(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"success":               true,
-		"message":               "Pattern data deleted",
-		"pattern_id": id,
+		"message":               "Modeler data deleted",
+		"modeler_id": id,
 	})
 }

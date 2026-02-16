@@ -2,10 +2,11 @@ package analyze
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/godotask/interface/http/authcontext"
+	dtoquery "github.com/godotask/dto/query"
+	helperquery "github.com/godotask/infrastructure/helper/query"
+	"github.com/godotask/interface/tools"
 	"github.com/godotask/errors"
 )
 
@@ -36,46 +37,31 @@ func (ctl *AnalyzeController) ListAnalyzeData(c *gin.Context) {
 
 // ListAnalyzeData: GET /api/heuristics/analyze/pager
 func (ctl *AnalyzeController) ListAnalyzePager(c *gin.Context) {
-	page := 1
-	limit := 20
-	const maxPerPage = 100
-	userID, _ := authcontext.UserID(c)
-
-	if p := c.Query("page"); p != "" {
-		if v, err := strconv.Atoi(p); err == nil && v > 0 {
-			page = v
-		}
+  pager := tools.ParsePagerQuery(c)
+	filter := dtoquery.QueryFilter{
+		UserID:  &pager.UserID,
+		TaskID:  &pager.TaskID,
+		Include: helperquery.ParseIncludeParam(c.Query("include")),
 	}
-	if pp := c.Query("limit"); pp != "" {
-		if v, err := strconv.Atoi(pp); err == nil && v > 0 {
-			limit = v
-		}
-	}
-	if limit > maxPerPage {
-		limit = maxPerPage
-	}
-
-	offset := (page - 1) * limit
-	// 分析データのリストを取得
-	analyses, total, err := ctl.Service.ListAnalysesPager(userID, offset, limit)
-	if err != nil {
-		appErr := errors.NewAppError(
-			errors.SYS_INTERNAL_ERROR,
-			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
-			err.Error() + " | Failed to list analyze data",
-		)
-		c.JSON(appErr.HTTPStatus, gin.H{
-			"code":    appErr.Code,
-			"message": appErr.Message,
-			"detail":  appErr.Detail,
-		})
-		return
-	}
+  analyses, total, err := ctl.Service.ListAnalysesPager(filter,pager)
+  if err != nil {
+    appErr := errors.NewAppError(
+      errors.SYS_INTERNAL_ERROR,
+      errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
+      err.Error(),
+    )
+    c.JSON(appErr.HTTPStatus, gin.H{
+      "code":    appErr.Code,
+      "message": appErr.Message,
+      "detail":  appErr.Detail,
+    })
+    return
+  }
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "analysis retrieved",
 		"analysis": analyses,
-    "total": total,
+		"meta": tools.BuildPageMeta(total, pager.Page, pager.Limit),
 	})
 }

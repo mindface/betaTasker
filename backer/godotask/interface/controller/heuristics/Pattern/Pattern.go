@@ -1,4 +1,4 @@
-package insight
+package pattern
 
 import "github.com/godotask/usecase/service"
 

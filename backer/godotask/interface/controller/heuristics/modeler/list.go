@@ -1,7 +1,7 @@
-package pattern
+package modeler
 
 import (
-  "net/http"
+	"net/http"
 
   "github.com/gin-gonic/gin"
 	dtoquery "github.com/godotask/dto/query"
@@ -11,16 +11,16 @@ import (
   "github.com/godotask/errors"
 )
 
-// ListPatternData: GET /api/pattern/pattern
-func (ctl *HeuristicsPatternController) ListPatternData(c *gin.Context) {
+// ListModelerData: GET /api/heuristics/modeler
+func (ctl *HeuristicsModelerController) ListModelerData(c *gin.Context) {
 	userID, _ := authcontext.UserID(c)
-	// 分析データのリストを取得
-	patterns, err := ctl.Service.ListPattern(userID)
+	// モデルデータのリストを取得
+	modeler, err := ctl.Service.ListModeler(userID)
 	if err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,
 			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
-			err.Error() + " | Failed to list pattern data",
+			err.Error() + " | Failed to list modeler data",
 		)
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,
@@ -33,25 +33,26 @@ func (ctl *HeuristicsPatternController) ListPatternData(c *gin.Context) {
 	// 成功レスポンス
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"message": "patterns retrieved",
-		"patterns": patterns,
+		"message": "modeler data retrieved",
+		"modeler": modeler,
 	})
 }
 
-// ListPatternPager: GET /api/pattern/pattern/pager
-func (ctl *HeuristicsPatternController) ListPatternPager(c *gin.Context) {
+
+// ListModelerPager: GET /api/heuristics/modeler/pager
+func (ctl *HeuristicsModelerController) ListModelerPager(c *gin.Context) {
   pager := tools.ParsePagerQuery(c)
 	filter := dtoquery.QueryFilter{
 		UserID:  &pager.UserID,
 		TaskID:  &pager.TaskID,
 		Include: helperquery.ParseIncludeParam(c.Query("include")),
 	}
-  patterns, total, err := ctl.Service.ListPatternPager(filter, pager)
+  modelers, total, err := ctl.Service.ListModelerPager(filter, pager)
   if err != nil {
     appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,
 			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
-			err.Error() + " | Failed to list pattern data",
+			err.Error() + " | Failed to list modeler data",
 		)
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,
@@ -64,8 +65,9 @@ func (ctl *HeuristicsPatternController) ListPatternPager(c *gin.Context) {
 	// 成功レスポンス
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"message": "patterns retrieved",
-		"patterns": patterns,
+		"message": "modelers retrieved",
+		"modelers": modelers,
 		"meta": tools.BuildPageMeta(total, pager.Page, pager.Limit),
 	})
 }
+

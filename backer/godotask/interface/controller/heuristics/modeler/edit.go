@@ -1,4 +1,4 @@
-package pattern
+package modeler
 
 import (
 	"net/http"
@@ -8,13 +8,13 @@ import (
 	"github.com/godotask/errors"
 )
 
-// EditPatternData: PUT /api/heuristics/pattern/:id
-func (ctl *HeuristicsPatternController) EditPatternData(c *gin.Context) {
+// EditModelerData: PUT /api/heuristics/modeler/:id
+func (ctl *HeuristicsModelerController) EditModelerData(c *gin.Context) {
 	id := c.Param("id") // URLパラメータからIDを取得
 
-	var pattern model.HeuristicsPattern
+	var modeler model.HeuristicsModeler
 	// リクエストボディをバインド
-	if err := c.ShouldBindJSON(&pattern); err != nil {
+	if err := c.ShouldBindJSON(&modeler); err != nil {
 		appErr := errors.NewAppError(
 			errors.VAL_INVALID_INPUT,
 			errors.GetErrorMessage(errors.VAL_INVALID_INPUT),
@@ -28,12 +28,12 @@ func (ctl *HeuristicsPatternController) EditPatternData(c *gin.Context) {
 		return
 	}
 
-	// 分析データを更新
-	if err := ctl.Service.UpdatePatternData(id, &pattern); err != nil {
+	// モデルデータを更新
+	if err := ctl.Service.UpdateModelerData(id, &modeler); err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,
 			errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
-			err.Error()+" | Failed to update insight data",
+			err.Error()+" | Failed to update modeler data",
 		)
 		c.JSON(appErr.HTTPStatus, gin.H{
 			"code":    appErr.Code,
@@ -45,7 +45,7 @@ func (ctl *HeuristicsPatternController) EditPatternData(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"message": "Knowledge pattern edited",
-		"pattern": pattern,
+		"message": "Modeler data edited",
+		"modeler": modeler,
 	})
 }

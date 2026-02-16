@@ -1,6 +1,7 @@
 package service
 
 import (
+	dtoquery "github.com/godotask/dto/query"
 	"github.com/godotask/infrastructure/db/model"
 	"github.com/godotask/infrastructure/db/repository"
 )
@@ -22,6 +23,10 @@ func (s *HeuristicsInsightService) GetInsightById(id string) (*model.HeuristicsI
 
 func (s *HeuristicsInsightService) ListInsight() ([]model.HeuristicsInsight, error) {
   return s.Repo.ListInsight()
+}
+
+func (s *HeuristicsInsightService) ListInsightPager(filter dtoquery.QueryFilter, pager dtoquery.PagerQuery) ([]model.HeuristicsInsight, int64, error) {
+  return s.Repo.ListInsightPager(filter, pager.Offset, pager.Limit)
 }
 
 func (s *HeuristicsInsightService) UpdateInsightData(id string, insight *model.HeuristicsInsight) error {

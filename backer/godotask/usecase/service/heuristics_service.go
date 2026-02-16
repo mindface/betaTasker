@@ -1,6 +1,7 @@
 package service
 
 import (
+	dtoquery "github.com/godotask/dto/query"
 	"github.com/godotask/infrastructure/db/model"
 	"github.com/godotask/infrastructure/db/repository"
 )
@@ -34,8 +35,8 @@ func (s *HeuristicsService) ListAnalyses() ([]model.HeuristicsAnalysis, error) {
   return s.Repo.FindAllAnalyses()
 }
 
-func (s *HeuristicsService) ListAnalysesPager(userID uint, offset int, limit int) ([]model.HeuristicsAnalysis, int64, error) {
-  return s.Repo.ListAnalysesPager(userID, offset, limit)
+func (s *HeuristicsService) ListAnalysesPager(filter dtoquery.QueryFilter, pager dtoquery.PagerQuery) ([]model.HeuristicsAnalysis, int64, error) {
+  return s.Repo.ListAnalysesPager(filter, pager.Offset, pager.Limit)
 }
 
 func (s *HeuristicsService) UpdateAnalyzeData(id string, analyze *model.HeuristicsAnalysis) error {
@@ -64,22 +65,6 @@ func (s *HeuristicsService) GetTrackingDataByUserID(userID string) ([]model.Heur
 
 func (s *HeuristicsService) DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error) {
 	return s.Repo.DetectPatterns(userID, dataType, period)
-}
-
-func (s *HeuristicsService) TrainModel(request *model.HeuristicsTrainRequest) (*model.HeuristicsModel, error) {
-	modelData := &model.HeuristicsModel{
-		ModelType:   request.ModelType,
-		Version:     "1.0.0",
-		Parameters:  toJSONString(request.Parameters),
-		Performance: toJSONString(map[string]interface{}{"status": "training"}),
-		Status:      "training",
-	}
-	
-	if err := s.Repo.CreateModel(modelData); err != nil {
-		return nil, err
-	}
-	
-	return modelData, nil
 }
 
 // Helper functions

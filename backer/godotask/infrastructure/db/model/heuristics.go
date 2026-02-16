@@ -66,7 +66,6 @@ type HeuristicsInsight struct {
 	Recommendation string        `json:"recommendation"`
 	// 追加：改善した場合の期待値 (0〜1)
 	ExpectedImpact float64       `json:"expected_impact"`
-
 	IsActive    bool           `json:"is_active" gorm:"default:true"`
 
 	CreatedAt   time.Time      `json:"created_at"`
@@ -97,7 +96,7 @@ type HeuristicsPattern struct {
 }
 
 // HeuristicsModel - 学習モデル情報
-type HeuristicsModel struct {
+type HeuristicsModeler struct {
 	ID          int           `gorm:"primaryKey" json:"id"`
 	UserID    	int           `json:"user_id"`
 	TaskID    	int           `json:"task_id"`

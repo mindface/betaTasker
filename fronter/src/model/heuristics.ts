@@ -1,5 +1,4 @@
 // Heuristics関連の型定義
-
 export interface HeuristicsAnalysis {
   id: number;
   user_id: number;

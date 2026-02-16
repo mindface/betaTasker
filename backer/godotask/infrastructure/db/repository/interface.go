@@ -1,6 +1,9 @@
 package repository
 
-import "github.com/godotask/infrastructure/db/model"
+import (
+	"github.com/godotask/infrastructure/db/model"
+	dtoquery "github.com/godotask/dto/query"
+)
 
 type BookRepositoryInterface interface {
 	Create(book *model.Book) error
@@ -14,9 +17,9 @@ type AssessmentRepositoryInterface interface {
 	Create(assessment *model.Assessment) error
 	FindByID(id string) (*model.Assessment, error)
 	FindAll(userID uint) ([]model.Assessment, int64, error)
-	ListAssessmentsPager(userID uint, offset int, perPage int) ([]model.Assessment, int64, error)
+	ListAssessmentsPager(userID uint, offset int, limit int) ([]model.Assessment, int64, error)
 	FindByTaskIDAndUserID(userID int, taskID int) ([]model.Assessment, error)
-	ListAssessmentsForTaskUserPager(offset int, perPage int, userID int, taskID int) ([]model.Assessment, int64, error)
+	ListAssessmentsForTaskUserPager(userID uint, taskID int, offset int, limit int) ([]model.Assessment, int64, error)
 	Update(id string, assessment *model.Assessment) error
 	Delete(id string) error
 }
@@ -49,21 +52,21 @@ type HeuristicsRepositoryInterface interface {
 	CreateAnalysis(analysis *model.HeuristicsAnalysis) error
 	GetAnalysisById(id string) (*model.HeuristicsAnalysis, error)
 	ListAnalyses() ([]model.HeuristicsAnalysis, error)
-	ListAnalysesPager(userID uint, offset int, limit int) ([]model.HeuristicsAnalysis, int64, error)
+	ListAnalysesPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.HeuristicsAnalysis, int64, error)
 	UpdateAnalysis(id string, analysis *model.HeuristicsAnalysis) error
 	DeleteAnalysis(id string) error
 	FindAllAnalyses() ([]model.HeuristicsAnalysis, error)
 	CreateTracking(tracking *model.HeuristicsTracking) error
 	GetTrackingByUserID(userID string) ([]model.HeuristicsTracking, error)
 	DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error)
-	CreateModel(model *model.HeuristicsModel) error
+	CreateModel(model *model.HeuristicsModeler) error
 }
 
 type HeuristicsInsightRepositoryInterface interface {
 	CreateInsight(insight *model.HeuristicsInsight) error
 	GetInsightById(id string) (*model.HeuristicsInsight, error)
 	ListInsight() ([]model.HeuristicsInsight, error)
-	GetInsights(userID string, limit, offset int) ([]model.HeuristicsInsight, int, error)
+	ListInsightPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.HeuristicsInsight, int64, error)
 	UpdateInsight(id string, insight *model.HeuristicsInsight) error
 	DeleteInsight(id string) error
 }
@@ -72,9 +75,19 @@ type HeuristicsPatternRepositoryInterface interface {
 	CreatePattern(pattern *model.HeuristicsPattern) error
 	GetPatternById(id string) (*model.HeuristicsPattern, error)
 	ListPattern(userID uint) ([]model.HeuristicsPattern, error)
+	ListPatternPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.HeuristicsPattern, int64, error)
 	GetPatterns(userID string, limit, offset int) ([]model.HeuristicsPattern, int, error)
 	UpdatePattern(id string, insight *model.HeuristicsPattern) error
 	DeletePattern(id string) error
+}
+
+type HeuristicsModelerRepositoryInterface interface {
+	CreateModeler(modeler *model.HeuristicsModeler) error
+	GetModelerById(id string) (*model.HeuristicsModeler, error)
+	ListModeler(userID uint) ([]model.HeuristicsModeler, error)
+	ListModelerPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.HeuristicsModeler, int64, error)
+	UpdateModeler(id string, modeler *model.HeuristicsModeler) error
+	DeleteModeler(id string) error
 }
 
 type ProcessOptimizationRepositoryInterface interface {

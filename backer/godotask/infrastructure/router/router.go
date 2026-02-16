@@ -9,6 +9,8 @@ import (
 	"github.com/godotask/interface/controller/heuristics"
 	"github.com/godotask/interface/controller/heuristics/analyze"
 	"github.com/godotask/interface/controller/heuristics/insight"
+	"github.com/godotask/interface/controller/heuristics/modeler"
+	"github.com/godotask/interface/controller/heuristics/pattern"
 	"github.com/godotask/interface/controller/process_optimization"
 	"github.com/godotask/interface/controller/qualitative_label"
 	"github.com/godotask/interface/controller/knowledge_pattern"
@@ -83,6 +85,14 @@ func setupRouter() *gin.Engine {
 	heuristicsInsightRepo := &repository.HeuristicsInsightRepositoryImpl{DB: model.DB}
 	heuristicsInsightService := &service.HeuristicsInsightService{Repo: heuristicsInsightRepo}
 	heuristicsInsightController := insight.HeuristicsInsightController{Service: heuristicsInsightService}
+
+	heuristicsPatternRepo := &repository.HeuristicsPatternRepositoryImpl{DB: model.DB}
+	heuristicsPatternService := &service.HeuristicsPatternService{Repo: heuristicsPatternRepo}
+	heuristicsPatternController := pattern.HeuristicsPatternController{Service: heuristicsPatternService}
+
+	heuristicsModelerRepo := &repository.HeuristicsModelerRepositoryImpl{DB: model.DB}
+	heuristicsModelerService := &service.HeuristicsModelerService{Repo: heuristicsModelerRepo}
+	heuristicsModelerController := modeler.HeuristicsModelerController{Service: heuristicsModelerService}
 
 	processOptimizationRepo := &repository.ProcessOptimizationRepositoryImpl{DB: model.DB}
 	processOptimizationService := &service.ProcessOptimizationService{Repo: processOptimizationRepo}
@@ -167,16 +177,26 @@ func setupRouter() *gin.Engine {
 		protected.PUT("/heuristics/analyze/:id", AnalyzeController.EditAnalyzeData)
 		protected.DELETE("/heuristics/analyze/:id", AnalyzeController.DeleteAnalyzeData)
 
-		// Heuristics API (ML Pipeline & Analytics)
 		protected.POST("/heuristics/insight", heuristicsInsightController.AddInsightData)
+		protected.GET("/heuristics/insight/pager", heuristicsInsightController.ListInsightPager)
 		protected.GET("/heuristics/insight/:id", heuristicsInsightController.GetInsightData)
 		protected.PUT("/heuristics/insight/:id", heuristicsInsightController.EditInsightsData)
 		protected.DELETE("/heuristics/insight/:id", heuristicsInsightController.DeleteInsightData)
 
+		protected.POST("/heuristics/pattern", heuristicsPatternController.AddPatternData)
+		protected.GET("/heuristics/pattern/pager", heuristicsPatternController.ListPatternPager)
+		protected.GET("/heuristics/pattern/:id", heuristicsPatternController.GetPatternData)
+		protected.PUT("/heuristics/pattern/:id", heuristicsPatternController.EditPatternData)
+		protected.DELETE("/heuristics/pattern/:id", heuristicsPatternController.DeletePatternData)
+
 		protected.POST("/heuristics/track", heuristicsController.TrackBehavior)
 		protected.GET("/heuristics/track/:user_id", heuristicsController.GetTrackingData)
-		protected.GET("/heuristics/patterns", heuristicsController.DetectPatterns)
-		protected.POST("/heuristics/patterns/train", heuristicsController.TrainModel)
+
+		protected.POST("/heuristics/modeler", heuristicsModelerController.AddModelerData)
+		protected.GET("/heuristics/modeler/pager", heuristicsModelerController.ListModelerPager)
+		protected.GET("/heuristics/modeler/:id", heuristicsModelerController.GetModelerData)
+		protected.PUT("/heuristics/modeler/:id", heuristicsModelerController.EditModelerData)
+		protected.DELETE("/heuristics/modeler/:id", heuristicsModelerController.DeleteModelerData)
 
 		// phenomenological framework API (CRUD)
 		protected.POST("/phenomenological_framework", phenomenologicalFrameworkController.AddPhenomenologicalFramework)
