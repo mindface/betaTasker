@@ -6,7 +6,6 @@ import (
 	"github.com/godotask/interface/controller/memory"
 	"github.com/godotask/interface/controller/task"
 	"github.com/godotask/interface/controller/assessment"
-	"github.com/godotask/interface/controller/heuristics"
 	"github.com/godotask/interface/controller/heuristics/analyze"
 	"github.com/godotask/interface/controller/heuristics/insight"
 	"github.com/godotask/interface/controller/heuristics/modeler"
@@ -76,11 +75,9 @@ func setupRouter() *gin.Engine {
 	assessmentService := &service.AssessmentService{Repo: assessmentRepo}
 	assessmentController := assessment.AssessmentController{Service: assessmentService}
 
-	heuristicsRepo := &repository.HeuristicsRepositoryImpl{DB: model.DB}
-	heuristicsService := &service.HeuristicsService{Repo: heuristicsRepo}
-	heuristicsController := heuristics.HeuristicsController{Service: heuristicsService}
-
-	AnalyzeController := analyze.AnalyzeController{Service: heuristicsService}
+	heuristicsAnalysisRepo := &repository.HeuristicsAnalysisRepositoryImpl{DB: model.DB}
+	heuristicsAnalysisService := &service.HeuristicsAnalysisService{Repo: heuristicsAnalysisRepo}
+	heuristicsAnalysisController := analyze.HeuristicsAnalyzeController{Service: heuristicsAnalysisService}
 
 	heuristicsInsightRepo := &repository.HeuristicsInsightRepositoryImpl{DB: model.DB}
 	heuristicsInsightService := &service.HeuristicsInsightService{Repo: heuristicsInsightRepo}
@@ -170,12 +167,10 @@ func setupRouter() *gin.Engine {
 		protected.DELETE("/assessment/:id", assessmentController.DeleteAssessment)	
 
 		// Heuristics API (ML Pipeline & Analytics)
-		protected.POST("/heuristics/analyze", AnalyzeController.AddAnalyzeData)
-		protected.GET("/heuristics/analyze", AnalyzeController.ListAnalyzeData)
-		protected.GET("/heuristics/analyze/pager", AnalyzeController.ListAnalyzePager)
-		protected.GET("/heuristics/analyze/:id", AnalyzeController.GetAnalyzeData)
-		protected.PUT("/heuristics/analyze/:id", AnalyzeController.EditAnalyzeData)
-		protected.DELETE("/heuristics/analyze/:id", AnalyzeController.DeleteAnalyzeData)
+		protected.POST("/heuristics/analyze", heuristicsAnalysisController.AddAnalyzeData)
+		protected.GET("/heuristics/analyze/:id", heuristicsAnalysisController.GetAnalyzeData)
+		protected.PUT("/heuristics/analyze/:id", heuristicsAnalysisController.EditAnalyzeData)
+		protected.DELETE("/heuristics/analyze/:id", heuristicsAnalysisController.DeleteAnalyzeData)
 
 		protected.POST("/heuristics/insight", heuristicsInsightController.AddInsightData)
 		protected.GET("/heuristics/insight/pager", heuristicsInsightController.ListInsightPager)
@@ -188,9 +183,6 @@ func setupRouter() *gin.Engine {
 		protected.GET("/heuristics/pattern/:id", heuristicsPatternController.GetPatternData)
 		protected.PUT("/heuristics/pattern/:id", heuristicsPatternController.EditPatternData)
 		protected.DELETE("/heuristics/pattern/:id", heuristicsPatternController.DeletePatternData)
-
-		protected.POST("/heuristics/track", heuristicsController.TrackBehavior)
-		protected.GET("/heuristics/track/:user_id", heuristicsController.GetTrackingData)
 
 		protected.POST("/heuristics/modeler", heuristicsModelerController.AddModelerData)
 		protected.GET("/heuristics/modeler/pager", heuristicsModelerController.ListModelerPager)

@@ -11,9 +11,9 @@ import (
 )
 
 // ListAnalyzeData: GET /api/heuristics/analyze
-func (ctl *AnalyzeController) ListAnalyzeData(c *gin.Context) {
+func (ctl *HeuristicsAnalyzeController) ListAnalyze(c *gin.Context) {
 	// 分析データのリストを取得
-	analyses, err := ctl.Service.ListAnalyses()
+	analyses, err := ctl.Service.ListAnalyze()
 	if err != nil {
 		appErr := errors.NewAppError(
 			errors.SYS_INTERNAL_ERROR,
@@ -36,7 +36,7 @@ func (ctl *AnalyzeController) ListAnalyzeData(c *gin.Context) {
 }
 
 // ListAnalyzeData: GET /api/heuristics/analyze/pager
-func (ctl *AnalyzeController) ListAnalyzePager(c *gin.Context) {
+func (ctl *HeuristicsAnalyzeController) ListAnalyzePager(c *gin.Context) {
   pager := tools.ParsePagerQuery(c)
 	filter := dtoquery.QueryFilter{
 		UserID:  &pager.UserID,

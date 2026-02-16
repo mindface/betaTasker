@@ -48,18 +48,13 @@ type TaskRepositoryInterface interface {
 	Delete(id string) error
 }
 
-type HeuristicsRepositoryInterface interface {
+type HeuristicsAnalysisRepositoryInterface interface {
 	CreateAnalysis(analysis *model.HeuristicsAnalysis) error
 	GetAnalysisById(id string) (*model.HeuristicsAnalysis, error)
-	ListAnalyses() ([]model.HeuristicsAnalysis, error)
+	ListAnalyze() ([]model.HeuristicsAnalysis, error)
 	ListAnalysesPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.HeuristicsAnalysis, int64, error)
 	UpdateAnalysis(id string, analysis *model.HeuristicsAnalysis) error
 	DeleteAnalysis(id string) error
-	FindAllAnalyses() ([]model.HeuristicsAnalysis, error)
-	CreateTracking(tracking *model.HeuristicsTracking) error
-	GetTrackingByUserID(userID string) ([]model.HeuristicsTracking, error)
-	DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error)
-	CreateModel(model *model.HeuristicsModeler) error
 }
 
 type HeuristicsInsightRepositoryInterface interface {
