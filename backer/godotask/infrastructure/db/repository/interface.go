@@ -45,7 +45,7 @@ type TaskRepositoryInterface interface {
 	Delete(id string) error
 }
 
-type HeuristicsRepositoryInterface interface {
+type HeuristicsAnalysisRepositoryInterface interface {
 	CreateAnalysis(analysis *model.HeuristicsAnalysis) error
 	GetAnalysisById(id string) (*model.HeuristicsAnalysis, error)
 	ListAnalyses() ([]model.HeuristicsAnalysis, error)

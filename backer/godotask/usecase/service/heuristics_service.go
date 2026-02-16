@@ -5,11 +5,11 @@ import (
 	"github.com/godotask/infrastructure/db/repository"
 )
 
-type HeuristicsService struct {
-	Repo repository.HeuristicsRepositoryInterface
+type HeuristicsAnalysisService struct {
+	Repo repository.HeuristicsAnalysisRepositoryInterface
 }
 
-func (s *HeuristicsService) CreateAnalyzeData(request *model.HeuristicsAnalysisRequest) (*model.HeuristicsAnalysis, error) {
+func (s *HeuristicsAnalysisService) CreateAnalyzeData(request *model.HeuristicsAnalysisRequest) (*model.HeuristicsAnalysis, error) {
 	analysis := &model.HeuristicsAnalysis{
 		UserID:       request.UserID,
 		TaskID:       request.TaskID,
@@ -26,23 +26,23 @@ func (s *HeuristicsService) CreateAnalyzeData(request *model.HeuristicsAnalysisR
 	return analysis, nil
 }
 
-func (s *HeuristicsService) GetAnalysisById(id string) (*model.HeuristicsAnalysis, error) {
+func (s *HeuristicsAnalysisService) GetAnalysisById(id string) (*model.HeuristicsAnalysis, error) {
   return s.Repo.GetAnalysisById(id)
 }
 
-func (s *HeuristicsService) ListAnalyses() ([]model.HeuristicsAnalysis, error) {
+func (s *HeuristicsAnalysisService) ListAnalyses() ([]model.HeuristicsAnalysis, error) {
   return s.Repo.FindAllAnalyses()
 }
 
-func (s *HeuristicsService) UpdateAnalyzeData(id string, analyze *model.HeuristicsAnalysis) error {
+func (s *HeuristicsAnalysisService) UpdateAnalyzeData(id string, analyze *model.HeuristicsAnalysis) error {
 	return s.Repo.UpdateAnalysis(id, analyze)
 }
 
-func (s *HeuristicsService) DeleteAnalyzeData(id string) error {
+func (s *HeuristicsAnalysisService) DeleteAnalyzeData(id string) error {
 	return s.Repo.DeleteAnalysis(id)
 }
 
-func (s *HeuristicsService) TrackUserBehavior(trackData *model.HeuristicsTrackingData) error {
+func (s *HeuristicsAnalysisService) TrackUserBehavior(trackData *model.HeuristicsTrackingData) error {
 	tracking := &model.HeuristicsTracking{
 		UserID:    trackData.UserID,
 		Action:    trackData.Action,
@@ -54,15 +54,15 @@ func (s *HeuristicsService) TrackUserBehavior(trackData *model.HeuristicsTrackin
 	return s.Repo.CreateTracking(tracking)
 }
 
-func (s *HeuristicsService) GetTrackingDataByUserID(userID string) ([]model.HeuristicsTracking, error) {
+func (s *HeuristicsAnalysisService) GetTrackingDataByUserID(userID string) ([]model.HeuristicsTracking, error) {
 	return s.Repo.GetTrackingByUserID(userID)
 }
 
-func (s *HeuristicsService) DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error) {
+func (s *HeuristicsAnalysisService) DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error) {
 	return s.Repo.DetectPatterns(userID, dataType, period)
 }
 
-func (s *HeuristicsService) TrainModel(request *model.HeuristicsTrainRequest) (*model.HeuristicsModel, error) {
+func (s *HeuristicsAnalysisService) TrainModel(request *model.HeuristicsTrainRequest) (*model.HeuristicsModel, error) {
 	modelData := &model.HeuristicsModel{
 		ModelType:   request.ModelType,
 		Version:     "1.0.0",

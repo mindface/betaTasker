@@ -8,7 +8,7 @@ import (
 )
 
 // GetAnalyzeData: GET /api/heuristics/analyze/:id
-func (ctl *AnalyzeController) GetAnalyzeData(c *gin.Context) {
+func (ctl *HeuristicsAnalyzeController) GetAnalyzeData(c *gin.Context) {
 	id := c.Param("id")
 
 	analysis, err := ctl.Service.GetAnalysisById(id)

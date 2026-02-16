@@ -6,15 +6,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type HeuristicsRepositoryImpl struct {
+type HeuristicsAnalysisRepositoryImpl struct {
 	DB *gorm.DB
 }
 
-func (r *HeuristicsRepositoryImpl) CreateAnalysis(analysis *model.HeuristicsAnalysis) error {
+func (r *HeuristicsAnalysisRepositoryImpl) CreateAnalysis(analysis *model.HeuristicsAnalysis) error {
     return r.DB.Create(analysis).Error
 }
 
-func (r *HeuristicsRepositoryImpl) GetAnalysisById(id string) (*model.HeuristicsAnalysis, error) {
+func (r *HeuristicsAnalysisRepositoryImpl) GetAnalysisById(id string) (*model.HeuristicsAnalysis, error) {
     var analysis model.HeuristicsAnalysis
     if err := r.DB.First(&analysis, id).Error; err != nil {
         return nil, err
@@ -22,7 +22,7 @@ func (r *HeuristicsRepositoryImpl) GetAnalysisById(id string) (*model.Heuristics
     return &analysis, nil
 }
 
-func (r *HeuristicsRepositoryImpl) FindAllAnalyses() ([]model.HeuristicsAnalysis, error) {
+func (r *HeuristicsAnalysisRepositoryImpl) FindAllAnalyses() ([]model.HeuristicsAnalysis, error) {
     var analyses []model.HeuristicsAnalysis
     if err := r.DB.Find(&analyses).Error; err != nil {
         return nil, err
@@ -30,15 +30,15 @@ func (r *HeuristicsRepositoryImpl) FindAllAnalyses() ([]model.HeuristicsAnalysis
     return analyses, nil
 }
 
-func (r *HeuristicsRepositoryImpl) UpdateAnalysis(id string, analysis *model.HeuristicsAnalysis) error {
+func (r *HeuristicsAnalysisRepositoryImpl) UpdateAnalysis(id string, analysis *model.HeuristicsAnalysis) error {
     return r.DB.Model(&model.HeuristicsAnalysis{}).Where("id = ?", id).Updates(analysis).Error
 }
 
-func (r *HeuristicsRepositoryImpl) DeleteAnalysis(id string) error {
+func (r *HeuristicsAnalysisRepositoryImpl) DeleteAnalysis(id string) error {
     return r.DB.Delete(&model.HeuristicsAnalysis{}, id).Error
 }
 
-func (r *HeuristicsRepositoryImpl) ListAnalyses() ([]model.HeuristicsAnalysis, error) {
+func (r *HeuristicsAnalysisRepositoryImpl) ListAnalyses() ([]model.HeuristicsAnalysis, error) {
     var analyses []model.HeuristicsAnalysis
     if err := r.DB.Find(&analyses).Error; err != nil {
         return nil, err
@@ -47,11 +47,11 @@ func (r *HeuristicsRepositoryImpl) ListAnalyses() ([]model.HeuristicsAnalysis, e
 }
 
 
-func (r *HeuristicsRepositoryImpl) CreateTracking(tracking *model.HeuristicsTracking) error {
+func (r *HeuristicsAnalysisRepositoryImpl) CreateTracking(tracking *model.HeuristicsTracking) error {
 	return r.DB.Create(tracking).Error
 }
 
-func (r *HeuristicsRepositoryImpl) GetTrackingByUserID(userID string) ([]model.HeuristicsTracking, error) {
+func (r *HeuristicsAnalysisRepositoryImpl) GetTrackingByUserID(userID string) ([]model.HeuristicsTracking, error) {
 	var trackings []model.HeuristicsTracking
 	uid, _ := strconv.Atoi(userID)
 	if err := r.DB.Where("user_id = ?", uid).Find(&trackings).Error; err != nil {
@@ -60,7 +60,7 @@ func (r *HeuristicsRepositoryImpl) GetTrackingByUserID(userID string) ([]model.H
 	return trackings, nil
 }
 
-func (r *HeuristicsRepositoryImpl) DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error) {
+func (r *HeuristicsAnalysisRepositoryImpl) DetectPatterns(userID, dataType, period string) ([]model.HeuristicsPattern, error) {
 	var patterns []model.HeuristicsPattern
 	query := r.DB.Model(&model.HeuristicsPattern{})
 	
@@ -76,6 +76,6 @@ func (r *HeuristicsRepositoryImpl) DetectPatterns(userID, dataType, period strin
 	return patterns, nil
 }
 
-func (r *HeuristicsRepositoryImpl) CreateModel(modelData *model.HeuristicsModel) error {
+func (r *HeuristicsAnalysisRepositoryImpl) CreateModel(modelData *model.HeuristicsModel) error {
 	return r.DB.Create(modelData).Error
 }

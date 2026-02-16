@@ -8,7 +8,7 @@ import (
 )
 
 // ListAnalyzeData: GET /api/heuristics/analyze
-func (ctl *AnalyzeController) ListAnalyzeData(c *gin.Context) {
+func (ctl *HeuristicsAnalyzeController) ListAnalyzeData(c *gin.Context) {
 	// 分析データのリストを取得
 	analyses, err := ctl.Service.ListAnalyses()
 	if err != nil {

@@ -9,7 +9,7 @@ import (
 )
 
 // EditAnalyzeData: PUT /api/heuristics/analyze/:id
-func (ctl *AnalyzeController) EditAnalyzeData(c *gin.Context) {
+func (ctl *HeuristicsAnalyzeController) EditAnalyzeData(c *gin.Context) {
 	id := c.Param("id") // URLパラメータからIDを取得
 
 	var analyze model.HeuristicsAnalysis

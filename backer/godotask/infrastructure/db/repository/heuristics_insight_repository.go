@@ -11,13 +11,13 @@ type HeuristicsInsightRepositoryImpl struct {
 }
 
 func (r *HeuristicsInsightRepositoryImpl) CreateInsight(insight *model.HeuristicsInsight) error {
-    return r.DB.Create(insight).Error
+  return r.DB.Create(insight).Error
 }
 
 func (r *HeuristicsInsightRepositoryImpl) GetInsightById(id string) (*model.HeuristicsInsight, error) {
 	var insight model.HeuristicsInsight
 	if err := r.DB.First(&insight, "id = ?", id).Error; err != nil {
-			return nil, err
+		return nil, err
 	}
 	return &insight, nil
 }
