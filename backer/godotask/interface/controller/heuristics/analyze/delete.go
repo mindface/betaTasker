@@ -8,7 +8,7 @@ import (
 )
 
 // DeleteAnalyzeData: DELETE /api/heuristics/analyze/:id
-func (ctl *AnalyzeController) DeleteAnalyzeData(c *gin.Context) {
+func (ctl *HeuristicsAnalyzeController) DeleteAnalyzeData(c *gin.Context) {
 	id := c.Param("id")
 
 	if err := ctl.Service.DeleteAnalyzeData(id); err != nil {

@@ -8,7 +8,7 @@ import (
 	"github.com/godotask/errors"
 )
 
-func (ctl *AnalyzeController) AddAnalyzeData(c *gin.Context) {
+func (ctl *HeuristicsAnalyzeController) AddAnalyzeData(c *gin.Context) {
     var analyze model.HeuristicsAnalysisRequest
 
     // リクエストボディをバインド 

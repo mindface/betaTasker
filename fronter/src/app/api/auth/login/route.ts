@@ -8,12 +8,11 @@ import { handleError } from "../../utlts/handleRequest";
 
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
-  console.log("Login request received:", { email, password });
   if (!email || !password) {
     throw new HttpError(
       StatusCodes.BadRequest,
       errorMessages[ErrorCode.PAYLOAD_EMAIL_AND_PASSWORD_NOT_FOUND],
-    );
+    )
   }
 
   try {

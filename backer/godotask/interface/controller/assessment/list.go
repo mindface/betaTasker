@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/godotask/interface/http/authcontext"
+	"github.com/godotask/interface/tools"
 	"github.com/godotask/errors"
 	"strconv"
 
@@ -66,7 +67,7 @@ func (ctl *AssessmentController) ListAssessmentsPager(c *gin.Context) {
     offset := (page - 1) * limit
 
     // Service 側で total も返す想定
-    assessments, total, err := ctl.Service.ListAssessmentsTOPager(userID, limit, offset)
+    assessments, total, err := ctl.Service.ListAssessmentPager(userID, limit, offset)
     if err != nil {
       appErr := errors.NewAppError(
         errors.SYS_INTERNAL_ERROR,
@@ -127,69 +128,29 @@ func (ctl *AssessmentController) ListAssessmentsForTaskUser(c *gin.Context) {
 
 // ListAssessmentsForTaskUserPager: GET /api/assessment/task-user/pager
 func (ctl *AssessmentController) ListAssessmentsForTaskUserPager(c *gin.Context) {
-    // クエリパラメータ
-    page := 1
-    limit := 20
-    const maxPerPage = 100
-    taskID := 0
-    userID := 0
+  // クエリパラメータ
+  query := tools.ParsePagerQuery(c)
 
-    if p := c.Query("page"); p != "" {
-        if v, err := strconv.Atoi(p); err == nil && v > 0 {
-            page = v
-        }
-    }
-    if pp := c.Query("limit"); pp != "" {
-        if v, err := strconv.Atoi(pp); err == nil && v > 0 {
-            limit = v
-        }
-    }
-    if t := c.Query("task_id"); t != "" {
-        if v, err := strconv.Atoi(t); err == nil && v > 0 {
-            taskID = v
-        }
-    }
-    if u := c.Query("user_id"); u != "" {
-        if v, err := strconv.Atoi(u); err == nil && v > 0 {
-            userID = v
-        }
-    }
-    if limit > maxPerPage {
-        limit = maxPerPage
-    }
-
-    offset := (page - 1) * limit
-
-    // Service 側で total も返す想定
-    assessments, total, err := ctl.Service.ListAssessmentsForTaskUserPager(userID, taskID, page, limit, offset)
-    if err != nil {
-        appErr := errors.NewAppError(
-            errors.SYS_INTERNAL_ERROR,
-            errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
-            err.Error(),
-        )
-        c.JSON(appErr.HTTPStatus, gin.H{
-            "code":    appErr.Code,
-            "message": appErr.Message,
-            "detail":  appErr.Detail,
-        })
-        return
-    }
-
-    totalPages := 0
-    if total > 0 {
-        totalPages = int((total + int64(limit) - 1) / int64(limit))
-    }
-
-    c.JSON(http.StatusOK, gin.H{
-        "success":     true,
-        "message":     "Assessments retrieved",
-        "assessments": assessments,
-        "meta": gin.H{
-            "total":       total,
-            "total_pages": totalPages,
-            "page":        page,
-            "limit":       limit,
-        },
+  // Service 側で total も返す想定
+  assessments, total, err := ctl.Service.ListAssessmentsForTaskUserPager(query.UserID, query.TaskID, query.Offset, query.Limit)
+  if err != nil {
+    appErr := errors.NewAppError(
+      errors.SYS_INTERNAL_ERROR,
+      errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
+      err.Error(),
+    )
+    c.JSON(appErr.HTTPStatus, gin.H{
+      "code":    appErr.Code,
+      "message": appErr.Message,
+      "detail":  appErr.Detail,
     })
+    return
+  }
+
+  c.JSON(http.StatusOK, gin.H{
+    "success": true,
+    "message": "assessments retrieved",
+    "assessments": assessments,
+    "meta":    tools.BuildPageMeta(total, query.Page, query.Limit),
+  })
 }

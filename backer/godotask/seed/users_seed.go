@@ -217,6 +217,10 @@ func SeedAdminUser(db *gorm.DB) error {
 func SeedUsers(db *gorm.DB) error {
 	log.Println("Starting users seeding (99 regular users)...")
 
+	hashedPassword, err := hashPassword("User@Seed")
+	if err != nil {
+		return fmt.Errorf("failed to hash default password: %w", err)
+	}
 	users := []model.User{}
 	baseTime := time.Now()
 
@@ -226,10 +230,8 @@ func SeedUsers(db *gorm.DB) error {
 		firstName := firstNames[(i-2)%len(firstNames)]
 		username := generateUsername(lastName, firstName, i)
 		email := fmt.Sprintf("%s@example.com", username)
-		
-		// デフォルトパスワード（テスト用）
-		defaultPassword := fmt.Sprintf("User@%d", i)
-		hashedPassword, err := hashPassword(defaultPassword)
+
+		// デフォルトパスワード（テスト用）x
 		if err != nil {
 			return fmt.Errorf("failed to hash password for user %d: %w", i, err)
 		}
@@ -378,7 +380,7 @@ func SeedAllUsers(db *gorm.DB) error {
 // CleanUsers - ユーザーデータをクリーンアップ（開発用）
 func CleanUsers(db *gorm.DB) error {
 	log.Println("Cleaning existing users...")
-	
+
 	if err := db.Where("id <= ?", 100).Delete(&model.User{}).Error; err != nil {
 		return fmt.Errorf("failed to clean users: %w", err)
 	}

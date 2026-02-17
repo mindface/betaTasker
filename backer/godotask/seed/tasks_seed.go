@@ -49,8 +49,8 @@ func SeedTaskModelsFromCSV(db *gorm.DB) error {
     // Date（NULL もありうるのでポインタ）
     var datePtr *time.Time
     if record[3] != "" {
-        t, _ := time.Parse("2006-01-02", record[3])
-        datePtr = &t
+			t, _ := time.Parse("2006-01-02", record[3])
+			datePtr = &t
     }
 
     createdAt, _ := time.Parse("2006-01-02", record[6])

@@ -4,6 +4,7 @@ import (
 	"gorm.io/gorm"
   "github.com/godotask/infrastructure/db/model"
 	"github.com/godotask/infrastructure/helper"
+  "fmt"
 )
 
 type TaskRepositoryImpl struct {
@@ -53,12 +54,13 @@ func (r *TaskRepositoryImpl) FindAll(userID uint) ([]model.Task, error) {
 func (r *TaskRepositoryImpl) ListTasksPager(userID uint, offset int, limit int) ([]model.Task, int64, error) {
 	var tasks []model.Task
 	var total int64
+  fmt.Printf("ListTasksPager called with userID: %d, offset: %d, limit: %d\n", userID, offset, limit)
 
 	q := r.DB.Model(&model.Task{}).Scopes(helper.WithUserFilter(userID))
 	if err := q.Count(&total).Error; err != nil {
 	  return nil, 0, err
 	}
-
+  
 	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
 		return nil, 0, err
 	}
@@ -67,18 +69,18 @@ func (r *TaskRepositoryImpl) ListTasksPager(userID uint, offset int, limit int) 
 
 // ListTasksByUserPager: 特定ユーザーのタスク一覧をページネーション取得
 func (r *TaskRepositoryImpl) ListTasksByUserPager(userID uint, offset, limit int) ([]model.Task, int64, error) {
-  var tasks []model.Task
-  var total int64
+    var tasks []model.Task
+    var total int64
 
-  q := r.DB.Model(&model.Task{}).Scopes(helper.WithUserFilter(userID))
-  if err := q.Count(&total).Error; err != nil {
-    return nil, 0, err
-  }
+    q := r.DB.Model(&model.Task{}).Scopes(helper.WithUserFilter(userID))
+    if err := q.Count(&total).Error; err != nil {
+      return nil, 0, err
+    }
 
-  if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
-    return nil, 0, err
-  }
-  return tasks, total, nil
+    if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
+      return nil, 0, err
+    }
+    return tasks, total, nil
 }
 
 func (r *TaskRepositoryImpl) Update(id string, task *model.Task) error {

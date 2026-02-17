@@ -40,7 +40,7 @@ func (r *AssessmentRepositoryImpl) FindAll(userID uint) ([]model.Assessment, int
 	q := r.DB.Model(&model.Assessment{}).Scopes(helper.WithUserFilter(userID))
 
 	if err := q.Count(&total).Error; err != nil {
-			return nil, 0, err
+		return nil, 0, err
 	}
 
 	if err := q.Order("created_at DESC, id DESC").Find(&assessments).Error; err != nil {
@@ -49,14 +49,14 @@ func (r *AssessmentRepositoryImpl) FindAll(userID uint) ([]model.Assessment, int
 	return assessments, total, nil
 }
 
-func (r *AssessmentRepositoryImpl) ListAssessmentsPager(userID uint, offset int, limit int) ([]model.Assessment, int64, error) {
+func (r *AssessmentRepositoryImpl) ListAssessmentsPager(userID uint,  offset int, limit int) ([]model.Assessment, int64, error) {
 	var assessments []model.Assessment
 	var total int64
 
 	q := r.DB.Model(&model.Assessment{}).Scopes(helper.WithUserFilter(userID))
 
 	if err := q.Count(&total).Error; err != nil {
-			return nil, 0, err
+		return nil, 0, err
 	}
 
 	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&assessments).Error; err != nil {
@@ -65,7 +65,7 @@ func (r *AssessmentRepositoryImpl) ListAssessmentsPager(userID uint, offset int,
 	return assessments, total, nil
 }
 
-func (r *AssessmentRepositoryImpl) ListAssessmentsForTaskUserPager(userID, taskID, offset, limit int) ([]model.Assessment, int64, error) {
+func (r *AssessmentRepositoryImpl) ListAssessmentsForTaskUserPager(userID uint, taskID int, offset int, limit int) ([]model.Assessment, int64, error) {
 	var assessments []model.Assessment
 	var total int64
 
@@ -73,18 +73,18 @@ func (r *AssessmentRepositoryImpl) ListAssessmentsForTaskUserPager(userID, taskI
 
 	// フィルタ条件
 	if userID > 0 {
-			q = q.Where("user_id = ?", userID)
+		q = q.Where("user_id = ?", userID)
 	}
 	if taskID > 0 {
-			q = q.Where("task_id = ?", taskID)
+		q = q.Where("task_id = ?", taskID)
 	}
 
 	if err := q.Count(&total).Error; err != nil {
-			return nil, 0, err
+		return nil, 0, err
 	}
 
 	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&assessments).Error; err != nil {
-			return nil, 0, err
+		return nil, 0, err
 	}
 	return assessments, total, nil
 }
