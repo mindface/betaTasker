@@ -25,6 +25,11 @@ type HeuristicsAnalysis struct {
 	CreatedAt   time.Time      `json:"created_at"`
 	UpdatedAt   time.Time      `json:"updated_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
+
+	Patterns []HeuristicsPattern `gorm:"-"`
+	Insights []HeuristicsInsight `gorm:"-"`
+	Modelers []HeuristicsModeler `gorm:"-"`
+
 }
 
 // HeuristicsTracking - ユーザー行動追跡データ
@@ -59,7 +64,6 @@ type HeuristicsInsight struct {
 	Description string         `json:"description"`
 	Confidence  float64        `json:"confidence"`
 	Data        string         `json:"data" gorm:"type:jsonb"`
-
 	// 追加：どの分析から生成されたか
 	SourceAnalysisID *int      `json:"source_analysis_id"`
 	// 追加：AI からの具体的改善アクション
@@ -67,7 +71,6 @@ type HeuristicsInsight struct {
 	// 追加：改善した場合の期待値 (0〜1)
 	ExpectedImpact float64       `json:"expected_impact"`
 	IsActive    bool           `json:"is_active" gorm:"default:true"`
-
 	CreatedAt   time.Time      `json:"created_at"`
 	UpdatedAt   time.Time      `json:"updated_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
@@ -77,7 +80,6 @@ type HeuristicsInsight struct {
 type HeuristicsPattern struct {
 	ID          int           `gorm:"primaryKey" json:"id"`
 	Name        string         `json:"name"`
-
 	UserID    int           `json:"user_id"`    // 個人ごとのパターン分析も可能に
 	TaskID    int          `json:"task_id"`
 	// タスク分類

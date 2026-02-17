@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	querydto "github.com/godotask/dto/query"
+	"fmt"
 )
 
 // ParseIncludeParam
@@ -14,17 +15,15 @@ func ParseIncludeParam(raw string) []querydto.FilterTarget {
 	}
 
 	parts := strings.Split(raw, ",")
-	result := make([]querydto.FilterTarget, 0, len(parts))
+	fmt.Printf("%#v\n", parts)
+	fmt.Printf("type=%T value=%v\n", parts, parts)
+	includes := make([]querydto.FilterTarget, 0, len(parts))
 
 	for _, p := range parts {
-		p = strings.TrimSpace(p)
-		switch querydto.FilterTarget(p) {
-		case querydto.FilterUser,
-			querydto.FilterTask,
-			querydto.FilterMemory:
-			result = append(result, querydto.FilterTarget(p))
+		v := strings.TrimSpace(p)
+		if v != "" {
+			includes = append(includes, querydto.FilterTarget(v))
 		}
 	}
-	return result
+	return includes
 }
-

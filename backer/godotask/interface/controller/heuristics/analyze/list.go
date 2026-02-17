@@ -8,6 +8,7 @@ import (
 	helperquery "github.com/godotask/infrastructure/helper/query"
 	"github.com/godotask/interface/tools"
 	"github.com/godotask/errors"
+	"fmt"
 )
 
 // ListAnalyzeData: GET /api/heuristics/analyze
@@ -43,6 +44,8 @@ func (ctl *HeuristicsAnalyzeController) ListAnalyzePager(c *gin.Context) {
 		TaskID:  &pager.TaskID,
 		Include: helperquery.ParseIncludeParam(c.Query("include")),
 	}
+	fmt.Printf("eeeeeeeee")
+	fmt.Printf("%d",filter.Include)
   analyses, total, err := ctl.Service.ListAnalysesPager(filter,pager)
   if err != nil {
     appErr := errors.NewAppError(

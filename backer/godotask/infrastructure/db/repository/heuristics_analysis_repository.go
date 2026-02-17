@@ -3,8 +3,9 @@ package repository
 import (
 	"github.com/godotask/infrastructure/db/model"
 	dtoquery "github.com/godotask/dto/query"
-	helperquery "github.com/godotask/infrastructure/helper/query"
+	// helperquery "github.com/godotask/infrastructure/helper/query"
 	"gorm.io/gorm"
+	"fmt"
 )
 
 type HeuristicsAnalysisRepositoryImpl struct {
@@ -26,7 +27,7 @@ func (r *HeuristicsAnalysisRepositoryImpl) GetAnalysisById(id string) (*model.He
 func (r *HeuristicsAnalysisRepositoryImpl) ListAnalyze() ([]model.HeuristicsAnalysis, error) {
 	var analyses []model.HeuristicsAnalysis
 	if err := r.DB.Find(&analyses).Error; err != nil {
-			return nil, err
+		return nil, err
 	}
 	return analyses, nil
 }
@@ -34,14 +35,60 @@ func (r *HeuristicsAnalysisRepositoryImpl) ListAnalyze() ([]model.HeuristicsAnal
 func (r *HeuristicsAnalysisRepositoryImpl) ListAnalysesPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.HeuristicsAnalysis, int64, error) {
 	var analyses []model.HeuristicsAnalysis
 	var total int64
+	fmt.Printf("feeeeeee %d",filter.Include)
 
-	q := r.DB.Model(&model.HeuristicsAnalysis{}).Scopes(helperquery.WithDynamicFilters(filter))
+	q := r.DB.Model(&model.HeuristicsAnalysis{})
+
+	if filter.UserID != nil {
+		q = q.Where("user_id = ?", *filter.UserID)
+	}
+
+	if filter.TaskID != nil {
+		q = q.Where("task_id = ?", *filter.TaskID)
+	}
+
+
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
-	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&analyses).Error; err != nil {
+	if err := q.
+		Order("created_at ASC, id ASC").
+		Limit(limit).
+		Offset(offset).
+		Find(&analyses).Error; err != nil {
 		return nil, 0, err
+	}
+
+	// 🔽 include に応じて手動ロード
+	for i := range analyses {
+		a := &analyses[i]
+
+		for _, inc := range filter.Include {
+			switch inc {
+
+			case dtoquery.FilterPattern:
+				if err := r.DB.
+					Where("user_id = ? AND task_id = ?", a.UserID, a.TaskID).
+					Find(&a.Patterns).Error; err != nil {
+					return nil, 0, err
+				}
+
+			case dtoquery.FilterInsight:
+				if err := r.DB.
+					Where("user_id = ? AND task_id = ?", a.UserID, a.TaskID).
+					Find(&a.Insights).Error; err != nil {
+					return nil, 0, err
+				}
+
+			case dtoquery.FilterModeler:
+				if err := r.DB.
+					Where("user_id = ? AND task_id = ?", a.UserID, a.TaskID).
+					Find(&a.Modelers).Error; err != nil {
+					return nil, 0, err
+				}
+			}
+		}
 	}
 
 	return analyses, total, nil

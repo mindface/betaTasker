@@ -28,3 +28,19 @@ func WithDynamicFilters(q querydto.QueryFilter) func(db *gorm.DB) *gorm.DB {
 		return db
 	}
 }
+
+func WithDynamicIncludes(includes []querydto.FilterTarget) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		for _, inc := range includes {
+			switch inc {
+			case "pattern":
+				db = db.Preload("Patterns")
+			case "insight":
+				db = db.Preload("Insights")
+			case "modeler":
+				db = db.Preload("Modelers")
+			}
+		}
+		return db
+	}
+}
