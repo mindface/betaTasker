@@ -3,10 +3,12 @@ package task
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
+	dtoquery "github.com/godotask/dto/query"
+	helperquery "github.com/godotask/infrastructure/helper/query"
+
 	"github.com/godotask/interface/http/authcontext" 
 	"github.com/godotask/errors"
-
-	"strconv"
+	"github.com/godotask/interface/tools"
 )
 
 // ListTasks: GET /api/task
@@ -36,58 +38,43 @@ func (ctl *TaskController) ListTasks(c *gin.Context) {
 
 // ListTasksPager: GET /api/task/pager
 func (ctl *TaskController) ListTasksPager(c *gin.Context) {
-    // クエリパラメータ
-    page := 1
-    limit := 20
-    const maxPerPage = 100
-	  userID, _ := authcontext.UserID(c)
+  pager := tools.ParsePagerQuery(c)
+  filter := dtoquery.QueryFilter{
+    UserID:  &pager.UserID,
+    TaskID:  &pager.TaskID,
+    Include: helperquery.ParseIncludeParam(c.Query("include")),
+  }
 
-    if p := c.Query("page"); p != "" {
-      if v, err := strconv.Atoi(p); err == nil && v > 0 {
-        page = v
-      }
-    }
-    if pp := c.Query("limit"); pp != "" {
-      if v, err := strconv.Atoi(pp); err == nil && v > 0 {
-        limit = v
-      }
-    }
-    if limit > maxPerPage {
-      limit = maxPerPage
-    }
-
-    offset := (page - 1) * limit
-
-    // Service 側で total も返す想定
-    tasks, total, err := ctl.Service.ListTasksPager(userID, limit, offset)
-    if err != nil {
-      appErr := errors.NewAppError(
-        errors.SYS_INTERNAL_ERROR,
-        errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
-        err.Error(),
-      )
-      c.JSON(appErr.HTTPStatus, gin.H{
-        "code":    appErr.Code,
-        "message": appErr.Message,
-        "detail":  appErr.Detail,
-      })
-      return
-    }
-
-    totalPages := 0
-    if total > 0 {
-      totalPages = int((total + int64(limit) - 1) / int64(limit))
-    }
-
-    c.JSON(http.StatusOK, gin.H{
-      "success":     true,
-      "message":     "Tasks retrieved",
-      "tasks":       tasks,
-      "meta": gin.H{
-        "total":       total,
-        "total_pages": totalPages,
-        "page":        page,
-        "limit":       limit,
-      },
+  // Service 側で total も返す想定
+  tasks, total, err := ctl.Service.ListTasksPager(filter,pager)
+  if err != nil {
+    appErr := errors.NewAppError(
+      errors.SYS_INTERNAL_ERROR,
+      errors.GetErrorMessage(errors.SYS_INTERNAL_ERROR),
+      err.Error(),
+    )
+    c.JSON(appErr.HTTPStatus, gin.H{
+      "code":    appErr.Code,
+      "message": appErr.Message,
+      "detail":  appErr.Detail,
     })
+    return
+  }
+
+  totalPages := 0
+  if total > 0 {
+    totalPages = int((total + int64(pager.Limit) - 1) / int64(pager.Limit))
+  }
+
+  c.JSON(http.StatusOK, gin.H{
+    "success":     true,
+    "message":     "Tasks retrieved",
+    "tasks":       tasks,
+    "meta": gin.H{
+      "total":       total,
+      "total_pages": totalPages,
+      "page":        pager.Page,
+      "limit":       pager.Limit,
+    },
+  })
 }

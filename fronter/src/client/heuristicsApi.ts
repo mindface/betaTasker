@@ -9,8 +9,27 @@ import {
   HeuristicsModel,
 } from "../model/heuristics";
 import { fetchApiJsonCore } from "@/utils/fetchApi";
+import { LimitResponse } from "@/model/respose";
 
 const API_BASE = "/api/heuristics";
+
+// 分析関連
+export const getAnalyzesLimitClient = async (page: number, limit:number, task_id: number, include:string) => {
+  console.log(limit)
+  const data = await fetchApiJsonCore<
+    undefined,
+    LimitResponse<HeuristicsAnalysis,"analyses">
+  >({
+    endpoint: `${API_BASE}/analyze/pager?page=${page}&limit=${limit}&task_id=${task_id}&include=${include}`,
+    method: "GET",
+    errorMessage: "error analyzeData アナリシス一覧取得失敗",
+  });
+  if ("error" in data) {
+    return data;
+  }
+  console.log(data)
+  return data.value;
+};
 
 // 分析関連
 export const analyzeData = async (request: HeuristicsAnalysisRequest) => {
@@ -18,7 +37,7 @@ export const analyzeData = async (request: HeuristicsAnalysisRequest) => {
     HeuristicsAnalysisRequest,
     HeuristicsAnalysis[]
   >({
-    endpoint: `${API_BASE}/analyze`,
+    endpoint: `${API_BASE}/analyze/pager?user_id=1&page=1&limit=2&include=analysis`,
     method: "POST",
     body: request,
     errorMessage: "error analyzeData アナリシス一覧取得失敗",

@@ -1,6 +1,7 @@
 package service
 
 import (
+	dtoquery "github.com/godotask/dto/query"
 	"github.com/godotask/infrastructure/db/model"
 	"github.com/godotask/infrastructure/db/repository"
 )
@@ -18,8 +19,8 @@ func (s *TaskService) GetTaskByID(id string) (*model.Task, error) {
 func (s *TaskService) ListTasks(userID uint) ([]model.Task, error) {
 	return s.Repo.FindAll(userID)
 }
-func (s *TaskService) ListTasksPager(userID uint,perPage int, offset int) ([]model.Task, int64, error) {
-  return s.Repo.ListTasksPager(userID, offset, perPage)
+func (s *TaskService) ListTasksPager(filter dtoquery.QueryFilter, pager dtoquery.PagerQuery) ([]model.Task, int64, error) {
+  return s.Repo.ListTasksPager(filter, pager.Offset, pager.Limit)
 }
 // ListTasksByUserPager: 特定ユーザーのタスク一覧をページネーション取得
 func (s *TaskService) ListTasksByUserPager(userID uint, page int, perPage int, offset int) ([]model.Task, int64, error) {

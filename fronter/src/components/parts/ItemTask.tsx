@@ -4,6 +4,7 @@ import { Task } from "../../model/task";
 import { HeuristicsAnalysis } from "../../model/heuristics";
 import { useDispatch, useSelector } from "react-redux";
 import { getMemory } from "../../features/memory/memorySlice";
+import { fetchAnalysisLimit } from "../../features/heuristics/heuristicsSlice";
 
 import MemoryModal from "./MemoryModal";
 import ListDialog from "./ListDialog";
@@ -25,6 +26,11 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
   const { memoryItem, memoryLoading, memoryError } = useSelector(
     (state: RootState) => state.memory,
   );
+  const { analyses } = useSelector(
+    (state: RootState) => state.heuristics,
+  );
+
+  const [heuristicsAnalysis, heuristicsAnalysisSet] = useState<HeuristicsAnalysis[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getMemoryAction = (memoryId: number) => {
@@ -35,6 +41,11 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
   const reData = (data: string, intKey: string) => {
     return JSON.parse(data)[intKey];
   };
+
+  const viewAnyalze = (taskId: number) => {
+    dispath(fetchAnalysisLimit({page: 1, limit: 20, task_id: taskId, include: "pattern," }));
+    // dispath(getMemory());
+  }
 
   return (
     <>
@@ -113,6 +124,11 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
             )}
           />
         )}
+        <button onClick={() => viewAnyalze(task.id)}>
+          test
+        </button>
+        {analyses && analyses.map((item) => <p key={item.id}>{item.domain}</p>)}
+        {JSON.stringify(analyses)}
         <ListDialog<HeuristicsAnalysis>
           viewData={task.heuristics_analysis}
           title="Heuristics Analysis"

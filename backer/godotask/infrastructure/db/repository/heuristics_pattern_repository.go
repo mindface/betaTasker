@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"github.com/godotask/infrastructure/db/model"
 	dtoquery "github.com/godotask/dto/query"
- "github.com/godotask/infrastructure/helper"
 	helperquery "github.com/godotask/infrastructure/helper/query"
 	"gorm.io/gorm"
 )
@@ -14,7 +13,7 @@ type HeuristicsPatternRepositoryImpl struct {
 }
 
 func (r *HeuristicsPatternRepositoryImpl) CreatePattern(pattern *model.HeuristicsPattern) error {
-    return r.DB.Create(pattern).Error
+  return r.DB.Create(pattern).Error
 }
 
 func (r *HeuristicsPatternRepositoryImpl) GetPatternById(id string) (*model.HeuristicsPattern, error) {
@@ -27,7 +26,7 @@ func (r *HeuristicsPatternRepositoryImpl) GetPatternById(id string) (*model.Heur
 
 func (r *HeuristicsPatternRepositoryImpl) ListPattern(userID uint) ([]model.HeuristicsPattern, error) {
 	var patterns []model.HeuristicsPattern
-	if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&patterns).Error; err != nil {
+	if err := r.DB.Scopes(helperquery.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&patterns).Error; err != nil {
 		return nil, err
 	}
 	return patterns, nil

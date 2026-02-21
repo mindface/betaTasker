@@ -53,7 +53,7 @@ export default function HeuristicsDashboard() {
         ))}
       </div>
 
-      <div className={styles.tabContent}>{renderTabContent()}</div>
+      {/* <div className={styles.tabContent}>{renderTabContent()}</div> */}
     </div>
   );
 }

@@ -3,7 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 	"github.com/godotask/infrastructure/db/model"
-	"github.com/godotask/infrastructure/helper"
+	helperquery "github.com/godotask/infrastructure/helper/query"
 )
 
 // BookRepositoryImpl
@@ -25,7 +25,7 @@ func (r *BookRepositoryImpl) FindByID(id string) (*model.Book, error) {
 
 func (r *BookRepositoryImpl) FindAll(userID uint) ([]model.Book, error) {
 	var books []model.Book
-	if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&books).Error; err != nil {
+	if err := r.DB.Scopes(helperquery.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&books).Error; err != nil {
 		return nil, err
 	}
 	return books, nil
@@ -35,7 +35,7 @@ func (r *BookRepositoryImpl) FindAllPager(userID uint, offset, limit int) ([]mod
     var books []model.Book
     var total int64
 
-    q := r.DB.Model(&model.Book{}).Scopes(helper.WithUserFilter(userID))
+    q := r.DB.Model(&model.Book{}).Scopes(helperquery.WithUserFilter(userID))
 
     if err := q.Count(&total).Error; err != nil {
         return nil, 0, err

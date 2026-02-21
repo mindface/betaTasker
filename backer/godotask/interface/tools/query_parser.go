@@ -23,6 +23,7 @@ func ParsePagerQuery(c *gin.Context) dtoquery.PagerQuery {
 	page := getPositiveInt(c, "page", defaultPage)
 	limit := getPositiveInt(c, "limit", defaultLimit)
 
+
 	if limit > maxPerPage {
 		limit = maxPerPage
 	}
@@ -32,7 +33,7 @@ func ParsePagerQuery(c *gin.Context) dtoquery.PagerQuery {
 			taskID = v
 		}
 	}
-
+s
 	return dtoquery.PagerQuery{
 		Page:   page,
 		Limit:  limit,

@@ -49,7 +49,7 @@ export default function SectionAssessment() {
     // dispatch(loadAssessments());
     dispatch(getAssessmentsLimit({ page: 1, limit: 20 }));
     dispatch(loadLearningData());
-    dispatch(loadKnowledgePatterns());
+    // dispatch(loadKnowledgePatterns());
   }, [dispatch, isAuthenticated]);
 
   const handleAddAssessment = () => {

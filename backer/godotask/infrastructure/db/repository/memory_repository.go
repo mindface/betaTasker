@@ -3,7 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 	"github.com/godotask/infrastructure/db/model"
-	"github.com/godotask/infrastructure/helper"
+	helperquery "github.com/godotask/infrastructure/helper/query"
 )
 
 // MemoryRepositoryImpl
@@ -16,17 +16,17 @@ func (r *MemoryRepositoryImpl) Create(memory *model.Memory) error {
 }
 
 func (r *MemoryRepositoryImpl) FindByID(id string) (*model.Memory, error) {
-	var m model.Memory
+	var memory model.Memory
 
-	if err := r.DB.Where("id = ?", id).First(&m).Error; err != nil {
+	if err := r.DB.Where("id = ?", id).First(&memory).Error; err != nil {
 		return nil, err
 	}
-	return &m, nil
+	return &memory, nil
 }
 
 func (r *MemoryRepositoryImpl) FindAll(userID uint) ([]model.Memory, error) {
 	var memories []model.Memory
-	if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&memories).Error; err != nil {
+	if err := r.DB.Scopes(helperquery.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&memories).Error; err != nil {
 		return nil, err
 	}
 	return memories, nil
@@ -35,7 +35,7 @@ func (r *MemoryRepositoryImpl) FindAll(userID uint) ([]model.Memory, error) {
 func (r *MemoryRepositoryImpl) ListMemoriesPager(userID uint, offset int, limit int) ([]model.Memory, int64, error) {
 	var memories []model.Memory
 	var total int64
-	q := r.DB.Model(&model.Memory{}).Scopes(helper.WithUserFilter(userID))
+	q := r.DB.Model(&model.Memory{}).Scopes(helperquery.WithUserFilter(userID))
 
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, err

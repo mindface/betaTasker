@@ -54,9 +54,17 @@ export async function handleBaseRequest(
           url += `/${dynamicParams[key]}`;
           break;
         case "page":
-          const query = new URLSearchParams({ page: dynamicParams[key], limit: dynamicParams["limit"] }).toString();
-          url += `?${query}`;
-          break;
+          const paramsQuery = new URLSearchParams({ 
+            page: dynamicParams[key],
+            limit: dynamicParams["limit"],
+            task_id: dynamicParams["task_id"],
+            include: dynamicParams["include"],
+          });
+          url += `?${paramsQuery}`;
+        // case "page":
+        //   const query = new URLSearchParams({ page: dynamicParams[key], limit: dynamicParams["limit"] });
+        //   url += `?${query}`;
+        //   break;
       }
     }
 

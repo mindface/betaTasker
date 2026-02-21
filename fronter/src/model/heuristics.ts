@@ -66,7 +66,6 @@ export interface HeuristicsModel {
   updated_at: string;
 }
 
-// リクエスト用の型
 export interface HeuristicsAnalysisRequest {
   user_id?: number;
   task_id?: number;
