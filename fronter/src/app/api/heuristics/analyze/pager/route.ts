@@ -18,7 +18,6 @@ export async function GET(request: Request) {
       undefined,
       { page, limit, task_id, include }
     );
-    console.log(data.analyses)
     return NextResponse.json({
         analyses: data.analyses,
         meta: data.meta

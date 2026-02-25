@@ -13,6 +13,9 @@ export interface HeuristicsAnalysis {
   result: any; // 型をどこかでつける
   score: number;
   status: string;
+  heuristics_patterns?: HeuristicsPattern[];
+  heuristics_trackings?: HeuristicsTracking[];
+  heuristics_insights?: HeuristicsInsight[];
   created_at: string;
   updated_at: string;
 }
@@ -46,7 +49,7 @@ export interface HeuristicsPattern {
   id: number;
   name: string;
   category: string;
-  pattern: any; // JSONデータ
+  pattern: string; // JSONデータ
   frequency: number;
   accuracy: number;
   last_seen: string;

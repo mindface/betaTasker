@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import CommonDialog from "./CommonDialog";
 
 export interface ListDialogProps<T> {
-  onClose?: () => void;
+  initializationActionSet?: () => void;
   title?: string;
   btnText?: string;
   viewData?: T[];
@@ -11,6 +11,7 @@ export interface ListDialogProps<T> {
 }
 
 export default function ListDialog<T>({
+  initializationActionSet,
   viewData,
   title,
   btnText = "記録を確認",
@@ -19,9 +20,11 @@ export default function ListDialog<T>({
 }: ListDialogProps<T>) {
   const [viewDataState, setViewDataState] = useState<T[]>([]);
   const [onDialog, setOnDialog] = useState(false);
+  const initializationAction = initializationActionSet ?? (() => {})
 
   const onDialogHandler = () => {
     setOnDialog(!onDialog);
+    initializationAction();
   };
 
   useEffect(() => {

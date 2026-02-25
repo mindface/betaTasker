@@ -1,13 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Task } from "../../model/task";
-import { HeuristicsAnalysis } from "../../model/heuristics";
+import { HeuristicsAnalysis, HeuristicsPattern } from "../../model/heuristics";
 import { useDispatch, useSelector } from "react-redux";
 import { getMemory } from "../../features/memory/memorySlice";
 import { fetchAnalysisLimit } from "../../features/heuristics/heuristicsSlice";
 
 import MemoryModal from "./MemoryModal";
 import ListDialog from "./ListDialog";
+import HeuristicsAnalysisDIalog from "./HeuristicsAnalysisDIalog";
 
 import { Memory } from "../../model/memory";
 import { RootState } from "../../store";
@@ -30,22 +31,12 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
     (state: RootState) => state.heuristics,
   );
 
-  const [heuristicsAnalysis, heuristicsAnalysisSet] = useState<HeuristicsAnalysis[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getMemoryAction = (memoryId: number) => {
     dispath(getMemory(memoryId));
     setIsModalOpen(true);
   };
-
-  const reData = (data: string, intKey: string) => {
-    return JSON.parse(data)[intKey];
-  };
-
-  const viewAnyalze = (taskId: number) => {
-    dispath(fetchAnalysisLimit({page: 1, limit: 20, task_id: taskId, include: "pattern," }));
-    // dispath(getMemory());
-  }
 
   return (
     <>
@@ -108,7 +99,7 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
                 <p className="p-b-8">
                   <span className="abstraction-level p-8">
                     abstraction_level:
-                  </span>{" "}
+                  </span>
                   {item.abstraction_level}
                 </p>
                 <p className="p-b-4">original_text: {item.original_text}</p>
@@ -124,31 +115,7 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
             )}
           />
         )}
-        <button onClick={() => viewAnyalze(task.id)}>
-          test
-        </button>
-        {analyses && analyses.map((item) => <p key={item.id}>{item.domain}</p>)}
-        {JSON.stringify(analyses)}
-        <ListDialog<HeuristicsAnalysis>
-          viewData={task.heuristics_analysis}
-          title="Heuristics Analysis"
-          btnText="Heuristics Analysisを確認"
-          renderItem={(item, index) => (
-            <div className="language_optimizations-item p-8">
-              <div className="p-b-8">analysis_type | {item.analysis_type}</div>
-              <div className="p-b-8">confidence | {item.confidence}</div>
-              <div className="p-b-8">
-                difficulty_score | {item.difficulty_score}
-              </div>
-              <div className="p-b-8">
-                efficiency_score | {item.efficiency_score}
-              </div>
-              <p>{reData(item.result, "strengths")}</p>
-              <p>{reData(item.result, "next_steps")}</p>
-              <p>{reData(item.result, "weaknesses")}</p>
-            </div>
-          )}
-        />
+        <HeuristicsAnalysisDIalog task={task} />
       </div>
       {memoryItem && (
         <MemoryModal

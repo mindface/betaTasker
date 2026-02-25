@@ -15,7 +15,6 @@ const API_BASE = "/api/heuristics";
 
 // 分析関連
 export const getAnalyzesLimitClient = async (page: number, limit:number, task_id: number, include:string) => {
-  console.log(limit)
   const data = await fetchApiJsonCore<
     undefined,
     LimitResponse<HeuristicsAnalysis,"analyses">
@@ -27,7 +26,6 @@ export const getAnalyzesLimitClient = async (page: number, limit:number, task_id
   if ("error" in data) {
     return data;
   }
-  console.log(data)
   return data.value;
 };
 

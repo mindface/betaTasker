@@ -33,7 +33,7 @@ func ParsePagerQuery(c *gin.Context) dtoquery.PagerQuery {
 			taskID = v
 		}
 	}
-s
+
 	return dtoquery.PagerQuery{
 		Page:   page,
 		Limit:  limit,

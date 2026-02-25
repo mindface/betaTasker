@@ -5,7 +5,6 @@ import (
 	dtoquery "github.com/godotask/dto/query"
 	// helperquery "github.com/godotask/infrastructure/helper/query"
 	"gorm.io/gorm"
-	"fmt"
 )
 
 type HeuristicsAnalysisRepositoryImpl struct {
