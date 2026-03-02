@@ -4,9 +4,12 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
+  "log"
 )
 
 type JSON map[string]interface{}
+
+
 
 func (j JSON) Value() (driver.Value, error) {
 	if j == nil {
@@ -27,4 +30,14 @@ func (j *JSON) Scan(value interface{}) error {
 	}
 
 	return json.Unmarshal(bytes, j)
+}
+
+func JSONUnm(text string) (JSON, error) {
+	var j JSON
+
+	if err := json.Unmarshal([]byte(text), &j); err != nil {
+		log.Fatal(err)
+	}
+
+	return j, nil
 }

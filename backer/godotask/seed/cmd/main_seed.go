@@ -53,6 +53,13 @@ func main() {
 	}
 	log.Println("✓ Tasks seeded successfully")
 
+	// KnowledgePattern のシード
+	log.Println("Seeding Knowledge Pattern ...")
+	if err := seed.SeedKnowledgePattern(db); err != nil {
+		fmt.Errorf("failed to seed Seed Knowledge Pattern: %v", err)
+	}
+	log.Println("✓ Knowledge Pattern successfully")
+
 	// Assessments のシード
 	log.Println("Seeding assessment...")
 	if err := seed.SeedAssessmentsModelsFromCSV(db); err != nil {
@@ -182,10 +189,11 @@ func CleanDatabase() {
 		// "process_monitorings",
 		// "robot_specifications",
 		"heuristics_models",
-		"heuristics_patterns",
+		"knowledge_patterns",
 		"heuristics_insights",
 		"heuristics_trackings",
 		"heuristics_analyses",
+		"knowledge_patterns",
 		"memory_contexts",
 		"tasks",
 		"memories",

@@ -1,5 +1,6 @@
 export interface KnowledgePattern {
   id: string;
+  TaskId: number;
   type: "tacit" | "explicit" | "hybrid";
   domain: string;
   tacit_knowledge: string;
