@@ -28,19 +28,17 @@ func (r *TaskRepositoryImpl) FindAll(userID uint) ([]model.Task, error) {
 	// if err := r.DB.Find(&tasks).Error; err != nil {
 	// 	return nil, err
 	// }
+
 	err := r.DB.
     Scopes(helperquery.WithUserFilter(userID)).
     Preload("Assessments").
-    Preload("QualitativeLabels").
-    Preload("QuantificationLabels").
-    Preload("MultimodalData").
-    Preload("HeuristicsModel").
-    Preload("HeuristicsTracking").
-    Preload("HeuristicsAnalysis").
-    Preload("HeuristicsPattern").
-    Preload("HeuristicsInsight").
     Preload("KnowledgePatterns").
-    Preload("LanguageOptimization").
+    // Preload("HeuristicsModel").
+    // Preload("HeuristicsTracking").
+    // Preload("HeuristicsAnalysis").
+    // Preload("HeuristicsPattern").
+    // Preload("HeuristicsInsight").
+    // Preload("LanguageOptimization").
     Order("created_at ASC, id ASC").
     Find(&tasks).Error
 
@@ -56,11 +54,17 @@ func (r *TaskRepositoryImpl) ListTasksPager(filter dtoquery.QueryFilter, offset 
 	var total int64
 
 	q := r.DB.Model(&model.Task{}).Scopes(helperquery.WithDynamicFilters(filter))
+
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
-	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
+	if err := q.
+    Preload("KnowledgePatterns").
+		Order("created_at DESC, id DESC").
+		Limit(limit).
+		Offset(offset).
+		Find(&tasks).Error; err != nil {
 		return nil, 0, err
 	}
   return tasks, total,nil
@@ -76,7 +80,11 @@ func (r *TaskRepositoryImpl) ListTasksByUserPager(userID uint, offset, limit int
 		return nil, 0, err
 	}
 
-	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
+	if err := q.
+		Order("created_at DESC, id DESC").
+		Limit(limit).
+		Offset(offset).
+		Find(&tasks).Error; err != nil {
 		return nil, 0, err
 	}
 	return tasks, total, nil
