@@ -1,3 +1,14 @@
+
+export interface ConversionPath {
+  characteristics: string[];
+  coefficient: string;
+  level: number;
+  outcomes: string[];
+  pattern_type: string;
+  task_type: string;
+  triggers: string[];
+}
+
 export interface KnowledgePattern {
   id: string;
   TaskId: number;
@@ -5,7 +16,7 @@ export interface KnowledgePattern {
   domain: string;
   tacit_knowledge: string;
   explicit_form: string;
-  conversion_path: string; // JSONB → any （SECIモデルのパス）
+  conversion_path: ConversionPath;
   accuracy: number;
   coverage: number;
   consistency: number;

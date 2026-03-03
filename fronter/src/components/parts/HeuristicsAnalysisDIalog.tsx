@@ -26,9 +26,9 @@ const HeuristicsAnalysisDialog = ({ task }: HeuristicsAnalysisDialogProps) => {
     dispath(fetchAnalysisLimit({page: 1, limit: 20, task_id: taskId, include: "pattern," }));
   }
 
-  const changehAeuristicsPatterns = (index: number, item: HeuristicsPattern) => {
+  const RenaderAeuristicsPatterns = (index: number, item: HeuristicsPattern) => {
     const patternList = JSON.parse(item.pattern);
-    return <div key={`changehAeuristicsPatterns-${item.id}-${index}`} className="pattern-box">
+    return <div key={`RenaderAeuristicsPatterns-${item.id}-${index}`} className="pattern-box">
       <div className="p-b-8">{item.name}</div>
       <div className="p-b-8">task type: {patternList.task_type}</div>
       <div className="p-b-8">{patternList.characteristics.join(" | ")}</div>
@@ -62,7 +62,7 @@ const HeuristicsAnalysisDialog = ({ task }: HeuristicsAnalysisDialogProps) => {
               <p>{reData(item.result, "weaknesses")}</p>
               <ul className="list p-8">
                 {item.heuristics_patterns &&
-                  item.heuristics_patterns.map((item,index) => changehAeuristicsPatterns(index, item))}
+                  item.heuristics_patterns.map((item,index) => RenaderAeuristicsPatterns(index, item))}
               </ul>
             </div>
           )}

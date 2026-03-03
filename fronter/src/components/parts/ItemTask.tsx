@@ -1,14 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Task } from "../../model/task";
-import { HeuristicsAnalysis, HeuristicsPattern } from "../../model/heuristics";
 import { useDispatch, useSelector } from "react-redux";
 import { getMemory } from "../../features/memory/memorySlice";
-import { fetchAnalysisLimit } from "../../features/heuristics/heuristicsSlice";
 
 import MemoryModal from "./MemoryModal";
 import ListDialog from "./ListDialog";
-import HeuristicsAnalysisDIalog from "./HeuristicsAnalysisDIalog";
+import HeuristicsAnalysisDialog from "./HeuristicsAnalysisDIalog";
+import KnowledgePatternsDIalog from "./KnowledgePatternsDIalog";
 
 import { Memory } from "../../model/memory";
 import { RootState } from "../../store";
@@ -26,9 +25,6 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
   const dispath = useDispatch();
   const { memoryItem, memoryLoading, memoryError } = useSelector(
     (state: RootState) => state.memory,
-  );
-  const { analyses } = useSelector(
-    (state: RootState) => state.heuristics,
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -115,7 +111,8 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
             )}
           />
         )}
-        <HeuristicsAnalysisDIalog task={task} />
+        <HeuristicsAnalysisDialog task={task} />
+        {task.knowledge_patterns && <KnowledgePatternsDIalog knowledgePatterns={task.knowledge_patterns} />}
       </div>
       {memoryItem && (
         <MemoryModal

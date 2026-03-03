@@ -30,7 +30,7 @@ export const setupStore = configureStore({
     learning: learningReducer,
     memoryAid: memoryAidReducer,
     heuristics: heuristicsReducer,
-    knowledgePattern: knowledgePatternReducer,
+    knowledgePatterns: knowledgePatternReducer,
     languageOptimization: languageOptimizationReducer,
     teachingFreeControl: teachingFreeControlReducer,
     learningData: learningDataReducer,

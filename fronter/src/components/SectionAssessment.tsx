@@ -31,7 +31,7 @@ export default function SectionAssessment() {
     knowledgePatterns,
     knowledgePatternsError,
     knowledgePatternsLoading,
-  } = useSelector((state: RootState) => state.knowledgePattern);
+  } = useSelector((state: RootState) => state.knowledgePatterns);
   const { memories, memoryLoading, memoryError } = useSelector(
     (state: RootState) => state.memory,
   );
