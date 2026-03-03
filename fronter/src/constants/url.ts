@@ -9,6 +9,7 @@ const URLs = {
   assessmentPager: `${domainAndHost}/api/assessment/pager`,
   assessmentsForTaskUser: `${domainAndHost}/api/assessmentsForTaskUser`,
   heuristicsAnalyze: `${domainAndHost}/api/heuristics/analyze`,
+  heuristicsAnalyzePager: `${domainAndHost}/api/heuristics/analyze/pager`,
   heuristicsInsights: `${domainAndHost}/api/heuristics/insights`,
   heuristicsPatterns: `${domainAndHost}/api/heuristics/patterns`,
   heuristicsPattern: `${domainAndHost}/api/heuristics/pattern`,

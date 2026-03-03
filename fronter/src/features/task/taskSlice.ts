@@ -125,8 +125,6 @@ const taskSlice = createSlice({
         state.tasksTotalPages = action.payload.meta.total_pages;
       })
       .addCase(getTasksLimit.rejected, (state, action) => {
-        console.error("----------------");
-        console.error("Failed to load tasks:", action.payload);
         state.taskLoading = false;
         state.taskError = action.payload as Error;
       })

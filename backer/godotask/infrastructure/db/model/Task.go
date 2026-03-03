@@ -2,6 +2,7 @@ package model
 
 import (
 	"time"
+
 )
 
 type Task struct {
@@ -31,6 +32,11 @@ type Task struct {
   LanguageOptimization   []LanguageOptimization    `json:"language_optimizations" gorm:"foreignKey:TaskID"`
 }
 
+type TaskWithAnalysis struct {
+	Task     Task        `json:"task"`
+	Analysis []HeuristicsAnalysis  `json:"analysis"`
+}
+
 func (Task) TableName() string {
-    return "tasks"
+  return "tasks"
 }

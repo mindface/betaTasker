@@ -42,7 +42,7 @@ type TaskRepositoryInterface interface {
 	Create(task *model.Task) error
 	FindByID(id string) (*model.Task, error)
 	FindAll(userID uint) ([]model.Task, error)
-	ListTasksPager(userID uint, offset int, perPage int) ([]model.Task, int64, error)
+	ListTasksPager(filter dtoquery.QueryFilter, offset int, perPage int) ([]model.Task, int64, error)
 	ListTasksByUserPager(userID uint, offset int, perPage int) ([]model.Task, int64, error)
 	Update(id string, task *model.Task) error
 	Delete(id string) error

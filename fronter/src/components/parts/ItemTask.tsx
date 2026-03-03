@@ -1,12 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Task } from "../../model/task";
-import { HeuristicsAnalysis } from "../../model/heuristics";
 import { useDispatch, useSelector } from "react-redux";
 import { getMemory } from "../../features/memory/memorySlice";
 
 import MemoryModal from "./MemoryModal";
 import ListDialog from "./ListDialog";
+import HeuristicsAnalysisDialog from "./HeuristicsAnalysisDIalog";
+import KnowledgePatternsDIalog from "./KnowledgePatternsDIalog";
 
 import { Memory } from "../../model/memory";
 import { RootState } from "../../store";
@@ -25,15 +26,12 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
   const { memoryItem, memoryLoading, memoryError } = useSelector(
     (state: RootState) => state.memory,
   );
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getMemoryAction = (memoryId: number) => {
     dispath(getMemory(memoryId));
     setIsModalOpen(true);
-  };
-
-  const reData = (data: string, intKey: string) => {
-    return JSON.parse(data)[intKey];
   };
 
   return (
@@ -97,7 +95,7 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
                 <p className="p-b-8">
                   <span className="abstraction-level p-8">
                     abstraction_level:
-                  </span>{" "}
+                  </span>
                   {item.abstraction_level}
                 </p>
                 <p className="p-b-4">original_text: {item.original_text}</p>
@@ -113,26 +111,8 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
             )}
           />
         )}
-        <ListDialog<HeuristicsAnalysis>
-          viewData={task.heuristics_analysis}
-          title="Heuristics Analysis"
-          btnText="Heuristics Analysisを確認"
-          renderItem={(item, index) => (
-            <div className="language_optimizations-item p-8">
-              <div className="p-b-8">analysis_type | {item.analysis_type}</div>
-              <div className="p-b-8">confidence | {item.confidence}</div>
-              <div className="p-b-8">
-                difficulty_score | {item.difficulty_score}
-              </div>
-              <div className="p-b-8">
-                efficiency_score | {item.efficiency_score}
-              </div>
-              <p>{reData(item.result, "strengths")}</p>
-              <p>{reData(item.result, "next_steps")}</p>
-              <p>{reData(item.result, "weaknesses")}</p>
-            </div>
-          )}
-        />
+        <HeuristicsAnalysisDialog task={task} />
+        {task.knowledge_patterns && <KnowledgePatternsDIalog knowledgePatterns={task.knowledge_patterns} />}
       </div>
       {memoryItem && (
         <MemoryModal

@@ -5,6 +5,7 @@ import {
   HeuristicsTracking,
   HeuristicsInsight,
 } from "./heuristics";
+import { KnowledgePattern } from "./knowledgePattern";
 import { LanguageOptimization } from "./languageOptimization";
 
 export interface Task {
@@ -26,6 +27,7 @@ export interface Task {
   heuristics_trackings?: HeuristicsTracking[];
   heuristics_insights?: HeuristicsInsight[];
   language_optimizations?: LanguageOptimization[];
+  knowledge_patterns?: KnowledgePattern[];
 }
 
 export interface AddTask {

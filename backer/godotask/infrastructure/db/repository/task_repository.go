@@ -3,8 +3,8 @@ package repository
 import (
 	"gorm.io/gorm"
   "github.com/godotask/infrastructure/db/model"
-	"github.com/godotask/infrastructure/helper"
-  "fmt"
+	dtoquery "github.com/godotask/dto/query"
+	helperquery "github.com/godotask/infrastructure/helper/query"
 )
 
 type TaskRepositoryImpl struct {
@@ -28,19 +28,17 @@ func (r *TaskRepositoryImpl) FindAll(userID uint) ([]model.Task, error) {
 	// if err := r.DB.Find(&tasks).Error; err != nil {
 	// 	return nil, err
 	// }
+
 	err := r.DB.
-    Scopes(helper.WithUserFilter(userID)).
+    Scopes(helperquery.WithUserFilter(userID)).
     Preload("Assessments").
-    Preload("QualitativeLabels").
-    Preload("QuantificationLabels").
-    Preload("MultimodalData").
-    Preload("HeuristicsModel").
-    Preload("HeuristicsTracking").
-    Preload("HeuristicsAnalysis").
-    Preload("HeuristicsPattern").
-    Preload("HeuristicsInsight").
     Preload("KnowledgePatterns").
-    Preload("LanguageOptimization").
+    // Preload("HeuristicsModel").
+    // Preload("HeuristicsTracking").
+    // Preload("HeuristicsAnalysis").
+    // Preload("HeuristicsPattern").
+    // Preload("HeuristicsInsight").
+    // Preload("LanguageOptimization").
     Order("created_at ASC, id ASC").
     Find(&tasks).Error
 
@@ -51,17 +49,22 @@ func (r *TaskRepositoryImpl) FindAll(userID uint) ([]model.Task, error) {
 }
 
 // ListTasksByUser: 特定ユーザーのタスク一覧を取得
-func (r *TaskRepositoryImpl) ListTasksPager(userID uint, offset int, limit int) ([]model.Task, int64, error) {
+func (r *TaskRepositoryImpl) ListTasksPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.Task, int64, error) {
 	var tasks []model.Task
 	var total int64
-  fmt.Printf("ListTasksPager called with userID: %d, offset: %d, limit: %d\n", userID, offset, limit)
 
-	q := r.DB.Model(&model.Task{}).Scopes(helper.WithUserFilter(userID))
+	q := r.DB.Model(&model.Task{}).Scopes(helperquery.WithDynamicFilters(filter))
+
 	if err := q.Count(&total).Error; err != nil {
-	  return nil, 0, err
+		return nil, 0, err
 	}
-  
-	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
+
+	if err := q.
+    Preload("KnowledgePatterns").
+		Order("created_at DESC, id DESC").
+		Limit(limit).
+		Offset(offset).
+		Find(&tasks).Error; err != nil {
 		return nil, 0, err
 	}
   return tasks, total,nil
@@ -69,18 +72,22 @@ func (r *TaskRepositoryImpl) ListTasksPager(userID uint, offset int, limit int) 
 
 // ListTasksByUserPager: 特定ユーザーのタスク一覧をページネーション取得
 func (r *TaskRepositoryImpl) ListTasksByUserPager(userID uint, offset, limit int) ([]model.Task, int64, error) {
-    var tasks []model.Task
-    var total int64
+	var tasks []model.Task
+	var total int64
 
-    q := r.DB.Model(&model.Task{}).Scopes(helper.WithUserFilter(userID))
-    if err := q.Count(&total).Error; err != nil {
-      return nil, 0, err
-    }
+	q := r.DB.Model(&model.Task{}).Scopes(helperquery.WithUserFilter(userID))
+	if err := q.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
 
-    if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
-      return nil, 0, err
-    }
-    return tasks, total, nil
+	if err := q.
+		Order("created_at DESC, id DESC").
+		Limit(limit).
+		Offset(offset).
+		Find(&tasks).Error; err != nil {
+		return nil, 0, err
+	}
+	return tasks, total, nil
 }
 
 func (r *TaskRepositoryImpl) Update(id string, task *model.Task) error {

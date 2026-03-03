@@ -3,7 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 	"github.com/godotask/infrastructure/db/model"
-	"github.com/godotask/infrastructure/helper"
+	helperquery "github.com/godotask/infrastructure/helper/query"
 )
 
 type KnowledgePatternRepositoryImpl struct {
@@ -24,7 +24,7 @@ func (r *KnowledgePatternRepositoryImpl) FindByID(id string) (*model.KnowledgePa
 
 func (r *KnowledgePatternRepositoryImpl) FindAll(userID uint) ([]model.KnowledgePattern, error) {
 	var knowledgePatterns []model.KnowledgePattern
-	if err := r.DB.Scopes(helper.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&knowledgePatterns).Error; err != nil {
+	if err := r.DB.Scopes(helperquery.WithUserFilter(userID)).Order("created_at DESC, id DESC").Find(&knowledgePatterns).Error; err != nil {
 		return nil, err
 	}
 	return knowledgePatterns, nil

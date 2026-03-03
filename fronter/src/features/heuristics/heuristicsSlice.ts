@@ -11,6 +11,9 @@ import {
   HeuristicsTrainRequest,
 } from "../../model/heuristics";
 
+// TODO　この部分はclaudeにコーディングさせて作ったため、
+// 他の部分とは別のコーディングパタンになっている。
+
 interface HeuristicsState {
   // 分析関連
   analyses: HeuristicsAnalysis[];
@@ -75,6 +78,19 @@ export const analyzeData = createAsyncThunk(
       return rejectWithValue(response.error);
     }
     return response.value as HeuristicsAnalysis[];
+  },
+);
+
+export const fetchAnalysisLimit = createAsyncThunk(
+  "heuristics/fetchAnalysisLimit",
+  async (
+    { page, limit, task_id, include }:
+      { page: number, limit:number, task_id: number, include:string }, { rejectWithValue }) => {
+    const response = await heuristicsApi.getAnalyzesLimitClient(page, limit, task_id, include);
+    if ("error" in response) {
+      return rejectWithValue(response.error);
+    }
+    return response;
   },
 );
 
@@ -212,6 +228,21 @@ const heuristicsSlice = createSlice({
       .addCase(fetchAnalysisById.fulfilled, (state, action) => {
         state.currentAnalysis = action.payload;
       });
+
+    builder
+      .addCase(fetchAnalysisLimit.pending, (state) => {
+        state.analysisLoading = true;
+        state.analysisError = null;
+      })
+      .addCase(fetchAnalysisLimit.fulfilled, (state, action) => {
+        state.analysisLoading = false;
+        console.log(action.payload.analyses)
+        state.analyses = action.payload.analyses;
+      })
+      .addCase(fetchAnalysisLimit.rejected, (state, action) => {
+        state.analysisLoading = false;
+        state.analysisError = action.payload as string;
+      })
 
     // トラッキング関連
     builder

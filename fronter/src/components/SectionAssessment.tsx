@@ -31,7 +31,7 @@ export default function SectionAssessment() {
     knowledgePatterns,
     knowledgePatternsError,
     knowledgePatternsLoading,
-  } = useSelector((state: RootState) => state.knowledgePattern);
+  } = useSelector((state: RootState) => state.knowledgePatterns);
   const { memories, memoryLoading, memoryError } = useSelector(
     (state: RootState) => state.memory,
   );
@@ -49,7 +49,7 @@ export default function SectionAssessment() {
     // dispatch(loadAssessments());
     dispatch(getAssessmentsLimit({ page: 1, limit: 20 }));
     dispatch(loadLearningData());
-    dispatch(loadKnowledgePatterns());
+    // dispatch(loadKnowledgePatterns());
   }, [dispatch, isAuthenticated]);
 
   const handleAddAssessment = () => {

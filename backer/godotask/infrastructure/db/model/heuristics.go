@@ -26,7 +26,8 @@ type HeuristicsAnalysis struct {
 	UpdatedAt   time.Time      `json:"updated_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
 
-	Patterns []HeuristicsPattern `gorm:"-"`
+	// Patterns []HeuristicsPattern `gorm:"-"`
+	Patterns []HeuristicsPattern `gorm:"-" json:"heuristics_patterns"`
 	Insights []HeuristicsInsight `gorm:"-"`
 	Modelers []HeuristicsModeler `gorm:"-"`
 

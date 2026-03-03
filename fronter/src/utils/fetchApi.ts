@@ -27,10 +27,10 @@ export const fetchApiJsonCore = async <TB, TR>({
     });
 
     const data = await res.json();
-    console.log(123, res);
     if (!res.ok) {
       return { ok: false, error: new Error(errorMessage) };
     }
+    console.log(data)
     return { ok: true, value: getKey ? (data[getKey] as TR) : (data as TR) };
   } catch (err: unknown) {
     return {

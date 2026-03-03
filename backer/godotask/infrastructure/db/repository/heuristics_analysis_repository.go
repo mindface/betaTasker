@@ -5,7 +5,6 @@ import (
 	dtoquery "github.com/godotask/dto/query"
 	// helperquery "github.com/godotask/infrastructure/helper/query"
 	"gorm.io/gorm"
-	"fmt"
 )
 
 type HeuristicsAnalysisRepositoryImpl struct {
@@ -35,7 +34,6 @@ func (r *HeuristicsAnalysisRepositoryImpl) ListAnalyze() ([]model.HeuristicsAnal
 func (r *HeuristicsAnalysisRepositoryImpl) ListAnalysesPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.HeuristicsAnalysis, int64, error) {
 	var analyses []model.HeuristicsAnalysis
 	var total int64
-	fmt.Printf("feeeeeee %d",filter.Include)
 
 	q := r.DB.Model(&model.HeuristicsAnalysis{})
 
@@ -46,7 +44,6 @@ func (r *HeuristicsAnalysisRepositoryImpl) ListAnalysesPager(filter dtoquery.Que
 	if filter.TaskID != nil {
 		q = q.Where("task_id = ?", *filter.TaskID)
 	}
-
 
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, err

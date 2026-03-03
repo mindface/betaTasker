@@ -1,7 +1,6 @@
 
 services:
   backender:
-    container_name: backender
     build:
       context: .
       dockerfile: ./backer/godotask/Dockerfile
@@ -15,13 +14,12 @@ services:
     depends_on:
       - db
     networks:
-      - app-network
+      - beta-app-network
 
   fronter:
     build:
       context: ./fronter
       dockerfile: Dockerfile
-    container_name: fronter
     volumes:
       - ./fronter:/app
       - /app/node_modules
@@ -29,24 +27,22 @@ services:
     depends_on:
       - backender
     networks:
-      - app-network
+      - beta-app-network
 
   nginx:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    container_name: nginx
     ports:
       - "80:80"
     depends_on:
       - fronter
       - backender
     networks:
-      - app-network
+      - beta-app-network
 
   db:
     image: postgres:16
-    container_name: db
     environment:
       POSTGRES_USER: dbgodotask
       POSTGRES_PASSWORD: dbgodotask
@@ -55,8 +51,9 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - app-network
+      - beta-app-network
 
 networks:
-  app-network:
+  beta-app-network:
+    name: beta-app-network
     driver: bridge
