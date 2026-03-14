@@ -9,7 +9,6 @@ import {
   updateAssessment,
   removeAssessment,
 } from "../features/assessment/assessmentSlice";
-import { loadKnowledgePatterns } from "../features/knowledge_pattern/knowledgePatternSlice";
 import { loadLearningData } from "../features/learning_data/learningDataSlice";
 import ItemAssessment from "./parts/ItemAssessment";
 import AssessmentModal from "./parts/AssessmentModal";

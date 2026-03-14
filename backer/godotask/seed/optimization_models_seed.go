@@ -10,12 +10,16 @@ import (
 	"io"
 	// "encoding/json"
 
+	"github.com/godotask/seed/utils"
 	"github.com/godotask/infrastructure/db/model"
 	"gorm.io/gorm"
 )
 
 func SeedOptimizationModelsFromCSV(db *gorm.DB) error {
-	file, err := os.Open("seed/data/optimization_models.csv")
+	path := utils.GetSeedPath()
+	filePath := fmt.Sprintf("seed/%s/optimization_models.csv", path)
+
+	file, err := os.Open(filePath)
 	if err != nil {
 		return fmt.Errorf("could not open optimization_models.csv: %v", err)
 	}

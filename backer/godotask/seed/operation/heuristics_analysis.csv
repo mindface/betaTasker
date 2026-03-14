@@ -1,2 +1,11 @@
-id,user_id,task_id,analysis_type,result,score,status,created_at,updated_at
-1,1,1,skill_pattern_analysis,"{""pattern"":""assembly_skill"",""detected_skills"":[""force_sensing"",""tactile_feedback""],""confidence"":0.85,""skill_level"":""intermediate""}",0.85,completed,2020-01-01 00:00:00,2020-01-01 00:00:00
+id,user_id,task_id,analysis_type,result,time_spent_minutes,difficulty_score,efficiency_score,error_count,confidence,score,status,created_at,updated_at
+1,1,1,heuristics,薄型化は素材変更が鍵,60,0.6,5.2,0,0.7,0.72,done,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+2,1,1,heuristics,保持治具問題,45,0.5,4.8,1,0.6,0.61,done,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+3,1,1,heuristics,高強度材有効,80,0.7,6.1,0,0.75,0.8,done,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+4,1,1,heuristics,圧力制御重要,55,0.6,5.5,0,0.7,0.74,done,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+5,1,1,heuristics,現行不可,40,0.4,3.5,2,0.5,0.45,done,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+6,1,1,heuristics,新工程必要,95,0.8,6.4,0,0.8,0.85,done,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+7,1,1,heuristics,温度管理必要,70,0.6,5.8,0,0.72,0.77,done,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+8,1,1,heuristics,条件不足,35,0.5,4.2,1,0.55,0.58,done,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+9,1,1,heuristics,新素材最適,100,0.75,6.7,0,0.82,0.9,done,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+10,1,1,heuristics,加工順序変更,65,0.6,5.9,0,0.74,0.79,done,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z

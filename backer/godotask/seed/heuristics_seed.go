@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"os"
 
+	"github.com/godotask/seed/utils"
 	"github.com/godotask/infrastructure/db/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -42,7 +43,10 @@ func SeedHeuristics(db *gorm.DB) error {
 }
 
 func seedHeuristicsAnalysis(db *gorm.DB) error {
-	file, err := os.Open("seed/data/heuristics_analysis.csv")
+	path := utils.GetSeedPath()
+	filePath := fmt.Sprintf("seed/%s/heuristics_analysis.csv", path)
+
+	file, err := os.Open(filePath)
 	if err != nil {
 		fmt.Errorf("could not open heuristics_analysis.csv: %v", err)
 	}
@@ -118,7 +122,10 @@ func seedHeuristicsAnalysis(db *gorm.DB) error {
 }
 
 func seedHeuristicsTracking(db *gorm.DB) error {
-	file, err := os.Open("seed/data/heuristics_tracking.csv")
+	path := utils.GetSeedPath()
+	filePath := fmt.Sprintf("seed/%s/heuristics_tracking.csv", path)
+
+	file, err := os.Open(filePath)
 	if err != nil {
 		return fmt.Errorf("could not open heuristics_tracking.csv: %v", err)
 	}
@@ -192,7 +199,10 @@ func seedHeuristicsTracking(db *gorm.DB) error {
 }
 
 func seedHeuristicsInsights(db *gorm.DB) error {
-	file, err := os.Open("seed/data/heuristics_insights.csv")
+	path := utils.GetSeedPath()
+	filePath := fmt.Sprintf("seed/%s/heuristics_insights.csv", path)
+
+	file, err := os.Open(filePath)
 	if err != nil {
 		return fmt.Errorf("could not open heuristics_insights.csv: %v", err)
 	}
@@ -268,7 +278,10 @@ func seedHeuristicsInsights(db *gorm.DB) error {
 }
 
 func seedHeuristicsPatterns(db *gorm.DB) error {
-	file, err := os.Open("seed/data/heuristics_patterns.csv")
+	path := utils.GetSeedPath()
+	filePath := fmt.Sprintf("seed/%s/heuristics_patterns.csv", path)
+
+	file, err := os.Open(filePath)
 	if err != nil {
 		return fmt.Errorf("could not open heuristics_patterns.csv: %v", err)
 	}
@@ -348,7 +361,10 @@ func seedHeuristicsPatterns(db *gorm.DB) error {
 }
 
 func seedHeuristicsModelers(db *gorm.DB) error {
-	file, err := os.Open("seed/data/heuristics_models.csv")
+	path := utils.GetSeedPath()
+	filePath := fmt.Sprintf("seed/%s/heuristics_models.csv", path)
+
+	file, err := os.Open(filePath)
 	if err != nil {
 		return fmt.Errorf("could not open heuristics_models.csv: %v", err)
 	}

@@ -9,12 +9,16 @@ import (
 	"time"
 	// "encoding/json"
 
+	"github.com/godotask/seed/utils"
 	"github.com/godotask/infrastructure/db/model"
 	"gorm.io/gorm"
 )
 
 func SeedQualitativeLabelsFromCSV(db *gorm.DB) error {
-	file, err := os.Open("seed/data/qualitative_label.csv")
+	path := utils.GetSeedPath()
+	filePath := fmt.Sprintf("seed/%s/qualitative_label.csv", path)
+
+	file, err := os.Open(filePath)
 	if err != nil {
 		return fmt.Errorf("could not open qualitative_labels.csv: %v", err)
 	}

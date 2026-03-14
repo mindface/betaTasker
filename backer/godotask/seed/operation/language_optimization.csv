@@ -1,2 +1,6 @@
-id,task_id,original_text,optimized_text,domain,abstraction_level,precision,clarity,completeness,context_json,transformation_json,evaluation_score,created_at,updated_at,deleted_at
-1,1,初品加工時の寸法ばらつきを観測し、原因を特定した。,寸法ばらつきの主因は工具摩耗と熱変位であると判定。補正テーブルと温度補正を導入し再発防止を提案。#1,manufacturing,operational,0.8,0.85,0.75,"{""task_id"": 1, ""sensor_types"": [""force"", ""temp"", ""vibration""], ""instance"": 1}","{""steps"": [""detect"", ""analyze"", ""propose""], ""changes"": [""tool_offset"", ""temp_comp""]}",0.7,2024-01-09T08:00:00Z,2024-01-09T08:00:00Z,
+id,task_id,original_text,optimized_text,domain,abstraction_level,precision,clarity,completeness,context_json,transformation_json,evaluation_score,created_at,updated_at
+1,1,薄型ウェハーで割れが発生した,割れの主因は保持圧不足と温度変形。保持条件と冷却条件を変更し再試験を提案,semiconductor,technical,0.82,0.86,0.8,"{""task_id"":1}","{""step"":""analyze""}",0.78,2024-03-01,2024-03-01
+2,1,加工中に反りが出る,反りは温度上昇と材料応力差による。回転数と冷却流量の再設定が必要,semiconductor,technical,0.85,0.88,0.82,"{""task_id"":1}","{""step"":""optimize""}",0.81,2024-03-01,2024-03-01
+3,1,顧客が軽量化を希望,軽量化要求は厚み低減を意味するが保持条件変更が必要。別素材提案を検討,engineering,conceptual,0.8,0.84,0.79,"{}", "{}",0.76,2024-03-01,2024-03-01
+4,1,装置が不安定,装置振動はチャック圧不足。設定値を10%上げる必要あり,manufacturing,technical,0.83,0.85,0.8,"{}","{}",0.79,2024-03-01,2024-03-01
+5,1,新素材を試す,SiC混合材で強度向上見込み。加工条件再設定必要,material,technical,0.88,0.9,0.85,"{}","{}",0.84,2024-03-01,2024-03-01
