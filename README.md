@@ -6,7 +6,7 @@
 
 - **フロントエンド**: Next.js + TypeScript + Redux
 - **バックエンド**: Go (Gin) + PostgreSQL
-- **インフラ**: Docker + Docker Compose + Nginx
+- **インフラ**: Docker + Docker Compose + Nginx(追加予定)
 
 ## CI/CDパイプライン
 
@@ -42,9 +42,9 @@
 ### 前提条件
 
 - Docker & Docker Compose
-- Go 1.21+
-- Node.js 18+
-- Yarn
+- Go 1.25
+- Node.js 18
+- pnpm
 
 ### セットアップ
 
@@ -68,21 +68,11 @@ docker-compose up -d
 
 # フロントエンド
 cd fronter
-yarn install
-yarn dev
+pnpm install
+pnpm run dev
 ```
 
 ## デプロイ
-
-### 本番環境へのデプロイ
-
-1. コードを`main`ブランチにプッシュ
-2. GitHub Actionsが自動的にデプロイを実行
-3. デプロイスクリプトの実行（手動の場合）
-```bash
-chmod +x scripts/deploy.sh
-./scripts/deploy.sh
-```
 
 ### 環境変数
 
@@ -107,6 +97,7 @@ chmod +x scripts/deploy.sh
 - ヘルスチェックエンドポイント: `/health`
 - アプリケーションログは標準出力に出力
 - Nginxアクセスログ
+
 
 ## トラブルシューティング
 

@@ -1,2 +1,11 @@
-id,user_id,task_id,content,category,created_at,updated_at
-1,1,1,プロセス手順の標準化が可能,process,2024-01-08T09:00:00Z,2024-01-08T09:00:00Z
+id,user_id,task_id,original_text,normalized_text,category,domain,value,unit,min_range,max_range,typical_value,precision,confidence,abstract_level,source,validated,notes,created_by,updated_by,created_at,updated_at
+1,1,1,保持条件変更で改善可能,保持圧変更で安定化可能,process,wafer_dev,0.8,ratio,0.5,1.0,0.7,0.01,0.85,L2,task_text,true,保持圧調整,1,1,2024-03-01T10:00:00Z,2024-03-01T10:00:00Z
+2,1,1,安全域再確認必要,安全温度範囲の再確認必要,safety,wafer_dev,120,C,80,150,100,1,0.9,L2,task_text,true,温度制限確認,1,1,2024-03-02T10:00:00Z,2024-03-02T10:00:00Z
+3,1,1,顧客要求満たす必要,仕様一致率確認必要,client,engineering,0.9,ratio,0.7,1.0,0.85,0.01,0.88,L3,task_text,true,仕様確認,1,1,2024-03-03T10:00:00Z,2024-03-03T10:00:00Z
+4,1,1,素材変更が有効,高強度材使用で改善,material,wafer_dev,1,flag,0,1,1,1,0.87,L2,task_text,true,材料変更,1,1,2024-03-04T10:00:00Z,2024-03-04T10:00:00Z
+5,1,1,装置設定不足,チャック圧設定不足,hardware,manufacturing,0.6,ratio,0.5,1.0,0.8,0.01,0.8,L2,task_text,true,圧力不足,1,1,2024-03-05T10:00:00Z,2024-03-05T10:00:00Z
+6,1,1,温度管理重要,加工温度制御必要,process,wafer_dev,140,C,80,180,120,1,0.9,L2,task_text,true,温度制御,1,1,2024-03-06T10:00:00Z,2024-03-06T10:00:00Z
+7,1,1,過去事例参照可,過去条件再利用可能,knowledge,engineering,1,flag,0,1,1,1,0.82,L3,task_text,true,過去案件,1,1,2024-03-07T10:00:00Z,2024-03-07T10:00:00Z
+8,1,1,別工程必要,2段加工必要,process,wafer_dev,2,count,1,3,2,1,0.84,L2,task_text,true,工程追加,1,1,2024-03-08T10:00:00Z,2024-03-08T10:00:00Z
+9,1,1,試験追加必要,追加評価回数必要,test,wafer_dev,3,count,1,5,2,1,0.83,L2,task_text,true,再試験,1,1,2024-03-09T10:00:00Z,2024-03-09T10:00:00Z
+10,1,1,コスト注意,材料コスト増加注意,cost,engineering,1.2,ratio,1.0,2.0,1.1,0.01,0.78,L2,task_text,true,コスト評価,1,1,2024-03-10T10:00:00Z,2024-03-10T10:00:00Z

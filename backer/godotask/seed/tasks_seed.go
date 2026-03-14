@@ -9,13 +9,17 @@ import (
 	"io"
 	"os"
 
+	"github.com/godotask/seed/utils"
 	"github.com/godotask/infrastructure/db/model"
 	"gorm.io/gorm"
 )
 
 
 func SeedTaskModelsFromCSV(db *gorm.DB) error {
-	file, err := os.Open("seed/data/task.csv")
+	path := utils.GetSeedPath()
+	filePath := fmt.Sprintf("seed/%s/task.csv", path)
+
+	file, err := os.Open(filePath)
 	if err != nil {
 		return fmt.Errorf("could not open task_models.csv: %v", err)
 	}

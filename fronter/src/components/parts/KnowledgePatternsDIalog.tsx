@@ -34,6 +34,9 @@ const KnowledgePatternsDialog = (props: knowledgePatternsDialogProps) => {
         <button className="btn btn-secondary" onClick={handleClose}>knowledge patternsを確認</button>
         <CommonDialog
           isOpen={isOpenDialog}
+          onClose={() => {
+            handleClose()
+          }}
           title="knowledge patterns"
           children={
             <div className="knowledge-patterns-item p-8">
@@ -62,7 +65,6 @@ const KnowledgePatternsDialog = (props: knowledgePatternsDialogProps) => {
               </div>)}
             </div>
           }
-          onClose={() => {}}
         />
       </div>
     </>
