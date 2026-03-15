@@ -1,11 +1,13 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"github.com/godotask/cmd/boot/initialize"
 	"github.com/godotask/infrastructure/db/model"
 	"github.com/godotask/seed"
+	"github.com/godotask/seed/utils"
 	// "github.com/seed2/memory_context_seed"
 )
 
@@ -13,6 +15,12 @@ import (
 func main() {
 	initialize.InitDB()
 	db := model.DB
+
+	path := flag.String("path", "data", "seed path")
+	flag.Parse()
+
+	fmt.Println("seed path =", *path)
+	utils.SetSeedPath(*path)
 
 	CleanDatabase()
 
@@ -184,6 +192,7 @@ func CleanDatabase() {
 		"tool_matching_results",
 		"state_evaluations",
 		"quantification_labels",
+		"qualitative_labels",
 		"phenomenological_frameworks",
 		"optimization_models",
 		// "process_monitorings",

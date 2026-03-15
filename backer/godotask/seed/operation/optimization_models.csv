@@ -1,2 +1,6 @@
-id,name,type,objective_function,constraints,parameters,performance_metric,iteration_count,convergence_rate,domain,application,task_id,created_at,updated_at
-trajectory_optimization,軌道最適化,control_theory,minimize(time) + minimize(energy) subject to collision_free,"{""joint_limits"":""q_min<q<q_max"",""collision_avoidance"":""d>d_safe"",""singularity_avoidance"":""det(J)>epsilon""}","{""max_velocity"":1000,""max_acceleration"":5000,""sampling_time"":0.001}","{""avg_improvement"":25.5,""computation_time"":0.15}",1000,0.95,robot_motion,6軸ロボット動作計画,6,2020-02-05 00:00:00,2020-02-05 00:00:00
+id,name,type,objective_function,constraints,parameters,performance_metric,iteration_count,convergence_rate,domain,application,task_id
+1,thin_opt,gradient,min_thickness,temp<200,pressure,stability,10,0.8,semiconductor,wafer,1
+2,heat_opt,search,min_temp,stress<limit,cooling,error,12,0.82,semiconductor,polish,1
+3,material_opt,genetic,max_strength,cost<limit,ratio,yield,15,0.75,material,wafer,1
+4,client_opt,rule,max_match,limit_spec,weight,score,6,0.9,engineering,spec,1
+5,machine_opt,gradient,min_vibration,pressure<max,set,error,9,0.8,manufacturing,tool,1

@@ -11,6 +11,7 @@ import (
 	"strings" 
 	"math/rand"
 
+	"github.com/godotask/seed/utils"
 	"github.com/godotask/infrastructure/db/model"
 	"gorm.io/gorm"
 )
@@ -169,7 +170,10 @@ func generateInformationAmount(scoreClass string) string {
 
 
 func SeedMemoriesModelsFromCSV(db *gorm.DB) error {
-	file, err := os.Open("seed/data/memories.csv")
+	path := utils.GetSeedPath()
+	filePath := fmt.Sprintf("seed/%s/memories.csv", path)
+
+	file, err := os.Open(filePath)
 	if err != nil {
 		return fmt.Errorf("could not open memories_models.csv: %v", err)
 	}

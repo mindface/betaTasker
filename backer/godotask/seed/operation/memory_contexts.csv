@@ -1,2 +1,6 @@
-user_id,task_id,level,work_target,machine,material_spec,change_factor,goal,tool_spec,concern,countermeasure,learned_knowledge
-1,1,1,[職務カテゴリ: 切削・初品確認 / 分類コード: MA-C-01] 対象工程 L1-1: 初品加工・基本寸法確認,NC旋盤（Mazak QT-200）,AISI 4340鋼材,新規ロット材導入（ロット番号: A-123）,初品寸法公差内維持、不良率5%以下,TNMG160408 (汎用) 標準コーティング,初回切削でのバリ発生（要因: 切削条件未調整）,メーカー推奨値での標準切削開始、目視での品質確認,基本的な切削条件とバリ発生の関係を理解。目視確認の重要性を認識。
+id,user_id,task_id,level,work_target,machine,material_spec,change_factor,goal,created_at
+1,1,1,12,ウェハー薄型試験,研磨装置A,Si 300mm,割れ発生,厚み650um達成,2024-03-01
+2,1,1,15,新素材試験,研磨装置B,SiC混合,負荷増大,強度向上,2024-03-01
+3,1,1,18,顧客仕様確認,会議,Si標準,軽量要求,軽量化,2024-03-01
+4,1,1,14,過去案件,装置C,Si725um,反り発生,改善,2024-03-01
+5,1,1,16,部下報告,装置B,S45C試験,温度上昇,安定化,2024-03-01

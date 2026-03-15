@@ -1,2 +1,6 @@
-id,task_id,name,description,goal,scope,process,result,feedback,limit_min,limit_max,goal_function,abstract_level,domain,created_at,updated_at
-robot_precision_framework,10,ロボット精度最適化フレームワーク,位置決め精度を目的とした現象学的アプローチ,G: 位置決め精度±0.01mm達成,A: 6軸ロボットアームの動作範囲全体,"{""steps"":[""キャリブレーション"",""測定"",""補正"",""検証""],""iteration"":""continuous""}","{""achieved_accuracy"":0.008,""improvement"":""20%""}","{""type"":""continuous"",""method"":""real-time_correction""}",0.005,0.02,minimize(abs(measured_position - target_position)),L1,robot_calibration,2020-03-04 00:00:00,2020-03-04 00:00:00
+id,task_id,name,description,goal,scope,process,result,feedback,limit_min,limit_max,goal_function,abstract_level,domain
+1,1,薄型化フレーム,厚み低減と保持条件の関係,割れ防止,加工工程,圧力調整,安定,良好,600,800,min_defect,L2,semiconductor
+2,1,温度制御,温度と反りの関係,反り低減,研磨,冷却変更,改善,良,20,150,min_warp,L2,semiconductor
+3,1,素材評価,材料強度評価,破損防止,材料試験,比較,成功,良,0,1,max_strength,L2,material
+4,1,顧客要求,仕様適合,仕様一致,会議,整理,OK,良,0,1,max_match,L3,engineering
+5,1,装置安定,振動抑制,安定加工,装置,設定,成功,良,0,10,min_vibration,L2,manufacturing

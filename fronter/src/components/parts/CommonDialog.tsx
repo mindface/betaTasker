@@ -1,5 +1,5 @@
-// ...existing code...
-import React, { useEffect, useRef } from "react";
+
+import React, { useCallback, useEffect, useRef } from "react";
 
 interface CommonDialogProps {
   isOpen: boolean;
@@ -24,13 +24,13 @@ const CommonDialog = ({
 }: CommonDialogProps) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const lastActiveElement = useRef<Element | null>(null);
+  const hiddenText = "overflow:hidden;";
 
-  useEffect(() => {
+  const onCloseEvent = useCallback(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
     const onCancel = (e: Event) => {
-      // allow default close, but notify parent
       onClose();
     };
 
@@ -51,10 +51,13 @@ const CommonDialog = ({
         onClose();
       }
     };
+    const prevBodyStyle = document.body.getAttribute("style") || "";
+    document.body.setAttribute("style", prevBodyStyle.replace(hiddenText,""))
 
     dialog.addEventListener("cancel", onCancel);
     dialog.addEventListener("close", onCloseEvent);
     dialog.addEventListener("click", onBackdropClick);
+    dialogRef.current?.close();
 
     return () => {
       dialog.removeEventListener("cancel", onCancel);
@@ -72,21 +75,23 @@ const CommonDialog = ({
       lastActiveElement.current = document.activeElement;
       // prevent background scroll
       const prevBodyStyle = document.body.getAttribute("style") || "";
-      document.body.setAttribute("style", prevBodyStyle + ";overflow:hidden;");
 
-      // open dialog
+      if(prevBodyStyle.match(new RegExp(hiddenText))) {
+        document.body.setAttribute("style", hiddenText)
+      }else {
+        document.body.setAttribute("style", prevBodyStyle + hiddenText);
+      }
+
       if (typeof dialog.showModal === "function") {
         try {
           if (!dialog.open) dialog.showModal();
         } catch {
-          // fallback to setting open
           dialog.setAttribute("open", "true");
         }
       } else {
         dialog.setAttribute("open", "true");
       }
 
-      // focus first focusable element inside dialog or dialog itself
       const focusable = dialog.querySelector<HTMLElement>(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
@@ -97,17 +102,9 @@ const CommonDialog = ({
         if (typeof dialog.close === "function" && dialog.open) dialog.close();
       } catch {}
       dialog.removeAttribute("open");
-
-      // restore body overflow
-      // remove only overflow:hidden, keep other styles
-      const cur = document.body.getAttribute("style") || "";
-      const cleaned = cur.replace(/;?overflow:hidden;?/g, "");
-      if (cleaned.trim() === "") document.body.removeAttribute("style");
-      else document.body.setAttribute("style", cleaned);
     }
 
     return () => {
-      // nothing here; close handled above
     };
   }, [isOpen]);
 
@@ -134,7 +131,7 @@ const CommonDialog = ({
             <button
               onClick={() => {
                 try {
-                  dialogRef.current?.close();
+                  onCloseEvent();
                 } catch {}
                 onClose();
               }}

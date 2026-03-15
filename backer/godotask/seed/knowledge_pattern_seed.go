@@ -10,6 +10,7 @@ import (
   "strconv"
   "fmt"
 
+	"github.com/godotask/seed/utils"
   "github.com/godotask/infrastructure/db/model"
   "gorm.io/gorm"
 )
@@ -26,8 +27,11 @@ type ConversionPath struct {
 
 // SeedKnowledgeEntities - 各CSVデータと紐付けたKnowledgeEntityをシード
 func SeedKnowledgePattern(db *gorm.DB) error {
+    path := utils.GetSeedPath()
+    filePath := fmt.Sprintf("seed/%s/knowledge_patterns.csv", path)
+
+    file, err := os.Open(filePath)
     // 紐付けるCSVファイルのリスト
-    file, err := os.Open("seed/data/knowledge_patterns.csv")
     if err != nil {
       return fmt.Errorf("could not open knowledge_patterns.csv: %v", err)
     }

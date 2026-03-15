@@ -6,11 +6,6 @@
   },
   {
     "id": 2,
-    "title": "photo",
-    "path": "/photo"
-  },
-  {
-    "id": 3,
     "title": "task",
     "path": "/task"
   },

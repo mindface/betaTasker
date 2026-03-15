@@ -1,0 +1,11 @@
+id,user_id,task_id,model_type,version,parameters,performance,status,trained_at,created_at,updated_at
+1,1,1,thickness_model,v1,"{""target"":650}",0.82,trained,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+2,1,1,temperature_model,v1,"{""limit"":150}",0.78,trained,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+3,1,1,material_model,v1,"{""ratio"":0.2}",0.85,trained,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+4,1,1,pressure_model,v1,"{""pressure"":1.2}",0.8,trained,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+5,1,1,vibration_model,v1,"{""limit"":5}",0.76,trained,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+6,1,1,client_model,v1,"{""weight"":0.8}",0.83,trained,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+7,1,1,cost_model,v1,"{""cost"":100}",0.7,trained,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+8,1,1,process_model,v1,"{""steps"":2}",0.81,trained,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+9,1,1,precision_model,v1,"{""tol"":0.001}",0.88,trained,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
+10,1,1,strength_model,v1,"{""target"":high}",0.86,trained,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z,2024-03-01T00:00:00Z
