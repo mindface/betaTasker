@@ -41,6 +41,22 @@ services:
     networks:
       - beta-app-network
 
+  crog:
+    build:
+      context: .
+      dockerfile: ./backer/crog/Dockerfile
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./backer/crog:/usr/local/go/crog
+    ports:
+      - 8082:8082
+    depends_on:
+      - db
+    networks:
+      - beta-app-network
+    command: air
+
   db:
     image: postgres:16
     environment:
