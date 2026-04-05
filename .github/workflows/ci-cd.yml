@@ -266,6 +266,13 @@ jobs:
           echo "=== build-output directory structure ==="
           ls -a -R ./build-output || true
 
+      - name: Debug files
+        run: |
+          pwd
+          ls -la
+          ls -la fronter
+          ls -la fronter/.next || echo ".next not found"
+
       # - name: Upload backend
       #   uses: appleboy/scp-action@v0.1.7
       #   with:
