@@ -305,13 +305,21 @@ jobs:
       #       sudo cp -r /home/ec2-user/fronter/* /var/www/html/
 
   deploy:
+    needs: [build] # 1. 継承のためにこれが必要
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifact
+      # 2. 個別にダウンロードする
+      - name: Download backend artifact
         uses: actions/download-artifact@v4
         with:
-          name: build-output
-          path: ./build-output
+          name: backend-output
+          path: ./build-output/godotask
+
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-output
+          path: ./build-output/fronter
 
       - name: Upload backend
         uses: appleboy/scp-action@v0.1.7
@@ -319,8 +327,10 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "./build-output/betaTasker/backer/godotask/main"
+          # 3. パスをダウンロード先に合わせる
+          source: "./build-output/godotask/main"
           target: "/home/ec2-user/betaTasker/backend/"
+          strip_components: 2 # build-output/godotask を除外して main だけ送る場合に便利
 
       - name: Upload frontend
         uses: appleboy/scp-action@v0.1.7
@@ -328,8 +338,9 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "./build-output/betaTasker/fronter/.next"
+          source: "./build-output/fronter/.next"
           target: "/home/ec2-user/betaTasker/fronter/"
+          strip_components: 2
 
       - name: Restart backend service
         uses: appleboy/ssh-action@v0.1.6
