@@ -331,11 +331,8 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: |
-            ./downloads/frontend/.next
-            ./downloads/frontend/public
+          source: "./downloads/frontend"
           target: "/home/ec2-user/"
-          strip_components: 2
 
       # 4. SSHで後処理（サービス再起動など）
       - name: Restart services via SSH
