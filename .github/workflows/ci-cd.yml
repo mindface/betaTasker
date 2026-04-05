@@ -1,0 +1,345 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: mindface/betatasker
+
+jobs:
+  # バックエンドテスト・ビルド
+  backend:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_DSN: host=localhost user=dbgodotask password=dbgodotask dbname=test_db port=5432 sslmode=disable
+      SKIP_TESTS: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Build Go backend
+        working-directory: backer/godotask
+        run: |
+          echo "Building Go backend..."
+          CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/boot/main.go
+          echo "=== Build result ==="
+          ls -lh .
+
+      - name: Upload backend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-output
+          path: backer/godotask/main
+
+      # - name: Cache Go modules
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/.cache/go-build
+      #       ~/go/pkg/mod
+      #     key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-go-
+
+      # - name: Run backend tests
+      #   working-directory: backer/godotask
+      #   run: |
+      #     go test -v ./...
+      #     go vet ./...
+
+      # - name: Build backend binary
+      #   working-directory: ./backer/godotask
+      #   run: |
+      #     CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+
+      # - name: Show directory tree
+      #   run: |
+      #     pwd
+      #     ls -R
+
+  # フロントエンドテスト・ビルド
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check package manager
+        working-directory: fronter
+        run: |
+          echo "Checking package manager files..."
+          ls -la
+          if [ -f "yarn.lock" ]; then
+            echo "Using Yarn"
+            echo "PACKAGE_MANAGER=yarn" >> $GITHUB_ENV
+          elif [ -f "package-lock.json" ]; then
+            echo "Using npm"
+            echo "PACKAGE_MANAGER=npm" >> $GITHUB_ENV
+          else
+            echo "No lock file found, defaulting to npm"
+            echo "PACKAGE_MANAGER=npm" >> $GITHUB_ENV
+          fi
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+          cache-dependency-path: fronter/yarn.lock
+
+      - name: Install dependencies
+        working-directory: fronter
+        # Yarn 4系では --immutable を使用します
+        run: yarn install --immutable
+
+      # - name: Run linting
+      #   working-directory: fronter
+      #   run: yarn lint
+
+      - name: Run type checking
+        working-directory: fronter
+        run: npx tsc --noEmit
+
+      - name: Build and Export frontend
+        working-directory: fronter
+        run: yarn build
+
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-output
+          path: |
+            ./fronter/.next
+            ./fronter/public
+          include-hidden-files: true
+
+  # 統合テスト
+  # integration:
+  #   needs: [backend, frontend]
+  #   runs-on: ubuntu-latest
+  #   services:
+  #     postgres:
+  #       image: postgres:16
+  #       env:
+  #         POSTGRES_PASSWORD: dbgodotask
+  #         POSTGRES_DB: test_db
+  #         POSTGRES_USER: dbgodotask
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+  #       ports:
+  #         - 5432:5432
+
+    # steps:
+    #   - name: Checkout code
+    #     uses: actions/checkout@v4
+  
+    #   - name: Set up Go
+    #     uses: actions/setup-go@v4
+    #     with:
+    #       go-version: '1.21'
+  
+      # - name: Run integration tests
+      #   working-directory: backer/godotask
+      #   env:
+      #     DATABASE_URL: postgres://dbgodotask:dbgodotask@localhost:5432/test_db?sslmode=disable
+      #   run: |
+      #     go test -v ./...
+
+  # セキュリティスキャン
+  # security:
+  #   needs: [backend, frontend]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Run Trivy vulnerability scanner
+  #       uses: aquasecurity/trivy-action@master
+  #       with:
+  #         scan-type: 'fs'
+  #         scan-ref: '.'
+  #         format: 'sarif'
+  #         output: 'trivy-results.sarif'
+
+  #     - name: Upload Trivy scan results to GitHub Security tab
+  #       uses: github/codeql-action/upload-sarif@v2
+  #       if: always()
+  #       with:
+  #         sarif_file: 'trivy-results.sarif'
+
+  # デプロイ（mainブランチのみ）
+  # deploy:
+  #   needs: [backend, frontend, integration, security]
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Log in to Container Registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ${{ env.REGISTRY }}
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+
+  #     - name: Push Docker images
+  #       run: |
+  #         docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+  #         docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
+
+  #     - name: Deploy to production
+  #       run: |
+  #         # 本番環境へのデプロイスクリプトを実行
+  #         echo "Deploying to production..."
+  #         # ここに実際のデプロイコマンドを追加 
+
+  # upload-artifact:
+  #   needs: [backend, frontend]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Download backend artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: backend-output
+  #         path: ./build-output/godotask
+
+  #     - name: Download frontend artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: frontend-output
+  #         path: ./build-output/fronter
+
+  # Nginxビルド
+  # nginx:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Build nginx Docker image
+  #       working-directory: ./nginx
+  #       run: |
+  #         docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ github.sha }} . 
+
+  build:
+    # needs: upload-artifact
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download backend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-output
+          path: ./build-output/godotask
+
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-output
+          path: ./build-output/fronter
+
+      - name: Check downloaded files
+        run: |
+          echo "=== build-output directory structure ==="
+          ls -a -R ./build-output || true
+
+      # - name: Upload backend
+      #   uses: appleboy/scp-action@v0.1.7
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ec2-user
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     source: ./build-output/godotask/main
+      #     target: /home/ec2-user/backend/
+
+      # - name: Upload frontend1
+      #   uses: appleboy/scp-action@v0.1.7
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ec2-user
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     source: ./build-output/fronter/.next
+      #     target: /home/ec2-user/fronter/
+      # - name: Upload frontend2
+      #   uses: appleboy/scp-action@v0.1.7
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ec2-user
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     source: ./build-output/fronter/public
+      #     target: /home/ec2-user/fronter/
+
+      # - name: Restart backend service
+      #   uses: appleboy/ssh-action@v0.1.6
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ec2-user
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     script: |
+      #       sudo systemctl restart godotask
+      #       sudo rm -rf /var/www/html/*
+      #       sudo cp -r /home/ec2-user/backend/* /var/www/html/
+      #       sudo cp -r /home/ec2-user/fronter/* /var/www/html/
+
+  deploy:
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: ./build-output
+
+      - name: Upload backend
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "./build-output/betaTasker/backer/godotask/main"
+          target: "/home/ec2-user/betaTasker/backend/"
+
+      - name: Upload frontend
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "./build-output/betaTasker/fronter/.next"
+          target: "/home/ec2-user/betaTasker/fronter/"
+
+      - name: Restart backend service
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          sudo systemctl restart godotask
+          sudo systemctl status godotask
+          rm -rf /var/www/html/*
+          sudo cp -r /home/ec2-user/betaTasker/backend/* /var/www/html/
+          sudo cp -r /home/ec2-user/betaTasker/fronter/* /var/www/html/
+
