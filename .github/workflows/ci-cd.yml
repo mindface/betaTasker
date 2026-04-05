@@ -334,7 +334,7 @@ jobs:
           source: |
             ./downloads/frontend/.next
             ./downloads/frontend/public
-          target: "/home/ec2-user/fronter/"
+          target: "/home/ec2-user/"
           strip_components: 2
 
       # 4. SSHで後処理（サービス再起動など）
