@@ -275,23 +275,6 @@ jobs:
       #     source: ./build-output/godotask/main
       #     target: /home/ec2-user/backend/
 
-      # - name: Upload frontend1
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ec2-user
-      #     key: ${{ secrets.EC2_SSH_KEY }}
-      #     source: ./build-output/fronter/.next
-      #     target: /home/ec2-user/fronter/
-      # - name: Upload frontend2
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ec2-user
-      #     key: ${{ secrets.EC2_SSH_KEY }}
-      #     source: ./build-output/fronter/public
-      #     target: /home/ec2-user/fronter/
-
       # - name: Restart backend service
       #   uses: appleboy/ssh-action@v0.1.6
       #   with:
@@ -303,3 +286,62 @@ jobs:
       #       sudo rm -rf /var/www/html/*
       #       sudo cp -r /home/ec2-user/backend/* /var/www/html/
       #       sudo cp -r /home/ec2-user/fronter/* /var/www/html/
+
+  deploy:
+    needs: [build] # buildジョブの完了を待つ
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 成果物のダウンロード
+      - name: Download backend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-output
+          path: ./downloads/backend
+
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-output
+          path: ./downloads/frontend
+
+      # 2. バックエンドのデプロイ (/home/ec2-user/backend)
+      - name: Upload backend
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "./downloads/backend/main" # 送りたいファイル
+          target: "/home/ec2-user/backend/"   # 送り先
+          strip_components: 3               # ./downloads/backend/ を無視して main だけ送る
+
+      - name: Debug files
+        run: |
+          pwd
+          ls -la
+          ls -la ./downloads
+          ls -la ./downloads/frontend
+          ls -la ./downloads/frontend/.next || echo ".next not found"
+          ls -la ./downloads/frontend/public || echo "public not found"
+
+      # 3. フロントエンドのデプロイ (/home/ec2-user/fronter)
+      - name: Upload frontend
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "./downloads/frontend"
+          target: "/home/ec2-user/"
+
+      # 4. SSHで後処理（サービス再起動など）
+      - name: Restart services via SSH
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # バックエンドの実行権限付与と再起動
+            chmod +x /home/ec2-user/backend/main
+            # sudo systemctl restart godotask
