@@ -305,6 +305,7 @@ jobs:
       #       sudo cp -r /home/ec2-user/fronter/* /var/www/html/
 
   deploy:
+    runs-on: ubuntu-latest
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
