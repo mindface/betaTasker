@@ -344,4 +344,4 @@ jobs:
           script: |
             # バックエンドの実行権限付与と再起動
             chmod +x /home/ec2-user/backend/main
-            sudo systemctl restart godotask
+            # sudo systemctl restart godotask
