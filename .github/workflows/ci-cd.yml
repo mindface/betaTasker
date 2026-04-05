@@ -275,22 +275,16 @@ jobs:
       #     source: ./build-output/godotask/main
       #     target: /home/ec2-user/backend/
 
-      # - name: Upload frontend1
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ec2-user
-      #     key: ${{ secrets.EC2_SSH_KEY }}
-      #     source: ./build-output/fronter/.next
-      #     target: /home/ec2-user/fronter/
-      # - name: Upload frontend2
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ec2-user
-      #     key: ${{ secrets.EC2_SSH_KEY }}
-      #     source: ./build-output/fronter/public
-      #     target: /home/ec2-user/fronter/
+      - name: Upload frontend
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: |
+            ./downloads/frontend/.next
+            ./downloads/frontend/public
+          target: /home/ec2-user/fronter/
 
       # - name: Restart backend service
       #   uses: appleboy/ssh-action@v0.1.6
@@ -341,7 +335,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "./downloads/frontend/.next, ./downloads/frontend/public"
           target: "/home/ec2-user/"
-          strip_components: 2               # ./downloads/frontend/ を無視して中身を送る
+          strip_components: 2 
 
       - name: Debug files
         run: |
@@ -363,8 +357,3 @@ jobs:
             # バックエンドの実行権限付与と再起動
             chmod +x /home/ec2-user/backend/main
             sudo systemctl restart godotask
-
-            # Nginx公開ディレクトリへの反映（必要に応じて）
-            sudo rm -rf /var/www/html/*
-            sudo cp -r /home/ec2-user/fronter/.next/* /var/www/html/ # 例
-
