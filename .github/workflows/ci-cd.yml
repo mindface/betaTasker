@@ -343,13 +343,14 @@ jobs:
           target: "/home/ec2-user/fronter/"
           strip_components: 2               # ./downloads/frontend/ を無視して中身を送る
 
-
       - name: Debug files
         run: |
           pwd
           ls -la
-          ls -la ./fronter
-          ls -la ./fronter/.next || echo ".next not found"
+          ls -la ./downloads
+          ls -la ./downloads/frontend
+          ls -la ./downloads/frontend/.next || echo ".next not found"
+          ls -la ./downloads/frontend/public || echo "public not found"
 
       # 4. SSHで後処理（サービス再起動など）
       - name: Restart services via SSH
