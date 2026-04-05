@@ -337,10 +337,10 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          sudo systemctl restart godotask
-          sudo systemctl status godotask
-          rm -rf /var/www/html/*
-          sudo cp -r /home/ec2-user/betaTasker/backend/* /var/www/html/
-          sudo cp -r /home/ec2-user/betaTasker/fronter/* /var/www/html/
+          script: |
+            sudo systemctl restart godotask
+            sudo systemctl status godotask
+            rm -rf /var/www/html/*
+            sudo cp -r /home/ec2-user/betaTasker/backend/* /var/www/html/
+            sudo cp -r /home/ec2-user/betaTasker/fronter/* /var/www/html/
 
