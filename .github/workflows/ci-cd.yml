@@ -335,7 +335,8 @@ jobs:
           source: |
             ./downloads/frontend/.next
             ./downloads/frontend/public
-          target: /home/ec2-user/fronter/
+          target: "/home/ec2-user/fronter/"
+          strip_components: 2
 
       - name: Debug files
         run: |
