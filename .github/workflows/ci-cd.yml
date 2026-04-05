@@ -266,13 +266,6 @@ jobs:
           echo "=== build-output directory structure ==="
           ls -a -R ./build-output || true
 
-      - name: Debug files
-        run: |
-          pwd
-          ls -la
-          ls -la fronter
-          ls -la fronter/.next || echo ".next not found"
-
       # - name: Upload backend
       #   uses: appleboy/scp-action@v0.1.7
       #   with:
@@ -349,6 +342,14 @@ jobs:
           source: "./downloads/frontend/.next, ./downloads/frontend/public"
           target: "/home/ec2-user/fronter/"
           strip_components: 2               # ./downloads/frontend/ を無視して中身を送る
+
+
+      - name: Debug files
+        run: |
+          pwd
+          ls -la
+          ls -la ./fronter
+          ls -la ./fronter/.next || echo ".next not found"
 
       # 4. SSHで後処理（サービス再起動など）
       - name: Restart services via SSH
