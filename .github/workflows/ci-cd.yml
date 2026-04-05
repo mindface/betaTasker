@@ -315,6 +315,15 @@ jobs:
           target: "/home/ec2-user/backend/"   # 送り先
           strip_components: 3               # ./downloads/backend/ を無視して main だけ送る
 
+      - name: Debug files
+        run: |
+          pwd
+          ls -la
+          ls -la ./downloads
+          ls -la ./downloads/frontend
+          ls -la ./downloads/frontend/.next || echo ".next not found"
+          ls -la ./downloads/frontend/public || echo "public not found"
+
       # 3. フロントエンドのデプロイ (/home/ec2-user/fronter)
       - name: Upload frontend
         uses: appleboy/scp-action@v0.1.7
@@ -327,15 +336,6 @@ jobs:
             ./downloads/frontend/public
           target: "/home/ec2-user/fronter/"
           strip_components: 2
-
-      - name: Debug files
-        run: |
-          pwd
-          ls -la
-          ls -la ./downloads
-          ls -la ./downloads/frontend
-          ls -la ./downloads/frontend/.next || echo ".next not found"
-          ls -la ./downloads/frontend/public || echo "public not found"
 
       # 4. SSHで後処理（サービス再起動など）
       - name: Restart services via SSH
