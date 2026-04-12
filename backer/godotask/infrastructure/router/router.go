@@ -120,6 +120,7 @@ func setupRouter() *gin.Engine {
 		// Task API (CRUD)
 		protected.POST("/task", taskController.AddTask)
 		protected.GET("/task", taskController.ListTasks)
+		protected.GET("/task/total/pager", taskController.ListTotalTasksPager)
 		protected.GET("/task/pager", taskController.ListTasksPager)
 		protected.GET("/task/:id", taskController.GetTask)
 		protected.PUT("/task/:id", taskController.EditTask)

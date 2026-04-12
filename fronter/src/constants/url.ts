@@ -19,6 +19,7 @@ const URLs = {
   memoryPager: `${domainAndHost}/api/memory/pager`,
   user: `${domainAndHost}/api/user`,
   task: `${domainAndHost}/api/task`,
+  totalTaskPager: `${domainAndHost}/api/task/total/pager`,
   taskPager: `${domainAndHost}/api/task/pager`,
   project: `${domainAndHost}/api/project`,
   test: `${domainAndHost}/api/test`,

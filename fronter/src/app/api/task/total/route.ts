@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { handleBaseRequest, handleError } from "../../utlts/handleRequest";
 
-const END_POINT_TASK_PAGER = "taskPager";
+const END_POINT_TOTAL_TASK_PAGER = "totalTaskPager";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -11,10 +11,10 @@ export async function GET(request: Request) {
   try {
     const { data, status } = await handleBaseRequest(
       "GET",
-      END_POINT_TASK_PAGER,
+      END_POINT_TOTAL_TASK_PAGER,
       undefined,
       undefined,
-      { page, limit, include: "user" }
+      { page, limit }
     );
     return NextResponse.json({
         tasks: data.tasks,
@@ -23,6 +23,6 @@ export async function GET(request: Request) {
         status
       });
   } catch (error) {
-    return handleError(error, END_POINT_TASK_PAGER);
+    return handleError(error, END_POINT_TOTAL_TASK_PAGER);
   }
 }

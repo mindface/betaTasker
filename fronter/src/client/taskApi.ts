@@ -43,6 +43,25 @@ export const getTasksLimitClient = async (
   return data.value;
 };
 
+export const getTotalTasksLimitClient = async (
+  page: number,
+  limit: number,
+) => {
+  const data = await fetchApiJsonCore<
+    undefined,
+     LimitResponse<Task,"tasks">
+  >({
+    endpoint: `/api/task/total?page=${page}&limit=${limit}`,
+    method: "GET",
+    errorMessage:
+      "error getTotalTasksLimitClient タスク総数の取得失敗",
+  });
+  if ("error" in data) {
+    return data;
+  }
+  return data.value;
+};
+
 export const addTaskClient = async (task: AddTask) => {
   const data = await fetchApiJsonCore<AddTask, Task>({
     endpoint: "/api/task",

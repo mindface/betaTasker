@@ -16,7 +16,7 @@ const CommonModal = ({
   contentStyle = {},
 }: CommonModalProps) => {
   useEffect(() => {
-    document.body.setAttribute("style", isOpen ? "overflow: hidden;" : "");
+    // document.body.setAttribute("style", isOpen ? "overflow: hidden;" : "");
   }, [isOpen]);
 
   return (
