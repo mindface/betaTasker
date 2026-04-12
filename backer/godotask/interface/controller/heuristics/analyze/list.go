@@ -40,7 +40,7 @@ func (ctl *HeuristicsAnalyzeController) ListAnalyzePager(c *gin.Context) {
   pager := tools.ParsePagerQuery(c)
 	filter := dtoquery.QueryFilter{
 		UserID:  &pager.UserID,
-		TaskID:  &pager.TaskID,
+		TaskID:  pager.TaskID,
 		Include: helperquery.ParseIncludeParam(c.Query("include")),
 	}
   analyses, total, err := ctl.Service.ListAnalysesPager(filter,pager)

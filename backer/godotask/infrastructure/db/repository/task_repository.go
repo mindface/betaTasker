@@ -5,6 +5,7 @@ import (
   "github.com/godotask/infrastructure/db/model"
 	dtoquery "github.com/godotask/dto/query"
 	helperquery "github.com/godotask/infrastructure/helper/query"
+	"fmt"
 )
 
 type TaskRepositoryImpl struct {
@@ -55,6 +56,11 @@ func (r *TaskRepositoryImpl) ListTasksPager(filter dtoquery.QueryFilter, offset 
 
 	q := r.DB.Model(&model.Task{}).Scopes(helperquery.WithDynamicFilters(filter))
 
+	if q.Error != nil {
+		fmt.Printf("Error in Scopes(helperquery.WithDynamicFilters): %v\n", q.Error)
+		return nil, 0, q.Error
+	}
+
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
@@ -96,4 +102,25 @@ func (r *TaskRepositoryImpl) Update(id string, task *model.Task) error {
 
 func (r *TaskRepositoryImpl) Delete(id string) error {
 	return r.DB.Delete(&model.Task{}, id).Error
+}
+
+func (r *TaskRepositoryImpl) ListSearchTasksPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.Task, int64, error) {
+	var tasks []model.Task
+	var total int64
+  fmt.Printf("%+v\n", filter)
+	q := r.DB.Model(&model.Task{}).Scopes(helperquery.WithDynamicFilters(filter))
+
+	if err := q.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if err := q.
+    Preload("KnowledgePatterns").
+		Order("created_at DESC, id DESC").
+		Limit(limit).
+		Offset(offset).
+		Find(&tasks).Error; err != nil {
+		return nil, 0, err
+	}
+  return tasks, total,nil
 }

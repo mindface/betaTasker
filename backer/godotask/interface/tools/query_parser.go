@@ -16,13 +16,13 @@ func ParsePagerQuery(c *gin.Context) dtoquery.PagerQuery {
 	)
 
 	var (
-		taskID int
+		taskID  *int
+		search  *string
 	)
 	userID, _ := authcontext.UserID(c)
 
 	page := getPositiveInt(c, "page", defaultPage)
 	limit := getPositiveInt(c, "limit", defaultLimit)
-
 
 	if limit > maxPerPage {
 		limit = maxPerPage
@@ -30,8 +30,12 @@ func ParsePagerQuery(c *gin.Context) dtoquery.PagerQuery {
 
 	if t := c.Query("task_id"); t != "" {
 		if v, err := strconv.Atoi(t); err == nil && v > 0 {
-			taskID = v
+			taskID = &v
 		}
+	}
+
+	if s := c.Query("search"); s != "" {
+		search = &s
 	}
 
 	return dtoquery.PagerQuery{
@@ -40,6 +44,7 @@ func ParsePagerQuery(c *gin.Context) dtoquery.PagerQuery {
 		Offset: (page - 1) * limit,
 		UserID: userID,
 		TaskID: taskID,
+		Search: search,
 	}
 }
 

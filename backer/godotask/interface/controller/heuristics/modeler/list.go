@@ -44,7 +44,7 @@ func (ctl *HeuristicsModelerController) ListModelerPager(c *gin.Context) {
   pager := tools.ParsePagerQuery(c)
 	filter := dtoquery.QueryFilter{
 		UserID:  &pager.UserID,
-		TaskID:  &pager.TaskID,
+		TaskID:  pager.TaskID,
 		Include: helperquery.ParseIncludeParam(c.Query("include")),
 	}
   modelers, total, err := ctl.Service.ListModelerPager(filter, pager)

@@ -17,9 +17,8 @@ type AssessmentRepositoryInterface interface {
 	Create(assessment *model.Assessment) error
 	FindByID(id string) (*model.Assessment, error)
 	FindAll(userID uint) ([]model.Assessment, int64, error)
-	ListAssessmentsPager(userID uint, offset int, limit int) ([]model.Assessment, int64, error)
-	FindByTaskIDAndUserID(userID int, taskID int) ([]model.Assessment, error)
-	ListAssessmentsForTaskUserPager(userID uint, taskID int, offset int, limit int) ([]model.Assessment, int64, error)
+	ListAssessmentsPager(userID uint, offset int, perPage int) ([]model.Assessment, int64, error)
+	ListAssessmentsForTaskUserPager(filter dtoquery.QueryFilter, offset int, perPage int) ([]model.Assessment, int64, error)
 	Update(id string, assessment *model.Assessment) error
 	Delete(id string) error
 }
@@ -43,6 +42,7 @@ type TaskRepositoryInterface interface {
 	FindByID(id string) (*model.Task, error)
 	FindAll(userID uint) ([]model.Task, error)
 	ListTasksPager(filter dtoquery.QueryFilter, offset int, perPage int) ([]model.Task, int64, error)
+	ListSearchTasksPager(filter dtoquery.QueryFilter, offset int, perPage int) ([]model.Task, int64, error)
 	ListTasksByUserPager(userID uint, offset int, perPage int) ([]model.Task, int64, error)
 	Update(id string, task *model.Task) error
 	Delete(id string) error
