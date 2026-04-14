@@ -4,7 +4,9 @@ import (
 	"errors"
 	"gorm.io/gorm"
 	"github.com/godotask/infrastructure/db/model"
+	dtoquery "github.com/godotask/dto/query"
 	helperquery "github.com/godotask/infrastructure/helper/query"
+
 )
 
 type AssessmentRepositoryImpl struct {
@@ -21,16 +23,6 @@ func (r *AssessmentRepositoryImpl) FindByID(id string) (*model.Assessment, error
 		return nil, err
 	}
 	return &assessment, nil
-}
-
-func (r *AssessmentRepositoryImpl) FindByTaskIDAndUserID(userID int, taskID int) ([]model.Assessment, error) {
-	var assessments []model.Assessment
-	if err := r.DB.
-		Where("task_id = ? AND user_id = ?", taskID, userID).
-		Find(&assessments).Error; err != nil {
-			return nil, err
-		}
-	return assessments, nil
 }
 
 func (r *AssessmentRepositoryImpl) FindAll(userID uint) ([]model.Assessment, int64, error) {
@@ -65,25 +57,21 @@ func (r *AssessmentRepositoryImpl) ListAssessmentsPager(userID uint,  offset int
 	return assessments, total, nil
 }
 
-func (r *AssessmentRepositoryImpl) ListAssessmentsForTaskUserPager(userID uint, taskID int, offset int, limit int) ([]model.Assessment, int64, error) {
+func (r *AssessmentRepositoryImpl) ListAssessmentsForTaskUserPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.Assessment, int64, error) {
 	var assessments []model.Assessment
 	var total int64
 
-	q := r.DB.Model(&model.Assessment{})
-
-	// フィルタ条件
-	if userID > 0 {
-		q = q.Where("user_id = ?", userID)
-	}
-	if taskID > 0 {
-		q = q.Where("task_id = ?", taskID)
-	}
+	q := r.DB.Model(&model.Assessment{}).Scopes(helperquery.WithDynamicFilters(filter))
 
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
-	if err := q.Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&assessments).Error; err != nil {
+	if err := q.
+		Order("created_at DESC, id DESC").
+		Limit(limit).
+		Offset(offset).
+		Find(&assessments).Error; err != nil {
 		return nil, 0, err
 	}
 	return assessments, total, nil

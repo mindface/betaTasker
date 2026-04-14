@@ -43,7 +43,7 @@ func (ctl *HeuristicsPatternController) ListPatternPager(c *gin.Context) {
   pager := tools.ParsePagerQuery(c)
 	filter := dtoquery.QueryFilter{
 		UserID:  &pager.UserID,
-		TaskID:  &pager.TaskID,
+		TaskID:  pager.TaskID,
 		Include: helperquery.ParseIncludeParam(c.Query("include")),
 	}
   patterns, total, err := ctl.Service.ListPatternPager(filter, pager)

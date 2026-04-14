@@ -22,7 +22,10 @@ func (s *TaskService) ListTasks(userID uint) ([]model.Task, error) {
 func (s *TaskService) ListTasksPager(filter dtoquery.QueryFilter, pager dtoquery.PagerQuery) ([]model.Task, int64, error) {
   return s.Repo.ListTasksPager(filter, pager.Offset, pager.Limit)
 }
-// ListTasksByUserPager: 特定ユーザーのタスク一覧をページネーション取得
+func (s *TaskService) ListSearchTasksPager(filter dtoquery.QueryFilter, pager dtoquery.PagerQuery) ([]model.Task, int64, error) {
+  return s.Repo.ListSearchTasksPager(filter, pager.Offset, pager.Limit)
+}
+// ListTasksByUsedtoqueryrPager: 特定ユーザーのタスク一覧をページネーション取得
 func (s *TaskService) ListTasksByUserPager(userID uint, page int, perPage int, offset int) ([]model.Task, int64, error) {
     return s.Repo.ListTasksByUserPager(userID, offset, perPage)
 }

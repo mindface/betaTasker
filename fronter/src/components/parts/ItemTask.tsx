@@ -73,6 +73,9 @@ const ItemTask = ({ task, onEdit, onDelete, onSetTaskId }: ItemTaskProps) => {
             )}
           </p>
           <div className="task-for-memory-view">
+            〈 UserID: {task.user_id}〉
+          </div>
+          <div className="task-for-memory-view">
             〈 記録ID: {task.memory_id}〉
           </div>
           <p className="p-b-1">{task.title}</p>

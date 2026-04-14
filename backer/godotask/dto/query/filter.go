@@ -20,5 +20,6 @@ type QueryFilter struct {
 
 	// include=user,task,memory
 	Include []FilterTarget
+	Search  *string
 }
 

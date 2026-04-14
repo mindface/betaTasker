@@ -7,5 +7,6 @@ type PagerQuery struct {
 
 	// optional filters
 	UserID uint
-	TaskID int
+	TaskID *int
+	Search *string
 }

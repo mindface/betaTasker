@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { URLs } from "@/constants/url";
 import { StatusCodes } from "@/response/statusCodes";
@@ -54,12 +54,14 @@ export async function handleBaseRequest(
           url += `/${dynamicParams[key]}`;
           break;
         case "page":
-          const paramsQuery = new URLSearchParams({ 
-            page: dynamicParams[key],
-            limit: dynamicParams["limit"],
-            task_id: dynamicParams["task_id"],
-            include: dynamicParams["include"],
+          const paramsQuery = new URLSearchParams();
+
+          Object.keys(dynamicParams).forEach((key) => {
+            if (dynamicParams[key]) {
+              paramsQuery.append(key, dynamicParams[key]);
+            }
           });
+
           url += `?${paramsQuery}`;
         // case "page":
         //   const query = new URLSearchParams({ page: dynamicParams[key], limit: dynamicParams["limit"] });
@@ -67,6 +69,7 @@ export async function handleBaseRequest(
         //   break;
       }
     }
+    console.log("Final URL:", url);
 
     const sendData = body
       ? {

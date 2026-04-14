@@ -9,20 +9,21 @@ import PageNation from "./parts/PageNation";
 import AssessmentListModal from "./parts/AssessmentListModal";
 import { AddTask, Task } from "../model/task";
 import { loadMemories } from "../features/memory/memorySlice";
-import { getTasksLimit } from "../features/task/taskSlice";
+import { getTotalTasksLimit, getSearchTasksLimit } from "../features/task/taskSlice";
 
-export default function SectionTask() {
+export default function SectionTotalTask() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
   const { memories } = useSelector((state: RootState) => state.memory);
   const { tasks, taskError, tasksPage, tasksLimit, tasksTotal, tasksTotalPages } = useSelector((state: RootState) => state.task);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<AddTask | Task | undefined>();
+  const [SearchText, setSearchText] = useState("");
   const [TaskId, setTaskId] = useState<number>(-1);
 
   useEffect(() => {
     dispatch(loadMemories());
-    dispatch(getTasksLimit({ page: 1, limit: 20 }));
+    dispatch(getTotalTasksLimit({ page: 1, limit: 20 }));
   }, [dispatch, isAuthenticated]);
 
   const handleAddTask = () => {
@@ -35,22 +36,17 @@ export default function SectionTask() {
     setIsModalOpen(true);
   };
 
-  // const handleSaveTask = async (taskData: AddTask | Task) => {
-  //   if (editingTask) {
-  //     await dispatch(updateTask(taskData as Task));
-  //   } else {
-  //     await dispatch(createTask(taskData as AddTask));
-  //   }
-  //   setIsModalOpen(false);
-  // };
-
   const handleDeleteTask = async (id: number) => {
     await dispatch(removeTask(id));
   };
 
   const handlePageChange = (newPage: number) => {
-    dispatch(getTasksLimit({ page: newPage, limit: tasksLimit }));
+    dispatch(getTotalTasksLimit({ page: newPage, limit: tasksLimit }));
   };
+
+  const handleSearch = () => {
+    dispatch(getSearchTasksLimit({ page: 1, limit: tasksLimit, search: SearchText }));
+  }
 
   if(taskError !== null) {
     throw new Error(taskError.name + ": " + taskError.message);
@@ -64,6 +60,18 @@ export default function SectionTask() {
           <button onClick={() => handleAddTask()} className="btn btn-primary">
             新規タスク
           </button>
+        </div>
+        <div className="task-search">
+          <p className="search-box">
+            <input 
+              type="text" 
+              className="input" 
+              placeholder="タスクを検索" 
+              value={SearchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+            <button onClick={handleSearch}>検索</button>
+          </p>
         </div>
         <div className="task-list card-list">
           <Suspense fallback={<p>Waiting...</p>}>
