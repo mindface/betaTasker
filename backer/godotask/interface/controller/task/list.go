@@ -131,7 +131,6 @@ func (ctl *TaskController) ListTasksPager(c *gin.Context) {
 func (ctl *TaskController) ListSearchTasksPager(c *gin.Context) {
   fmt.Printf("Parsed pager pppp")
   pager := tools.ParsePagerQuery(c)
-  fmt.Printf("Parsed pager: %+v\n", pager)
 
   filter := dtoquery.QueryFilter{
     UserID:  &pager.UserID,

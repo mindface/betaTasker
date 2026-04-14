@@ -62,6 +62,26 @@ export const getTotalTasksLimitClient = async (
   return data.value;
 };
 
+export const getSearchTasksLimitClient = async (
+  page: number,
+  limit: number,
+  search: string
+) => {
+  const data = await fetchApiJsonCore<
+    undefined,
+     LimitResponse<Task,"tasks">
+  >({
+    endpoint: `/api/task/search?page=${page}&limit=${limit}&search=${search}`,
+    method: "GET",
+    errorMessage:
+      "error getSearchTasksLimitClient タスク検索失敗",
+  });
+  if ("error" in data) {
+    return data;
+  }
+  return data.value;
+};
+
 export const addTaskClient = async (task: AddTask) => {
   const data = await fetchApiJsonCore<AddTask, Task>({
     endpoint: "/api/task",

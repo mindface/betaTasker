@@ -9,7 +9,7 @@ import PageNation from "./parts/PageNation";
 import AssessmentListModal from "./parts/AssessmentListModal";
 import { AddTask, Task } from "../model/task";
 import { loadMemories } from "../features/memory/memorySlice";
-import { getTotalTasksLimit } from "../features/task/taskSlice";
+import { getTotalTasksLimit, getSearchTasksLimit } from "../features/task/taskSlice";
 
 export default function SectionTotalTask() {
   const dispatch = useDispatch();
@@ -18,6 +18,7 @@ export default function SectionTotalTask() {
   const { tasks, taskError, tasksPage, tasksLimit, tasksTotal, tasksTotalPages } = useSelector((state: RootState) => state.task);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<AddTask | Task | undefined>();
+  const [SearchText, setSearchText] = useState("");
   const [TaskId, setTaskId] = useState<number>(-1);
 
   useEffect(() => {
@@ -43,6 +44,10 @@ export default function SectionTotalTask() {
     dispatch(getTotalTasksLimit({ page: newPage, limit: tasksLimit }));
   };
 
+  const handleSearch = () => {
+    dispatch(getSearchTasksLimit({ page: 1, limit: tasksLimit, search: SearchText }));
+  }
+
   if(taskError !== null) {
     throw new Error(taskError.name + ": " + taskError.message);
   }
@@ -55,6 +60,18 @@ export default function SectionTotalTask() {
           <button onClick={() => handleAddTask()} className="btn btn-primary">
             新規タスク
           </button>
+        </div>
+        <div className="task-search">
+          <p className="search-box">
+            <input 
+              type="text" 
+              className="input" 
+              placeholder="タスクを検索" 
+              value={SearchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+            <button onClick={handleSearch}>検索</button>
+          </p>
         </div>
         <div className="task-list card-list">
           <Suspense fallback={<p>Waiting...</p>}>

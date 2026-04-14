@@ -5,11 +5,11 @@ import (
 	"gorm.io/gorm"
 )
 
-// WithDynamicFzilters
-// include + optional ID に応じて WHERE を動的構築
+// WithDynamicFilters
+// Include + optional ID + Search に応じて WHERE を動的構築
 func WithDynamicFilters(q dtoquery.QueryFilter) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		if q.UserID != nil {
+		if q.UserID != nil && *q.UserID != 0 {
 			db = db.Where("user_id = ?", *q.UserID)
 		}
 
@@ -22,7 +22,8 @@ func WithDynamicFilters(q dtoquery.QueryFilter) func(db *gorm.DB) *gorm.DB {
 		}
 
 		if q.Search != nil && *q.Search != "" {
-			db = db.Where("title LIKE ?", "%"+*q.Search+"%")
+			keyword := "%" + *q.Search + "%"
+			db = db.Where("title LIKE ? OR description LIKE ?", keyword, keyword)
 		}
 		return db
 	}

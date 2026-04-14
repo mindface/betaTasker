@@ -4,9 +4,10 @@ import {
   addTaskClient,
   updateTaskClient,
   deleteTaskClient,
-  SuccessResponse,
+  // SuccessResponse,
   getTasksLimitClient,
   getTotalTasksLimitClient,
+  getSearchTasksLimitClient
 } from "../../client/taskApi";
 import { AddTask, Task } from "../../model/task";
 import { LimitResponse } from "@/model/respose";
@@ -69,6 +70,24 @@ export const getTotalTasksLimit = createAsyncThunk(
     const response = await getTotalTasksLimitClient(
       payload.page,
       payload.limit,
+    );
+    if ("error" in response) {
+      return rejectWithValue({
+        message: response.error.message,
+        name: response.error.name,
+      });
+    }
+    return { tasks: response.tasks, meta: response.meta };
+  },
+);
+
+export const getSearchTasksLimit = createAsyncThunk(
+  "task/getSearchTasksLimit",
+  async (payload: { page: number; limit: number; search: string }, { rejectWithValue }) => {
+    const response = await getSearchTasksLimitClient(
+      payload.page,
+      payload.limit,
+      payload.search
     );
     if ("error" in response) {
       return rejectWithValue({
@@ -158,6 +177,21 @@ const taskSlice = createSlice({
         state.tasksTotalPages = action.payload.meta.total_pages;
       })
       .addCase(getTotalTasksLimit.rejected, (state, action) => {
+        state.taskLoading = false;
+        state.taskError = action.payload as Error;
+      })
+      .addCase(getSearchTasksLimit.pending, (state) => {
+        state.taskLoading = true;
+        state.taskError = null;
+      })
+      .addCase(getSearchTasksLimit.fulfilled, (state, action: PayloadAction<LimitResponse<Task,"tasks">>) => {
+        state.taskLoading = false;
+        state.tasks = action.payload.tasks;
+        state.tasksLimit = action.payload.meta.limit;
+        state.tasksTotal = action.payload.meta.total;
+        state.tasksTotalPages = action.payload.meta.total_pages;
+      })
+      .addCase(getSearchTasksLimit.rejected, (state, action) => {
         state.taskLoading = false;
         state.taskError = action.payload as Error;
       })
