@@ -5,7 +5,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// WithDynamicFilters
 // Include + optional ID + Search に応じて WHERE を動的構築
 func WithDynamicFilters(q dtoquery.QueryFilter) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {

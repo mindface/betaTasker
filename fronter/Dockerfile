@@ -16,19 +16,16 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# 非rootユーザーの作成（セキュリティ）
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app ./
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
-# .nextディレクトリの権限を設定
-# 既存のディレクトリはそのまま、権限のみ変更
-RUN chown -R nextjs:nodejs .next && \
-    chmod -R 755 .next
-
+RUN chown -R nextjs:nodejs .next
 USER nextjs
 
 EXPOSE 3000
 
-CMD ["yarn", "dev"]
+CMD ["node", "server.js"]

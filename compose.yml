@@ -6,7 +6,7 @@ services:
       dockerfile: ./backer/godotask/Dockerfile
     stdin_open: true
     tty: true
-    command: bash -c "/bin/bash"
+    command: go run ./cmd/boot/main.go
     volumes:
       - ./backer/godotask:/usr/local/go/godotask
     ports:
@@ -20,16 +20,12 @@ services:
     build:
       context: ./fronter
       dockerfile: Dockerfile
-    volumes:
-      - ./fronter:/app
-      - /app/node_modules
-      - /app/.next
     depends_on:
       - backender
     networks:
       - beta-app-network
 
-  nginx:
+  betanginx:
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -40,6 +36,7 @@ services:
       - backender
     networks:
       - beta-app-network
+    restart: always
 
   db:
     image: postgres:16

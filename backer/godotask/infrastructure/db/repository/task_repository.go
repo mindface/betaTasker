@@ -107,12 +107,7 @@ func (r *TaskRepositoryImpl) Delete(id string) error {
 func (r *TaskRepositoryImpl) ListSearchTasksPager(filter dtoquery.QueryFilter, offset int, limit int) ([]model.Task, int64, error) {
 	var tasks []model.Task
 	var total int64
-	searchTerm := ""
-	if filter.Search != nil {
-		searchTerm = *filter.Search
-	}
-	fmt.Printf("Search Filter Applied - SearchTerm: %s, UserID: %v\n", searchTerm, filter.UserID)
-
+  fmt.Printf("%+v\n", filter)
 	q := r.DB.Model(&model.Task{}).Scopes(helperquery.WithDynamicFilters(filter))
 
 	if err := q.Count(&total).Error; err != nil {
