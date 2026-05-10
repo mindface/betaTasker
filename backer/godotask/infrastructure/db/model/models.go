@@ -30,5 +30,6 @@ func Models() []interface{} {
 		&QuantificationLabel{},
 		&TeachingFreeControl{},
 		&KnowledgeEntity{},
+		&RagDocumentEmbedding{},
 	}
 }

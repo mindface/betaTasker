@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn
 
-COPY . .
+COPY ./ ./
 RUN yarn build
 
 FROM node:20-alpine AS runner
@@ -26,9 +26,10 @@ COPY --from=builder /app ./
 # 既存のディレクトリはそのまま、権限のみ変更
 RUN chown -R nextjs:nodejs .next && \
     chmod -R 755 .next
-
-USER nextjs
+RUN chown -R nextjs:nodejs /app
+# USER nextjs
 
 EXPOSE 3000
 
-CMD ["yarn", "dev"]
+# CMD ["yarn", "start"]
+# RUN bash -c "/bin/bash"

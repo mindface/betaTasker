@@ -12,6 +12,7 @@ import (
 	"github.com/godotask/interface/controller/heuristics/pattern"
 	"github.com/godotask/interface/controller/process_optimization"
 	"github.com/godotask/interface/controller/qualitative_label"
+	rag_controller "github.com/godotask/interface/controller/rag"
 	"github.com/godotask/interface/controller/knowledge_pattern"
 	"github.com/godotask/interface/controller/language_optimization"
 	"github.com/godotask/interface/controller/teaching_free_control"
@@ -96,6 +97,7 @@ func setupRouter() *gin.Engine {
 	phenomenologicalFrameworkRepo := &repository.PhenomenologicalFrameworkRepositoryImpl{DB: model.DB}
 	phenomenologicalFrameworkService := &service.PhenomenologicalFrameworkService{Repo: phenomenologicalFrameworkRepo}
 	phenomenologicalFrameworkController := phenomenological_framework.PhenomenologicalFrameworkController{Service: phenomenologicalFrameworkService}
+	ontologySearchController := rag_controller.OntologySearchController{}
 
 	// 認証不要のエンドポイント
 	public := r.Group("/api")
@@ -173,6 +175,12 @@ func setupRouter() *gin.Engine {
 		protected.GET("/heuristics/modeler/:id", heuristicsModelerController.GetModelerData)
 		protected.PUT("/heuristics/modeler/:id", heuristicsModelerController.EditModelerData)
 		protected.DELETE("/heuristics/modeler/:id", heuristicsModelerController.DeleteModelerData)
+
+		// RAG / Ontology Search API
+		protected.GET("/rag/ontology/policies", ontologySearchController.ListOntologySearchPolicies)
+		protected.POST("/rag/ontology/rank", ontologySearchController.RankOntologySearch)
+		protected.POST("/rag/ontology/seed/embeddings", ontologySearchController.StoreSeedOntologyEmbeddings)
+		protected.POST("/rag/ontology/seed/rank", ontologySearchController.RankSeedOntologySearch)
 
 		// phenomenological framework API (CRUD)
 		protected.POST("/phenomenological_framework", phenomenologicalFrameworkController.AddPhenomenologicalFramework)
