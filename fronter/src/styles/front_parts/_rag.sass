@@ -1,0 +1,336 @@
+@use '../settings' as *
+
+.rag-search-form
+  display: flex
+  flex-direction: column
+  gap: 16px
+  max-width: 1200px
+  width: 100%
+  margin: 20px auto
+  padding: 20px
+  border: 1px solid $gary_thin_color
+  border-radius: $border_radius
+  background: $white_color
+  box-shadow: 0 2px 6px $boxShadow
+
+  &__header
+    display: flex
+    align-items: flex-start
+    justify-content: space-between
+    gap: 16px
+
+    h2
+      margin: 0
+      font-size: 2.4rem
+      font-weight: 600
+
+    p
+      margin: 8px 0 0
+      color: $focus_color
+      font-size: $body_font_size
+
+    button
+      min-width: 120px
+      padding: 10px 16px
+      border: none
+      border-radius: $border_radius
+      background: $base_color
+      color: $white_color
+      cursor: pointer
+      font-size: $body_font_size
+      font-weight: 600
+
+      &:disabled
+        cursor: not-allowed
+        opacity: 0.6
+
+  fieldset
+    display: flex
+    flex-direction: column
+    gap: 14px
+    margin: 0
+    padding: 16px
+    border: 1px solid $gary_thin_color
+    border-radius: $border_radius
+
+  legend
+    padding: 0 6px
+    font-size: $body_font_size
+    font-weight: 700
+
+  label
+    display: flex
+    flex-direction: column
+    gap: 6px
+    font-size: $small_font_size
+    font-weight: 700
+
+  input,
+  textarea
+    width: 100%
+    padding: 14px
+    border: 1px solid $gary_thin_color
+    border-radius: $border_radius
+    background: $gary_thin_gray_color
+    color: $base_dark_color
+    font-family: monospace
+    font-size: 1.3rem
+    line-height: 1.5
+    resize: vertical
+
+    &:focus
+      outline: none
+      border-color: $base_color
+      box-shadow: 0 0 0 2px rgba(68, 185, 93, 0.16)
+
+  input
+    height: 42px
+
+  &__grid
+    display: grid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+    gap: 14px
+
+  &__document
+    display: flex
+    flex-direction: column
+    gap: 14px
+    padding-top: 4px
+
+    h3
+      margin: 0
+      font-size: $subtitle_font_size
+
+.rag-search
+  display: flex
+  flex-direction: column
+  gap: 20px
+  max-width: 1200px
+  margin: 0 auto
+  padding: 20px
+  color: $base_dark_color
+
+  &__header
+    display: flex
+    align-items: flex-start
+    justify-content: space-between
+    gap: 16px
+
+    h2
+      margin: 0
+      font-size: 2.4rem
+      font-weight: 600
+
+    p
+      margin: 8px 0 0
+      color: $focus_color
+      font-size: $body_font_size
+
+  &__count
+    min-width: 76px
+    padding: 10px 14px
+    border: 1px solid $gary_thin_color
+    border-radius: $border_radius
+    background: $white_color
+    text-align: center
+    font-size: 2.4rem
+    font-weight: 700
+
+    span
+      display: block
+      margin-top: 2px
+      color: $focus_color
+      font-size: $small_font_size
+      font-weight: 500
+
+  &__policy,
+  &__card
+    border: 1px solid $gary_thin_color
+    border-radius: $border_radius
+    background: $white_color
+    box-shadow: 0 2px 6px $boxShadow
+
+  &__policy
+    display: flex
+    flex-direction: column
+    gap: 18px
+    padding: 20px
+
+    h3
+      margin: 0 0 8px
+      font-size: $title_font_size
+
+    p
+      margin: 0
+      color: $base_dark_color
+      font-family: monospace
+      font-size: 1.3rem
+      line-height: 1.6
+
+  &__weight-grid
+    display: grid
+    grid-template-columns: repeat(4, minmax(0, 1fr))
+    gap: 12px
+
+  &__weight-item
+    display: flex
+    min-height: 132px
+    flex-direction: column
+    gap: 8px
+    padding: 14px
+    border: 1px solid $gary_thin_color
+    border-radius: $border_radius
+    background: $gary_thin_gray_color
+
+    span
+      color: $base_dark_color
+      font-size: 1.3rem
+      font-weight: 600
+
+    strong
+      color: $focus_color
+      font-size: 2.4rem
+
+    small
+      color: $base_dark_color
+      font-size: $small_font_size
+      line-height: 1.5
+
+  &__results
+    display: grid
+    grid-template-columns: 1fr
+    gap: 16px
+
+  &__card
+    padding: 18px
+
+  &__card-header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 16px
+    margin-bottom: 16px
+
+    h3
+      display: inline-block
+      margin: 0 0 0 10px
+      font-size: $title_font_size
+
+  &__rank
+    display: inline-flex
+    align-items: center
+    min-width: 42px
+    justify-content: center
+    padding: 5px 8px
+    border-radius: 6px
+    background: rgba(68, 185, 93, 0.16)
+    color: $focus_color
+    font-size: 1.3rem
+    font-weight: 700
+
+  &__score
+    min-width: 132px
+    text-align: right
+
+    span
+      display: block
+      color: $focus_color
+      font-size: $small_font_size
+
+    strong
+      font-size: 2.2rem
+
+  &__metric-list
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+  &__metric-row
+    display: grid
+    grid-template-columns: minmax(180px, 1.3fr) minmax(220px, 1fr)
+    gap: 10px 16px
+    align-items: center
+    padding: 12px
+    border: 1px solid $gary_thin_color
+    border-radius: $border_radius
+    background: $gary_thin_gray_color
+
+  &__metric-text
+    span
+      display: block
+      font-size: $body_font_size
+      font-weight: 700
+
+    small
+      display: block
+      margin-top: 4px
+      color: $base_dark_color
+      font-size: $small_font_size
+      line-height: 1.5
+
+  &__metric-values
+    display: flex
+    flex-wrap: wrap
+    justify-content: flex-end
+    gap: 8px
+    color: $base_dark_color
+    font-size: $small_font_size
+
+    span,
+    strong
+      padding: 5px 8px
+      border-radius: 6px
+      background: $white_color
+
+    strong
+      color: $focus_color
+
+  &__bar-track
+    grid-column: 1 / -1
+    height: 8px
+    overflow: hidden
+    border-radius: 999px
+    background: $gray_color
+
+  &__bar-fill
+    height: 100%
+    border-radius: inherit
+    background: $base_color
+
+  &__error
+    padding: 24px
+    border: 1px solid $red_color
+    border-radius: $border_radius
+    background: rgba(200, 0, 0, 0.08)
+    color: $red_color
+
+@media (max-width: $middle-px)
+  .rag-search-form
+    &__header
+      flex-direction: column
+      align-items: stretch
+
+    button
+      width: 100%
+
+    &__grid
+      grid-template-columns: 1fr
+
+  .rag-search
+    &__header,
+    &__card-header
+      flex-direction: column
+      align-items: stretch
+
+    &__count,
+    &__score
+      text-align: left
+
+    &__weight-grid
+      grid-template-columns: 1fr
+
+    &__metric-row
+      grid-template-columns: 1fr
+
+    &__metric-values
+      justify-content: flex-start

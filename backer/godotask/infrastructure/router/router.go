@@ -179,6 +179,8 @@ func setupRouter() *gin.Engine {
 		// RAG / Ontology Search API
 		protected.GET("/rag/ontology/policies", ontologySearchController.ListOntologySearchPolicies)
 		protected.POST("/rag/ontology/rank", ontologySearchController.RankOntologySearch)
+		protected.POST("/rag/ontology/seed/embeddings", ontologySearchController.StoreSeedOntologyEmbeddings)
+		protected.POST("/rag/ontology/seed/rank", ontologySearchController.RankSeedOntologySearch)
 
 		// phenomenological framework API (CRUD)
 		protected.POST("/phenomenological_framework", phenomenologicalFrameworkController.AddPhenomenologicalFramework)

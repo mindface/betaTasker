@@ -32,6 +32,7 @@ const URLs = {
   qualitativeLabel: `${domainAndHost}/api/qualitative_label`,
   processOptimization: `${domainAndHost}/api/process_optimization`,
   languageOptimization: `${domainAndHost}/api/language_optimization`,
+  ragOntologyRank: `${domainAndHost}/api/rag/ontology/rank`,
 };
 
 export { URLs };
